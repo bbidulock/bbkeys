@@ -673,6 +673,7 @@ WindowList ScreenHandler::getCycleWindowList(unsigned int state, const bool forw
     if (sameclass && ! classname.empty() &&
 	t->appClass() != classname) continue;
     if (! t->canFocus()) continue;
+    if (t->skipPager()) continue;
 
     // found a focusable window
     theList.push_back(t);
@@ -751,6 +752,7 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
       if (sameclass && ! classname.empty() &&
 	  t->appClass() != classname) continue;
       if (! t->canFocus()) continue;
+      if (t->skipPager()) continue;
 
       // found a good window so break out of the while, and perhaps continue
       // with the for loop

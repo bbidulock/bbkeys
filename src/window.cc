@@ -189,7 +189,7 @@ void XWindow::updateWMHints() {
 
 void XWindow::updateState() {
   // set the defaults
-  _shaded = _iconic = _max_vert = _max_horz = false;
+  _shaded = _skip_pager = _iconic = _max_vert = _max_horz = false;
   
   unsigned long num = (unsigned) -1;
   Atom *state;
@@ -205,6 +205,8 @@ void XWindow::updateState() {
       _shaded = true;
     if (state[i] == _netclient->wmStateHidden())
       _iconic = true;
+    if (state[i] == _netclient->wmStateSkipPager())
+      _skip_pager = true;
   }
 
   delete [] state;

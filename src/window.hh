@@ -77,6 +77,7 @@ private:
   // states
   bool _shaded;
   bool _iconic;
+  bool _skip_pager;
   bool _max_vert;
   bool _max_horz;
   bool _decorated;
@@ -123,6 +124,7 @@ public:
   
   inline bool shaded() const { return _shaded; }
   inline bool iconic() const { return _iconic; }
+  inline bool skipPager() const { return _skip_pager; }
   inline bool maxVert() const { return _max_vert; }
   inline bool maxHorz() const { return _max_horz; }
   inline bool decorated() const { return _decorated; }
