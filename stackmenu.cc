@@ -41,10 +41,6 @@ Stackmenu::~Stackmenu() {
 void Stackmenu::reconfigure()
 {
 	setMenuItems();
-	if (getHighlight() >= getCount())
-		setHighlight(getCount() - 1);
-//	else if (getHighlight() < 0)
-//		setHighlight(0);
 	Basemenu::reconfigure();
 }
 
@@ -84,7 +80,7 @@ void Stackmenu::key_release(unsigned int key)
 {
 	if (key == 64) {
 printf("Alt Released\n");
-		int selected = getHighlight();
+		int selected = menuPosition;
 		LinkedListIterator<WindowList> it(bbtool->windowList);
 		for(; it.current(); it++)
 			if (it.current()->desktop == bbtool->getCurrentDesktopNr())
