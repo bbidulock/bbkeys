@@ -61,12 +61,23 @@ void Stackmenu::setMenuItems() {
 				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) {
 			if (XGetWMName(bbtool->getXDisplay(), it.current()->win, &xtp))
 				if (XTextPropertyToStringList(&xtp, &windowname, &num)) {
-					if (*windowname) insert((char*) *windowname);
+					if (*windowname) {
+						if (bbtool->getResource()->getMenuShowAllWorkspaces()) {
+							int size = strlen(*windowname) + strlen(" (workspace )") + 2;
+							char *workspace = (char*) malloc(size);
+							if (workspace) {
+								snprintf(workspace, size, "%s (workspace %i)", *windowname,
+										it.current()->desktop+1);
+								insert(workspace);
+								free(workspace);
+							}
+						} else
+							insert((char*) *windowname);
+					}
 					if (windowname) XFreeStringList(windowname);
 				}
 		}
 	}
-	centerPosition();
 }
 
 void Stackmenu::clearMenu() {
@@ -160,8 +171,10 @@ void Stackmenu::show(bool forward, bool showMenu)
 
 	bbtool->setCycling(True);
 
-	if (showMenu)
+	if (showMenu) {
 		Basemenu::show();
+		centerPosition();
+	}
 }
 
 void Stackmenu::centerPosition()
