@@ -41,20 +41,20 @@ version 0.8.0 --
   - Applying patches from Ben Jansens <xor at x-o-r dot net>.  His comments
     are below....
 
-      I've removed all the functionality from the wminterface class that bbkeys does 
-      not used, and reorganised the header files for wminterface and bbkeys, adding 
-      comments for all of the class members. One thing to note, is that i changed the
-      "framewin" variable to "win_frame" to be consistant with all of the other
-      "win_*" variables. With this patch, bbkeys not longer calls the blackbox
-      cycling routines, but maintains its own list of windows, and cycles them  
-      itself. One thing to note is that the cycling does not occur in the same
-      order as the buttons on the toolbar cycle. I personally dont think this
-      will be a big issue, and i think the new way is nicer. When a new window
-      opens, its added to the list right *after* the focused window, so that   
-      hitting PrevWindow would take you back to the window that was previously
-      focused.  I also ran bbkeys.cc/hh and
-      wminterface.cc/hh through expand and unexpand to fix all of the
-      double spaces to tabs wherever possible.
+      I've removed all the functionality from the wminterface class that bbkeys
+      does not use, and reorganised the header files for wminterface and bbkeys,
+      adding comments for all of the class members. One thing to note, is that
+      i changed the "framewin" variable to "win_frame" to be consistant with all
+      of the other "win_*" variables. With this patch, bbkeys not longer calls
+      the blackbox cycling routines, but maintains its own list of windows, and
+      cycles them itself. One thing to note is that the cycling does not occur
+      in the same order as the buttons on the toolbar cycle. I personally dont
+      think this will be a big issue, and i think the new way is nicer. When a
+      new window opens, its added to the list right *after* the focused window,
+      so that hitting PrevWindow would take you back to the window that was
+      previously focused.  I also ran bbkeys.cc/hh and wminterface.cc/hh through
+      expand and unexpand to fix all of the double spaces to tabs wherever
+      possible.
 
     ....
     * VERY nice work, Ben.  Thanks for your work! *
