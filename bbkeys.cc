@@ -1165,7 +1165,7 @@ void ToolWindow::MakeWindow(bool reconfigure)
 		menuFrameGC = XCreateGC(getXDisplay(), win_frame,GCFont|GCForeground, &gcv);
 
  		stackMenu = new Stackmenu(this);
-		stackMenu->Update();
+		stackMenu->update();
 	} else {
 		gcv.font = resource->label.font->fid;
 		gcv.foreground = resource->label.textColor.getPixel();
@@ -2027,8 +2027,6 @@ void ToolWindow::add_stack(WindowList *newwin, int desktop) {
 }
 
 void ToolWindow::cycle_stack(bool forward) {
-	if (stackMenu->WaitForUpdate())
-		stackMenu->Update();
 	stackMenu->show(forward);
 }
 

@@ -69,11 +69,6 @@ void Stackmenu::clearMenu() {
 		remove(0);
 }
 
-void Stackmenu::Update() {
-	wait_for_update=False;
-	Basemenu::update();	
-}
-
 void Stackmenu::key_release(unsigned int key)
 {
 	if (key == 64) {

@@ -29,14 +29,12 @@ public:
 	Stackmenu(ToolWindow *);
 	virtual ~Stackmenu();
 
-	void Update();
 	void hide();
 	void show(bool forward);
 	void reconfigure();
 	void key_release(unsigned int);
 	void key_press(int grabInt);
 	void centerPosition();
-	bool WaitForUpdate(void) {return wait_for_update;}
 	void setSelected(int);
 	void setMenuItems();
 
@@ -46,7 +44,6 @@ protected:
 
 private:
 	ToolWindow *bbtool;
-	bool wait_for_update;
 	int menuPosition;
 };
 
