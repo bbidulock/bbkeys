@@ -56,12 +56,6 @@ void Stackmenu::setMenuItems() {
 
 	clearMenu();
 
-//	int count = 0;
-//	for (; it.current(); it++)
-//		++count;
-
-//	word_length = new int [count];
-//	it.reset();
 	for (; it.current(); it++) {
 		if (it.current()->desktop == bbtool->getCurrentDesktopNr()) {
 			XGetWMName(bbtool->getXDisplay(), it.current()->win, &xtp);
@@ -86,12 +80,55 @@ void Stackmenu::itemSelected(int button, int index)
 {
 }
 
-void Stackmenu::show()
+void Stackmenu::key_release(unsigned int key)
+{
+	if (key == 64) {
+printf("Alt Released\n");
+		int selected = getHighlight();
+		LinkedListIterator<WindowList> it(bbtool->windowList);
+		for(; it.current(); it++)
+			if (it.current()->desktop == bbtool->getCurrentDesktopNr())
+				if(!selected--) {
+					bbtool->wminterface->setWindowFocus(it.current()->win);
+					XRaiseWindow(bbtool->getXDisplay(), it.current()->win);
+				}
+		XUngrabKeyboard(bbtool->getXDisplay(), CurrentTime);
+		hide();
+	}
+}
+
+void Stackmenu::key_press(int grabInt)
+{
+	switch (grabInt) {
+		case grabNextWindow:
+			if(++menuPosition >= getCount())
+				menuPosition = 0;
+			setHighlight(menuPosition);
+			break;
+		case grabPrevWindow:
+			if(--menuPosition < 0)
+				menuPosition = getCount() - 1;
+			setHighlight(menuPosition);
+			break;
+		default:
+			XUngrabKeyboard(bbtool->getXDisplay(), CurrentTime);
+			hide();
+			break;
+	}
+}
+
+void Stackmenu::show(bool forward)
 {
 	XRaiseWindow(bbtool->getXDisplay(), getWindowID());
-	XGrabKey(bbtool->getXDisplay(), 64, 0, 
-			bbtool->getScreenInfo(0)->getRootWindow(), True,
-			GrabModeAsync, GrabModeAsync);
+//	XGrabKey(bbtool->getXDisplay(), 64, 0, 
+//			bbtool->getScreenInfo(0)->getRootWindow(), True,
+//			GrabModeAsync, GrabModeAsync);
+	XGrabKeyboard(bbtool->getXDisplay(), getWindowID(), True,
+			GrabModeAsync, GrabModeAsync, CurrentTime);
+
+	menuPosition = 0;
+	key_press(forward?grabNextWindow:grabPrevWindow);
+
 	Basemenu::show();
 }
 

@@ -198,7 +198,6 @@ private:
 	GC menuHiBGGC;
 	GC menuHiGC;
 	GC menuFrameGC;
-	int menuPosition;
 
 	friend Stackmenu;
 };

@@ -1163,7 +1163,7 @@ void ToolWindow::MakeWindow(bool reconfigure)
 
 	  gcv.foreground = resource->menu.textColor.getPixel();                    	
 		menuFrameGC = XCreateGC(getXDisplay(), win_frame,GCFont|GCForeground, &gcv);
-                    	
+
  		stackMenu = new Stackmenu(this);
 		stackMenu->Update();
 	} else {
@@ -1245,24 +1245,8 @@ void ToolWindow::process_event(XEvent * e)
 		break;
 	
 	case KeyRelease: {
-//		if (stackMenu->isVisible()) {
-//			if ((e->xkey.keycode == grabSet.KeyMap[grabNextWindow].modMask) ||
-//					(e->xkey.keycode == grabSet.KeyMap[grabPrevWindow].modMask)) {
-			if (e->xkey.keycode == 64) {
-printf("Released\n");
-				int selected = stackMenu->getHighlight();
-				LinkedListIterator<WindowList> it(windowList);
-				for(; it.current(); it++)
-					if (it.current()->desktop == getCurrentDesktopNr())
-						if(!selected--) {
-							wminterface->setWindowFocus(it.current()->win);
-							XRaiseWindow(getXDisplay(), it.current()->win);
-						}
-				XUngrabKey(getXDisplay(), 64, 0, getScreenInfo(0)->getRootWindow());
-				stackMenu->hide();
-//				bbtool->reconfigure();
-			}
-//		}
+		if (e->xkey.window == stackMenu->getWindowID())
+			stackMenu->key_release(e->xkey.keycode);
 		break;
 	}
 
@@ -1307,7 +1291,10 @@ printf("Released\n");
 			}
 		}
 
-		if (grabInt > -1) {
+    if (e->xkey.window == stackMenu->getWindowID()) {
+      stackMenu->key_press(grabInt);
+		}
+		else if (grabInt > -1) {
 			/* play with colors for nyz =:) */
 			XSetWindowBackgroundPixmap(getXDisplay(), win_configBtn,
 					pixmap.pix_pressedBtn);
@@ -1793,7 +1780,6 @@ void ToolWindow::focusDesktop(int desktop)
 	for (; it.current(); it++)
 		if (it.current()->number == desktop)
 			current_desktop = it.current();
-	stackMenu->reconfigure();
 }
 
 void ToolWindow::setDesktopCount(int count)
@@ -1957,24 +1943,11 @@ void ToolWindow::add_stack(WindowList *newwin, int desktop) {
 }
 
 void ToolWindow::cycle_stack(bool forward) {
-	if (!stackMenu->isVisible()) {
-		menuPosition = 0;
-		if (stackMenu->WaitForUpdate())
-			stackMenu->Update();
-		stackMenu->reconfigure();
-		stackMenu->centerPosition();
-		stackMenu->show();
-	} else {
-		stackMenu->setHighlight(2);
-	}
-	if (forward) {
-		if(++menuPosition >= stackMenu->getCount())
-			menuPosition = 0;
-	} else {
-		if(--menuPosition < 0)
-			menuPosition = stackMenu->getCount() - 1;
-	}
-	stackMenu->setHighlight(menuPosition);
+	if (stackMenu->WaitForUpdate())
+		stackMenu->Update();
+	stackMenu->reconfigure();
+	stackMenu->centerPosition();
+	stackMenu->show(forward);
 }
 
 void ToolWindow::focus_stack(Window win)

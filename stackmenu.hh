@@ -30,8 +30,10 @@ public:
 	virtual ~Stackmenu();
 
 	void Update();
-	void show();
+	void show(bool forward);
 	void reconfigure();
+	void key_release(unsigned int);
+	void key_press(int);
 	void centerPosition();
 	bool WaitForUpdate(void) {return wait_for_update;}
 
@@ -43,7 +45,7 @@ protected:
 private:
 	ToolWindow *bbtool;
 	bool wait_for_update;
-//	int *word_length;
+	int menuPosition;
 };
 
 #endif // __STACKMENU_HH
