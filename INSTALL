@@ -1,0 +1,6 @@
+To make and install this program :
+
+run:
+./configure (for configure options see ./configure --help)
+make
+make install (as root)

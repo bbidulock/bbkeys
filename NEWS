@@ -1,0 +1,134 @@
+2003-01-01
+
+- Um.  A later note on plaigarism....  
+
+- Wellsir, I started this rewrite out with the intention of not copying any
+  code from anyone else.  Of course, that wasn't how bbkeys started 4+
+  years ago, so I don't know why I expected it to be different this time
+  around....  bbkeys borrowed heavily from XEmacs and windowmaker before...
+  I guess I was hoping to not have to do the same thing again this time
+  around.  
+
+  Well anyway, I started the bbkeys re-write out with 0 existing code.  I
+  did class diagrams and sequence diagrams, designing the new system to be
+  truly object-oriented and reusable for other bbtools, etc.  I started off
+  the re-write by focusing on the config classes.  I think they're clean
+  and well-done, and am pleased with them.  Then I started into the hard
+  stuff.  As the CVS repository will tell, I didn't originally start out
+  with any anything other than my class-diagram-generated code base.
+
+  But as I started working on coding the screen handler, the main client
+  itself, and the keybindings interface, I frequently looked at epist's
+  code.  And the more I looked at their code for ideas and sanity-checks,
+  the more I realized that they truly did a marvelous job.  Not only that,
+  but some of their classes were exactly what I had in mind with my early
+  class and sequence diagrams.  I also quickly realized that I could either
+  take some of their classes inline or spend quite a lot of time writing
+  just about exactly the same thing myself.  I chose the former.
+
+  In particular, I've brought in epist's actions, keytree, and window
+  classes and modified them to work with the new blackbox library.  I've
+  also borrowed code from openbox's XAtom class and used it in Netclient.
+  I was determined that I could do it better than they did with screen, and
+  I think I've done some good things, but all in all, much of ScreenHandler
+  uses epists's screen methods.
+
+  That being said, I feel less than happy about the means, but I do believe
+  that the end will still be good.  bbkeys has an extremely good code base
+  now--much, much better than it did before.  It's not quite a code-fork
+  from epist, but it feels sort of the same, which isn't nearly as
+  satisfying as I had hoped.   But credit does need to be given where
+  credit is due, and I hope I've done that.
+
+  *sigh*
+
+-----------------------------------------------------------------------------
+
+2002-11-02
+
+- Okay. complete rewrite time....  Check out the README for the new
+  low-down....
+
+- A note on plaigarism...  I've poured through epist-ng's code and it is
+  truly a thing of beauty.  xOr, woodblock, and shrimpx did an EXTREMELY
+  nice job with the code.  I personally don't like the lexx/yacc parser
+  stuff, and since ob2 doesn't have a common window manager library to go
+  against, it's really tied very closely to openbox2.  This means, if
+  people want to use epist-nb with blackbox, they have to first download
+  and build openbox2.  =:)  All that's to say that I would loved to have
+  used more of epist-ng's code, but couldn't because it is so deeply
+  dependent on openbox2's code.  The funny thing is--some of the syntax
+  that epist uses (actions, etc.), look very similar to those which were
+  in bbkeys.  And oddly enough, some of the code looks rather familiar to
+  the epist-ng code.  The reason for this is... there's not honestly that
+  many different ways to do this stuff, folks.  So, hush to all you
+  nay-sayers and "he jacked epist-ng's code!"-sayers too.  Zip it, even.
+  =:)
+
+
+-----------------------------------------------------------------------------
+
+2001-11-15
+
+- Make use of this file. :) Stuff like the note from 2001-08-03 should
+  really be in here, so it moved. README will contain non-INSTALL-related
+  usage instructions.
+
+-----------------------------------------------------------------------------
+
+2001-08-03...
+
+- This hasn't been updated in a LOOONG time, so I'll do so now.  Some
+  exciting new features have been added to bbkeys with this release
+  (0.8.0), and I'll try to explain one of them here.  By default, bbkeys
+  will now window-cycle MUCH better.  Of course, all keybindings are
+  user-configurable as before, and whatever keys you were using before for
+  PrevWindow/NextWindow will still work--they'll just work better.
+
+  xOr has helped me considerably (HUGE THANKS AGAIN, xOr!!) with this
+  release, and one of the new features that we added was a "stackedCycling"
+  methodology to window-switching.  To turn off this incredibly GOOD
+  feature (although I have NO idea why you would want to), put this in your
+  bbtools/bbkeys config file (no, not ~/.bbkeysrc--this is the other one
+  that's by default looked for at ~/.bbtools/bbkeys.bb or
+  ~/.bbtools/bbkeys.nobb)....
+
+  ! set this to false to use the linear style of window cycling
+  bbkeys.menu.stackedCycling:	False
+
+  Again, why you'd want to do that is beyond me, because there's SO much
+  more benefit to letting bbkeys do things the way it wants to--the new
+  way.  But if you're absolutely dead-set against progress, then put that
+  in.  What you'll then be using is another improvement--a "linear" cycling
+  method.  This will look the same as the old blackbox/bbkeys window
+  cycling method, but will act a little bit better and make more sense.  It
+  will, for instance, put a newly-created window into the cycling stack
+  immediately after the currently-focused window, so you just have to
+  "alt+tab" to it, rather than having to go all the way around the stack.
+
+  As for the new method for cycling windows...  When you hit your
+  NextWindow keybinding (mine's <alt+tab>), a window menu will pop up and
+  stay up until you release your PrevWindow/NextWindow keys.  This allows you 
+  to navigate through the window list (only showing the windows on the current
+  workspace, but INCLUDING STICKY WINDOWS!!), and then release your keys
+  when you have the window hilighted that you want to switch to.  You can
+  go backwards or forwards through the list, by using your NextWindow and
+  PrevWindow keys.  You can also make the pop-up window menu go away by
+  hitting <Escape>, or if you want, you can select the window currently
+  hilighted with <Return> or <Enter>.  What this last little feature also
+  means is that if you have only one key bound to PrevWindow or NextWindow
+  (i.e. using F11 to cycle forwards and F12 to cycle backwards), you can
+  keep cycling backwards/forwards, and then when you've hilighted the
+  window you want, just hit <Return>, or <Escape> to cancel.
+
+  But that's not all!!  With this new cycling scheme, the window list stack
+  will be re-organized when you cycle to a new/different window.  The
+  window that you had previously focused is now right below the one you now
+  have focused.  So you can switch back and forth between windows with a
+  simple <alt+tab> (or whatever you choose for your NextWindow keybinding.
+
+  I guess that's about it.  Give it a try.  I think you'll be pleasantly
+  suprised.
+
+
+

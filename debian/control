@@ -1,0 +1,16 @@
+Source: bbkeys
+Section: x11
+Priority: optional
+Maintainer: Jason 'vanRijn' Kasper <vR@movingparts.net>
+Build-Depends: xlibs-dev, debhelper (>> 3.0.0)
+Standards-Version: 3.5.2
+
+Package: bbkeys
+Architecture: any
+Depends: ${shlibs:Depends}
+Recommends: blackbox, bbconf
+Description: A key-grabber for any NETWM/EMWH-compliant window manager. 
+ bbkeys is a configurable key-grabber designed for the blackbox window manager
+ which is written by Brad Hughes.  bbkeys is easily configurable via directly 
+ hand-editting the user's configuration file, or by using the GUI total 
+ blackbox configurator, bbconf.
