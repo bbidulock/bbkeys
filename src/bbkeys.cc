@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.30 2002/06/27 20:45:50 eckzor Exp $
+// $Id: bbkeys.cc,v 1.31 2002/06/27 21:07:16 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -1381,91 +1381,93 @@ void ToolWindow::process_event(XEvent * e)
 		unsigned int fw_w, fw_h, fw_b, fw_d, num_children;
 
 		if (focus_window) {
+      Window fw_root, fw_parent, child;
+      Window *fw_children;
+      int fr_y, fr_x;
+      unsigned int fw_b, fw_d, num_children;
+      unsigned int fr_w, fr_h, fr_b, fr_d;
+      int margin_left, margin_right, margin_top, margin_bottom;
+
+      // get the client's geometry
+      XGetGeometry(getXDisplay(), focus_window, &fw_root, &fw_x,
+                   &fw_y, &fw_w, &fw_h, &fw_b, &fw_d);
+      // get the client's parent
+      XQueryTree(getXDisplay(), focus_window, &fw_root, &fw_parent,
+                 &fw_children, &num_children);
+      XFree(fw_children); // we dont use this
       // get the frame window (the client window's parent's parent)
-      if (0 != XQueryTree(getXDisplay(), focus_window, &fw_root, &fw_parent,
-                          &fw_children, &num_children) &&
-          0 != XQueryTree(getXDisplay(), fw_parent, &fw_root, &fw_parent,
-                          &fw_children, &num_children)) {
-        int fr_y, fr_x;
-    		unsigned int fr_w, fr_h, fr_b, fr_d;
+      XQueryTree(getXDisplay(), fw_parent, &fw_root, &fw_parent,
+                 &fw_children, &num_children);
+      XFree(fw_children); // we dont use this
+      // get the frame's geometry
+      XGetGeometry(getXDisplay(), fw_parent, &fw_root, &fr_x,
+                   &fr_y, &fr_w, &fr_h, &fr_b, &fr_d);
+      // translate the coordinates te relative to the frame window
+      XTranslateCoordinates(getXDisplay(), focus_window, fw_parent,
+                            fw_x, fw_y, &margin_left, &margin_top, &child);
+      margin_right = fr_w - fw_w - margin_left,
+      margin_bottom = fr_h - fw_h - margin_top;
+      // get the client window's gravity
+      XSizeHints sizehint;
+      long mask;
+      int gravity;
+      if (XGetWMNormalHints(getXDisplay(), focus_window, &sizehint, &mask) &&
+          sizehint.flags & PWinGravity)
+        gravity = sizehint.win_gravity;
+      else
+        gravity = NorthWestGravity;
+      // restore horizontal window gravity
+      switch (gravity) {
+      default:
+      case NorthWestGravity:
+      case SouthWestGravity:
+      case WestGravity:
+        fw_x = fr_x;
+        break;
 
-        XFree(fw_children); // we dont use this
-        // get the client's geometry
-        XGetGeometry(getXDisplay(), focus_window, &fw_root, &fw_x,
-                     &fw_y, &fw_w, &fw_h, &fw_b, &fw_d);
-        // get the frame's geometry
-			  XGetGeometry(getXDisplay(), fw_parent, &fw_root, &fr_x,
-                     &fr_y, &fr_w, &fr_h, &fr_b, &fr_d);
-        printf("client: x %i y %i w %i h %i\n", fw_x, fw_y, fw_w, fw_h);
-        printf("frame : x %i y %i w %i h %i\n", fr_x, fr_y, fr_w, fr_h);
-        // get the client windpw's gravity
-        XSizeHints sizehint;
-        long mask;
-        int gravity;
-        if (XGetWMNormalHints(getXDisplay(), focus_window, &sizehint, &mask) &&
-            sizehint.flags & PWinGravity)
-          gravity = sizehint.win_gravity;
-        else
-          gravity = NorthWestGravity;
-        // find the decorations sizes
-        unsigned int margin_left = fw_x,
-                    margin_right = fr_w - fw_w - margin_left,
-                      margin_top = fw_y,
-                   margin_bottom = fr_h - fw_h - margin_top;
-        // restore horizontal window gravity
-        switch (gravity) {
-        default:
-        case NorthWestGravity:
-        case SouthWestGravity:
-        case WestGravity:
-          fw_x = fr_x;
-          break;
+      case NorthGravity:
+      case SouthGravity:
+      case CenterGravity:
+        fw_x = fr_x + (margin_left + margin_right) / 2;
+        break;
 
-        case NorthGravity:
-        case SouthGravity:
-        case CenterGravity:
-          fw_x = fr_x + (margin_left + margin_right) / 2;
-          break;
+      case NorthEastGravity:
+      case SouthEastGravity:
+      case EastGravity:
+        fw_x = fr_x + margin_left + margin_right;
+        break;
 
-        case NorthEastGravity:
-        case SouthEastGravity:
-        case EastGravity:
-          fw_x = fr_x + margin_left + margin_right;
-          break;
+      case ForgetGravity:
+      case StaticGravity:
+        fw_x = fr_x + margin_left;
+        break;
+      }
 
-        case ForgetGravity:
-        case StaticGravity:
-          fw_x = fr_x + margin_left;
-          break;
-        }
+      // restore vertical window gravity
+      switch (gravity) {
+      default:
+      case NorthWestGravity:
+      case NorthEastGravity:
+      case NorthGravity:
+        fw_y = fr_y;
+        break;
 
-        // restore vertical window gravity
-        switch (gravity) {
-        default:
-        case NorthWestGravity:
-        case NorthEastGravity:
-        case NorthGravity:
-          fw_y = fr_y;
-          break;
+      case CenterGravity:
+      case EastGravity:
+      case WestGravity:
+        fw_y = fr_y + (margin_top + margin_bottom) / 2;
+        break;
 
-        case CenterGravity:
-        case EastGravity:
-        case WestGravity:
-          fw_y = fr_y + (margin_top + margin_bottom) / 2;
-          break;
+      case SouthWestGravity:
+      case SouthEastGravity:
+      case SouthGravity:
+        fw_y = fr_y + margin_top + margin_bottom;
+        break;
 
-        case SouthWestGravity:
-        case SouthEastGravity:
-        case SouthGravity:
-          fw_y = fr_y + margin_top + margin_bottom;
-          break;
-
-        case ForgetGravity:
-        case StaticGravity:
-          fw_y = fr_y + margin_top;
-          break;
-        }
-        printf("client: x %i y %i w %i h %i\n", fw_x, fw_y, fw_w, fw_h);
+      case ForgetGravity:
+      case StaticGravity:
+        fw_y = fr_y + margin_top;
+        break;
       }
 		}
 		
