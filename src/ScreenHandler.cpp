@@ -35,6 +35,7 @@ extern "C" {
 #endif // HAVE_UNISTD_H
 
 #include <X11/keysym.h>
+#include <stdlib.h>
 }
 
 #include "ScreenHandler.h"
@@ -822,30 +823,29 @@ void ScreenHandler::changeWorkspace(const int num) const {
 
 void ScreenHandler::changeWorkspaceVert(const int num) const {
   assert(_managed);
-  int width = _workspace_columns;
-  int num_desktops = (signed)_num_desktops;
-  int active_desktop = (signed)_active_desktop;
+  int width  = _workspace_columns;
+  int total = (signed)_num_desktops;
+  int n = (signed)_active_desktop;
   int wnum = 0;
 
-  if (width > num_desktops || width <= 0)
+  // if the # of rows is greater than the # of desktops or <= 0, or
+  // if we're not dealing with a rectangle here, return (invalid condition)
+  if ( width > total || width <= 0 ||
+       ( total % width ) != 0 )
     return;
 
-// a cookie to the person that makes this pretty
-  if (num < 0) {
-    wnum = active_desktop - width;
-    if (wnum < 0) {
-      wnum = num_desktops/width * width + active_desktop;
-      if (wnum >= num_desktops)
-	wnum = num_desktops - 1;
-    }
-  }
-  else {
-    wnum = active_desktop + width;
-    if (wnum >= num_desktops) {
-      wnum = (active_desktop + width) % num_desktops - 1;
-      if (wnum < 0)
-	wnum = 0;
-    }
+  bool moveUp = (num < 0);
+  if (moveUp) { // we go up...
+    wnum = (n < width) // if we're on the first row
+      ? n + (total - width) // go to the same position in the last row
+      : n - width; // else, just go up one row
+
+  } else { // we go down...
+    wnum = (n < (total - width)) // if we're not on the last row
+      ? n + width // go down one row
+      : n - (total - width); // else go to the same position in the
+			     // first row
+
   }
   changeWorkspace(wnum);
 }
@@ -853,30 +853,27 @@ void ScreenHandler::changeWorkspaceVert(const int num) const {
 void ScreenHandler::changeWorkspaceHorz(const int num) const {
   assert(_managed);
   int width = _workspace_columns;
-  int num_desktops = (signed)_num_desktops;
-  int active_desktop = (signed)_active_desktop;
+  int total = (signed)_num_desktops;
+  int n = (signed)_active_desktop;
   int wnum = 0;
 
-  if (width > num_desktops || width <= 0)
+  int curx = (n % width);
+  
+  // if the # of rows is greater than the # of desktops or <= 0, or
+  // if we're not dealing with a rectangle here, return (invalid condition)
+  if ( width > total || width <= 0 ||
+       ( total % width ) != 0 )
     return;
 
-  if (num < 0) {
-    if (active_desktop % width != 0)
-      wnum = active_desktop - 1;
-    else {
-      wnum = active_desktop + width - 1;
-      if (wnum >= num_desktops)
-	wnum = num_desktops - 1;
-    }
-  }
-  else {
-    if (active_desktop % width != width - 1) {
-      wnum = active_desktop + 1;
-      if (wnum >= num_desktops)
-	wnum = num_desktops / width * width;
-    }
-    else
-      wnum = active_desktop - width + 1;
+  bool moveLeft = (num < 0);
+  if (moveLeft) {
+    wnum = (curx % width == 0) // if we're on the left edge already
+      ? n + (width -1) // move to the far right side
+      : n -1; // else, just move once left
+  } else {
+    wnum = (curx < width -1) // if we're not on the right side
+      ? n + 1 // move once to the right
+      : n - (width -1); // else move all the way to the left
   }
   changeWorkspace(wnum);
 }
