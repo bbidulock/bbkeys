@@ -19,13 +19,15 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: BaseDisplay.hh,v 1.5 2002/06/07 19:07:34 eckzor Exp $
+// $Id: BaseDisplay.hh,v 1.6 2002/10/08 02:06:41 vanrijn Exp $
 
 #ifndef   __BaseDisplay_hh
 #define   __BaseDisplay_hh
 
+extern "C" {
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+}
 
 #include "LinkedList.hh"
 

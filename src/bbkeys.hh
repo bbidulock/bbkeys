@@ -20,13 +20,15 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.hh,v 1.12 2002/07/19 06:45:25 eckzor Exp $
+// $Id: bbkeys.hh,v 1.13 2002/10/08 02:06:41 vanrijn Exp $
 
 #ifndef __BBKEYS_HH
 #define __BBKEYS_HH
 
+extern "C" {
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
+}
 
 #include "grab_defs.hh" // grab* definitions
 #include "Basewindow.hh"

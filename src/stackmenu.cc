@@ -19,7 +19,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: stackmenu.cc,v 1.10 2002/07/10 14:04:29 eckzor Exp $
+// $Id: stackmenu.cc,v 1.11 2002/10/08 02:06:41 vanrijn Exp $
 
 #ifdef    HAVE_CONFIG_H
 #  include "config.h"
@@ -30,7 +30,9 @@
 #include "LinkedList.hh"
 #include "wminterface.hh"
 
+extern "C" {
 #include <X11/Xutil.h>
+}
 
 Stackmenu::Stackmenu(ToolWindow *tool) :
 		Basemenu(tool)

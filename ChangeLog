@@ -1,3 +1,7 @@
+version 0.8.6 --
+  - pulling patch in from David Dellanave (solaris compile issues) 
+    [vanRijn]
+
 version 0.8.5 --
 
   - fix recursive redhat-build bug (fixes 577135)

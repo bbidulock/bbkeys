@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.34 2002/07/20 08:25:40 eckzor Exp $
+// $Id: bbkeys.cc,v 1.35 2002/10/08 02:06:41 vanrijn Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -64,9 +64,11 @@
 #	 include <sys/stat.h>
 #endif									// HAVE_SYS_STAT_H
 
+extern "C" {
 #include <X11/Xlib.h>
 #include <X11/Xproto.h>
 #include <X11/keysym.h>
+}
 
 #include "bbkeys.hh"
 #include "stackmenu.hh"

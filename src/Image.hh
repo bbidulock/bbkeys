@@ -19,13 +19,15 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: Image.hh,v 1.3 2002/05/30 18:26:25 eckzor Exp $
+// $Id: Image.hh,v 1.4 2002/10/08 02:06:41 vanrijn Exp $
 
 #ifndef   __Image_hh
 #define   __Image_hh
 
+extern "C" {
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+}
 
 #include "Timer.hh"
 

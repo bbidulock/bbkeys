@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: BaseDisplay.cc,v 1.5 2002/06/07 19:07:34 eckzor Exp $
+// $Id: BaseDisplay.cc,v 1.6 2002/10/08 02:06:41 vanrijn Exp $
 
 // stupid macros needed to access some functions in version 2 of the GNU C
 // library
@@ -83,10 +83,12 @@
 #  include <sys/wait.h>
 #endif // HAVE_SYS_WAIT_H
 
+extern "C" {
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #include <X11/cursorfont.h>
+}
 
 #include "BaseDisplay.hh"
 #include "LinkedList.hh"

@@ -18,7 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: Baseresource.hh,v 1.5 2002/05/31 17:07:04 eckzor Exp $
+// $Id: Baseresource.hh,v 1.6 2002/10/08 02:06:41 vanrijn Exp $
 
 #ifndef __BASERESOURCE_HH
 #define __BASERESOURCE_HH
@@ -35,8 +35,10 @@
 #  include <unistd.h>
 #endif
 
+extern "C" {
 #include <X11/Xlib.h>
 #include <X11/Xresource.h>
+}
 
 #include "Timer.hh"
 

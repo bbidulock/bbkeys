@@ -18,7 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: Basewindow.hh,v 1.4 2002/05/30 20:47:45 eckzor Exp $
+// $Id: Basewindow.hh,v 1.5 2002/10/08 02:06:41 vanrijn Exp $
 
 #ifndef __BASEWINDOW_HH
 #define __BASEWINDOW_HH
@@ -47,11 +47,13 @@
 #  include <math.h>
 #endif
 
+extern "C" {
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
+}
 
 #include "BaseDisplay.hh"
 #include "main.hh"

@@ -20,12 +20,14 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: Basemenu.hh,v 1.5 2002/05/30 20:47:45 eckzor Exp $
+// $Id: Basemenu.hh,v 1.6 2002/10/08 02:06:41 vanrijn Exp $
 
 #ifndef   __Basemenu_hh
 #define   __Basemenu_hh
 
+extern "C" {
 #include <X11/Xlib.h>
+}
 
 #include "LinkedList.hh"
 
