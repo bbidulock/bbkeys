@@ -52,6 +52,10 @@ version 0.8.4 --
     smarter way of handling key grabbing configuration in bbconf, we don't
     have to hang bbkeys while keygrabs are being configured. [vanRijn]
 
+  - adding logic to bbkeys to pass configurators correct command-line
+    arguments so we load the rc-file that our user is running bbkeys with.
+    [vanRijn]
+
 version 0.8.3 --
 
   - changing external app launch order--we go bbconf, bbkeysconf,

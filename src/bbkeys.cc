@@ -660,15 +660,23 @@ void ToolWindow::setKeygrabs(void)
 				// Make 'bbconf' automagically fail...
 				res = 1;
 			} else {
-				res = execlp("bbconf", "bbconf", NULL);
+				char *begin="keybindings:loadfile=";
+		    char *args = new char[strlen(begin) + strlen(bbkeys_rcfile) +1];
+				sprintf(args, "%s%s", begin, bbkeys_rcfile);
+
+				res = execlp("bbconf", "bbconf", "--start-plugin", "key bindings", 
+				"--args", args, NULL);
 			}
 
 			if (res != 0) {
+				char *begin="bbkeysconf.pl -rcfile ";
+		    char *args = new char[strlen(begin) + strlen(bbkeys_rcfile) +1];
+				sprintf(args, "%s%s", begin, bbkeys_rcfile);
 			 	res = execlp("rxvt", "rxvt", "-bg", "black", "-fg", "red",
-								"-e", "bbkeysconf.pl", NULL);
+								"-e", args, NULL);
 			 	if (res != 0) {
 						execlp("xterm", "xterm", "-bg", "black", "-fg",
-								"red", "-e", "bbkeysconf.pl", NULL);
+								"red", "-e", args, NULL);
 			 	}
 			}
 			exit(0);

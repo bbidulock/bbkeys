@@ -33,6 +33,7 @@
 #include <X11/keysym.h>
 
 #define MaxInstructions 50
+#define RCFILE ".bbkeysrc"
 
 typedef struct {
 		unsigned long modMask;
