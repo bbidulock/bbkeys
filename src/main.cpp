@@ -31,7 +31,7 @@
 bt::I18n bt::i18n;
 
 //--------------------------------------------------------
-// parseOptions 
+// parseOptions
 //--------------------------------------------------------
 void parseOptions (int argc, char **argv, Config & _config)
 {
@@ -44,7 +44,7 @@ void parseOptions (int argc, char **argv, Config & _config)
         exit(2);
       };
       _config.setOption("display", argv[i]);
- 			
+
       // Applications we exec will need the proper display
       string disp = (string)"DISPLAY=" + argv[i];
       putenv((char *)disp.c_str());
@@ -72,7 +72,7 @@ void parseOptions (int argc, char **argv, Config & _config)
       usage();
       exit(2);
     };
-	
+
   }
 }
 
@@ -84,7 +84,7 @@ void usage() {
        << " -d or --display <display name>    X server to connect to" << endl
        << " -D or --debug                     print debugging information" << endl
        << " -c or --config  <filename>        configuration file" << endl
-       << "                     (default is ~/.blackbox/keybindings)" << endl
+       << "                     (default is ~/.bbkeysrc)" << endl
        << " -v or --version                   Display version number" << endl
        << " -h or --help                      Display this help" << endl;
 }
@@ -99,12 +99,12 @@ int main(int argc, char **argv)
   std::string dpy_name = _config->getStringValue("display",
                                                  getenv("DISPLAY"));
 
-  
+
   KeyClient * _k=new KeyClient(argc, argv, *_config, dpy_name);
   _k->run();
 
   delete _k;
   delete _config;
-  
+
   return 0;
 }

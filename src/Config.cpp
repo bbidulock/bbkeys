@@ -106,6 +106,10 @@ void Config::setOption(const std::string &name, const std::string &value)
 
 }
 
+void Config::reset() {
+  _configMap.clear();
+}
+
 void Config::showOptions() {
   ConfigMap::const_iterator it = _configMap.begin(), end = _configMap.end();
   for (; it != end; ++it) {

@@ -35,7 +35,7 @@ typedef std::map<std::string, std::string> ConfigMap;
 class Config {
 private:
   ConfigMap _configMap;
-  
+
 public:
   Config();
   ~Config();
@@ -46,6 +46,7 @@ public:
 
   void setOption(const std::string & key, const std::string & value);
   void showOptions();
+  void reset();
 };
 
 

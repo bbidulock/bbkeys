@@ -44,12 +44,13 @@
 #include <Util.hh>
 #include <i18n.hh>
 #include <Resource.hh>
+#include <Timer.hh>
 
 
 class ScreenHandler;
 class keytree;
 
-class KeyClient : public bt::Application
+class KeyClient : public bt::Application, public bt::TimeoutHandler
 {
 
 public:
@@ -60,7 +61,7 @@ public:
   inline Netclient * getNetclient() { return _netclient; }
   inline Config * getConfig() { return &_config; }
   inline KeyGrabber * getKeyGrabber() { return _keyGrabber; }
-  inline bt::Application & getMainApplication() 
+  inline bt::Application & getMainApplication()
     { return dynamic_cast<bt::Application&> (* this); }
   void cycleScreen(int current, bool forward) const;
 
@@ -71,8 +72,11 @@ public:
 
   WindowList& clientsList() { return _clients; }
   WindowList::iterator& activeWindow() { return _active; }
-  
+  virtual void timeout(bt::Timer *timer);
+
 private:
+  int _argc;
+  char **_argv;
   keytree *_keybindings;
   std::string _configFileName;
   Config & _config;
@@ -84,19 +88,26 @@ private:
   bool _debug;
 
   typedef std::vector<ScreenHandler*> ScreenList;
-  ScreenList screenList;  
+  ScreenList screenList;
 
   void handleConfigFile();
 
   void initKeywords(KeywordMap &);
-  void reconfigure () ;
+  void reconfigure();
+  void initialize();
   void setKeybindings(FileTokenizer &);
 
   bool process_signal(int sig);
   void process_event(XEvent *e);
 
   WindowList _clients;
-  WindowList::iterator _active;  
+  WindowList::iterator _active;
+
+  bt::Timer *config_check_timer;
+  long _autoConfigCheckTimeout;
+  bool _autoConfig;
+  void checkConfigFile();
+  time_t _last_time_config_changed;
 
 };
 #endif

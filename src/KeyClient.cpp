@@ -48,7 +48,7 @@ extern "C" {
 #include <sys/wait.h>
 
 }
-  
+
 #include "version.h"
 
 #include "KeyClient.h"
@@ -60,71 +60,51 @@ extern "C" {
 #include <vector>
 
 //--------------------------------------------------------
-// Constructor/Destructor 
+// Constructor/Destructor
 //--------------------------------------------------------
 KeyClient::KeyClient (int argc, char **argv,
                       Config & config, std::string display):
   bt::Application(BBTOOL, display.c_str(), true), _config(config)
 {
-    
+
+  // save off what we're constructed with for reconfiguring later...
+  _argc = argc;
+  _argv = argv;
+
   // initialize our keyword map for the file tokenizer
   initKeywords(_keywordMap);
-    
+
   // now connect to the X server
   _display = XDisplay();
   if (! _display ) {
-    cerr << "ERROR: Can't connect to X Server. Bummer! Exiting\n";
+    cerr << "KeyClient: ERROR: Can't connect to X Server. Bummer! Exiting\n";
     exit(2);
   }
 
   // check to see if we've been handed another config-file to use
-  _configFileName = bt::expandTilde(_config.getStringValue("config", 
+  _configFileName = bt::expandTilde(_config.getStringValue("config",
                                     "~/.bbkeysrc") );
 
   struct stat buf;
   if (0 != stat(_configFileName.c_str(), &buf) ||!S_ISREG(buf.st_mode)) {
-    cerr << "ERROR: Couldn't load rc-file: [" << _configFileName
+    cerr << "KeyClient: ERROR: Couldn't load rc-file: [" << _configFileName
          << "], falling back to default: [" << DEFAULTRC << "]\n";
     _configFileName = DEFAULTRC;
+  } else {
+    _last_time_config_changed = buf.st_mtime;
   }
 
-  
   _debug = _config.getBoolValue("debug", false);
 
-  // now, read in our configuration file and set both program settings
-  // and keybindings we're asked to handle
-  handleConfigFile();
-
-  // parse command options again to override what we read in from config file
-  parseOptions( argc, argv, _config );
+  // here's our friendly little general-purpose keygrabber
+  _keyGrabber = new KeyGrabber(_display, numLockMask(), scrollLockMask() );
 
   _netclient = new Netclient(_display);
   _active = _clients.end();
 
-  // here's our friendly little general-purpose keygrabber
-  _keyGrabber = new KeyGrabber(_display, numLockMask(), scrollLockMask() );
-    
-  // now create a screen handler for each screen that exists
-  for (unsigned int i = 0; i < bt::Application::display().screenCount(); i++) {
-    ScreenHandler *screen = new ScreenHandler(this, i);
-    if (! screen->isManaged()) {
-      delete screen;
-      continue;
-    }
-
-    screen->initialize();
-    
-    // add this screen to our collection
-    screenList.push_back(screen);
-  }
-
-  if (screenList.empty()) {
-    cerr << "KeyClient::KeyClient: no compatible window managers found, aborting.\n";
-    ::exit(3);
-  }  
-
-    
+  initialize();
 }
+
 KeyClient::~KeyClient ()
 {
 
@@ -136,12 +116,71 @@ KeyClient::~KeyClient ()
   if (_keyGrabber) delete _keyGrabber;
 }
 
+void KeyClient::initialize() {
+
+  // now, read in our configuration file and set both program settings
+  // and keybindings we're asked to handle
+  handleConfigFile();
+
+  // parse command options again to override what we read in from config file
+  parseOptions( _argc, _argv, _config );
+
+
+  // now create a screen handler for each screen that exists
+  for (unsigned int i = 0; i < bt::Application::display().screenCount(); i++) {
+    ScreenHandler *screen = new ScreenHandler(this, i);
+    if (! screen->isManaged()) {
+      delete screen;
+      continue;
+    }
+
+    screen->initialize();
+
+    // add this screen to our collection
+    screenList.push_back(screen);
+  }
+
+  if (screenList.empty()) {
+    cerr << "KeyClient: initialize: no compatible window managers found, aborting.\n";
+    ::exit(3);
+  }
+
+  _autoConfigCheckTimeout = (_config.getNumberValue("autoConfigCheckTimeout", 10)) * 1000;
+  _autoConfig = _config.getBoolValue("autoConfig", true);
+  if (_autoConfig) {
+    if (!config_check_timer) {
+      config_check_timer = new bt::Timer(this, this);
+    }
+    config_check_timer->setTimeout(_autoConfigCheckTimeout);
+    config_check_timer->recurring(True);
+    config_check_timer->start();
+  }
+
+}
+
 //--------------------------------------------------------
-// reconfigure 
+// reconfigure
 //--------------------------------------------------------
 void KeyClient::reconfigure ()
 {
-  cout << "hey, goodie! I got a reconfigure request!!\n";
+  if (_debug)
+    std::cout << "KeyClient: reconfigure: hey, goodie! I got a reconfigure request!!\n";
+
+
+  // delete all screens
+  for_each(screenList.begin(), screenList.end(), bt::PointerAssassin());
+  screenList.clear();
+
+  // initialize and/or clear our config
+  _config.reset();
+
+  // reset our timer
+  if (config_check_timer) {
+    config_check_timer->halt();
+  }
+
+  initialize();
+
 }
 
 
@@ -157,9 +196,9 @@ void KeyClient::handleConfigFile() {
   }
 
   _keybindings->reset();
-    
+
   bool _doingConfig = false, _doingKeybindings = false;
-    
+
   TokenBlock *block = 0;
   while ((block = tokenizer.next())) {
     switch (block->tag) {
@@ -177,17 +216,17 @@ void KeyClient::handleConfigFile() {
       if (_debug)
         cout << "got a config option!, setting key: [" << block->name
              << "] to value: [" << block->data << "]\n";
-      
+
       _config.setOption(block->name, block->data);
       break;
     case ConfigOpts::keybindings:
       _doingKeybindings = true;
       setKeybindings(tokenizer);
- 
+
       if (_debug)
         _keybindings->showTree();
- 
-      break;                   
+
+      break;
     default:
       cerr << "unknown tag found in ConfigOpts block: ["
            << block->tag << "], name: [" << block->name
@@ -245,7 +284,7 @@ void KeyClient::setKeybindings(FileTokenizer & tokenizer) {
         cerr << "ERROR: No key or modifier given. Ignoring this one, Jimmy.\n";
         if (block) delete block;
         continue;
-      } 
+      }
       // first, split our string containing our keys/modifiers and separate
       // the keys from the modifiers
       vector<string> results;
@@ -258,11 +297,11 @@ void KeyClient::setKeybindings(FileTokenizer & tokenizer) {
       if (sym == 0) {
         cerr << "ERROR: Invalid key (" << _key << ")! This may cause odd behavior.\n";
       }
-   
+
       // now iterate through our modifiers and try to match the given string
       // to a modifier mask. if we find it, xor it together with what we already have
       unsigned int _mask=0;
-            
+
       for (int j=0; j < (matches -1); j++) {
 
         bool found=false;
@@ -332,7 +371,7 @@ void KeyClient::initKeywords(KeywordMap& keywords) {
 
   keywords.insert(KeywordMap::value_type("nextscreen", Action::nextScreen));
   keywords.insert(KeywordMap::value_type("prevscreen", Action::prevScreen));
-  
+
   keywords.insert(KeywordMap::value_type("showrootmenu", Action::showRootMenu));
   keywords.insert(KeywordMap::value_type("showworkspacemenu", Action::showWorkspaceMenu));
   keywords.insert(KeywordMap::value_type("toggledecorations", Action::toggleDecorations));
@@ -364,7 +403,7 @@ bool KeyClient::process_signal(int sig) {
 
 void KeyClient::process_event(XEvent *e) {
   // Send the event through the default EventHandlers.
-  bt::Application::process_event(e);  
+  bt::Application::process_event(e);
 }
 
 void KeyClient::cycleScreen(int current, bool forward) const {
@@ -375,7 +414,7 @@ void KeyClient::cycleScreen(int current, bool forward) const {
       break;
     }
   assert(i < screenList.size());  // current is for an unmanaged screen
-  
+
   int dest = current + (forward ? 1 : -1);
 
   if (dest < 0) dest = (signed)screenList.size() - 1;
@@ -384,3 +423,27 @@ void KeyClient::cycleScreen(int current, bool forward) const {
   const XWindow *target = screenList[dest]->lastActiveWindow();
   if (target) target->focus();
 }
+
+void KeyClient::timeout(bt::Timer *timer) {
+  if (_debug)
+    std::cout << "KeyClient: timeout: got timeout from timer...." << std::endl;
+  if (timer == config_check_timer) {
+    checkConfigFile();
+  }
+}
+
+void KeyClient::checkConfigFile() {
+
+  struct stat file_status;
+
+  if (stat(_configFileName.c_str(), &file_status) != 0) {
+    if (_debug)
+      std::cerr << "Could not open config file: [" << _configFileName << "]";
+  } else if (file_status.st_mtime != _last_time_config_changed) {
+    if (_debug)
+      std::cout << "KeyClient: checkConfigFile: config file time changed..." << std::endl;
+    _last_time_config_changed = file_status.st_mtime;
+    reconfigure();
+  }
+}
+
