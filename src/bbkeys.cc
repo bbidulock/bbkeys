@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.14 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: bbkeys.cc,v 1.15 2002/03/11 16:20:25 vanrijn Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -408,7 +408,7 @@ void ToolWindow::activateKeygrabs(void)
 
 	 if (grabSet.instructCount > 0)
 			XUngrabKey(getXDisplay(), AnyKey, AnyModifier,
-						 getScreenInfo(0)->getRootWindow());
+						 getCurrentScreenInfo()->getRootWindow());
 	 for (i = 0; i < grabSet.instructCount; i++) {
 			if (grabSet.KeyMap[i].keycode == 0)
 				continue;

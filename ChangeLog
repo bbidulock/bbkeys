@@ -6,6 +6,10 @@ version 0.8.5 --
   - fix bug in bbkeys.hh--increasing MaxInstructions to 100 for cthulhain
     [vanRijn]
 
+  - fix in bbkeys.cc -- XUngrabKey changed to use same call to find what
+    screen we're on as the XGrabKey call 
+    [vanRijn]
+
 version 0.8.4 --
 
   - add a sanity check to the removeWindow function. Basically, blackbox tells
