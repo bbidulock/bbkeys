@@ -154,6 +154,7 @@ Boston, MA 02111-1307, USA.	 */
  */
 
 static int MetaMask, HyperMask, SuperMask, AltMask, ModeMask;
+static int NumLockMask, ScrollLockMask;
 
 char *ToolWindow::index_to_name(int indice)
 {
@@ -190,6 +191,8 @@ void ToolWindow::x_reset_modifier_mapping(Display * display)
 	 int super_bit = 0;
 	 int alt_bit = 0;
 	 int mode_bit = 0;
+	 int num_lock_bit = 0;
+	 int scroll_lock_bit = 0;
 	 XModifierKeymap *x_modifier_keymap = XGetModifierMapping(display);
 
 #define modwarn(name,old,other)								\
@@ -261,6 +264,12 @@ void ToolWindow::x_reset_modifier_mapping(Display * display)
 					 case XK_Alt_R:
 							store_modifier("Alt_R", alt_bit);
 							break;
+					 case XK_Num_Lock:
+							store_modifier("Num_Lock", num_lock_bit);
+							break;
+					 case XK_Scroll_Lock:
+							store_modifier("Scroll_Lock", scroll_lock_bit);
+							break;
 					 case XK_Control_L:
 							check_modifier("Control_L", ControlMask);
 							break;
@@ -325,6 +334,8 @@ void ToolWindow::x_reset_modifier_mapping(Display * display)
 	 SuperMask = (super_bit ? (1 << super_bit) : 0);
 	 AltMask = (alt_bit ? (1 << alt_bit) : 0);
 	 ModeMask = (mode_bit ? (1 << mode_bit) : 0); /* unused */
+	 NumLockMask = (num_lock_bit ? (1 << num_lock_bit) : 0);
+	 ScrollLockMask = (scroll_lock_bit ? (1 << scroll_lock_bit) : 0);
 
 	 if (x_modifier_keymap)
 			XFreeModifiermap(x_modifier_keymap);
@@ -1290,21 +1301,25 @@ unsigned int ToolWindow::KeycodeToModmask(unsigned int code)
 
 		case XK_Alt_L:
 		case XK_Alt_R:
-      return Mod1Mask;
+      return AltMask ? AltMask : MetaMask;
 
 		case XK_Num_Lock:
-      return Mod2Mask;
+      return NumLockMask;
 
 		case XK_Super_L:
 		case XK_Super_R:
-      return Mod3Mask;
+      return SuperMask;
+
+		case XK_Hyper_L:
+		case XK_Hyper_R:
+      return HyperMask;
 
 		case XK_Meta_L:
 		case XK_Meta_R:
-      return Mod4Mask;
+      return MetaMask;
 
 		case XK_Scroll_Lock:
-      return Mod5Mask;
+      return ScrollLockMask;
 	}
 	return (unsigned int)-1;
 }

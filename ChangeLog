@@ -33,8 +33,14 @@ version 0.8.4 --
   - patch for allowing an alternate keybinding config file (thanks to Scott
     Moynes!)
 
+  - sync with blackbox for 0.61.2--attributes element Atom has changed to now
+    include decoration state so that ToggleDecor() works.
 
-
+  - including patch from Sergey Vlasov for allowing use of Meta and Hyper
+    modifiers, also try to get the correct Num_Lock and Scroll_Lock modifier
+    mask from the X server rather than hard-coded.  I've not had tons of time
+    to play with this, though I have made sure that it works on my laptop.
+    =:)
 
 version 0.8.3 --
 
