@@ -1,13 +1,16 @@
 version 0.8.5 --
 
+  - fix recursive redhat-build bug (fixes 577135)
+    [vanRijn]
+
   - fix a memory leak in ToolWindow::windowAttributeChange.
     [xOr]
 
   - remove server grabs from the Image code. They prove to not be needed (they
     no longer exist in the blackbox code.) And they cause the X server to lock
-	indefinately if you run 2 bbkeys on the same display, running the second
-	one from a terminal on the display.
-	[xOr]
+    indefinately if you run 2 bbkeys on the same display, running the second
+    one from a terminal on the display.
+    [xOr]
 
   - when we recieve a startup message from blackbox, clear out any leftover
     windows in the window list. These are caused by the fact that on shutdown

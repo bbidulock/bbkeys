@@ -6,7 +6,11 @@ SUBDIRS = src data doc redhat
 
 docdir = $(prefix)/doc/bbkeys
 doc_DATA = README AUTHORS BUGS ChangeLog NEWS
-EXTRA_DIST = $(doc_DATA) debian redhat
+EXTRA_DIST = $(doc_DATA) debian
+
+dist-hook:
+	rm -rf `find $(distdir) -name CVS`
+	rm -f  `find $(distdir) -name ".\#*"`
 
 ## create RPMs
 dist-rpm: Makefile
