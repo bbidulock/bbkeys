@@ -84,6 +84,8 @@ void XWindow::propertyNotifyEvent(const XPropertyEvent * const e) {
     updateNormalHints();
   else if (e->atom == XA_WM_HINTS)
     updateWMHints();
+  else if (e->atom == _netclient->xaBlackboxAttributes())
+    updateBlackboxAttributes();  
   else if (e->atom == _netclient->wmState() )
     updateState();
   else if (e->atom == _netclient->wmDesktop() )
