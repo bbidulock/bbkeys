@@ -102,7 +102,6 @@ void Stackmenu::key_press(int grabInt)
       setSelected(menuPosition);
 			break;
 		default:
-			hide();
 			break;
 	}
 }
