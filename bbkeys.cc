@@ -1293,8 +1293,11 @@ void ToolWindow::process_event(XEvent * e)
 			}
 		}
 
-	 // if we're doing the CycleWindow thing
-	 if (grabInt > -1) {
+		if (grabInt < 0)
+			if ((e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Escape)) &&
+					stackMenu->isVisible())
+				stackMenu->hide();
+		else {
 			if (stackMenu->isVisible())
 				stackMenu->key_press(grabSet.KeyMap[grabInt].action);
 			else {

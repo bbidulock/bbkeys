@@ -30,6 +30,7 @@ public:
 	virtual ~Stackmenu();
 
 	void Update();
+	void hide();
 	void show(bool forward);
 	void reconfigure();
 	void key_release(unsigned int);
@@ -40,7 +41,8 @@ public:
 protected:
 	void setMenuItems();
 	void clearMenu();
-	virtual void itemSelected(int,int);
+	void setSelected(int);
+	void itemSelected(int,int);
 
 private:
 	ToolWindow *bbtool;

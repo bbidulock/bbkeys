@@ -38,6 +38,9 @@ Stackmenu::Stackmenu(ToolWindow *tool) :
 Stackmenu::~Stackmenu() {
 }
 
+void Stackmenu::itemSelected(int,int) {
+}
+
 void Stackmenu::reconfigure()
 {
 	setMenuItems();
@@ -72,10 +75,6 @@ void Stackmenu::Update() {
 	Basemenu::update();	
 }
 
-void Stackmenu::itemSelected(int button, int index)
-{
-}
-
 void Stackmenu::key_release(unsigned int key)
 {
 	if (key == 64) {
@@ -87,7 +86,6 @@ void Stackmenu::key_release(unsigned int key)
 					bbtool->wminterface->setWindowFocus(it.current()->win);
 					XRaiseWindow(bbtool->getXDisplay(), it.current()->win);
 				}
-		XUngrabKeyboard(bbtool->getXDisplay(), CurrentTime);
 		hide();
 	}
 }
@@ -98,19 +96,24 @@ void Stackmenu::key_press(int grabInt)
 		case grabNextWindow:
 			if(++menuPosition >= getCount())
 				menuPosition = 0;
-			setHighlight(menuPosition);
+			setSelected(menuPosition);
 			break;
 		case grabPrevWindow:
 			if(--menuPosition < 0)
 				menuPosition = getCount() - 1;
-			setHighlight(menuPosition);
+			setSelected(menuPosition);
 			break;
 		default:
-			XUngrabKeyboard(bbtool->getXDisplay(), CurrentTime);
 			hide();
 			break;
 	}
 }
+
+void Stackmenu::hide()
+{
+	XUngrabKeyboard(bbtool->getXDisplay(), CurrentTime);
+	Basemenu::hide();
+}	
 
 void Stackmenu::show(bool forward)
 {
@@ -135,7 +138,7 @@ void Stackmenu::show(bool forward)
 		if(--menuPosition < 0)
 			menuPosition = getCount() - 1;
   }
-	setHighlight(menuPosition);*/
+	setSelected(menuPosition);*/
 	key_press(forward?grabNextWindow:grabPrevWindow);
 
 	Basemenu::show();
@@ -147,4 +150,10 @@ void Stackmenu::centerPosition()
 	int y = (bbtool->getCurrentScreenInfo()->getHeight()>>1) - (getHeight()>>1);
 	if (x>0 && y>0)
 		Basemenu::move(x, y);
+}
+
+void Stackmenu::setSelected(int sel)
+{
+	if ((sel < 0) || sel >= getCount()) return;
+//	setIndicatorPosition(sel);
 }
