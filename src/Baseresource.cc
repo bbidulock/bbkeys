@@ -18,7 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: Baseresource.cc,v 1.5 2002/05/30 20:47:45 eckzor Exp $
+// $Id: Baseresource.cc,v 1.6 2002/05/31 17:07:04 eckzor Exp $
 
 #ifdef    HAVE_CONFIG_H
 #  include "config.h"
@@ -172,7 +172,7 @@ void BaseResource::CopyTexture(BTexture Texture1,BTexture *Texture2) {
 }
 
 void BaseResource::Reload() {
-  struct stat file_status;
+  struct stat fstatus;
 
   switch (ResourceType) {
     case BBTOOLS:
@@ -190,30 +190,32 @@ void BaseResource::Reload() {
   LoadBBToolResource();
 
   if ((bbtool->config_file!=NULL) && (style.auto_config)) {
-    if (stat(bbtool->config_filename,&file_status)!=0) {
+    if (stat(bbtool->config_filename,&fstatus)!=0) {
       fprintf(stderr,"Can't use autoconfig");
       style.auto_config=false;
       mtime=0;
     } else
-        mtime=file_status.st_mtime;
+        mtime=fstatus.st_mtime;
   }
 
   XrmDestroyDatabase(resource_db);
 }
 
-bool BaseResource::ReadResourceFromFilename(char *rname, char *rclass) {
-  struct stat file_status;
+bool BaseResource::ReadResourceFromFilename(const char *rname,
+                                            const char *rclass) {
+  struct stat fstatus;
   char *filename=NULL;
   XrmValue value;
   char *value_type;
 
-  if (XrmGetResource(resource_db,rname,rclass, &value_type, &value)) {
+  if (XrmGetResource(resource_db, (char *)rname, (char *)rclass, &value_type,
+                     &value)) {
     int len = strlen(value.addr);
     delete [] filename;
     filename = new char[len + 1];
     memset(filename, 0, len + 1);
     strncpy(filename, value.addr, len);
-    if (stat(filename,&file_status)!=0) {
+    if (stat(filename,&fstatus)!=0) {
       db=NULL;
       delete [] filename;
       return(False);

@@ -18,7 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: Baseresource.hh,v 1.4 2002/05/30 20:47:45 eckzor Exp $
+// $Id: Baseresource.hh,v 1.5 2002/05/31 17:07:04 eckzor Exp $
 
 #ifndef __BASERESOURCE_HH
 #define __BASERESOURCE_HH
@@ -87,7 +87,7 @@ class BaseResource : public TimeoutHandler {
     virtual void LoadBBToolResource(void) = 0;
     virtual void timeout(void);
   private:
-    bool ReadResourceFromFilename(char *, char *);
+    bool ReadResourceFromFilename(const char *, const char *);
     void ReadBBtoolResource(void);
     void ReadDefaultResource(void);
     void ReadBlackboxResource(void);

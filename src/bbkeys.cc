@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.23 2002/05/30 20:20:45 eckzor Exp $
+// $Id: bbkeys.cc,v 1.24 2002/05/31 17:07:04 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -188,7 +188,7 @@ const char *ToolWindow::index_to_name(int indice)
 	 }
 }
 
-void ToolWindow::x_reset_modifier_mapping(Display * display)
+void ToolWindow::x_reset_modifier_mapping(Display * d)
 {
 	 int modifier_index, modifier_key, column, mkpm;
 	 int warned_about_overlapping_modifiers = 0;
@@ -201,7 +201,7 @@ void ToolWindow::x_reset_modifier_mapping(Display * display)
 	 int mode_bit = 0;
 	 int num_lock_bit = 0;
 	 int scroll_lock_bit = 0;
-	 XModifierKeymap *x_modifier_keymap = XGetModifierMapping(display);
+	 XModifierKeymap *x_modifier_keymap = XGetModifierMapping(d);
 
 #define modwarn(name,old,other)								\
 	warned_about_overlapping_modifiers = 1
@@ -240,7 +240,7 @@ void ToolWindow::x_reset_modifier_mapping(Display * display)
 							x_modifier_keymap->modifiermap[modifier_index * mkpm +
 																	modifier_key];
 					 KeySym sym =
-							(code ? XKeycodeToKeysym(display, code, column) : 0);
+							(code ? XKeycodeToKeysym(d, code, column) : 0);
 					 if (sym == last_sym)
 							continue;
 					 last_sym = sym;
@@ -642,13 +642,13 @@ void ToolWindow::execCommand(char *const ptrCommand)
 	}
 
 	if (pid == 0) {
-		char *const argv[] = {
+		const char *const argv[] = {
       "sh",
       "-c",
       ptrCommand,
       0
     };
-		execve("/bin/sh", argv, environ);
+		execve("/bin/sh", (char *const *)argv, environ);
 		exit(127);
 	}
 }
@@ -1125,13 +1125,13 @@ void ToolWindow::MakeWindow(bool reconfigure)
 									geom_closeBtn.height);
 	 }
 
-	 char *name = BBTOOL;
+	 char *name = (char *)BBTOOL;
 	 XSizeHints sizehints;
 
 	 wmhints.flags = StateHint;
 
-	 classhints.res_name = BBTOOL;
-	 classhints.res_class = "bbtools";
+	 classhints.res_name = (char *)BBTOOL;
+	 classhints.res_class = (char *)"bbtools";
 
 	 sizehints.x = frame.x;			//getResource()->position.x;
 	 sizehints.y = frame.y;			//getResource()->position.y;
@@ -1236,7 +1236,7 @@ void ToolWindow::Redraw()
 	XClearWindow(getXDisplay(), win_configBtn);
 	XClearWindow(getXDisplay(), win_closeBtn);
 
-	char *title = "bbkeys";
+	char *title = (char *)"bbkeys";
 	XDrawString(getXDisplay(), win_title, frameGC, geom_title.x - 1,
 			(geom_title.height + resource->label.font->ascent -
 			resource->label.font->descent) / 2, title, strlen(title));

@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: BaseDisplay.cc,v 1.3 2002/05/30 20:47:45 eckzor Exp $
+// $Id: BaseDisplay.cc,v 1.4 2002/05/31 17:07:04 eckzor Exp $
 
 // stupid macros needed to access some functions in version 2 of the GNU C
 // library
@@ -126,10 +126,10 @@ static int handleXErrors(Display *, XErrorEvent * e)
 // signal handler to allow for proper and gentle shutdown
 
 #ifndef   HAVE_SIGACTION
-static RETSIGTYPE signalhandler(int sig)
+extern "C" RETSIGTYPE signalhandler(int sig)
 {
 #else														//  HAVE_SIGACTION
-static void signalhandler(int sig)
+extern "C" void signalhandler(int sig)
 {
 #endif													// HAVE_SIGACTION
 
