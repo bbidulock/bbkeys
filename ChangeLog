@@ -3,6 +3,9 @@ version 0.8.5 --
   - fix bug in main.cc (| rather than ||).  Thanks to Roman Neuhauser!
     [vanRijn]
 
+  - fix bug in bbkeys.hh--increasing MaxInstructions to 100 for cthulhain
+    [vanRijn]
+
 version 0.8.4 --
 
   - add a sanity check to the removeWindow function. Basically, blackbox tells

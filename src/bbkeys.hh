@@ -20,7 +20,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.hh,v 1.5 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: bbkeys.hh,v 1.6 2002/02/21 02:05:29 vanrijn Exp $
 
 #ifndef __BBKEYS_HH
 #define __BBKEYS_HH
@@ -34,7 +34,7 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
-#define MaxInstructions 50
+#define MaxInstructions 100
 #define RCFILE ".bbkeysrc"
 
 typedef struct {
