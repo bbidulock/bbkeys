@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.33 2002/07/19 06:45:25 eckzor Exp $
+// $Id: bbkeys.cc,v 1.34 2002/07/20 08:25:40 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -1387,45 +1387,36 @@ void ToolWindow::findFramePosition(Window window, int &x, int &y) {
   // find the frame's reference position based on the window's gravity
   switch (gravity) {
   case NorthWestGravity:
-    printf("NW\n");
     x -= left;
     y -= top;
     break;
   case NorthGravity:
-    printf("N\n");
     x += (left + right) / 2;
     y -= top;
     break;
   case NorthEastGravity:
-    printf("NE\n");
     x += right;
     y -= top;
   case WestGravity:
-    printf("W\n");
     x -= left;
     y += (top + bottom) / 2;
     break;
   case CenterGravity:
-    printf("C\n");
     x += (left + right) / 2;
     y += (top + bottom) / 2;
     break;
   case EastGravity:
-    printf("E\n");
     x += right;
     y += (top + bottom) / 2;
   case SouthWestGravity:
-    printf("SW\n");
     x -= left;
     y += bottom;
     break;
   case SouthGravity:
-    printf("S\n");
     x += (left + right) / 2;
     y += bottom;
     break;
   case SouthEastGravity:
-    printf("SE\n");
     x += right;
     y += bottom;
     break;
