@@ -2932,14 +2932,14 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  LDFLAGS="$LDFLAGS -lX11"
+  LIBS="-lX11"
 else
   echo "$ac_t""no" 1>&6
 { echo "configure: error: XOpenDisplay not found in -lX11" 1>&2; exit 1; }
 fi
 
 
-LDFLAGS="$LDFLAGS $X_EXTRA_LIBS"
+LIBS="-lX11"
 
 
 

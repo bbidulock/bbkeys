@@ -69,6 +69,8 @@ version 0.8.4 --
     patches and suggestions!  =:)  Also, adding CVS version id's to all source
     and documentation files, woot!  =:) [vanRijn]
 
+  - cross-compilation patch from Bo Thorsen--moves -lX11 to LIBS [vanRijn]
+
 version 0.8.3 --
 
   - changing external app launch order--we go bbconf, bbkeysconf,
