@@ -381,10 +381,6 @@ void XWindow::move(int x, int y) const {
 
   int destx = rx +x, desty = ry +y;
 
-#if DEBUG
-  std::cout<< "moving window to: +" << destx << "+" << desty << endl;
-#endif
-  
   XMoveWindow(_display, _window, destx, desty);
 
 }
