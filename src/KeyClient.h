@@ -42,7 +42,6 @@
 // the blackbox library
 #include <Application.hh>
 #include <Util.hh>
-#include <i18n.hh>
 #include <Resource.hh>
 #include <Timer.hh>
 

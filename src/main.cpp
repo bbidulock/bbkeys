@@ -25,10 +25,7 @@
 #include "KeyClient.h"
 #include "version.h"
 
-#include <i18n.hh>
 #include "main.h"
-
-bt::I18n bt::i18n;
 
 //--------------------------------------------------------
 // parseOptions
