@@ -1,6 +1,9 @@
 DEFAULT_RC=$(pkgdatadir)/bbkeysrc
+DEFAULT_STYLE=$(pkgdatadir)/defaultStyle
 
-AM_CPPFLAGS =	@CPPFLAGS@ -DDEFAULTRC=\"$(DEFAULT_RC)\"
+AM_CPPFLAGS =	@CPPFLAGS@ \
+	-DDEFAULTRC=\"$(DEFAULT_RC)\" \
+	-DDEFAULTSTYLE=\"$(DEFAULT_STYLE)\"
 
 bin_PROGRAMS = bbkeys
 bbkeys_SOURCES = actions.cc \
@@ -18,14 +21,15 @@ bbkeys_SOURCES = actions.cc \
 	keytree.hh \
 	LocalUtil.h \
 	main.cpp \
+	main.h \
 	Netclient.cpp \
 	Netclient.h \
 	ScreenHandler.cpp \
 	ScreenHandler.h \
-	WindowlistMenu.cpp \
-	WindowlistMenu.h \
 	window.cc \
-	window.h
+	window.hh \
+	WindowlistMenu.cpp \
+	WindowlistMenu.h 
 
 
 

@@ -127,7 +127,7 @@ void ScreenHandler::initialize()
   updateActiveWindow();
 
   // load graphics resource from config file
-  bt::Resource res(_config->getStringValue("stylefile", "/tmp/needstyle"));
+  bt::Resource res(_config->getStringValue("stylefile", DEFAULTSTYLE));
   bt::MenuStyle::get(_keyClient->getMainApplication(),
 		     _screenNumber)->load(res);
 
