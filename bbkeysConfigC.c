@@ -19,6 +19,7 @@ int setKeygrabs(void)
 
 #define OPTIONS "Minimize, Raise, Lower, Close, " \
             "\n\tWorkspace1, Workspace2, Workspace3, Workspace4, "\
+	    "\n\tUpWorkspace, DownWorkspace, LeftWorkspace, RightWorkspace, "\
             "\n\tNextWorkspace, PrevWorkspace, NextWindow, PrevWindow, "\
             "\n\tShadeWindow, MaximizeWindow, StickWindow, MaximizeVertical, "\
             "\n\tMaximizeHorizontal, BigNudgeRight, BigNudgeLeft, BigNudgeUp, "\

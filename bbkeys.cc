@@ -553,6 +553,14 @@ int ToolWindow::translateAction(char *action)
 			return grabNextWorkspace;
 	 if (!strcasecmp(action, "PrevWorkspace"))
 			return grabPrevWorkspace;
+   if (!strcasecmp(action, "UpWorkspace"))
+     return grabUpWorkspace;
+   if (!strcasecmp(action, "DownWorkspace"))
+     return grabDownWorkspace;
+   if (!strcasecmp(action, "LeftWorkspace"))
+     return grabLeftWorkspace;
+   if (!strcasecmp(action, "RightWorkspace"))
+     return grabRightWorkspace;
 	 if (!strcasecmp(action, "NextWindow"))
 			return grabNextWindow;
 	 if (!strcasecmp(action, "PrevWindow"))
@@ -1471,6 +1479,105 @@ void ToolWindow::process_event(XEvent * e)
 					wminterface->changeDesktop(desktop_count - 1);
 				break;
 
+			case grabUpWorkspace:
+				if (resource->columns > 1) { //ie columns given
+					if (getCurrentDesktopNr()-resource->columns<0) {
+						if (getDesktopCount()-1-(getDesktopCount()-1)%resource->columns +
+								getCurrentDesktopNr()%resource->columns  > getDesktopCount() - 1) {
+
+							wminterface->changeDesktop(getDesktopCount() - 1 -
+								(getDesktopCount() - 1)%resource->columns +
+								getCurrentDesktopNr()%resource->columns  -resource->columns);
+
+						} else {
+							wminterface->changeDesktop(getDesktopCount() - 1 -
+								(getDesktopCount() - 1)%resource->columns +
+								getCurrentDesktopNr()%resource->columns );
+						}
+					} else {
+						wminterface->changeDesktop(getCurrentDesktopNr() - resource->columns);
+					}
+				} else if (resource->rows > 1) { //ie rows given 
+					if (getCurrentDesktopNr()%resource->rows==0) {// if row=1
+							if (getCurrentDesktopNr() + resource->rows > getDesktopCount())
+									//incomplete last col?
+									wminterface->changeDesktop(getDesktopCount() - 1); //last desktop
+							else //complete col
+									wminterface->changeDesktop(getCurrentDesktopNr() +resource->rows - 1);
+				//last in column
+				} else  // row>1
+					wminterface->changeDesktop(getCurrentDesktopNr() - 1);
+				} else {} //no arrangement -> insert fallback solution here
+
+				break;
+			
+			case grabDownWorkspace:
+				if (resource->columns > 1) { //ie columns given
+					if (getCurrentDesktopNr() + resource->columns > getDesktopCount() - 1)
+						wminterface->changeDesktop(getCurrentDesktopNr()%resource->columns);
+					else
+						wminterface->changeDesktop(getCurrentDesktopNr() +resource->columns);
+				} else if (resource->rows > 1) { //ie rows given
+					if (getCurrentDesktopNr()%resource->rows + 1 == resource->rows ||
+							getCurrentDesktopNr() + 1 == getDesktopCount()) {
+							//last row or last in incomplete col
+							wminterface->changeDesktop(getCurrentDesktopNr() -
+							getCurrentDesktopNr()%resource->rows);
+							//first in col
+					} else
+						wminterface->changeDesktop(getCurrentDesktopNr() + 1);
+				} else {} //no arrangement -> fallback solution
+
+				break;
+			
+			
+			case grabLeftWorkspace:
+				if (resource->columns > 1) {   //ie columns given
+					if (getCurrentDesktopNr()%resource->columns==0) {
+						if (getCurrentDesktopNr() + resource->columns > getDesktopCount())
+							wminterface->changeDesktop(getDesktopCount() -1);
+						else
+							wminterface->changeDesktop(getCurrentDesktopNr() + resource->columns - 1);
+					} else
+						wminterface->changeDesktop(getCurrentDesktopNr() - 1);
+				} else if (resource->rows > 1) { //ie rows given
+					if (getCurrentDesktopNr() - resource->rows<0) {// first col
+							if (getDesktopCount() - 1 - (getDesktopCount()-1)%resource->rows +
+									getCurrentDesktopNr()%resource->rows  > getDesktopCount() - 1)
+									//incomplete row
+								wminterface->changeDesktop(getDesktopCount() - 1 -
+										(getDesktopCount() - 1)%resource->rows +
+										getCurrentDesktopNr()%resource->rows  - resource->rows);
+							else
+								wminterface->changeDesktop(getDesktopCount() - 1 -
+									(getDesktopCount() - 1)%resource->rows +
+									getCurrentDesktopNr()%resource->rows );
+					} else
+						wminterface->changeDesktop(getCurrentDesktopNr() - resource->rows);
+				} else {} //no arrangement -> fallback solution
+
+				break;
+			
+			
+			case grabRightWorkspace:
+				if (resource->columns > 1) { //ie columns given
+					if (getCurrentDesktopNr()%resource->columns + 1 == resource->columns ||
+							getCurrentDesktopNr() + 1 == getDesktopCount())
+						wminterface->changeDesktop(getCurrentDesktopNr() -
+							getCurrentDesktopNr()%resource->columns);
+					else
+						wminterface->changeDesktop(getCurrentDesktopNr() + 1);
+				} else if (resource->rows > 1) { //ie rows given
+					if (getCurrentDesktopNr() + resource->rows > getDesktopCount() - 1)
+						// last in row
+						wminterface->changeDesktop(getCurrentDesktopNr()%resource->rows);
+					// first col
+					else
+						wminterface->changeDesktop(getCurrentDesktopNr() + resource->rows);
+				} else {} //no arrangement -> fallback solution
+
+				break;
+			
 			case grabNextWindow:
 				cycleWindowFocus(True);
 				break;

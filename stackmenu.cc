@@ -174,6 +174,11 @@ void Stackmenu::show(bool forward, bool showMenu)
 	if (showMenu) {
 		Basemenu::show();
 		centerPosition();
+		XWindowChanges xwc;
+		xwc.stack_mode = TopIf;
+		xwc.sibling = bbtool->getScreenInfo(0)->getRootWindow();
+		printf("%i\n", XConfigureWindow(bbtool->getXDisplay(), getWindowID(),
+				CWStackMode, &xwc));
 	}
 }
 

@@ -18,6 +18,9 @@ bbkeys.honorModifiers:        False
 ! to have this on
 !bbkeys.menu.showAllWorkspaces:	True
 
+! *** menu options for the stacked cycling popup window menu....
+!bbkeys.menu.justify: right
+
 ! ** auto reconfigure when config-file has changed **
 !bbkeys.autoConfig:                False
 ! ** number of seconds between checks **

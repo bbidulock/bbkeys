@@ -41,6 +41,12 @@ enum {
 	grabWorkspace12, 
 	grabNextWorkspace, 
 	grabPrevWorkspace, 
+
+	grabUpWorkspace,
+	grabDownWorkspace,
+	grabLeftWorkspace,
+	grabRightWorkspace,
+
 	grabNextWindow, 
 	grabPrevWindow, 
 	grabShade, 
@@ -66,6 +72,7 @@ enum {
 	grabVertDec, 
 
 	grabToggleDecor, 
+
 	NUM_GRABS
 };
 

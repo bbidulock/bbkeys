@@ -477,7 +477,7 @@ void Resource::Menu()
 			"bbkeys.menu.highlight.textColor", "Bbkeys.Menu.Highlight.TextColor",
             "white",&menu.hiTextColor);
 
-  if (XrmGetResource(resource_db,"bbkeys.menuJustify","Bbkeys.MenuJustify",
+  if (XrmGetResource(resource_db,"bbkeys.menu.justify","Bbkeys.Menu.Justify",
 						&value_type, &value))
 	{
     	if (! strncasecmp("left", value.addr, value.size))
