@@ -45,8 +45,11 @@
 #define BB_BUTTON_PRESSED  "window.button.pressed"
 #define BB_BUTTON_PRESSED2 "Window.Button.Pressed"
 /* bbkeys.menu.frame */
-#define BB_MENU  "menu.frame"
-#define BB_MENU2 "Menu.Frame"
+#define BB_MENU_TEXTURE  "menu.frame"
+#define BB_MENU_TEXTURE2 "Menu.Frame"
+/* bbkeys.menu.frame.hilight */
+#define BB_MENU_HILITE_TEXTURE  "menu.hilite"
+#define BB_MENU_HILITE_TEXTURE2 "Menu.Hilite"
 /* bbkeys.menu.highlight.color */
 #define BB_MENU_HIGHLIGHT_COLOR  "menu.hilite.color"
 #define BB_MENU_HIGHLIGHT_COLOR2 "Menu.Hilite.Color"

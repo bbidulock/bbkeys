@@ -426,9 +426,14 @@ void Resource::Menu()
 	char *value_type;
 
 	
-	readTexture("bbkeys.menu","Bbkeys.Menu",BB_MENU,BB_MENU2,
+	readTexture("bbkeys.menu.frame","Bbkeys.Menu.Frame",BB_MENU_TEXTURE,BB_MENU_TEXTURE2,
               "slategrey","darkslategrey",
               "Raised Diagonal Gradient Bevel1",&menu.texture);
+															   	
+	readTexture("bbkeys.menu.hilight","Bbkeys.Menu.Hilight",
+					BB_MENU_HILITE_TEXTURE,BB_MENU_HILITE_TEXTURE2,
+              "darkslategrey","slategrey",
+              "Raised Elliptic Gradient Bevel2",&menu.hiTexture);
 															   	
   readColor("bbkeys.menu.highlight.color",
 				    "Bbkeys.Menu.Highlight.Color",
@@ -447,11 +452,11 @@ void Resource::Menu()
   if (XrmGetResource(resource_db,"bbkeys.menuJustify","Bbkeys.MenuJustify",
 						&value_type, &value))
 	{
-    	if (! strncasecmp("leftjustify", value.addr, value.size))
+    	if (! strncasecmp("left", value.addr, value.size))
 	      menu.justify = LeftJustify;
-    	else if (! strncasecmp("rightjustify", value.addr, value.size))
+    	else if (! strncasecmp("right", value.addr, value.size))
 	      menu.justify = RightJustify;
-	    else if (! strncasecmp("centerjustify", value.addr, value.size))
+	    else if (! strncasecmp("center", value.addr, value.size))
 	      menu.justify = CenterJustify;
 	    else
     	  menu.justify = LeftJustify;

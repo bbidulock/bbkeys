@@ -343,7 +343,7 @@ void Basemenu::update(void) {
   if (tmp) image_ctrl->removeImage(tmp);
 
   tmp = menu.hilite_pixmap;
-  texture = &(bbtool->getResource()->menu.texture);
+  texture = &(bbtool->getResource()->menu.hiTexture);
   if (texture->getTexture() == (BImage_Flat | BImage_Solid))
     menu.hilite_pixmap = None;
   else

@@ -89,6 +89,7 @@ struct BUTTON {
 
 struct MENU {
 	BTexture texture;
+	BTexture hiTexture;
 	BColor textColor;
 	BColor highlightColor;
 	BColor hitextColor;
