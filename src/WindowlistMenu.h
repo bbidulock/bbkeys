@@ -63,6 +63,7 @@ private:
   bool _honor_modifiers;
   int _current_index;
   int numLockMask, scrollLockMask;
+  unsigned int _desktop_nbr;
 
   void keyPressEvent (const XKeyEvent * const e) ;
   void keyReleaseEvent (const XKeyEvent * const e) ;

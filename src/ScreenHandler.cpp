@@ -123,6 +123,7 @@ void ScreenHandler::initialize()
 
   updateActiveDesktop();
   updateNumDesktops();
+  updateDesktopNames();
   updateClientList();
   updateActiveWindow();
 
@@ -457,6 +458,8 @@ void ScreenHandler::propertyNotifyEvent(const XPropertyEvent * const e)
 {
   if (e->atom == _netclient->numberOfDesktops()) {
     updateNumDesktops();
+  } else if (e->atom == _netclient->desktopNames()) {
+    updateDesktopNames();
   } else if (e->atom == _netclient->currentDesktop()) {
     updateActiveDesktop();
   } else if (e->atom == _netclient->activeWindow()) {
@@ -472,6 +475,28 @@ void ScreenHandler::updateNumDesktops()
 
   if (! _netclient->readNumberOfDesktops(_root, & _num_desktops))
     _num_desktops = 1;  // assume that there is at least 1 desktop!
+
+}
+
+void ScreenHandler::updateDesktopNames()
+{
+  assert(_managed);
+
+  if(! _netclient->readDesktopNames(_root, _desktop_names))
+    _desktop_names.clear();
+}
+
+std::string ScreenHandler::getDesktopName(unsigned int desktopNbr) const {
+  
+  if (0xFFFFFFFF == desktopNbr)
+    return "all";
+
+  if (desktopNbr > _desktop_names.size() ) 
+    return "error";
+
+  std::string name = _desktop_names[desktopNbr];
+  
+  return name;
 
 }
 

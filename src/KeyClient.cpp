@@ -409,7 +409,7 @@ void KeyClient::process_event(XEvent *e) {
 void KeyClient::cycleScreen(int current, bool forward) const {
   unsigned int i;
   for (i = 0; i < screenList.size(); ++i)
-    if (screenList[i]->screenNumber() == current) {
+    if (screenList[i]->getScreenNumber() == current) {
       current = i;
       break;
     }

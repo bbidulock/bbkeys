@@ -121,14 +121,32 @@ void WindowlistMenu::showCycleMenu( WindowList theList ) {
 
   _windowList = theList;
 
-  WindowList::const_iterator it = theList.begin();
+  WindowList::const_iterator it;
   const WindowList::const_iterator end = theList.end();
 
+  // first, find out if we have any windows in our list for anything other
+  // than the current desktop
+  _desktop_nbr = _screen->getDesktopNumber();
+  bool onlyThisDesktop = true;
+  for (it = theList.begin(); it != end; it++) {
+    unsigned int dNbr = (*it)->desktop();
+    if ( (dNbr != _desktop_nbr) && (0xFFFFFFFF != dNbr) ) {
+      onlyThisDesktop = false;
+      break;
+    }
+  }
+
+  // now add the windows to our list
   unsigned int i = 0;
 
-  for (; it != end; it++) {
+  for (it = theList.begin(); it != end; it++) {
     std::string title = (*it)->title();
+    unsigned int dNbr = (*it)->desktop();
     std::string newTitle = bt::ellideText(title, 100, " ... ");
+    if (! onlyThisDesktop) {
+      std::string suffix = _screen->getDesktopName(dNbr);
+      newTitle.append(" (" + suffix + ")");
+    }
     bt::Menu::insertItem( newTitle, i++ );
   }
 

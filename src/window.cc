@@ -219,6 +219,7 @@ void XWindow::updateDesktop() {
     d = 0ul;
 
   _desktop = static_cast<unsigned int>(d);
+
 }
 
 

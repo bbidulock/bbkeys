@@ -57,11 +57,12 @@ public:
   ScreenHandler (KeyClient * _k, unsigned int number);
   ~ScreenHandler () ;
   inline unsigned int getScreenNumber() const { return _screenNumber; }
+  inline unsigned int getDesktopNumber() const { return _active_desktop; }
+  std::string getDesktopName(unsigned int desktopNbr) const;
   inline Window getRootWindow() const { return _screenInfo.rootWindow(); }
   inline KeyClient & getKeyClient() const { return * _keyClient; }
   inline bool isManaged() const { return _managed; }
   inline const bt::ScreenInfo & getScreenInfo() { return _screenInfo; }
-  inline int screenNumber() const { return _screenNumber; }
 
   void initialize();
   void grabKey(const KeyCode keyCode, const int modifierMask) const;
@@ -99,6 +100,8 @@ private:
 
   unsigned int _num_desktops;
   unsigned int _active_desktop;
+  bt::Netwm::UTF8StringList _desktop_names;
+
   
   const bt::ScreenInfo & _screenInfo;
 
@@ -110,6 +113,7 @@ private:
   void keyReleaseEvent (const XKeyEvent * const e) ;
   void propertyNotifyEvent(const XPropertyEvent * const e);
   void updateNumDesktops();
+  void updateDesktopNames();
   void updateActiveDesktop();
   void updateActiveWindow();
   void updateClientList();
