@@ -880,7 +880,6 @@ void ToolWindow::reconfigure(void)
 		getImageControl()->removeImage(pixmap.pix_pressedBtn);
 
 	resource->Reload();
-	stackMenu->reconfigure();
 
 	MakeWindow(True);
 
@@ -1164,8 +1163,12 @@ void ToolWindow::MakeWindow(bool reconfigure)
 	  gcv.foreground = resource->menu.textColor.getPixel();                    	
 		menuFrameGC = XCreateGC(getXDisplay(), win_frame,GCFont|GCForeground, &gcv);
                     	
- 		stackMenu = new Stackmenu(this);
-		stackMenu->Update();
+ 		if (True) {
+			stackMenu = new Stackmenu(this);
+			stackMenu->Update();
+		} else {
+			stackMenu = NULL;
+		}
 	} else {
 			gcv.font = resource->label.font->fid;
 			gcv.foreground = resource->label.textColor.getPixel();
@@ -1245,24 +1248,23 @@ void ToolWindow::process_event(XEvent * e)
 		break;
 	
 	case KeyRelease: {
-//		if (stackMenu->isVisible()) {
+		if (stackMenu && stackMenu->isVisible()) {
 //			if ((e->xkey.keycode == grabSet.KeyMap[grabNextWindow].modMask) ||
 //					(e->xkey.keycode == grabSet.KeyMap[grabPrevWindow].modMask)) {
 			if (e->xkey.keycode == 64) {
-printf("Released\n");
 				int selected = stackMenu->getHighlight();
 				LinkedListIterator<WindowList> it(windowList);
 				for(; it.current(); it++)
-					if (it.current()->desktop == getCurrentDesktopNr())
+					if (it.current()->desktop == getCurrentDesktopNr() &&
+							!it.current()->iconic)
 						if(!selected--) {
 							wminterface->setWindowFocus(it.current()->win);
 							XRaiseWindow(getXDisplay(), it.current()->win);
 						}
 				XUngrabKey(getXDisplay(), 64, 0, getScreenInfo(0)->getRootWindow());
 				stackMenu->hide();
-//				bbtool->reconfigure();
 			}
-//		}
+		}
 		break;
 	}
 
@@ -1738,6 +1740,9 @@ void ToolWindow::addDesktop(void)
 			win->desktop = tmp->number;
 			windowList->insert(win, -1);	// add to the end of the list
 		}
+	if (stackMenu)
+		if (stackMenu->isVisible())		// if the desktop switches, then close the
+			stackMenu->hide();					// cycling menu
 }
 
 void ToolWindow::removeDesktop(int desktop)
@@ -1785,6 +1790,9 @@ void ToolWindow::removeDesktop(int desktop)
 				break;
 			}
 	}
+	if (stackMenu)
+		if (stackMenu->isVisible())
+			stackMenu->hide();
 }
 
 void ToolWindow::focusDesktop(int desktop)
@@ -1793,7 +1801,9 @@ void ToolWindow::focusDesktop(int desktop)
 	for (; it.current(); it++)
 		if (it.current()->number == desktop)
 			current_desktop = it.current();
-	stackMenu->reconfigure();
+	if (stackMenu)
+		if (stackMenu->isVisible())
+			stackMenu->hide();
 }
 
 void ToolWindow::setDesktopCount(int count)
@@ -1809,6 +1819,9 @@ void ToolWindow::setDesktopCount(int count)
 		while(delta++ < 0)
 			removeDesktop(desktop_count - 1); // remove the last desktop
 	}
+	if (stackMenu)
+		if (stackMenu->isVisible())
+			stackMenu->hide();
 }
 
 /*--------------------------------------*/
@@ -1824,12 +1837,19 @@ void ToolWindow::removeWindow(Window win)
 		if (it.current()->win == win) {
 			windowList->remove(it.current());
 		}
+	if (stackMenu)
+		if (stackMenu->isVisible())
+			stackMenu->hide();
 }
 
 void ToolWindow::focusWindow(Window win)
 {
 	focus_window = win;
-	focus_stack(win);
+	if (stackMenu)
+		focus_stack(win);
+	if (stackMenu)
+		if (stackMenu->isVisible())
+			stackMenu->hide();
 }
 
 void ToolWindow::moveWinToDesktop(Window win, int desktop)
@@ -1842,10 +1862,16 @@ void ToolWindow::moveWinToDesktop(Window win, int desktop)
 			}
 			break;
 		}
+	if (stackMenu)
+		if (stackMenu->isVisible())
+			stackMenu->hide();
 }
 
 void ToolWindow::windowAttributeChange(Window win)
 {
+	if (stackMenu)
+		if (stackMenu->isVisible())
+			stackMenu->hide();
 }
 
 void ToolWindow::addWindow(Window win, int desktop)
@@ -1856,14 +1882,21 @@ void ToolWindow::addWindow(Window win, int desktop)
 	newwin->shaded = False;
 	newwin->sticky = False;
 	newwin->desktop = desktop;
-//	add_linear(newwin, desktop);
-	add_stack(newwin, desktop);
+	if (stackMenu)
+		add_stack(newwin, desktop);
+	else
+		add_linear(newwin, desktop);
+	if (stackMenu)
+		if (stackMenu->isVisible())
+			stackMenu->hide();
 }
 
 void ToolWindow::cycleWindowFocus(bool forward)
 {
-//	cycle_linear(forward);
-	cycle_stack(forward);
+	if (stackMenu)
+		cycle_stack(forward);
+	else
+		cycle_linear(forward);
 }
 
 /*******************************************************************************
@@ -1950,10 +1983,6 @@ void ToolWindow::cycle_linear(bool forward)
 
 void ToolWindow::add_stack(WindowList *newwin, int desktop) {
 	windowList->insert(newwin, 0); // insert at the top of the list
-//	if (stackMenu->isVisible())
-//		stackMenu->reconfigure();
-//	else
-		stackMenu->reconfigure();
 }
 
 void ToolWindow::cycle_stack(bool forward) {
@@ -1962,10 +1991,7 @@ void ToolWindow::cycle_stack(bool forward) {
 		if (stackMenu->WaitForUpdate())
 			stackMenu->Update();
 		stackMenu->reconfigure();
-		stackMenu->centerPosition();
 		stackMenu->show();
-	} else {
-		stackMenu->setHighlight(2);
 	}
 	if (forward) {
 		if(++menuPosition >= stackMenu->getCount())
