@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: BaseDisplay.cc,v 1.4 2002/05/31 17:07:04 eckzor Exp $
+// $Id: BaseDisplay.cc,v 1.5 2002/06/07 19:07:34 eckzor Exp $
 
 // stupid macros needed to access some functions in version 2 of the GNU C
 // library
@@ -188,7 +188,6 @@ BaseDisplay::BaseDisplay(char *app_name, char *dpy_name)
 
 	_startup = True;
 	_shutdown = False;
-	server_grabs = 0;
 	last_bad_window = None;
 
 	::base_display = this;
@@ -463,23 +462,6 @@ const Bool BaseDisplay::validateWindow(Window window)
 	}
 
 	return True;
-}
-
-
-void BaseDisplay::grab(void)
-{
-	if (!server_grabs++)
-		XGrabServer(display);
-}
-
-
-void BaseDisplay::ungrab(void)
-{
-	if (!--server_grabs)
-		XUngrabServer(display);
-
-	if (server_grabs < 0)
-		server_grabs = 0;
 }
 
 

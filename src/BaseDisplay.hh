@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: BaseDisplay.hh,v 1.4 2002/05/30 20:47:45 eckzor Exp $
+// $Id: BaseDisplay.hh,v 1.5 2002/06/07 19:07:34 eckzor Exp $
 
 #ifndef   __BaseDisplay_hh
 #define   __BaseDisplay_hh
@@ -128,7 +128,7 @@ private:
   LinkedList<BTimer> *timerList;
 
   char *display_name, *application_name;
-  int number_of_screens, server_grabs, colors_per_channel;
+  int number_of_screens, colors_per_channel;
 
 
 protected:
@@ -302,8 +302,6 @@ public:
 
   const Bool validateWindow(Window);
 
-  void grab(void);
-  void ungrab(void);
   void eventLoop(void);
   void addTimer(BTimer *);
   void removeTimer(BTimer *);

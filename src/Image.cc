@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 // 
-//  $Id: Image.cc,v 1.4 2002/05/30 20:47:45 eckzor Exp $
+//  $Id: Image.cc,v 1.5 2002/06/07 19:07:34 eckzor Exp $
 
 // stupid macros needed to access some functions in version 2 of the GNU C
 // library
@@ -1923,8 +1923,6 @@ BImageControl::BImageControl(BaseDisplay *dpy, ScreenInfo *scrn, Bool _dither,
 	    colors[i].flags = DoRed|DoGreen|DoBlue;
 	  }
 
-      basedisplay->grab();
-
       for (i = 0; i < ncolors; i++)
 	if (! XAllocColor(basedisplay->getXDisplay(), getColormap(),
                           &colors[i])) {
@@ -1933,8 +1931,6 @@ BImageControl::BImageControl(BaseDisplay *dpy, ScreenInfo *scrn, Bool _dither,
 	  colors[i].flags = 0;
 	} else
 	  colors[i].flags = DoRed|DoGreen|DoBlue;
-
-      basedisplay->ungrab();
 
       XColor icolors[256];
       int incolors = (((1 << screen_depth) > 256) ? 256 : (1 << screen_depth));
@@ -2017,7 +2013,6 @@ BImageControl::BImageControl(BaseDisplay *dpy, ScreenInfo *scrn, Bool _dither,
 	red_color_table[i] = green_color_table[i] = blue_color_table[i] =
 	  i / bits;
 
-      basedisplay->grab();
       for (i = 0; i < ncolors; i++) {
 	colors[i].red = (i * 0xffff) / (colors_per_channel - 1);
 	colors[i].green = (i * 0xffff) / (colors_per_channel - 1);
@@ -2032,8 +2027,6 @@ BImageControl::BImageControl(BaseDisplay *dpy, ScreenInfo *scrn, Bool _dither,
 	} else
 	  colors[i].flags = DoRed|DoGreen|DoBlue;
       }
-
-      basedisplay->ungrab();
 
       XColor icolors[256];
       int incolors = (((1 << screen_depth) > 256) ? 256 :
@@ -2336,8 +2329,6 @@ void BImageControl::getGradientBuffers(unsigned int w,
 
 
 void BImageControl::installRootColormap(void) {
-  basedisplay->grab();
-
   Bool install = True;
   int i = 0, ncmap = 0;
   Colormap *cmaps =
@@ -2353,8 +2344,6 @@ void BImageControl::installRootColormap(void) {
 
     XFree(cmaps);
   }
-
-  basedisplay->ungrab();
 }
 
 

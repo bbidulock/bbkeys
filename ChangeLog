@@ -1,5 +1,11 @@
 version 0.8.5 --
 
+  - remove server grabs from the Image code. They prove to not be needed (they
+    no longer exist in the blackbox code.) And they cause the X server to lock
+	indefinately if you run 2 bbkeys on the same display, running the second
+	one from a terminal on the display.
+	[xOr]
+
   - when we recieve a startup message from blackbox, clear out any leftover
     windows in the window list. These are caused by the fact that on shutdown
     of blackbox, if any windows are unmanaged after bbkeys, bbkeys doesn't get
