@@ -24,6 +24,10 @@
 #include "Baseresource.hh"
 #include "blackboxstyle.hh"
 
+#ifdef    HAVE_CONFIG_H
+#  include "../config.h"
+#endif // HAVE_CONFIG_H
+
 BaseResource::BaseResource(ToolWindow *toolwindow) {
   XrmValue value;
   char *value_type;

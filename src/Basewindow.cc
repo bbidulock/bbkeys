@@ -25,6 +25,10 @@
 #  include <signal.h>  
 #endif // HAVE_SIGNAL_H
 
+#ifdef    HAVE_CONFIG_H
+#  include "../config.h"
+#endif // HAVE_CONFIG_H
+
 #ifdef    HAVE_SYS_SIGNAL_H
 #  include <sys/signal.h>
 #endif // HAVE_SYS_SIGNAL_H

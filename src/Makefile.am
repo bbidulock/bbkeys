@@ -4,17 +4,17 @@ CPPFLAGS =	@CPPFLAGS@  @INTERLACE@ \
 
 bin_PROGRAMS = bbkeys bbkeysConfigC
 bbkeys_SOURCES = bbkeys.cc Image.cc LinkedList.cc \
-  		  bbkeys.hh Image.hh LinkedList.hh \
-		  Timer.hh Timer.cc \
-			stackmenu.cc stackmenu.hh \
-		  main.cc main.hh \
-		  resource.cc resource.hh \
-		  Baseresource.cc Baseresource.hh \
-		  Basewindow.cc Basewindow.hh \
-		  BaseDisplay.cc BaseDisplay.hh \
-			Basemenu.cc Basemenu.hh \
-		  wminterface.cc wminterface.hh \
-		  NETInterface.cc NETInterface.hh \
-			grab_defs.hh blackboxstyle.hh
+	bbkeys.hh Image.hh LinkedList.hh \
+	Timer.hh Timer.cc \
+	stackmenu.cc stackmenu.hh \
+	main.cc main.hh \
+	resource.cc resource.hh \
+	Baseresource.cc Baseresource.hh \
+	Basewindow.cc Basewindow.hh \
+	BaseDisplay.cc BaseDisplay.hh \
+	Basemenu.cc Basemenu.hh \
+	wminterface.cc wminterface.hh \
+	NETInterface.cc NETInterface.hh \
+	grab_defs.hh blackboxstyle.hh
 bbkeysConfigC_SOURCES = bbkeysConfigC.c
 bbkeys_LDADD = @X_LIBS@

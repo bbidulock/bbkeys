@@ -24,6 +24,10 @@
 #include "resource.hh"
 #include "BaseDisplay.hh"
 
+#ifdef    HAVE_CONFIG_H
+#  include "../config.h"
+#endif // HAVE_CONFIG_H
+
 WMInterface::WMInterface(ToolWindow *toolwindow) : NETInterface(toolwindow) {
 	bbtool=toolwindow;
 	focusWindow = True;

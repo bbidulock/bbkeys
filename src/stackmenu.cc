@@ -24,6 +24,10 @@
 
 #include <X11/Xutil.h>
 
+#ifdef    HAVE_CONFIG_H
+#  include "../config.h"
+#endif // HAVE_CONFIG_H
+
 Stackmenu::Stackmenu(ToolWindow *tool) :
 		Basemenu(tool)
 {

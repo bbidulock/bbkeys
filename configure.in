@@ -1,11 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src/bbkeys.cc)
-
 AM_INIT_AUTOMAKE(bbkeys, 0.8.3)
-
 AC_PREFIX_DEFAULT(/usr/local)
-
-
 
 AC_CHECK_PROGS(regex_cmd, sed)
 if test x$regex_cmd = "x"; then
@@ -55,19 +51,35 @@ AC_ARG_ENABLE(
 AC_SUBST(INTERLACE)
 
 dnl Checks for programs.
-dnl needed by configure itsself
-AC_PROG_CC
 AC_PROG_CXX
+AC_PROG_AWK
+AC_PROG_CC
+AC_PROG_CPP
 AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
 
-AC_HEADER_STDC
-AC_CHECK_HEADERS(ctype.h strings.h fcntl.h libgen.h locale.h process.h signal.h stdio.h time.h errno.h unistd.h sys/param.h sys/select.h sys/stat.h sys/time.h sys/types.h sys/wait.h)
-AC_HEADER_TIME
-
-AC_CHECK_FUNCS(setlocale sigaction strftime)
-
+# Checks for header files.
 AC_PATH_X
 AC_PATH_XTRA
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS(ctype.h strings.h fcntl.h libgen.h locale.h process.h signal.h stdio.h time.h errno.h unistd.h sys/signal.h sys/param.h sys/select.h sys/stat.h sys/time.h sys/types.h sys/wait.h stdlib.h string.h malloc.h)
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_C_INLINE
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+# Checks for library functions.
+dnl AC_FUNC_FORK
+dnl AC_FUNC_MALLOC
+AC_TYPE_SIGNAL
+dnl AC_FUNC_STAT
+AC_CHECK_FUNCS(setlocale sigaction strftime gettimeofday memset strcasecmp strchr strcspn strdup strncasecmp select strstr)
+
 
 CFLAGS="$CFLAGS $X_CFLAGS"
 CXXFLAGS="$CXXFLAGS $X_CFLAGS"
@@ -78,17 +90,8 @@ AC_CHECK_LIB(X11, XOpenDisplay, LDFLAGS="$LDFLAGS -lX11",
 
 LDFLAGS="$LDFLAGS $X_EXTRA_LIBS"
 
-dnl Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS(malloc.h)
-
-dnl Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-AC_HEADER_TIME
-AC_STRUCT_TM
-
-dnl Checks for library functions.
-AC_CHECK_FUNCS(select strstr)
+dnl generate the config header
+AM_CONFIG_HEADER(config.h) 
 
 AC_OUTPUT( \
 version.h \

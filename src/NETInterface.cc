@@ -19,6 +19,10 @@
 // (See the included file COPYING / GPL-2.0)
 //
 
+#ifdef    HAVE_CONFIG_H
+#  include "../config.h"
+#endif // HAVE_CONFIG_H
+
 #include "NETInterface.hh"
 
 NETInterface::NETInterface(Basewindow *basewindow) {
