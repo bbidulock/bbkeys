@@ -54,12 +54,11 @@ void Stackmenu::setMenuItems() {
 
 	for (; it.current(); it++) {
 		if (it.current()->desktop == bbtool->getCurrentDesktopNr()) {
-			XGetWMName(bbtool->getXDisplay(), it.current()->win, &xtp);
-			XTextPropertyToStringList(&xtp, &windowname, &num);
-			if (*windowname)
-				insert((char*) *windowname);
-			if (windowname)
-				XFreeStringList(windowname);
+			if (!XGetWMName(bbtool->getXDisplay(), it.current()->win, &xtp))
+				if (!XTextPropertyToStringList(&xtp, &windowname, &num)) {
+					insert((char*) *windowname);
+					XFreeStringList(windowname);
+				}
 		}
 	}
 }
@@ -76,7 +75,7 @@ void Stackmenu::Update() {
 
 void Stackmenu::key_release(unsigned int key)
 {
-	if (key == XK_Alt_L) {
+	if (key == 64) {
 		int selected = menuPosition;
 		LinkedListIterator<WindowList> it(bbtool->windowList);
 		for(; it.current(); it++)
