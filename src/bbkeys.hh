@@ -20,7 +20,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.hh,v 1.10 2002/05/30 20:47:45 eckzor Exp $
+// $Id: bbkeys.hh,v 1.11 2002/06/07 06:12:26 eckzor Exp $
 
 #ifndef __BBKEYS_HH
 #define __BBKEYS_HH
@@ -119,6 +119,7 @@ public:
 	// functions for maintaining the window list
 	void addWindow(Window,int);
 	void removeWindow(Window);
+	void clearWindows(void);
 	void focusWindow(Window);
 	void moveWinToDesktop(Window,int);
 	void windowAttributeChange(Window); // called when attributes for a window

@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.25 2002/06/07 05:59:48 eckzor Exp $
+// $Id: bbkeys.cc,v 1.26 2002/06/07 06:12:26 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -2010,13 +2010,20 @@ void ToolWindow::setDesktopCount(int count)
 
 /*--------------------------------------*/
 
+void ToolWindow::clearWindows(void)
+{
+	focusWindow(0);
+	while (! windowList->empty())
+		windowList->remove(0);
+}
+
 void ToolWindow::removeWindow(Window win)
 {
 	if (focus_window == win)
 		focusWindow(0);
-  for (int i = 0; i < windowList->count(); ++i)
-    if (windowList->find(i)->win == win)
-      windowList->remove(i--);
+	for (int i = 0; i < windowList->count(); ++i)
+		if (windowList->find(i)->win == win)
+			windowList->remove(i--);
 }
 
 void ToolWindow::focusWindow(Window win)

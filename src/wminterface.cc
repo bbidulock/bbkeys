@@ -19,7 +19,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: wminterface.cc,v 1.8 2002/05/30 20:47:45 eckzor Exp $
+// $Id: wminterface.cc,v 1.9 2002/06/07 06:12:26 eckzor Exp $
 
 #ifdef    HAVE_CONFIG_H
 #  include "config.h"
@@ -291,6 +291,14 @@ int WMInterface::getAttributes(Window win) {
 
 void WMInterface::NETNotifyStartup() {
 //	bbtool->setNETInit();
+
+  /*
+   * We clear all windows from our internal window lists when we get this
+   * message because its quite possible that blackbox is restarting and deleted
+   * us before deleting other windows, leaving rogue windows behind in our
+   * window lists.
+   */
+  bbtool->clearWindows();
 }
 
 void WMInterface::NETNotifyWindowAdd(Window win,int desktop_nr) {
