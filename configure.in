@@ -1,6 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src/bbkeys.cc)
 AM_INIT_AUTOMAKE(bbkeys, 0.8.5-pre)
+AC_REQUIRE([AC_CANONICAL_HOST])
 AM_MAINTAINER_MODE
 AC_PREFIX_DEFAULT(/usr/local)
 
@@ -19,7 +20,6 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
 
-AC_REQUIRE([AC_CANONICAL_HOST])
 case $host_os in
   *solaris*)
     dnl On solaris, we get a ton of multiply-defined errors if we don't include
