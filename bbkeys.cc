@@ -675,6 +675,7 @@ void ToolWindow::loadKeygrabs(void)
 				free(grabSet.KeyMap[i].execCommand);
 			}
 	 }
+	 memset(&actionList, 0, sizeof(actionList));
 
 	 /* re-initialize our grabSet count... */
 	 grabSet.instructCount = 0;
@@ -1300,7 +1301,9 @@ void ToolWindow::process_event(XEvent * e)
 			// if the key released was the last modifier being held
 			// and being a member of the nextMask or PrevMask, then select
 			// the item in the menu that is currently focued.
-			if (((state & nextMask) == mask) || ((state & prevMask) == mask))
+			if (nextMask && ((state & nextMask) == mask))
+				stackMenu->selectFocused();
+			else if (prevMask && ((state & prevMask) == mask))
 				stackMenu->selectFocused();
 		}
 		break;
