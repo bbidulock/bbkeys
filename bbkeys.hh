@@ -178,6 +178,7 @@ private:
 //	bool raised;			// window is raised above all others
 
 	KEY_GRAB_INSTRUCTION grabSet; // key grab/handling vars
+	int actionList[NUM_GRABS];
 	unsigned int ValidModMask;
 	unsigned int _NumLockMask;
 	unsigned int _ScrollLockMask;

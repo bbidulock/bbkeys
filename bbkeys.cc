@@ -670,8 +670,7 @@ void ToolWindow::setKeygrabs(void)
 void ToolWindow::loadKeygrabs(void)
 {
 	 // free up pointers that we get with strdup for execCommand....
-	 int i = 0;
-	 for (i = 0; i < grabSet.instructCount; i++) {
+	 for (register int i = 0; i < grabSet.instructCount; i++) {
 			if (grabSet.KeyMap[i].execCommand != NULL) {
 				free(grabSet.KeyMap[i].execCommand);
 			}
@@ -734,6 +733,7 @@ void ToolWindow::loadKeygrabs(void)
 				grabSet.KeyMap[count].modMask |= translateModifier(tmp);
 
 				grabSet.KeyMap[count].action = translateAction(action);
+				actionList[grabSet.KeyMap[count].action] = count;
 
 				/* if we're supposed to having an execCommand and we do have
 				 * something to put into it																	*/
@@ -1295,14 +1295,8 @@ void ToolWindow::process_event(XEvent * e)
 		if (stackMenu->isVisible()) {
 			unsigned int mask = KeycodeToModmask(e->xkey.keycode);
 			unsigned int state = e->xkey.state;
-			int nextMask, prevMask;
-			// find the modMasks for the Next and Prev window commands
-	    for (register int i = 0; i < grabSet.instructCount; i++) {
-				if (grabNextWindow == grabSet.KeyMap[i].action)
-					nextMask = grabSet.KeyMap[i].modMask;
-				else if (grabPrevWindow == grabSet.KeyMap[i].action)
-					prevMask = grabSet.KeyMap[i].modMask;
-			}
+			int nextMask = grabSet.KeyMap[actionList[grabNextWindow]].modMask;
+			int prevMask = grabSet.KeyMap[actionList[grabPrevWindow]].modMask;
 			// if the key released was the last modifier being held
 			// and being a member of the nextMask or PrevMask, then select
 			// the item in the menu that is currently focued.

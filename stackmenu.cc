@@ -82,12 +82,6 @@ void Stackmenu::selectFocused()
 	hide();
 }
 
-void Stackmenu::key_release(unsigned int key)
-{
-	if (key == 64)
-		selectFocused();
-}
-
 void Stackmenu::key_press(int grabInt)
 {
 	switch (grabInt) {
