@@ -163,9 +163,8 @@ void KeyClient::initialize() {
 //--------------------------------------------------------
 void KeyClient::reconfigure ()
 {
-  if (_debug)
-    std::cout << BBTOOL << ": " << "KeyClient: reconfigure: hey, goodie! I got a reconfigure request!!\n";
-
+  std::cout << BBTOOL << ": " << 
+    "KeyClient: reconfigure: hey, goodie! I got a reconfigure request!!\n";
 
   // delete all screens
   for_each(screenList.begin(), screenList.end(), bt::PointerAssassin());
