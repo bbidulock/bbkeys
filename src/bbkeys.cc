@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.20 2002/05/30 07:33:13 eckzor Exp $
+// $Id: bbkeys.cc,v 1.21 2002/05/30 07:38:58 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -1419,21 +1419,18 @@ void ToolWindow::process_event(XEvent * e)
 
 			switch (grabSet.KeyMap[grabInt].action) {
 			case grabIconify:
-				if (focus_window && focus_window != (int)PointerRoot ) {
+				if (focus_window)
 					XIconifyWindow(getXDisplay(), focus_window, 0);
-				}
 				break;
 
 			case grabRaise:
-				if (focus_window && focus_window != (int)PointerRoot ) {
+				if (focus_window)
 					XRaiseWindow(getXDisplay(), focus_window);
-				}
 				break;
 
 			case grabLower:
-				if (focus_window && focus_window != (int)PointerRoot ) {
+				if (focus_window)
 					XLowerWindow(getXDisplay(), focus_window);
-				}
 				break;
 
 			case grabClose:
@@ -1628,15 +1625,13 @@ void ToolWindow::process_event(XEvent * e)
 				break;
 
 			case grabShade:
-				if (focus_window && focus_window != (int)PointerRoot ) {
+				if (focus_window)
 					wminterface->shadeWindow(focus_window);
-				}
 				break;
 
 			case grabStick:
-				if (focus_window && focus_window != (int)PointerRoot ) {
+				if (focus_window)
 					wminterface->stickWindow(focus_window);
-				}
 				break;
 
 			case grabExecute:
@@ -1644,62 +1639,62 @@ void ToolWindow::process_event(XEvent * e)
 				break;
 
 			case grabMaximize:
-				if (focus_window && focus_window != (int)PointerRoot )
+				if (focus_window)
 					wminterface->maximizeWindow(focus_window, True, True);
 				break;
 
 			case grabVertMax:
-				if (focus_window && focus_window != (int)PointerRoot )
+				if (focus_window)
 					wminterface->maximizeWindow(focus_window, False, True);
 				break;
 
 			case grabHorizMax:
-				if (focus_window && focus_window != (int)PointerRoot )
+				if (focus_window)
 					wminterface->maximizeWindow(focus_window, True, False);
 				break;
 		
 			case grabNudgeRight:
-				if (focus_window && focus_window != (int)PointerRoot )
+				if (focus_window)
 					XMoveWindow(getXDisplay(), focus_window, fw_x + 1, fw_y);
 				break;
 
 			case grabNudgeLeft:
-				if (focus_window && focus_window != (int)PointerRoot )
+				if (focus_window)
 					XMoveWindow(getXDisplay(), focus_window, fw_x - 1, fw_y);
 				break;
 
 			case grabNudgeUp:
-				if (focus_window && focus_window != (int)PointerRoot )
+				if (focus_window)
 					XMoveWindow(getXDisplay(), focus_window, fw_x, fw_y - 1);
 				break;
 
 			case grabNudgeDown:
-				if (focus_window && focus_window != (int)PointerRoot )
+				if (focus_window)
 					XMoveWindow(getXDisplay(), focus_window, fw_x, fw_y + 1);
 				break;
 
 			case grabBigNudgeRight:
-				if (focus_window && focus_window != (int)PointerRoot )
+				if (focus_window)
 					XMoveWindow(getXDisplay(), focus_window, fw_x + 10, fw_y);
 				break;
 
 			case grabBigNudgeLeft:
-				if (focus_window && focus_window != (int)PointerRoot )
+				if (focus_window)
 					XMoveWindow(getXDisplay(), focus_window, fw_x - 10, fw_y);
 				break;
 
 			case grabBigNudgeUp:
-				if (focus_window && focus_window != (int)PointerRoot )
+				if (focus_window)
 					XMoveWindow(getXDisplay(), focus_window, fw_x, fw_y - 10);
 				break;
 
 			case grabBigNudgeDown:
-				if (focus_window && focus_window != (int)PointerRoot )
+				if (focus_window)
 					XMoveWindow(getXDisplay(), focus_window, fw_x, fw_y + 10);
 				break;
 
 			case grabHorizInc:
-				if (focus_window && focus_window != (int)PointerRoot ) {
+				if (focus_window) {
 					XWindowAttributes foo;
 					XGetWindowAttributes(getXDisplay(), focus_window, &foo);
 					XResizeWindow(getXDisplay(), focus_window,
@@ -1708,7 +1703,7 @@ void ToolWindow::process_event(XEvent * e)
 				break;
 
 			case grabVertInc:
-				if (focus_window && focus_window != (int)PointerRoot ) {
+				if (focus_window) {
 					XWindowAttributes foo;
 					XGetWindowAttributes(getXDisplay(), focus_window, &foo);
 					XResizeWindow(getXDisplay(), focus_window,
@@ -1717,7 +1712,7 @@ void ToolWindow::process_event(XEvent * e)
 				break;
 
 			case grabHorizDec:
-				if (focus_window && focus_window != (int)PointerRoot ) {
+				if (focus_window) {
 					XWindowAttributes foo;
 					XGetWindowAttributes(getXDisplay(), focus_window, &foo);
 					if (foo.width < 11)
@@ -1728,7 +1723,7 @@ void ToolWindow::process_event(XEvent * e)
 				break;
 
 			case grabVertDec:
-				if (focus_window && focus_window != (int)PointerRoot ) {
+				if (focus_window) {
 					XWindowAttributes foo;
 					XGetWindowAttributes(getXDisplay(), focus_window, &foo);
 					if (foo.height < 11)
@@ -1739,9 +1734,8 @@ void ToolWindow::process_event(XEvent * e)
 				break;
 
 			case grabToggleDecor:
-				if (focus_window && focus_window != (int)PointerRoot ) {
+				if (focus_window)
 					wminterface->decorateToggleWindow(focus_window);
-				}
 				break;
 			}
 		}
