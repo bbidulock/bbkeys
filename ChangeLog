@@ -10,6 +10,11 @@ version 0.8.5 --
     screen we're on as the XGrabKey call 
     [vanRijn]
 
+  - fix in bbkeys.cc -- doing "xterm -e sh -c $command" rather than "xterm -e
+    $command".  Thanks to Magnus Solvang for the bug report.  Also, changing
+    hideous char* and snprintf() to ostrstream, YAY!!
+    [vanRijn]
+
 version 0.8.4 --
 
   - add a sanity check to the removeWindow function. Basically, blackbox tells

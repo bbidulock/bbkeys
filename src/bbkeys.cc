@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.15 2002/03/11 16:20:25 vanrijn Exp $
+// $Id: bbkeys.cc,v 1.16 2002/03/12 19:33:03 vanrijn Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -72,6 +72,8 @@
 #include "main.hh"
 #include "Timer.hh"
 #include "Basemenu.hh"
+
+#include "strstream.h"
 
 /*--------------------------------------------------------------------*/
 
@@ -647,54 +649,42 @@ void ToolWindow::execCommand(char *ptrCommand)
 
 void ToolWindow::setKeygrabs(void)
 {
-	 int res, pid;
+	int res, pid;
 
-	 pid = fork();
-	 if (pid == -1) {
-			fprintf(stderr,
-					 "bbkeys: Could not fork a process for configurator.\n");
-			return;
-	 }
+	pid = fork();
 
-	 if (pid == 0) {
-			if (noQt) {
-				// Make 'bbconf' automagically fail...
-				res = 1;
-			} else {
-				char *begin="keybindings:loadfile=";
-		    char *args = new char[strlen(begin) + strlen(bbkeys_rcfile) +1];
-				sprintf(args, "%s%s", begin, bbkeys_rcfile);
+	if (pid == -1) {
+		fprintf(stderr,
+		"bbkeys: Could not fork a process for configurator.\n");
+		return;
+	}
+	
+	if (pid == 0) {
+		if (noQt) {
+			// Make 'bbconf' automagically fail...
+			res = 1;
+		} else {
+			ostrstream ost;
+			ost << "keybindings:loadfile=" << bbkeys_rcfile << ends;
+			
+			res = execlp("bbconf", "bbconf", "--start-plugin", "key bindings", 
+				"--args", ost.str(), NULL);
+			
+		}
+		
+		if (res != 0) {
+			ostrstream ost;
+			ost	<< "bbkeysconf.pl -rcfile " << bbkeys_rcfile << ends;
 
-				res = execlp("bbconf", "bbconf", "--start-plugin", "key bindings", 
-				"--args", args, NULL);
-
-				delete args;
-			}
-
+			res = execlp("rxvt", "rxvt", "-bg", "black", "-fg", "green",
+				"-e", "sh", "-c", ost.str(), NULL);
 			if (res != 0) {
-				char *begin="bbkeysconf.pl -rcfile ";
-		    char *args = new char[strlen(begin) + strlen(bbkeys_rcfile) +1];
-				sprintf(args, "%s%s", begin, bbkeys_rcfile);
-			 	res = execlp("rxvt", "rxvt", "-bg", "black", "-fg", "red",
-								"-e", args, NULL);
-			 	if (res != 0) {
-						execlp("xterm", "xterm", "-bg", "black", "-fg",
-								"red", "-e", args, NULL);
-			 	}
-				delete args;
+				execlp("xterm", "xterm", "-bg", "black", "-fg", "green", 
+					"-e", "sh", "-c", ost.str(), NULL);
 			}
-			exit(0);
-	 }
-
-	 /*
-	 do {
-			if (waitpid(pid, &status, 0) == -1) {
-				if (errno != EINTR)
-					 return;
-			} else
-				return;
-	 } while (1);
-	 */
+		}
+		exit(0);
+	}
 
 }
 
