@@ -117,6 +117,7 @@ void Stackmenu::hide()
 
 void Stackmenu::show(bool forward)
 {
+	setMenuItems();
 	if (getCount() < 1)	return;	// no windows, just return
 	if (getCount() == 1) {
 		// only 1 window, focus it and leave
