@@ -1245,7 +1245,7 @@ void ToolWindow::process_event(XEvent * e)
 		break;
 	
 	case KeyRelease: {
-		if ( stackMenu && stackMenu->isVisible()) {
+		if (stackMenu->isVisible()) {
 			stackMenu->key_release(e->xkey.keycode);
 		}
 		break;
@@ -1294,11 +1294,10 @@ void ToolWindow::process_event(XEvent * e)
 		}
 
 	 // if we're doing the CycleWindow thing
-    if ( stackMenu && stackMenu->isVisible()) {
+    if (stackMenu->isVisible()) {
      	stackMenu->key_press(grabInt);
 		break;
 	 } 
-
 	 if (grabInt > -1) {
 			/* play with colors for nyz =:) */
 			XSetWindowBackgroundPixmap(getXDisplay(), win_configBtn,
