@@ -65,6 +65,9 @@ version 0.8.4 --
     arguments so we load the rc-file that our user is running bbkeys with.
     [vanRijn]
 
+  - long-overdue documentation finessing, thanks to Roman Neuhauser!  =:)
+    [vanRijn]
+
 version 0.8.3 --
 
   - changing external app launch order--we go bbconf, bbkeysconf,

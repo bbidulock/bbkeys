@@ -5,11 +5,6 @@ run:
 make
 make install (as root)
 
-To make and install the gui configurator written in qt2, cd into the 
-bbkeysconf subdirectory and run `make`, followed by a `make install`.
-You may have to edit the Makefile in this directory to tell it where your 
-qt2 libs are.
-
 The global configuration files can be found in $(datadir)/bbtools 
 (default: /usr/local/share/bbtools).
 
@@ -32,7 +27,7 @@ possible options.
 Make sure the file .bbtoolsrc does not exist, else the configuration style
 for other Window Managers will be used.
 
-Users other Window managers:
+Users of other Window managers:
 
 By default bbkeys reads the bbtoolsrc bbkeys.nobb config files.
 If you want to define your personal config-file copy bbtoolsrc to your home-dir
