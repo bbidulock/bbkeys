@@ -20,7 +20,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.hh,v 1.11 2002/06/07 06:12:26 eckzor Exp $
+// $Id: bbkeys.hh,v 1.12 2002/07/19 06:45:25 eckzor Exp $
 
 #ifndef __BBKEYS_HH
 #define __BBKEYS_HH
@@ -169,6 +169,7 @@ protected:
 	void removeSticky(const Window,const int);
 	inline void setCycling(bool f) { doingCycling = f; }
 	inline void setShowAllWorkspaces(bool f) { showAllWorkspaces = f; }
+  void findFramePosition(Window window, int &x, int &y);
 	
 private:
 	XGCValues gcv;	// font stuff

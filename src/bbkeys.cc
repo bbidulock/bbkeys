@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.32 2002/07/10 13:57:34 eckzor Exp $
+// $Id: bbkeys.cc,v 1.33 2002/07/19 06:45:25 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -1326,6 +1326,115 @@ unsigned int ToolWindow::KeycodeToModmask(unsigned int code)
 	return (unsigned int)-1;
 }
 
+
+void ToolWindow::findFramePosition(Window window, int &x, int &y) {
+  Window win = window, parent, root, last = None;
+  Window *children = 0;
+  unsigned int nchildren;
+  int gravity, top, bottom, left, right;
+  XWindowAttributes wattr;
+  XSizeHints size;
+  long ret;
+  unsigned int cwidth, cheight;
+  
+  // get the location, size and gravity of the client window
+  if (! XGetWindowAttributes(getXDisplay(), window, &wattr)) return;
+  cwidth = wattr.width;
+  cheight = wattr.height;
+  if (! XGetWMNormalHints(getXDisplay(), window, &size, &ret)) return;
+  if (size.flags & PWinGravity)
+    gravity = size.win_gravity;
+  else
+    gravity = NorthWestGravity;
+    
+  while (XQueryTree(getXDisplay(), win, &root, &parent, &children,
+                    &nchildren)) {
+    if (children && nchildren > 0)
+      XFree(children); // don't care about the children
+
+    if (! parent) // no parent!?
+      return;
+
+    // if the parent window is the root window, stop here
+    if (parent == root)
+      break;
+
+    last = win;
+    win = parent;
+  }
+
+  if (! (XTranslateCoordinates(getXDisplay(), last, win, 0, 0, &left, &top,
+                               &parent) &&
+         XGetWindowAttributes(getXDisplay(), win, &wattr)))
+    return;
+
+  right = wattr.width - cwidth - left;
+  bottom = wattr.height - cheight - top;
+
+  left += wattr.border_width;
+  right += wattr.border_width;
+  top += wattr.border_width;
+  bottom += wattr.border_width;
+
+  // find the client's location
+  x = wattr.x + left;
+  y = wattr.y + top;
+
+  // this makes things work. why? i don't know. but you need them.
+  right -= 2;
+  bottom -= 2;
+
+  // find the frame's reference position based on the window's gravity
+  switch (gravity) {
+  case NorthWestGravity:
+    printf("NW\n");
+    x -= left;
+    y -= top;
+    break;
+  case NorthGravity:
+    printf("N\n");
+    x += (left + right) / 2;
+    y -= top;
+    break;
+  case NorthEastGravity:
+    printf("NE\n");
+    x += right;
+    y -= top;
+  case WestGravity:
+    printf("W\n");
+    x -= left;
+    y += (top + bottom) / 2;
+    break;
+  case CenterGravity:
+    printf("C\n");
+    x += (left + right) / 2;
+    y += (top + bottom) / 2;
+    break;
+  case EastGravity:
+    printf("E\n");
+    x += right;
+    y += (top + bottom) / 2;
+  case SouthWestGravity:
+    printf("SW\n");
+    x -= left;
+    y += bottom;
+    break;
+  case SouthGravity:
+    printf("S\n");
+    x += (left + right) / 2;
+    y += bottom;
+    break;
+  case SouthEastGravity:
+    printf("SE\n");
+    x += right;
+    y += bottom;
+    break;
+  default:
+    break;
+  }
+}
+
+
 void ToolWindow::process_event(XEvent * e)
 {
 	switch (e->type) {
@@ -1375,16 +1484,11 @@ void ToolWindow::process_event(XEvent * e)
 
 		int i = 0;
 		int grabInt = -1;
-		Window fw_root, fw_child;
 		int fw_y, fw_x;
-		unsigned int fw_w, fw_h, fw_b, fw_d;
 
 		if (focus_window) {
-			XGetGeometry(getXDisplay(), focus_window, &fw_root, &fw_x,
-					&fw_y, &fw_w, &fw_h, &fw_b, &fw_d);
-			XTranslateCoordinates(getXDisplay(), focus_window, fw_root,
-					fw_x, fw_y, &fw_x, &fw_y, &fw_child);
-		}
+      findFramePosition(focus_window, fw_x, fw_y);
+    }
 		
 		// if our user wants to grab his keystrokes, even though one
 		// or more of the Lock-Modifiers are pressed, alter the mask
