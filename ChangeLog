@@ -8,7 +8,10 @@ version 0.8.4 --
 
   - fixing things for multi-head displays--replacing
     "getScreenInfo(0)->getRootWindow()," with
-    "getCurrentScreenInfo()->getRootWindow(),"
+    "getCurrentScreenInfo()->getRootWindow(),"  So yes, bbkeys now has
+    multi-head support.  Sort of.  You need to have a separate instance of
+    bbkeys running against each head ("bbkeys -display :1"), etc.  cat
+    complaints >> /dev/null....
 
   - removing kludgy C command-line configurator with much-improved perl script
     from Damien Tougas (thanks!!!)
@@ -21,6 +24,13 @@ version 0.8.4 --
     "NextWindow" variety (as in previous versions of bbkeys, and another
     keybinding, "NextWindowAllWorkspaces", that pops up the window list for
     navigation for windows open on all workspaces. 
+
+  - bugfix....  previously, bbkeys would ignore windows that had no name.  We
+    now follow blackbox's lead (and follow blackbox's code) and create a name
+    for it, "Unnamed".  Thanks to Damien Terrier for this bug report.
+
+
+
 
 version 0.8.3 --
   - changing external app launch order--we go bbconf, bbkeysconf,

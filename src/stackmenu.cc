@@ -51,9 +51,11 @@ void Stackmenu::reconfigure()
 }
 
 void Stackmenu::setMenuItems() {
-	XTextProperty xtp;
-	char **windowname;
+	XTextProperty text_prop;
+	char **list;
+	char *title=0;
 	int num;
+
 	LinkedListIterator<WindowList> it(bbtool->windowList);
 
 	clearMenu();
@@ -64,23 +66,46 @@ void Stackmenu::setMenuItems() {
 				||
 				((!bbtool->getShowAllWorkspaces()) &&
 				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) {
-			if (XGetWMName(bbtool->getXDisplay(), it.current()->win, &xtp))
-				if (XTextPropertyToStringList(&xtp, &windowname, &num)) {
-					if (windowname && *windowname) {
-						if (bbtool->getShowAllWorkspaces()) {
-							int size = strlen(*windowname) + strlen(" (workspace )") + 2;
-							char *workspace = (char*) malloc(size);
-							if (workspace) {
-								snprintf(workspace, size, "%s (workspace %i)", *windowname,
-										it.current()->desktop+1);
-								insert(workspace);
-								free(workspace);
-							}
+
+			if (title) {
+				delete [] title;
+				title = 0;
+			}
+
+			// what's our window name?
+			if (XGetWMName(bbtool->getXDisplay(), it.current()->win, &text_prop)) {
+				if (text_prop.value && text_prop.nitems > 0) {
+					if (text_prop.encoding != XA_STRING) {
+						text_prop.nitems = strlen((char *) text_prop.value);
+			
+						if ((XmbTextPropertyToTextList(bbtool->getXDisplay(), &text_prop,
+								&list, &num) == Success) &&
+								(num > 0) && *list) {
+							title = bstrdup(*list);
+							XFreeStringList(list);
 						} else
-							insert((char*) *windowname);
-						XFreeStringList(windowname);
-					}
+							title = bstrdup((char *) text_prop.value);
+					} else
+						title = bstrdup((char *) text_prop.value);
+			
+					XFree((char *) text_prop.value);
+				} else
+					title = bstrdup( "Unnamed");
+			} else
+				title = bstrdup( "Unnamed");
+
+			// now tack on the workspace name if we need to
+			if (bbtool->getShowAllWorkspaces()) {
+				int size = strlen(title) + strlen(" (workspace )") + 2;
+				char *workspace = (char*) malloc(size);
+				if (workspace) {
+					snprintf(workspace, size, "%s (workspace %i)", title,
+							it.current()->desktop+1);
+					insert(workspace);
+					free(workspace);
 				}
+			} else
+				insert(title);
 		}
 	}
 }

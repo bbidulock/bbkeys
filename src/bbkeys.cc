@@ -2081,10 +2081,7 @@ void ToolWindow::windowAttributeChange(Window win) {
 			PropBlackboxHintsElements, False,
 			getBlackboxAttributesAtom(), &real_type,
 			&format, &n, &extra, (unsigned char**)&net_hint)
-			==
-			Success
-			&&
-			net_hint))
+			== Success && net_hint))
 		return;
 	if (n != PropBlackboxHintsElements)
 		return;
