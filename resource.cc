@@ -127,7 +127,7 @@ void Resource::Frame()
 
 
 	readTexture("bbkeys.frame", "Bbkeys.Frame", BB_FRAME,
-							"Window", color, color, gradient, &frame.texture);
+							BB_FRAME2, color, color, gradient, &frame.texture);
 
 	if (XrmGetResource
 			(resource_db, "bbkeys.bevelWidth", "Bbkeys.BevelWidth",
@@ -138,7 +138,7 @@ void Resource::Frame()
 			frame.bevelWidth = 4;
 	} else
 		 if (XrmGetResource
-				 (resource_db, BB_BEVELWIDTH, "BevelWidth", &value_type, &value)) {
+				 (resource_db, BB_BEVELWIDTH, BB_BEVELWIDTH2, &value_type, &value)) {
 		if (sscanf(value.addr, "%u", &frame.bevelWidth) != 1)
 			frame.bevelWidth = 4;
 		else if (frame.bevelWidth == 0)
@@ -271,7 +271,7 @@ void Resource::SizeAndPosition()
 			}
 		}
 	} else if (XrmGetResource // try to load TitleFont, which will pick up *Font
-				 (resource_db, BB_FONT, "TitleFont", &value_type, &value)) {
+				 (resource_db, BB_FONT, BB_FONT2, &value_type, &value)) {
 		if ((frame.font =
 				 XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL) {
 			fprintf(stderr,
@@ -330,11 +330,11 @@ void Resource::Label(void)
 		label.transparent = False;
 
 	readTexture("bbkeys.label", "Bbkeys.Label", BB_LABEL,
-							"Window.Label.Focus", "slategrey", "darkslategrey",
+							BB_LABEL2, "slategrey", "darkslategrey",
 							"Sunken Gradient Diagonal Bevel1", &label.texture);
 
 	readColor("bbkeys.textColor", "Bbkeys.TextColor",
-						BB_LABEL_TEXTCOLOR, "Window.Label.Focus.TextColor",
+						BB_LABEL_TEXTCOLOR, BB_LABEL_TEXTCOLOR2,
 						"LightGrey", &label.textColor);
 
 
@@ -363,7 +363,7 @@ void Resource::Label(void)
 			}
 		}
 	} else if (XrmGetResource
-				 (resource_db, BB_FONT, "TitleFont", &value_type, &value)) {
+				 (resource_db, BB_FONT, BB_FONT2, &value_type, &value)) {
 		if ((label.font =
 				 XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL) {
 			fprintf(stderr,
@@ -409,12 +409,12 @@ void Resource::Label(void)
 void Resource::Button()
 {
 	readTexture("bbkeys.button", "Bbkeys.Button",
-							BB_BUTTON, "Window.Button.Focus",
+							BB_BUTTON, BB_BUTTON2,
 							"rgb:4/7/8", "rgb:2/2/2",
 							"Raised Gradient Diagonal Bevel1", &button.texture);
 
 	readTexture("bbkeys.button.pressed", "Bbkeys.Button.Pressed",
-							BB_BUTTON_PRESSED, "Window.Button.Pressed",
+							BB_BUTTON_PRESSED, BB_BUTTON_PRESSED2,
 							"rgb:4/4/4", "rgb:c/c/c",
 							"Sunken Gradient Diagonal Bevel1", &button.texture_pressed);
 
@@ -426,22 +426,22 @@ void Resource::Menu()
 	char *value_type;
 
 	
-	readTexture("bbkeys.menu","Bbkeys.Menu",BB_MENU,"Menu.Frame",
+	readTexture("bbkeys.menu","Bbkeys.Menu",BB_MENU,BB_MENU2,
               "slategrey","darkslategrey",
               "Raised Diagonal Gradient Bevel1",&menu.texture);
 															   	
   readColor("bbkeys.menu.highlight.color",
 				    "Bbkeys.Menu.Highlight.Color",
-             BB_MENU_HIGHLIGHT_COLOR,"Menu.highlightColor",
+             BB_MENU_HIGHLIGHT_COLOR,BB_MENU_HIGHLIGHT_COLOR2,
              "rgb:c/9/6",&menu.highlightColor);
   
 	readColor("bbkeys.menu.textColor","Bbkeys.Menu.TextColor",
-							      BB_MENU_TEXTCOLOR,"Menu.Frame.TextColor",
+							      BB_MENU_TEXTCOLOR,BB_MENU_TEXTCOLOR2,
                     "LightGrey",&menu.textColor);
 
 	readColor("bbkeys.menu.highlight.textColor",
 	    			"Bbkeys.Menu.Highlight.TextColor",
-			 			BB_MENU_HITEXTCOLOR,"Menu.Frame.HiTextColor",
+			 			BB_MENU_HITEXTCOLOR,BB_MENU_HITEXTCOLOR2,
             "white",&menu.hitextColor);
 
   if (XrmGetResource(resource_db,"bbkeys.menuJustify","Bbkeys.MenuJustify",
@@ -456,14 +456,14 @@ void Resource::Menu()
 	    else
     	  menu.justify = LeftJustify;
 	  }
-	  else if (XrmGetResource(resource_db,BB_MENU_JUSTIFY,"Bbkeys.MenuJustify",
+	  else if (XrmGetResource(resource_db,BB_MENU_JUSTIFY,BB_MENU_JUSTIFY2,
 								&value_type, &value))
 	  {
-    	if (! strncasecmp("leftjustify", value.addr, value.size))
+    	if (! strncasecmp("left", value.addr, value.size))
 	      menu.justify = LeftJustify;
-    	else if (! strncasecmp("rightjustify", value.addr, value.size))
+    	else if (! strncasecmp("right", value.addr, value.size))
 	      menu.justify = RightJustify;
-	    else if (! strncasecmp("centerjustify", value.addr, value.size))
+	    else if (! strncasecmp("center", value.addr, value.size))
 	      menu.justify = CenterJustify;
 	    else
     	  menu.justify = LeftJustify;	
@@ -485,7 +485,7 @@ void Resource::Menu()
       menu.bullet_style = Round;
   } else {
     if (XrmGetResource(resource_db, BB_MENU_BULLETSTYLE, 
-                       "Menu.BulletStyle", &value_type, &value)) {
+                       BB_MENU_BULLETSTYLE2, &value_type, &value)) {
       if (! strncasecmp(value.addr, "empty", value.size))
         menu.bullet_style = Empty;
       else if (! strncasecmp(value.addr, "square", value.size))
@@ -508,7 +508,7 @@ void Resource::Menu()
       menu.bullet_pos = Left;
   } else {
     if (XrmGetResource(resource_db, BB_MENU_BULLETPOSITION,
-                       "Menu.BulletPosition", &value_type, &value)) {
+                       BB_MENU_BULLETPOSITION2, &value_type, &value)) {
       if (! strncasecmp(value.addr, "right", value.size))
         menu.bullet_pos = Right;
       else
@@ -542,7 +542,7 @@ void Resource::Menu()
 			}
 		}
 	}
-	else if  (XrmGetResource(resource_db, BB_MENU_FONT, "MenuFont", &value_type, &value))
+	else if  (XrmGetResource(resource_db, BB_MENU_FONT, BB_MENU_FONT2, &value_type, &value))
 	{
 		if ((menu.font = XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL)
 		{
