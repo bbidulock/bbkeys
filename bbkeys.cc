@@ -1532,7 +1532,7 @@ void ToolWindow::process_event(XEvent * e)
 				}
 			}
 		}
-//		timer->start();
+		timer->start();
 		break;
 	}
 
@@ -1600,7 +1600,7 @@ void ToolWindow::process_event(XEvent * e)
 
 					loadKeygrabs();
 					activateKeygrabs();
-//					timer->start();
+					timer->start();
 				}
 
 				XSetWindowBackgroundPixmap(getXDisplay(), win_configBtn,
@@ -1806,7 +1806,6 @@ void ToolWindow::removeWindow(Window win)
 		if (it.current()->win == win) {
 			windowList->remove(it.current());
 		}
-printf("REMOVE WINDOW\n");
 }
 
 void ToolWindow::focusWindow(Window win)

@@ -117,8 +117,15 @@ void Stackmenu::hide()
 
 void Stackmenu::show(bool forward)
 {
-	if (getCount() <= 1)
-		return;		// don't show if theres only 1 window to show, or none.
+	if (getCount() < 1)	return;	// no windows, just return
+	if (getCount() == 1) {
+		// only 1 window, focus it and leave
+		LinkedListIterator<WindowList> it(bbtool->windowList);
+		for (; it.current(); it++)
+			if (it.current()->desktop == bbtool->getCurrentDesktopNr())
+				bbtool->wminterface->setWindowFocus(it.current()->win);
+		return;
+	}
 
 	XRaiseWindow(bbtool->getXDisplay(), getWindowID());
 	/*
