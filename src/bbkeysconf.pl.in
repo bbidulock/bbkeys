@@ -26,6 +26,10 @@
 # SUCH DAMAGE.
 #
 
+
+# do math in integer rather than double mode--we rely on this for rounding
+use integer;
+
 # prototypes
 sub trim;
 
@@ -84,6 +88,7 @@ my @actions = (
 	"VerticalDecrement"
 	);
 
+
 open(R, "$bbkeysrc");
 my @config;
 my $count = 0;
@@ -91,7 +96,6 @@ while (<R>) {
 	# skip blank lines or comments
 	$_ = trim($_);
 	next if ($_ =~ /^$/ or $_ =~ /^#/) ;
-	chomp($_);
 	$config[$count++] = $_;
 	}
 close(R);
@@ -100,7 +104,7 @@ my $save_state = 0;
 my $exit = 0;
 my $command = "";
 
-print "\n*** BBKeys Configuration Tool ***\n\n";
+print "\n*** BBKeys Configuration Tool ***\n";
 &list;
 while ($exit == 0) {
 
@@ -127,11 +131,11 @@ sub trim {
 	s/\s*$//;
 
 	return $_;
-}
+	}
 
-sub list() {
+sub list {
 
-	print "List:> Current Configuration\n";
+	print "\nList:> Current Configuration\n";
 	print "-----------------------------------------------------------------\n";
 
 	open(CONFIG_LIST, ">-");
@@ -155,9 +159,9 @@ sub list() {
 
 	}
 
-sub add() {
+sub add {
 
-	print "Add: Choose Key> Up, Down, R, L, etc.\n";
+	print "\nAdd: Choose Key> Up, Down, R, L, etc.\n";
 	print "Add: Choose Key> ";
 	my $grab = <STDIN>;
 	chomp($grab);
@@ -165,22 +169,29 @@ sub add() {
 	if ($grab eq "") {
 		print ("\nERROR: Must enter valid key.\n");
 		return;
-	}
+		}
 
 	print "Add: Select Modifier> Modifier List\n";
 	print "-----------------------------------------------------------------\n";
 	open(MODIFIER_LIST, ">-");
-	for ($i = 0; $i < $#modifiers; $i++) {
+	for ($i = 0; $i <= $#modifiers; $i++) {
 		write(MODIFIER_LIST);
 		}
 	close(MODIFIER_LIST);
 	print "-----------------------------------------------------------------\n";
-	my $mod = $modifiers[&get_num("Add: Select Modifier> ", $#modifiers - 1)];
+	my $mod = $modifiers[&get_num("Add: Select Modifier> ", $#modifiers)];
 
 	print "Add: Choose Action> Action List\n";
 	print "-----------------------------------------------------------------\n";
+	# okay. $#actions refers to the last index of the array, not the
+	# count. so add 1 more to it and divide by 3 and with the "user
+	# integer" line up time, we get an even number of rows
+	$action_rows = ($#actions +1)/ 3;
 	open(ACTION_LIST, ">-");
-	for ($i = 0; $i < $#actions; $i += 3) {
+	for ($i = 0; $i <= $action_rows; $i++) {
+		$index1=$i;
+		$index2=$i + $action_rows +1;
+		$index3=$index2 + $action_rows +1;
 		write(ACTION_LIST);
 		}
 	close(ACTION_LIST);
@@ -202,7 +213,7 @@ sub add() {
 	
 	}
 
-sub delete() {
+sub delete {
 
 	print "\n";
 	$item = &get_num("Delete: Select Item> ", $count - 1);
@@ -217,7 +228,7 @@ sub delete() {
 
 	}
 
-sub save() {
+sub save {
 
 	print "Save: Confirm> Save the current configuration?\n";
 	print "Save: Confirm> ";
@@ -241,7 +252,7 @@ sub save() {
 
 	}
 
-sub quit() {
+sub quit {
 
 	if ($save_state == 1) {
 		print "Quit: Notice> Configuration has been changed\n";
@@ -252,7 +263,7 @@ sub quit() {
 
 	}
 
-sub get_num() {
+sub get_num {
 
 	my $prompt = $_[0];
 	my $maxnum = $_[1];
@@ -260,16 +271,16 @@ sub get_num() {
 	my $input;
 
 	print $prompt . "Enter a number between 0 and $maxnum\n";
-	while ($validnum eq 0) {
+	while ($validnum == 0) {
 		print $prompt;
 		$input = <STDIN>;
 		chomp($input);
 		$input =~ s/\s*//g;
-		if (($input =~ /^\d*$/) && ($input <= $maxnum)) {
+		if (($input =~ /^\d+$/) && ($input <= $maxnum)) {
 			$validnum = 1;
 			}
 		else {
-			print $prompt . "Invalid selection, please try again\n";
+			print "\nERROR: Invalid selection, please try again\n\n";
 			}
 		}
 
@@ -289,5 +300,5 @@ $i, $modifiers[$i]
 
 format ACTION_LIST =
 @>  @<<<<<<<<<<<<<<<<<<<<  @>  @<<<<<<<<<<<<<<<<<<<  @>  @<<<<<<<<<<<<<<<<<<<
-{$actions[$i] ? $i : ""}, {$actions[$i] ? $actions[$i] : ""}, {$actions[$i + 1] ? ($i + 1) : ""}, {$actions[$i + 1] ? $actions[$i + 1] : ""}, {$actions[$i + 2] ? ($i + 2) : ""}, {$actions[$i + 2] ? $actions[$i + 2] : ""}
+$index1, $actions[$index1], {$actions[$index2] ? ($index2) : ""}, {$actions[$index2] ? $actions[$index2] : ""}, {$actions[$index3] ? ($index3) : ""}, {$actions[$index3] ? $actions[$index3] : ""}
 .
