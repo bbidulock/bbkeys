@@ -1175,6 +1175,9 @@ void ToolWindow::MakeWindow(bool reconfigure)
    	gcv.foreground = resource->menu.texture.getColor()->getPixel();
 		XChangeGC(getXDisplay(), menuGC, GCFont | GCForeground, &gcv);
 
+	  gcv.foreground = resource->menu.highlightColor.getPixel();
+		XChangeGC(getXDisplay(), menuHiBGGC, GCFont | GCForeground, &gcv);
+
 	  gcv.foreground = resource->menu.hiTextColor.getPixel();	                    	
 		XChangeGC(getXDisplay(), menuHiGC, GCFont | GCForeground, &gcv);
 
