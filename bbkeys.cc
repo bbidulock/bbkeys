@@ -1253,7 +1253,7 @@ void ToolWindow::Redraw()
 
 void ToolWindow::process_event(XEvent * e)
 {
-	static unisnged int released_state;
+	static unsigned int released_state;
 
 	switch (e->type) {
 	case PropertyNotify:
@@ -1262,8 +1262,9 @@ void ToolWindow::process_event(XEvent * e)
 	
 	case KeyRelease: {
 		if (stackMenu->isVisible()) {
-			; // add state bits
-			if ((state bits & mod1) || (state bits & mod2)
+			released_state |= e->xkey.state; // add state bits
+			if ((released_state & grabSet.KeyMap[grabNextWindow].modMask) ||
+					(released_state & grabSet.KeyMap[grabPrevWindow].modMask))
 				stackMenu->selectFocused();
 		}
 		break;
@@ -1317,12 +1318,13 @@ void ToolWindow::process_event(XEvent * e)
 			else if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Return))
 				stackMenu->selectFocused();
 			else
-				;		// remove state bits
+				released_state &= !e->xkey.state;		// remove state bits
 		}
 		if (grabInt > -1) {
-			if (stackMenu->isVisible())
+			if (stackMenu->isVisible()) {
+				released_state = 0;
 				stackMenu->key_press(grabSet.KeyMap[grabInt].action);
-			else {
+			} else {
 				/* play with colors for nyz =:) */
 				XSetWindowBackgroundPixmap(getXDisplay(), win_configBtn,
 						pixmap.pix_pressedBtn);
