@@ -1,6 +1,6 @@
 Summary: bbkeys, a completely configurable key-combo grabber for blackbox
 Name: bbkeys
-Version: 0.8.1
+Version: 0.8.2
 Release: 1
 Copyright: GPL
 Group: X11/Applications
