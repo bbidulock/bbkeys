@@ -1,7 +1,7 @@
 // grab_defs.hh for bbkeys
 //
 //  Copyright (c) 1999-2001 by Jason Kasper (vanRijn) vR@movingparts.net
-//  Copyright (c) 2001 by Ben Jansens <xor@x-o-r.net>
+//  Copyright (c) 2001 by Ben Jansens <xor@orodu.net>
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by

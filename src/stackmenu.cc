@@ -1,6 +1,6 @@
 // cycling.cc for bbkeys
 //
-//	Copyright (c) 2001 by Ben Jansens <xor@x-o-r.net>
+//	Copyright (c) 2001 by Ben Jansens <xor@orodu.net>
 //	Copyright (c) 2001 by Jason Kasper (vanRijn) <vR@movingparts.net>
 //
 //	This program is free software; you can redistribute it and/or modify
