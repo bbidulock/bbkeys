@@ -19,7 +19,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: wminterface.hh,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: wminterface.hh,v 1.4 2002/05/30 07:30:03 eckzor Exp $
 
 #ifndef __WMINTERFACE_HH
 #define __WMINTERFACE_HH
@@ -45,16 +45,6 @@ public:
 	void sendClientMessage(Atom, XID);
 	void changeDesktop(int,bool focusWin=True);
 
-/*	Atom getKWMModuleDesktopChange(void) { return kwm_module_desktop_change; }
-	Atom getKWMModuleDesktopNumberChange(void) {
-								return kwm_module_desktop_number_change; }
-	Atom getKWMModuleInit(void) { return kwm_module_init; }
-	Atom getKWMModuleWinAdd(void) { return kwm_module_win_add; }
-	Atom getKWMModuleWinRemove(void) { return kwm_module_win_remove; }
-	Atom getKWMModuleWinChange(void) { return kwm_module_win_change; }
-	Atom getKWMModuleWinActivate(void) { return kwm_module_win_activate; }
-	Atom getKWMModuleWinRaise(void) { return kwm_module_win_raise; }
-	Atom getKWMModuleWinLower(void) { return kwm_module_win_lower; }*/
 protected:
 	virtual void NETNotifyStartup(void);
 	virtual void NETNotifyWindowAdd(Window,int);
@@ -66,18 +56,6 @@ protected:
 
 private:
 	ToolWindow *bbtool;
-	bool focusWindow;
-/*	Atom kwm_module_init;
-	Atom kwm_module_win_add;
-	Atom kwm_module_win_remove;
-	Atom kwm_module_win_change;
-	Atom kwm_module_win_activate;
-	Atom kwm_module_win_iconfied;
-	Atom kwm_module_win_raise;
-	Atom kwm_module_win_lower;
-	Atom kwm_module_desktop_change;
-	Atom kwm_module_desktop_number_change;*/
-
 };
 
 #endif /* __WMINTERFACE_HH */

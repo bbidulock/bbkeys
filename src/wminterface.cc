@@ -19,7 +19,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: wminterface.cc,v 1.5 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: wminterface.cc,v 1.6 2002/05/30 07:30:03 eckzor Exp $
 
 #include "wminterface.hh"
 #include "resource.hh"
@@ -31,7 +31,6 @@
 
 WMInterface::WMInterface(ToolWindow *toolwindow) : NETInterface(toolwindow) {
 	bbtool=toolwindow;
-	focusWindow = True;
 }
 
 WMInterface::~WMInterface() {
@@ -57,7 +56,6 @@ void WMInterface::sendClientMessage(Atom atom, XID data) {
 void WMInterface::changeDesktop(int desk_number, bool focusWin) {
 	sendClientMessage(bbtool->getBlackboxChangeWorkspaceAtom(),
 		static_cast<unsigned long int>(desk_number));
-	focusWindow = focusWin;
 }
 
 void WMInterface::sendWindowToDesktop(Window win, int desk_number) {
@@ -310,13 +308,7 @@ void WMInterface::NETNotifyAttributes(Window win)
 }
 
 void WMInterface::NETNotifyFocus(Window win) {
-	if (win)
-		if (focusWindow)
-			bbtool->focusWindow(win);
-		else {
-			setWindowFocus(bbtool->getFocusWindow());
-			focusWindow = True;
-		}
+  bbtool->focusWindow(win);
 }
 
 void WMInterface::NETNotifyCurrentWorkspace(int desktop_nr) {
