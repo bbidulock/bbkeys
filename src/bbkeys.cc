@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.16 2002/03/12 19:33:03 vanrijn Exp $
+// $Id: bbkeys.cc,v 1.17 2002/05/27 19:30:31 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -73,7 +73,12 @@
 #include "Timer.hh"
 #include "Basemenu.hh"
 
-#include "strstream.h"
+#include <strstream>
+#include <string>
+
+using std::string;
+using std::ostrstream;
+using std::ends;
 
 /*--------------------------------------------------------------------*/
 
@@ -626,25 +631,27 @@ int ToolWindow::translateAction(char *action)
 
 void ToolWindow::execCommand(char *ptrCommand)
 {
-	 int pid;
-	 extern char **environ;
+	int pid;
+	extern char **environ;
 
-	 pid = fork();
-	 if (pid == -1) {
-			fprintf(stderr,
-					 "bbkeys: Could not fork a process for execCommand.\n");
-			return;
-	 }
+	pid = fork();
+	if (pid == -1) {
+		fprintf(stderr,
+						"bbkeys: Could not fork a process for execCommand.\n");
+		return;
+	}
 
-	 if (pid == 0) {
-			char *argv[4];
-			argv[0] = "sh";
-			argv[1] = "-c";
-			argv[2] = ptrCommand;
-			argv[3] = 0;
-			execve("/bin/sh", argv, environ);
-			exit(127);
-	 }
+	if (pid == 0) {
+		string display = (string)"DISPLAY=" + DisplayString(getXDisplay());
+		putenv((char*)display.c_str());
+		char *argv[4];
+		argv[0] = "sh";
+		argv[1] = "-c";
+		argv[2] = ptrCommand;
+		argv[3] = 0;
+		execve("/bin/sh", argv, environ);
+		exit(127);
+	}
 }
 
 void ToolWindow::setKeygrabs(void)

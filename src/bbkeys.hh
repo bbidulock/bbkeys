@@ -20,7 +20,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.hh,v 1.6 2002/02/21 02:05:29 vanrijn Exp $
+// $Id: bbkeys.hh,v 1.7 2002/05/27 19:30:31 eckzor Exp $
 
 #ifndef __BBKEYS_HH
 #define __BBKEYS_HH
@@ -191,9 +191,9 @@ private:
 	unsigned int _NumLockMask;
 	unsigned int _ScrollLockMask;
 
-	char *bbkeys_rcfile;	// resource file
+	char *bbkeys_rcfile;  // resource file
 	time_t bbkeys_rcTime; // time used for autoloading resource file
-	Resource *resource;		// resource data
+	Resource *resource;   // resource data
 
 	int desktop_count;										// the number of desktops
 	DesktopList *current_desktop;					// the currently active desktop
