@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.24 2002/05/31 17:07:04 eckzor Exp $
+// $Id: bbkeys.cc,v 1.25 2002/06/07 05:59:48 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -2014,11 +2014,9 @@ void ToolWindow::removeWindow(Window win)
 {
 	if (focus_window == win)
 		focusWindow(0);
-	LinkedListIterator<WindowList> it(windowList);
-	for (; it.current(); it++)
-		if (it.current()->win == win) {
-			windowList->remove(it.current());
-		}
+  for (int i = 0; i < windowList->count(); ++i)
+    if (windowList->find(i)->win == win)
+      windowList->remove(i--);
 }
 
 void ToolWindow::focusWindow(Window win)
