@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.18 2002/05/27 19:56:17 eckzor Exp $
+// $Id: bbkeys.cc,v 1.19 2002/05/27 20:01:18 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -639,8 +639,6 @@ void ToolWindow::execCommand(char *ptrCommand)
 	}
 
 	if (pid == 0) {
-		string display = (string)"DISPLAY=" + DisplayString(getXDisplay());
-		putenv((char*)display.c_str());
 		char *argv[4];
 		argv[0] = "sh";
 		argv[1] = "-c";
