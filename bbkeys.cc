@@ -880,9 +880,9 @@ void ToolWindow::reconfigure(void)
 		getImageControl()->removeImage(pixmap.pix_pressedBtn);
 
 	resource->Reload();
-	stackMenu->reconfigure();
-
 	MakeWindow(True);
+
+	stackMenu->reconfigure();
 
 	XClearWindow(getXDisplay(), win_frame);
 	XClearWindow(getXDisplay(), win_back);
@@ -1167,9 +1167,20 @@ void ToolWindow::MakeWindow(bool reconfigure)
  		stackMenu = new Stackmenu(this);
 		stackMenu->Update();
 	} else {
-			gcv.font = resource->label.font->fid;
-			gcv.foreground = resource->label.textColor.getPixel();
-			XChangeGC(getXDisplay(), frameGC, GCFont | GCForeground, &gcv);
+		gcv.font = resource->label.font->fid;
+		gcv.foreground = resource->label.textColor.getPixel();
+		XChangeGC(getXDisplay(), frameGC, GCFont | GCForeground, &gcv);
+
+		gcv.font = resource->menu.font->fid;                    	
+   	gcv.foreground = resource->menu.texture.getColor()->getPixel();
+		XChangeGC(getXDisplay(), menuGC, GCFont | GCForeground, &gcv);
+
+	  gcv.foreground = resource->menu.hiTextColor.getPixel();	                    	
+		XChangeGC(getXDisplay(), menuHiGC, GCFont | GCForeground, &gcv);
+
+	  gcv.foreground = resource->menu.textColor.getPixel();                    	
+		XChangeGC(getXDisplay(), menuFrameGC, GCFont | GCForeground, &gcv);
+
 	 }
 
 
