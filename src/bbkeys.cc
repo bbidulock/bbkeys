@@ -656,10 +656,10 @@ void ToolWindow::setKeygrabs(void)
 					res = execlp("bbkeysConfigGtk", "bbkeysConfigGtk", NULL);
 					if (res != 0) {
 					 	res = execlp("rxvt", "rxvt", "-bg", "black", "-fg", "green",
-										"-e", "bbkeysConfigC", NULL);
+										"-e", "bbkeysconf.pl", NULL);
 					 	if (res != 0) {
 								execlp("xterm", "xterm", "-bg", "black", "-fg",
-										"green", "-e", "bbkeysConfigC", NULL);
+										"green", "-e", "bbkeysconf.pl", NULL);
 					 	}
 					}
 				}

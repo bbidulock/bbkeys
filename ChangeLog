@@ -2,17 +2,23 @@ version 0.8.4 --
   - cleaning up build again.  Rather than having 200 -DDEFINE_ statements
     in our compile lines, we use config.h (like normal people).  =:)  This
     very well may break stuff, but it looks good thus far....
+
   - adding AM_MAINTAINER_MODE to stop the ever-annoying "here, let me run
     aclocal for you again!!" idiocy of automake and friends
+
   - fixing things for multi-head displays--replacing
     "getScreenInfo(0)->getRootWindow()," with
     "getCurrentScreenInfo()->getRootWindow(),"
+
   - removing kludgy C command-line configurator with much-improved perl script
     from Damien Tougas (thanks!!!)
+
+  - changing bbkeys.cc to look for bbkeysconf.pl rather than bbkeysConfigC
 
 version 0.8.3 --
   - changing external app launch order--we go bbconf, bbkeysconf,
     bbkeysConfigGtk, rxvt, xterm... *phew*
+
   - fix in stackmenu.cc (hopefully we got it this time?) to fix segfaults
     on some platforms due to screwy X stuff. *shudder*
 

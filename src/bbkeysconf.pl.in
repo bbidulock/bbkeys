@@ -227,6 +227,7 @@ sub save() {
 
 	if ($confirm =~ /^(y|yes)$/i) {
 		open(W, ">$bbkeysrc");
+		print W "#~/.bbkeysrc, automagically configured by bbkeysconf.pl\n\n\n";
 		for ($i = 0; $i < $count; $i++) {
 			print W $config[$i] . "\n";
 			}
