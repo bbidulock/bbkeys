@@ -18,7 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: Baseresource.hh,v 1.2 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: Baseresource.hh,v 1.3 2002/05/30 18:26:25 eckzor Exp $
 
 #ifndef __BASERESOURCE_HH
 #define __BASERESOURCE_HH
@@ -55,11 +55,12 @@ class BaseResource : public TimeoutHandler {
 
   protected:
     void Load(void);
-    void readDatabaseColor(char *, char *, BColor *);
-    void readDatabaseTexture(char *, char *,BTexture *);
-    void readColor(char *,char *, char *,char *,char *,BColor *);
-    void readTexture(char *,char *, char *,char *,char *,char *,char *,
-                BTexture *);
+    void readDatabaseColor(const char *, const char *, BColor *);
+    void readDatabaseTexture(const char *, const char *, BTexture *);
+    void readColor(const char *, const char *, const char *, const char *,
+									 const char *,BColor *);
+    void readTexture(const char *, const char *, const char *, const char *,
+										 const char *, const char *, const char *, BTexture *);
 
   
     ToolWindow *bbtool;

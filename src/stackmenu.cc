@@ -19,7 +19,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: stackmenu.cc,v 1.6 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: stackmenu.cc,v 1.7 2002/05/30 18:26:25 eckzor Exp $
 
 #include "bbkeys.hh"
 #include "LinkedList.hh"
@@ -181,6 +181,13 @@ void Stackmenu::hide()
 	bbtool->setCycling(False);
 }	
 
+
+void Stackmenu::show(void)
+{
+	Basemenu::show();
+}
+
+
 void Stackmenu::show(bool forward, bool showMenu)
 {
 	setMenuItems();
@@ -205,7 +212,7 @@ void Stackmenu::show(bool forward, bool showMenu)
 	bbtool->setCycling(True);
 
 	if (showMenu) {
-		Basemenu::show();
+		show();
 		centerPosition();
 	}
 }

@@ -20,7 +20,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.hh,v 1.7 2002/05/27 19:30:31 eckzor Exp $
+// $Id: bbkeys.hh,v 1.8 2002/05/30 18:26:25 eckzor Exp $
 
 #ifndef __BBKEYS_HH
 #define __BBKEYS_HH
@@ -38,15 +38,15 @@
 #define RCFILE ".bbkeysrc"
 
 typedef struct {
-		unsigned long modMask;
-		KeyCode keycode;
-		int action;
-		char *execCommand;
+  unsigned long modMask;
+  KeyCode keycode;
+  int action;
+  char *execCommand;
 } KEY_ACTION_MAP;
 
 typedef struct {
-		int instructCount;
-		KEY_ACTION_MAP KeyMap[MaxInstructions];
+  int instructCount;
+  KEY_ACTION_MAP KeyMap[MaxInstructions];
 } KEY_GRAB_INSTRUCTION;
 
 struct PIXMAP {
@@ -90,10 +90,10 @@ public:
 	~ToolWindow(void);
 
 	void reconfigure(void);
-	void execCommand(char *);
+	void execCommand(char *const);
 
 	// functions for translation of grab information
-	char *index_to_name(int);
+	const char *index_to_name(int);
 	int translateAction(char *);
 	int translateModifier(char *);
 

@@ -18,7 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: Basewindow.cc,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: Basewindow.cc,v 1.4 2002/05/30 18:26:25 eckzor Exp $
 
 #include "Basewindow.hh"
 #include "resource.hh"
@@ -69,7 +69,7 @@ Basewindow::Basewindow(int argc,char **argv,struct CMDOPTIONS *options)
 
 Basewindow::~Basewindow() {}
 
-void Basewindow::process_event(XEvent *event)
+void Basewindow::process_event(XEvent *)
 {
 }
 

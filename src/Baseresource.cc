@@ -18,7 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: Baseresource.cc,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: Baseresource.cc,v 1.4 2002/05/30 18:26:25 eckzor Exp $
 
 #include <stdlib.h>
 #include "bbkeys.hh"
@@ -303,9 +303,10 @@ void BaseResource::ReadBlackboxResource() {
   }
 }
 
-void BaseResource::readTexture(char *rname,char *rclass, char *bbname,
-                               char *bbclass,char *dcolor,char *dcolorTo,
-                               char *dtexture,BTexture *texture) {
+void BaseResource::readTexture(const char *rname, const char *rclass,
+															 const char *bbname, const char *bbclass,
+															 const char *dcolor, const char *dcolorTo,
+															 const char *dtexture, BTexture *texture) {
   readDatabaseTexture(rname,rclass,texture);
   if (!texture->getTexture()) {
     readDatabaseTexture(bbname,bbclass,texture);
@@ -317,8 +318,9 @@ void BaseResource::readTexture(char *rname,char *rclass, char *bbname,
   }
 }
 
-void BaseResource::readColor(char *rname,char *rclass, char *bbname,
-                             char *bbclass,char *dcolor,BColor *color) {
+void BaseResource::readColor(const char *rname, const char *rclass,
+														 const char *bbname, const char *bbclass,
+														 const char *dcolor, BColor *color) {
   readDatabaseColor(rname,rclass,color);
   if (!color->isAllocated()) {
     readDatabaseColor(bbname,bbclass,color);
@@ -327,8 +329,8 @@ void BaseResource::readColor(char *rname,char *rclass, char *bbname,
   }
 }
 
-void BaseResource::readDatabaseTexture(char *rname, char *rclass,
-				  BTexture *texture) {
+void BaseResource::readDatabaseTexture(const char *rname, const char *rclass,
+																			 BTexture *texture) {
   XrmValue value;
   char *value_type;
 
@@ -411,7 +413,8 @@ void BaseResource::readDatabaseTexture(char *rname, char *rclass,
   }
 }
 
-void BaseResource::readDatabaseColor(char *rname, char *rclass, BColor *color) {
+void BaseResource::readDatabaseColor(const char *rname,
+																		 const char *rclass, BColor *color) {
   XrmValue value;
   char *value_type;
   if (XrmGetResource(resource_db, rname, rclass, &value_type,

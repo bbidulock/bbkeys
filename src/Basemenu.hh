@@ -20,7 +20,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: Basemenu.hh,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: Basemenu.hh,v 1.4 2002/05/30 18:26:25 eckzor Exp $
 
 #ifndef   __Basemenu_hh
 #define   __Basemenu_hh
@@ -188,9 +188,9 @@ public:
   inline Basemenu *submenu(void) { return s; }
 
   inline const int &isEnabled(void) const { return enabled; }
-  inline void setEnabled(int e) { enabled = e; }
+  inline void setEnabled(int en) { enabled = en; }
   inline const int &isSelected(void) const { return selected; }
-  inline void setSelected(int s) { selected = s; }
+  inline void setSelected(int sel) { selected = sel; }
 };
 
 

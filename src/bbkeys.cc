@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.21 2002/05/30 07:38:58 eckzor Exp $
+// $Id: bbkeys.cc,v 1.22 2002/05/30 18:26:25 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -161,7 +161,7 @@ Boston, MA 02111-1307, USA.	 */
 static int MetaMask, HyperMask, SuperMask, AltMask, ModeMask;
 static int NumLockMask, ScrollLockMask;
 
-char *ToolWindow::index_to_name(int indice)
+const char *ToolWindow::index_to_name(int indice)
 {
 	 switch (indice) {
 	 case ShiftMapIndex:
@@ -626,7 +626,7 @@ int ToolWindow::translateAction(char *action)
 	 return 0;
 }
 
-void ToolWindow::execCommand(char *ptrCommand)
+void ToolWindow::execCommand(char *const ptrCommand)
 {
 	int pid;
 	extern char **environ;
@@ -639,11 +639,12 @@ void ToolWindow::execCommand(char *ptrCommand)
 	}
 
 	if (pid == 0) {
-		char *argv[4];
-		argv[0] = "sh";
-		argv[1] = "-c";
-		argv[2] = ptrCommand;
-		argv[3] = 0;
+		char *const argv[] = {
+      "sh",
+      "-c",
+      ptrCommand,
+      0
+    };
 		execve("/bin/sh", argv, environ);
 		exit(127);
 	}
@@ -1635,7 +1636,7 @@ void ToolWindow::process_event(XEvent * e)
 				break;
 
 			case grabExecute:
-				execCommand(grabSet.KeyMap[grabInt].execCommand);
+				execCommand((char *const)grabSet.KeyMap[grabInt].execCommand);
 				break;
 
 			case grabMaximize:
@@ -1882,11 +1883,11 @@ void ToolWindow::timeout(void)
 
 /*--------------------------------*/
 
-void ToolWindow::raiseWindow(Window win)
+void ToolWindow::raiseWindow(Window)
 {
 }
 
-void ToolWindow::lowerWindow(Window win)
+void ToolWindow::lowerWindow(Window)
 {
 }
 
@@ -2249,12 +2250,12 @@ void ToolWindow::focus_stack(Window win)
 	}
 }
 
-void ToolWindow::saveMenuSearch(Window window, Basemenu *menu)
+void ToolWindow::saveMenuSearch(Window window, Basemenu *)
 {
 	menuWin = window;
 }
 
-void ToolWindow::removeMenuSearch(Window window)
+void ToolWindow::removeMenuSearch(Window)
 {
 	menuWin = (Window)NULL;
 }

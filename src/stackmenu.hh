@@ -18,7 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: stackmenu.hh,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: stackmenu.hh,v 1.4 2002/05/30 18:26:25 eckzor Exp $
 
 #ifndef __STACKMENU_HH
 #define __STACKMENU_HH
@@ -32,6 +32,7 @@ public:
 	virtual ~Stackmenu();
 
 	void hide();
+	void show();
 	void show(bool forward, bool showMenu);
 	void reconfigure();
 	void key_press(int grabInt);

@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 // 
-//  $Id: Image.cc,v 1.2 2002/01/13 18:59:39 vanrijn Exp $
+//  $Id: Image.cc,v 1.3 2002/05/30 18:26:25 eckzor Exp $
 
 // stupid macros needed to access some functions in version 2 of the GNU C
 // library
@@ -2381,7 +2381,7 @@ unsigned long BImageControl::getSqrt(unsigned int x) {
 }
 
 
-void BImageControl::parseTexture(BTexture *texture, char *t) {
+void BImageControl::parseTexture(BTexture *texture, const char *t) {
   if ((! texture) || (! t)) return;
 
   int t_len = strlen(t) + 1, i;
@@ -2447,7 +2447,7 @@ void BImageControl::parseTexture(BTexture *texture, char *t) {
 }
 
 
-void BImageControl::parseColor(BColor *color, char *c) {
+void BImageControl::parseColor(BColor *color, const char *c) {
   if (! color) return;
 
   if (color->isAllocated()) {

@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: Image.hh,v 1.2 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: Image.hh,v 1.3 2002/05/30 18:26:25 eckzor Exp $
 
 #ifndef   __Image_hh
 #define   __Image_hh
@@ -234,8 +234,8 @@ public:
                           unsigned int **, unsigned int **);
   void setDither(Bool d) { dither = d; }
   void setColorsPerChannel(int);
-  void parseTexture(BTexture *, char *);
-  void parseColor(BColor *, char * = 0);
+  void parseTexture(BTexture *, const char *);
+  void parseColor(BColor *, const char * = 0);
 
   virtual void timeout(void);
 };

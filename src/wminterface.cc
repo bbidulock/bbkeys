@@ -19,7 +19,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: wminterface.cc,v 1.6 2002/05/30 07:30:03 eckzor Exp $
+// $Id: wminterface.cc,v 1.7 2002/05/30 18:26:25 eckzor Exp $
 
 #include "wminterface.hh"
 #include "resource.hh"
@@ -53,7 +53,7 @@ void WMInterface::sendClientMessage(Atom atom, XID data) {
 						 False, mask, &e);
 }
 
-void WMInterface::changeDesktop(int desk_number, bool focusWin) {
+void WMInterface::changeDesktop(int desk_number, bool) {
 	sendClientMessage(bbtool->getBlackboxChangeWorkspaceAtom(),
 		static_cast<unsigned long int>(desk_number));
 }
