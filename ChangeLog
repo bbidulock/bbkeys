@@ -1,5 +1,8 @@
 version 0.8.5 --
 
+  - fix a memory leak in ToolWindow::windowAttributeChange.
+    [xOr]
+
   - remove server grabs from the Image code. They prove to not be needed (they
     no longer exist in the blackbox code.) And they cause the X server to lock
 	indefinately if you run 2 bbkeys on the same display, running the second

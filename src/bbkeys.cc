@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.26 2002/06/07 06:12:26 eckzor Exp $
+// $Id: bbkeys.cc,v 1.27 2002/06/26 00:14:32 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -2102,8 +2102,10 @@ void ToolWindow::windowAttributeChange(Window win) {
 			&format, &n, &extra, (unsigned char**)&net_hint)
 			== Success && net_hint))
 		return;
-	if (n != PropBlackboxHintsElements)
+	if (n != PropBlackboxHintsElements) {
+    XFree(net_hint);
 		return;
+  }
 
 	if (net_hint->flags & AttribShaded) {
 		if (net_hint->attrib & AttribShaded)
@@ -2120,6 +2122,8 @@ void ToolWindow::windowAttributeChange(Window win) {
 			if (!window->sticky) addSticky(window);
 	} else if (window->sticky)
 			if (window->sticky) removeSticky(window->win, getCurrentDesktopNr());
+
+  XFree(net_hint);
 }
 
 void ToolWindow::addWindow(Window win, int desktop)
