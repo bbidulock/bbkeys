@@ -43,7 +43,8 @@ void Stackmenu::reconfigure()
 	setMenuItems();
 	if (getHighlight() >= getCount())
 		setHighlight(getCount() - 1);
-	centerPosition();
+//	else if (getHighlight() < 0)
+//		setHighlight(0);
 	Basemenu::reconfigure();
 }
 
@@ -62,8 +63,7 @@ void Stackmenu::setMenuItems() {
 //	word_length = new int [count];
 //	it.reset();
 	for (; it.current(); it++) {
-		if (it.current()->desktop == bbtool->getCurrentDesktopNr() &&
-				!it.current()->iconic) {
+		if (it.current()->desktop == bbtool->getCurrentDesktopNr()) {
 			XGetWMName(bbtool->getXDisplay(), it.current()->win, &xtp);
 			XTextPropertyToStringList(&xtp, &windowname, &num);
 			insert((char*) *windowname);
