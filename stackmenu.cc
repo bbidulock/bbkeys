@@ -114,6 +114,9 @@ void Stackmenu::key_press(int grabInt)
 
 void Stackmenu::show(bool forward)
 {
+	if (getCount() <= 1)
+		return;		// don't show if theres only 1 window to show, or none.
+
 	XRaiseWindow(bbtool->getXDisplay(), getWindowID());
 	/*
 	XGrabKey(bbtool->getXDisplay(), 64, 0, 
@@ -134,7 +137,7 @@ void Stackmenu::show(bool forward)
   }
 	setHighlight(menuPosition);*/
 	key_press(forward?grabNextWindow:grabPrevWindow);
-      
+
 	Basemenu::show();
 }
 
