@@ -1,3 +1,8 @@
+version 0.8.1 --
+  - bug fixin's--fixed annoying "un-iconify" feature when bbkeys did window
+    cycling, thanks to halt, all else for pointing that one out....
+  - 
+
 version 0.8.0 --
   - BIG changes!!!  w00T!!!  There's some very significant improvements in
     this version, and as such, I'm calling this version 0.8.0 for various

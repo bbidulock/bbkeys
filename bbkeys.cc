@@ -1140,9 +1140,6 @@ void ToolWindow::MakeWindow(bool reconfigure)
 										 pixmap.pix_closeBtn);
 
 
-	if (!withdrawn && resource->report.auto_raise)
-		XRaiseWindow(getXDisplay(), win_frame);
-
 	if (!reconfigure) {
 		gcv.font = resource->label.font->fid;
 		gcv.foreground = resource->label.textColor.getPixel();

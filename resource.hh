@@ -71,10 +71,6 @@ struct SIZE {
   unsigned int height;
 };
 
-struct REPORT {
-  bool auto_raise;
-};
-
 struct BBPAGERWIN {
   BTexture texture;
   BTexture focusedTexture;
@@ -112,8 +108,7 @@ public:
   struct BUTTON button;
   struct POSITION position;
   struct SIZE desktopSize;
-  struct REPORT report;
-	struct MENU menu;
+  struct MENU menu;
   struct BBPAGERWIN pagerwin;
   struct BBPAGERWIN desktopwin;
   int columns;
