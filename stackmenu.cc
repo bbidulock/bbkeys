@@ -94,14 +94,16 @@ void Stackmenu::key_press(int grabInt)
 {
 	switch (grabInt) {
 		case grabNextWindow:
+			setSelected(menuPosition, False);
 			if(++menuPosition >= getCount())
 				menuPosition = 0;
-			setSelected(menuPosition);
+      setSelected(menuPosition, True);
 			break;
 		case grabPrevWindow:
+      setSelected(menuPosition, False);
 			if(--menuPosition < 0)
 				menuPosition = getCount() - 1;
-			setSelected(menuPosition);
+      setSelected(menuPosition, True);
 			break;
 		default:
 			hide();
@@ -131,14 +133,6 @@ void Stackmenu::show(bool forward)
 			GrabModeAsync, GrabModeAsync, CurrentTime);
 
 	menuPosition = 0;
-/*	if (forward) {
-  	if(++menuPosition >= getCount())
-    	menuPosition = 0;
-	} else {
-		if(--menuPosition < 0)
-			menuPosition = getCount() - 1;
-  }
-	setSelected(menuPosition);*/
 	key_press(forward?grabNextWindow:grabPrevWindow);
 
 	Basemenu::show();
@@ -152,9 +146,6 @@ void Stackmenu::centerPosition()
 		Basemenu::move(x, y);
 }
 
-void Stackmenu::setSelected(int sel)
+void Stackmenu::setSelected(int index, bool select)
 {
-	if ((sel < 0) || sel >= getCount()) return;
-	setHighlight(sel);
-//	setIndicatorPosition(sel);
 }
