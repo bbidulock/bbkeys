@@ -127,8 +127,16 @@ printf("in Stackmenu::show()\n");
 			GrabModeAsync, GrabModeAsync, CurrentTime);
 
 	menuPosition = 0;
+/*	if (forward) {
+  	if(++menuPosition >= getCount())
+    	menuPosition = 0;
+	} else {
+		if(--menuPosition < 0)
+			menuPosition = getCount() - 1;
+  }
+	setHighlight(menuPosition);*/
 	key_press(forward?grabNextWindow:grabPrevWindow);
-
+      
 	Basemenu::show();
 }
 
