@@ -301,7 +301,7 @@ bool Netclient::isAtomSupported(Window win, Atom atom) const {
   bt::Netwm::AtomList atoms;
 
   if (readSupported(win, atoms) && atoms.size() > 0) {
-    if (find(atoms.begin(), atoms.end(), atom) != atoms.end()) {
+    if (std::find(atoms.begin(), atoms.end(), atom) != atoms.end()) {
       supported = True;
     }
   }
