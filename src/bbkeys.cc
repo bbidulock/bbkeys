@@ -553,14 +553,14 @@ int ToolWindow::translateAction(char *action)
 			return grabNextWorkspace;
 	 if (!strcasecmp(action, "PrevWorkspace"))
 			return grabPrevWorkspace;
-   if (!strcasecmp(action, "UpWorkspace"))
-     return grabUpWorkspace;
-   if (!strcasecmp(action, "DownWorkspace"))
-     return grabDownWorkspace;
-   if (!strcasecmp(action, "LeftWorkspace"))
-     return grabLeftWorkspace;
-   if (!strcasecmp(action, "RightWorkspace"))
-     return grabRightWorkspace;
+	if (!strcasecmp(action, "UpWorkspace"))
+			return grabUpWorkspace;
+	if (!strcasecmp(action, "DownWorkspace"))
+			return grabDownWorkspace;
+	if (!strcasecmp(action, "LeftWorkspace"))
+			return grabLeftWorkspace;
+	if (!strcasecmp(action, "RightWorkspace"))
+			return grabRightWorkspace;
 	 if (!strcasecmp(action, "NextWindow"))
 			return grabNextWindow;
 	 if (!strcasecmp(action, "PrevWindow"))
