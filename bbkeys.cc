@@ -1280,7 +1280,7 @@ unsigned int ToolWindow::KeycodeToModmask(unsigned int code)
 		case XK_Scroll_Lock:
       return Mod5Mask;
 	}
-	return -1;
+	return (unsigned int)-1;
 }
 
 void ToolWindow::process_event(XEvent * e)
@@ -1293,8 +1293,17 @@ void ToolWindow::process_event(XEvent * e)
 	case KeyRelease: {
 		if (stackMenu->isVisible()) {
 			unsigned int mask = KeycodeToModmask(e->xkey.keycode);
-			if (((e->xkey.state & grabSet.KeyMap[grabNextWindow].modMask) == mask) ||
-					((e->xkey.state & grabSet.KeyMap[grabPrevWindow].modMask) == mask))
+			unsigned int state = e->xkey.state;
+			int nextMask, prevMask;
+
+	    for (register int i = 0; i < grabSet.instructCount; i++) {
+				if (grabNextWindow == grabSet.KeyMap[i].action)
+					nextMask = grabSet.KeyMap[i].modMask;
+				else if (grabPrevWindow == grabSet.KeyMap[i].action)
+					prevMask = grabSet.KeyMap[i].modMask;
+			}
+
+			if (((state & nextMask) == mask) || ((state & prevMask) == mask))
 				stackMenu->selectFocused();
 		}
 		break;
