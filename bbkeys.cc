@@ -2036,7 +2036,6 @@ void ToolWindow::focus_stack(Window win)
 		windowList->remove(it.current());	// remove it
 		windowList->insert(window, 0);		// add it to the top
 	}
-p();
 }
 
 void ToolWindow::saveMenuSearch(Window window, Basemenu *menu)
