@@ -131,7 +131,7 @@ dnl Checks for Xextension
 AC_CHECK_LIB(Xext, XMissingExtension, LIBS="$LIBS -lXext",
              AC_MSG_ERROR(XMissingExtension not found in -lXext))
 
-dnl check for blackbox library and headers
+dnl check for blackbox headers
 blackbox_inc=""
 AC_MSG_CHECKING([for blackbox headers])
 AC_ARG_WITH(bt-includes,
@@ -156,10 +156,35 @@ if test -z "$blackbox_inc"; then
 fi
 
 AC_MSG_RESULT([$blackbox_inc])
-
 CXXFLAGS="$CXXFLAGS -I$blackbox_inc"
-dnl for the time being, assume the lib is in the same spot as the headers
-LIBS="$LIBS -L$blackbox_inc -lbt"
+
+
+dnl now check for blackbox library
+blackbox_lib=""
+AC_MSG_CHECKING([for blackbox lib])
+AC_ARG_WITH(bt-lib,
+        AC_HELP_STRING([--with-bt-lib], [blackbox library]),
+        ac_blackbox_lib=$withval, ac_blackbox_lib="")
+
+# if the blackbox headers directory was specified, make sure we have it
+for btdir in $ac_blackbox_lib /usr/local /usr/lib /usr; do
+    if test -f "$btdir/libbt.a"; then
+       blackbox_lib=$btdir
+       break
+    fi
+done
+
+if test -z "$blackbox_lib"; then
+   AC_MSG_RESULT([Not found])
+   echo 
+   echo "Couldn't find your blackbox library."
+   echo "Use --with-bt-lib=dir option to fix this."
+   echo 
+   exit 1
+fi
+
+AC_MSG_RESULT([$blackbox_lib])
+LIBS="$LIBS -L$blackbox_lib -lbt"
 
 dnl generate the config header
 AM_CONFIG_HEADER(config.h) 

@@ -868,6 +868,7 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-x                use the X Window System
   --with-bt-includes      blackbox library headers
+  --with-bt-lib           blackbox library
 
 Some influential environment variables:
   CC          C compiler command
@@ -6038,9 +6039,42 @@ fi
 
 echo "$as_me:$LINENO: result: $blackbox_inc" >&5
 echo "${ECHO_T}$blackbox_inc" >&6
-
 CXXFLAGS="$CXXFLAGS -I$blackbox_inc"
-LIBS="$LIBS -L$blackbox_inc -lbt"
+
+
+blackbox_lib=""
+echo "$as_me:$LINENO: checking for blackbox lib" >&5
+echo $ECHO_N "checking for blackbox lib... $ECHO_C" >&6
+
+# Check whether --with-bt-lib or --without-bt-lib was given.
+if test "${with_bt_lib+set}" = set; then
+  withval="$with_bt_lib"
+  ac_blackbox_lib=$withval
+else
+  ac_blackbox_lib=""
+fi;
+
+# if the blackbox headers directory was specified, make sure we have it
+for btdir in $ac_blackbox_lib /usr/local /usr/lib /usr; do
+    if test -f "$btdir/libbt.a"; then
+       blackbox_lib=$btdir
+       break
+    fi
+done
+
+if test -z "$blackbox_lib"; then
+   echo "$as_me:$LINENO: result: Not found" >&5
+echo "${ECHO_T}Not found" >&6
+   echo
+   echo "Couldn't find your blackbox library."
+   echo "Use --with-bt-lib=dir option to fix this."
+   echo
+   exit 1
+fi
+
+echo "$as_me:$LINENO: result: $blackbox_lib" >&5
+echo "${ECHO_T}$blackbox_lib" >&6
+LIBS="$LIBS -L$blackbox_lib -lbt"
 
           ac_config_headers="$ac_config_headers config.h"
 
