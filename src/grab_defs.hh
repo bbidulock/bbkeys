@@ -19,6 +19,8 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
+// $Id: grab_defs.hh,v 1.4 2002/01/13 18:59:39 vanrijn Exp $
+
 #ifndef __GRAB_DEFS_HH
 #define __GRAB_DEFS_HH
 

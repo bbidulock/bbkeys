@@ -18,6 +18,8 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
+// $Id: stackmenu.hh,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+
 #ifndef __STACKMENU_HH
 #define __STACKMENU_HH
 

@@ -25,6 +25,7 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
+# $Id: bbkeysconf.pl.in,v 1.9 2002/01/13 18:59:39 vanrijn Exp $
 
 sub usage() {
 	print "\nbbkeysconf.pl version @VERSION@\n";

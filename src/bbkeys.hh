@@ -20,6 +20,8 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
+// $Id: bbkeys.hh,v 1.5 2002/01/13 18:59:39 vanrijn Exp $
+
 #ifndef __BBKEYS_HH
 #define __BBKEYS_HH
 

@@ -66,7 +66,8 @@ version 0.8.4 --
     [vanRijn]
 
   - long-overdue documentation finessing, thanks to Roman Neuhauser for the
-    patches and suggestions!  =:) [vanRijn]
+    patches and suggestions!  =:)  Also, adding CVS version id's to all source
+    and documentation files, woot!  =:) [vanRijn]
 
 version 0.8.3 --
 

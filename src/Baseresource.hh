@@ -18,6 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
+// $Id: Baseresource.hh,v 1.2 2002/01/13 18:59:39 vanrijn Exp $
 
 #ifndef __BASERESOURCE_HH
 #define __BASERESOURCE_HH

@@ -18,6 +18,7 @@
 //
 // (see the included file copying / gpl-2.0)
 //
+// $Id: resource.hh,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
 
 
 #ifndef __RESOURCE_HH

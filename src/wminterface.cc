@@ -19,6 +19,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
+// $Id: wminterface.cc,v 1.5 2002/01/13 18:59:39 vanrijn Exp $
 
 #include "wminterface.hh"
 #include "resource.hh"

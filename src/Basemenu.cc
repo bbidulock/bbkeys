@@ -19,6 +19,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
+//
+// $Id: Basemenu.cc,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
 
 // stupid macros needed to access some functions in version 2 of the GNU C
 // library

@@ -18,6 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
+// $Id: NETInterface.cc,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
 
 #ifdef    HAVE_CONFIG_H
 #  include "../config.h"

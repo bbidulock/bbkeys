@@ -1,3 +1,6 @@
+.\"
+.\" $Id: bbkeys.1.in,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+.\"
 .TH BBKEYS 1 "January 12, 2002" "bbtools" bbkeys
 .SH NAME
 bbkeys \- a general XWindow keygrabber
@@ -30,40 +33,40 @@ use alternate 'look and feel' config file
 use alternate keygrab definition file.  (default is ~/.bbkeysrc)
 .TP
 \fB\-d[ecorated]\fR
-Show 'normal' decorated window
+show 'normal' decorated window
 .TP
 \fB\-display\fR \fIdisplay name\fR
 X server to connect to
 .TP
 \fB\-geom[etry]\fR \fIgeometry\fR
-Set geometry of window
+set geometry of the bbkeys window
 .TP
 \fB\-h[elp]\fR
-Show summary of options and exit.
+show summary of options and exit
 .TP
 \fB\-i[conic]\fR
-start bbkeys in a minimized state (will override -withdrawn directive)
+start bbkeys in a minimized state (will override the -withdrawn option)
 .TP
 \fB\-m[iniMe]\fR
 like Austin Powers 2. bbkeys, but smaller
 .TP
 \fB\-n[obb]\fR
-Fall back on default configuration
+fall back on default configuration
 .TP
 \fB\-no[qt]\fR
 use non-qt configuration tool
 .TP
 \fB\-s[hape]\fR
-Don't display groundplate
+don't display groundplate
 .TP
 \fB\-t[inyMe]\fR
-all you can see is his keyhole
+all you can see is its keyhole
 .TP
 \fB\-v[ersion]\fR
-Display version number
+display version number and exit
 .TP
 \fB\-w[ithdrawn]\fR
-Place bbtool in the Slit
+place bbkeys in the Slit
 
 .SH FILES
 .nr
