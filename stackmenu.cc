@@ -56,8 +56,8 @@ void Stackmenu::setMenuItems() {
 		if (it.current()->desktop == bbtool->getCurrentDesktopNr()) {
 			if (!XGetWMName(bbtool->getXDisplay(), it.current()->win, &xtp))
 				if (!XTextPropertyToStringList(&xtp, &windowname, &num)) {
-					insert((char*) *windowname);
-					XFreeStringList(windowname);
+					if (*windowname) insert((char*) *windowname);
+					if (windowname) XFreeStringList(windowname);
 				}
 		}
 	}
