@@ -887,7 +887,7 @@ if test $enableval = "no";
  then 
   _CFLAGS="-DNDEBUG"
   _CXXFLAGS="-DNDEBUG"
-  _LDFLAGS="-s"
+  _LDFLAGS=""
   case $host_os in
   *solaris*)
      _CFLAGS="$_CFLAGS -O"
@@ -922,7 +922,7 @@ else
   
   _CFLAGS="-DNDEBUG"
   _CXXFLAGS="-DNDEBUG"
-  _LDFLAGS="-s"
+  _LDFLAGS=""
   case $host_os in
   *solaris*)
      _CFLAGS="$_CFLAGS -O"
