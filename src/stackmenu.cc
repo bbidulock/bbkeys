@@ -19,7 +19,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: stackmenu.cc,v 1.9 2002/05/30 20:47:45 eckzor Exp $
+// $Id: stackmenu.cc,v 1.10 2002/07/10 14:04:29 eckzor Exp $
 
 #ifdef    HAVE_CONFIG_H
 #  include "config.h"
@@ -121,6 +121,9 @@ void Stackmenu::clearMenu() {
 
 void Stackmenu::selectFocused(bool raise)
 {
+	if ( raise )
+		hide();
+
 	int selected = menuPosition;
 	LinkedListIterator<WindowList> it(bbtool->windowList);
 	for(; it.current(); it++) 
@@ -142,7 +145,6 @@ void Stackmenu::selectFocused(bool raise)
 					// focusWindow() first, we'd then XRaise() the wrong window.
 					// Lastly, we update bbkey's stack with what we just
 					// raised...
-					hide();
 					if (bbtool->getCurrentDesktopNr() != it.current()->desktop)
 						bbtool->wminterface->changeDesktop(it.current()->desktop, False);
 					XRaiseWindow(bbtool->getXDisplay(), it.current()->win);
@@ -150,9 +152,6 @@ void Stackmenu::selectFocused(bool raise)
 				}
 			}
 		}
-		if ( raise ) {
-			hide();
-	}
 }
 
 void Stackmenu::key_press(int grabInt)
