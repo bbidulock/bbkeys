@@ -32,11 +32,13 @@ extern "C" {
 #include <Menu.hh>
 
 #include "ScreenHandler.h"
+#include "Config.h"
 #include "window.hh"
 #include "keytree.hh"
 
 class ScreenHandler;
 class keytree;
+class XWindow;
 
 class WindowlistMenu : public bt::Menu
 {
@@ -47,11 +49,19 @@ public:
   void showCycleMenu (WindowList theList ) ;
   void itemClicked(unsigned int id, unsigned int button);
 
+  void selectPrevious();
+  void selectNext();
+  XWindow * getSelectedWindow();
+
 private:
   ScreenHandler * _screen;
   WindowList  _windowList;
   keytree * _keybindings;
   Display * _display;
+  Config * _config;
+  bool _debug;
+  int _current_index;
+  
   void keyPressEvent (const XKeyEvent * const e) ;
   void keyReleaseEvent (const XKeyEvent * const e) ;
 

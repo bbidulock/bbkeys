@@ -32,6 +32,8 @@ WindowlistMenu::WindowlistMenu (ScreenHandler * s) :
   _screen = s;
   _keybindings = s->getKeyClient().getKeybindings();
   _display = s->getKeyClient().XDisplay();
+  _config = s->getKeyClient().getConfig();
+  _debug = _config->getBoolValue("debug", false);
 }
 WindowlistMenu::~WindowlistMenu () {
 }
@@ -39,31 +41,30 @@ WindowlistMenu::~WindowlistMenu () {
 void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
 
   unsigned int state = e->state;
+
+  if (_debug)
+    std::cout << "WindowlistMenu: got keyPressEvent!" << std::endl;
   
   // if we've made it this far, handle the action....
   const Action *it = _keybindings->getAction(e, state, _screen);
 
-  XKeyEvent * neo = new XKeyEvent;
-
-  KeyCode keyCode;
-  
   if (it) {
     switch (it->type()) {
 
     case Action::nextWindow:
-      keyCode = XKeysymToKeycode(_display, XK_Down);
-      neo->keycode = keyCode;
-      _screen->cycleWindow(state, true, it->number() != 0 ? it->number(): 1);
+      selectNext();
       break;
       
     case Action::prevWindow:
-      keyCode = XKeysymToKeycode(_display, XK_Up);
-      neo->keycode = keyCode;
-      _screen->cycleWindow(state, false, it->number() != 0 ? it->number(): 1);
+      selectPrevious();
+      break;
+
+    default:
       break;
     }    
   }
-  bt::Menu::keyPressEvent(neo);
+
+  bt::Menu::keyPressEvent(e);
 
 }
 
@@ -88,12 +89,22 @@ void WindowlistMenu::showCycleMenu( WindowList theList ) {
 
   WindowList::const_iterator it = theList.begin();
   const WindowList::const_iterator end = theList.end();
-  
-  for (; it != end; ++it) {
-    bt::Menu::insertItem( (*it)->title(), (*it)->window() );
+
+  unsigned int x = 0;
+
+  for (; it != end; it++) {
+    bt::Menu::insertItem( (*it)->title(), x++ );
   }
 
+  bt::Menu::setItemChecked(0, true);
+
   bt::Menu::popup(50, 50);
+  
+  // reset our marker as we will increment it in selectNext...
+  _current_index = -1;
+  
+  selectNext();
+  selectNext();
 
 }
 
@@ -102,13 +113,75 @@ void WindowlistMenu::itemClicked(unsigned int id, unsigned int button) {
   WindowList::const_iterator it = _windowList.begin();
   const WindowList::const_iterator end = _windowList.end();
 
+  unsigned int x = 0;
   for (; it != end; ++it) {
     XWindow * const win = dynamic_cast<XWindow *>(*it);
-    if ( id == win->window() ) {
-      std::cout << "yay! you selected id: [" << id
-		<<"], window: [" << win->title() << "]" << std::endl;
+    if ( id == x++ ) {
       win->focus(true);
     }
   }
   
+}
+
+void WindowlistMenu::selectNext() {
+
+  XKeyEvent neo;
+
+  KeyCode keyCode = XKeysymToKeycode(_display, XK_Down);
+  neo.keycode = keyCode;
+
+  // keep track of where we are...
+  if (++_current_index >= _windowList.size() )
+    _current_index = 0;
+
+  XWindow * win = getSelectedWindow();
+  if (win) win->focus(false);      
+
+  bt::Menu::keyPressEvent(&neo);
+  
+}
+
+void WindowlistMenu::selectPrevious() {
+
+  XKeyEvent neo;
+
+  KeyCode keyCode = XKeysymToKeycode(_display, XK_Up);
+  neo.keycode = keyCode;
+
+  // keep track of where we are now...
+  if (--_current_index < 0)
+    _current_index = _windowList.size() -1;
+
+  XWindow * win = getSelectedWindow();
+  if (win) win->focus(false);      
+  
+  bt::Menu::keyPressEvent(&neo);
+    
+}
+
+XWindow * WindowlistMenu::getSelectedWindow() {
+
+  WindowList::const_iterator it = _windowList.begin();
+  const WindowList::const_iterator end = _windowList.end();
+
+  if (_debug)
+    std::cout << "WindowlistMenu: getSelectedWindow: current index is: ["
+	      << _current_index << "]\n";
+  XWindow * win = 0;
+  
+  unsigned int x = 0;
+  for (; it != end; it++) {
+    if ( _current_index == x++ ) {
+      win = dynamic_cast<XWindow *>(*it);
+    }
+  }
+
+  if (0 == win)
+    std::cerr << "WindowlistMenu: getSelectedWindow--couldn't get window.  this won't turn out well.\n";
+
+  if (_debug && win)
+    std::cout << "WindowlistMenu: getSelectedWindow: currently-selected window: ["
+	      << win->title() << "]\n";
+  return win;
+
 }

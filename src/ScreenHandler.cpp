@@ -658,14 +658,13 @@ WindowList ScreenHandler::getCycleWindowList(unsigned int state, const bool forw
     classname = (*_active)->appClass();
 
 
-  WindowList::const_iterator it = _active;
+  WindowList::const_iterator it = _clients.begin();
   const WindowList::const_iterator end = _clients.end();
-  
+
   for (; it != end; ++it) {
-    XWindow *t = 0;
-  
+    XWindow *t = *it;
+    
     // determine if this window is invalid for cycling to
-    t = *it;
     if (t->iconic()) continue;
     if (! allscreens && t->getScreenNumber() != _screenNumber) continue;
     if (! alldesktops && ! (t->desktop() == _active_desktop ||
@@ -678,6 +677,17 @@ WindowList ScreenHandler::getCycleWindowList(unsigned int state, const bool forw
     theList.push_back(t);
   }
 
+  // okay, now we need to move the currently active window down one
+  // notch in the stacking list...
+//   if (theList.size() > 1) {
+//     WindowList::iterator tlStart = theList.begin();
+//     tlStart++;
+//     XWindow *win = *tlStart;
+//     std::cout << "removing win->" << win->title() << "<-\n";
+//     theList.remove( win );
+//     theList.push_front( win );
+//   }
+  
   return theList;
 
 }
