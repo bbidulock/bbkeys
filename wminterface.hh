@@ -41,7 +41,7 @@ public:
 	int isIconicState(Window);
 	int getAttributes(Window);
 	void sendClientMessage(Atom, XID);
-	void changeDesktop(int);
+	void changeDesktop(int,bool focusWin=True);
 
 /*	Atom getKWMModuleDesktopChange(void) { return kwm_module_desktop_change; }
 	Atom getKWMModuleDesktopNumberChange(void) {
@@ -64,7 +64,7 @@ protected:
 
 private:
 	ToolWindow *bbtool;
-
+	bool focusWindow;
 /*	Atom kwm_module_init;
 	Atom kwm_module_win_add;
 	Atom kwm_module_win_remove;

@@ -12,6 +12,12 @@ bbkeys.honorModifiers:        False
 ! set this to false to not show the popup window menu for stacked window cycling
 !bbkeys.menu.showCycleMenu:	False
 
+! set this to true to allow stacked cycling to go to any window on any
+! workspace. all of the windows will appear in the menu if it is being shown.
+! it is highly recommended that you turn on showCycleMenu is you are going
+! to have this on
+!bbkeys.menu.showAllWorkspaces:	True
+
 ! ** auto reconfigure when config-file has changed **
 !bbkeys.autoConfig:                False
 ! ** number of seconds between checks **

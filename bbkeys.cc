@@ -1290,7 +1290,7 @@ void ToolWindow::process_event(XEvent * e)
 		break;
 	
 	case KeyRelease: {
-		// if the menu is visible..
+		// if stacked cycling is going on..
 		if (doingCycling) {
 			unsigned int mask = KeycodeToModmask(e->xkey.keycode);
 			unsigned int state = e->xkey.state;
@@ -1359,7 +1359,7 @@ void ToolWindow::process_event(XEvent * e)
 				stackMenu->selectFocused(True);
 			else
 				stackMenu->key_press(grabSet.KeyMap[grabInt].action);
-		} else	if (grabInt > -1) {
+		} else if (grabInt > -1) {
 			/* play with colors for nyz =:) */
 			XSetWindowBackgroundPixmap(getXDisplay(), win_configBtn,
 					pixmap.pix_pressedBtn);

@@ -26,6 +26,7 @@
 
 WMInterface::WMInterface(ToolWindow *toolwindow) : NETInterface(toolwindow) {
 	bbtool=toolwindow;
+	focusWindow = True;
 }
 
 WMInterface::~WMInterface() {
@@ -48,9 +49,10 @@ void WMInterface::sendClientMessage(Atom atom, XID data) {
 						 False, mask, &e);
 }
 
-void WMInterface::changeDesktop(int desk_number) {
+void WMInterface::changeDesktop(int desk_number, bool focusWin) {
 	sendClientMessage(bbtool->getBlackboxChangeWorkspaceAtom(),
 		static_cast<unsigned long int>(desk_number));
+	focusWindow = focusWin;
 }
 
 void WMInterface::sendWindowToDesktop(Window win, int desk_number) {
@@ -303,7 +305,13 @@ void WMInterface::NETNotifyAttributes(Window win)
 }
 
 void WMInterface::NETNotifyFocus(Window win) {
-	bbtool->focusWindow(win);
+	if (win)
+		if (focusWindow)
+			bbtool->focusWindow(win);
+		else {
+			setWindowFocus(bbtool->getFocusWindow());
+			focusWindow = True;
+		}
 }
 
 void WMInterface::NETNotifyCurrentWorkspace(int desktop_nr) {

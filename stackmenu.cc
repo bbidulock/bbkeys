@@ -54,7 +54,11 @@ void Stackmenu::setMenuItems() {
 	clearMenu();
 
 	for (; it.current(); it++) {
-		if (it.current()->desktop == bbtool->getCurrentDesktopNr()) {
+		if (((bbtool->getResource()->getMenuShowAllWorkspaces()) &&
+				((!it.current()->sticky) ||
+				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) ||
+				((!bbtool->getResource()->getMenuShowAllWorkspaces()) &&
+				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) {
 			if (XGetWMName(bbtool->getXDisplay(), it.current()->win, &xtp))
 				if (XTextPropertyToStringList(&xtp, &windowname, &num)) {
 					if (*windowname) insert((char*) *windowname);
@@ -75,17 +79,26 @@ void Stackmenu::selectFocused(bool raise)
 	int selected = menuPosition;
 	LinkedListIterator<WindowList> it(bbtool->windowList);
 	for(; it.current(); it++) 
-		if (it.current()->desktop == bbtool->getCurrentDesktopNr())
+		if (((bbtool->getResource()->getMenuShowAllWorkspaces()) &&
+				((!it.current()->sticky) ||
+				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) ||
+				((!bbtool->getResource()->getMenuShowAllWorkspaces()) &&
+				(it.current()->desktop == bbtool->getCurrentDesktopNr())))
 			if(!selected--) {
 				bbtool->wminterface->setWindowFocus(it.current()->win);
 				if ( raise ) {
 					// okay, an explanation is in order... First, we have to
 					// hide our window so that focusWindow() actually does
-					// anything. Then we XRaiseWindow, because if we did
+					// anything.
+					// Next, if the window to focus is on a different desktop than
+					// the current one, we need to switch there.
+					// Then we XRaiseWindow, because if we did
 					// focusWindow() first, we'd then XRaise() the wrong window.
 					// Lastly, we update bbkey's stack with what we just
 					// raised...
 					hide();
+					if (bbtool->getCurrentDesktopNr() != it.current()->desktop)
+						bbtool->wminterface->changeDesktop(it.current()->desktop, False);
 					XRaiseWindow(bbtool->getXDisplay(), it.current()->win);
 					bbtool->focusWindow(it.current()->win);
 				}

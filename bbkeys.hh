@@ -138,6 +138,7 @@ public:
 	inline int getCurrentDesktopNr(void) {
 		return current_desktop?current_desktop->number:-1;
 	}
+	inline Window getFocusWindow() { return focus_window; }
 	inline int getDesktopCount(void) { return desktop_count; }
 	inline Resource *getResource() { return resource; }
 	inline GC getMenuTitleGC(void) {return NULL;/*menuTitleGC;*/}
