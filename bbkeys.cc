@@ -1806,6 +1806,7 @@ void ToolWindow::removeWindow(Window win)
 		if (it.current()->win == win) {
 			windowList->remove(it.current());
 		}
+printf("REMOVE WINDOW\n");
 }
 
 void ToolWindow::focusWindow(Window win)
@@ -1849,9 +1850,11 @@ void ToolWindow::removeSticky(const Window win, const int desktop) {
 	for (register int i=0; i < desktop_count; i++) {
 		it.reset();
 		for (; it.current(); it++)
-			if (it.current()->win == win &&
-					it.current()->desktop != desktop)
-				windowList->remove(it.current());
+			if (it.current()->win == win)
+				if (it.current()->desktop != desktop)
+					windowList->remove(it.current());
+				else
+					it.current()->sticky = False;
 	}
 }
 
@@ -2034,6 +2037,7 @@ void ToolWindow::focus_stack(Window win)
 		windowList->remove(it.current());	// remove it
 		windowList->insert(window, 0);		// add it to the top
 	}
+p();
 }
 
 void ToolWindow::saveMenuSearch(Window window, Basemenu *menu)
