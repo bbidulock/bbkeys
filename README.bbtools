@@ -1,0 +1,23 @@
+This is more for my sanity than anything else, but since kns has written such
+an excellent code base, I'm going to try to keep my code as simple as possible
+and as easy as possible to fit into his code, that it should be a trivial thing
+to plug bbkeys into his most current bbpager source and get it up and running.
+This is what I had to do to do this....
+
+- obviously, copy the bbkeysconf sub-directory into the current source tree. 
+- pull AUTHORS, ChangeLog, BUGS, NEWS, INSTALL, TODO, README in too....
+- pull bbkeys.cc, bbkeysConfigC.c, and bbkeys.hh in as well...
+- add bbkeys-specific switches to the Usage() function
+- add bbkeys-specific switches to CMDOPTIONS structure
+- add checks for bbkeys-specific switches to main()
+- change all references (grep -ir bbpager *| less) of bbpager/Bbpager to 
+  bbkeys/Bbkeys
+- add bbkeysConfigC to Makefile.am
+- add bbkeys-specific switches (noqt and miniMe) to Basewindow.hh/cc
+- merge bbkeys.hh and bbpager.hh
+- merge bbkeys.cc and bbpager.cc (up to line 651 is bbkeys code, from there on,
+  it's pick and choose and meld and merge time....
+- pull in resource.cc from most current bbkeys tree (need the resources for
+  font and button that just aren't in bbpager
+- pull in blackboxstyle.hh from most current bbkeys source tree
+- in general, it's messier than stickin yer head in a jar of honey

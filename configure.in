@@ -1,0 +1,93 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(bbkeys.cc)
+
+AM_INIT_AUTOMAKE(bbkeys, 0.3.7)
+
+AC_PREFIX_DEFAULT(/usr/local)
+
+
+
+AC_CHECK_PROGS(regex_cmd, sed)
+if test x$regex_cmd = "x"; then
+ AC_MSG_ERROR([error. sed is required to build the default bbtoolsrc file.])
+fi
+
+
+dnl get the debug values right
+AC_DEFUN(AC_SET_DEBUG,
+[
+ test "$CFLAGS" = "" && CFLAGS="-g -Wall -DDEBUG"
+ test "$CXXFLAGS" = "" && CXXFLAGS="-g -Wall -DDEBUG"
+ test "$LDFLAGS" = "" && LDFLAGS=""
+])
+
+AC_DEFUN(AC_SET_NODEBUG,
+[
+ test "$CFLAGS" = "" && CFLAGS="-O2 -Wall"
+ test "$CXXFLAGS" = "" && CXXFLAGS="-O2 -Wall"
+ test "$LDFLAGS" = "" && LDFLAGS="-s"
+])
+      
+
+AC_ARG_ENABLE(debug,[  --enable-debug	create debugging code [default=no]],
+[
+if test $enableval = "no";
+ then AC_SET_NODEBUG
+ else AC_SET_DEBUG
+fi
+],
+AC_SET_NODEBUG)
+
+dnl Check for Interlacing
+INTERLACE=""
+AC_MSG_CHECKING([whether to include interlacing image code])
+AC_ARG_ENABLE(
+  interlace, [  --enable-interlace      include code for image interlacing[default=yes]],
+  if test x$enableval = "xyes"; then
+    AC_MSG_RESULT([yes])
+    INTERLACE="-DINTERLACE"
+  else
+    AC_MSG_RESULT([no])
+  fi,
+  AC_MSG_RESULT([yes])
+  INTERLACE="-DINTERLACE"
+)
+AC_SUBST(INTERLACE)
+
+dnl Checks for programs.
+dnl needed by configure itsself
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_INSTALL
+
+AC_HEADER_STDC
+AC_CHECK_HEADERS(ctype.h strings.h fcntl.h libgen.h locale.h process.h signal.h stdio.h time.h errno.h unistd.h sys/param.h sys/select.h sys/stat.h sys/time.h sys/types.h sys/wait.h)
+AC_HEADER_TIME
+
+AC_CHECK_FUNCS(setlocale sigaction strftime)
+
+AC_PATH_X
+AC_PATH_XTRA
+
+CFLAGS="$CFLAGS $X_CFLAGS"
+CXXFLAGS="$CXXFLAGS $X_CFLAGS"
+LDFLAGS="$LDFLAGS $X_LIBS $X_PRE_LIBS"
+dnl Checks for X libraries.
+AC_CHECK_LIB(X11, XOpenDisplay, LDFLAGS="$LDFLAGS -lX11",
+             AC_MSG_ERROR(XOpenDisplay not found in -lX11))
+
+LDFLAGS="$LDFLAGS $X_EXTRA_LIBS"
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(malloc.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+dnl Checks for library functions.
+AC_CHECK_FUNCS(select strstr)
+
+AC_OUTPUT(version.h Makefile data/Makefile)

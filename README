@@ -1,0 +1,156 @@
+--  README for bbkeys, a general XWindow keygrabber, meant to be a working
+--  example of a better window-hinting scheme with blackbox.
+
+One thing to note on the tool that may seem odd to the user, but... (well, 
+frankly, I didn't see you helping me write this application.... =:) ) and 
+that would be how I handle the configuration tool launch.  As it stands 
+right now, when the user clicks the key-hole button to re-configure the
+key-grabs, bbkeys will freeze itself until the re-configuration tool 
+(explained below, Mr. Impatient) exits.  The problem that this is solved by is
+that I didn't want to dump all keygrabbings in-between configuration sessions.
+I either freeze bbkeys until the config-tool exits or I drop all keygrabbings
+so the configuration tool can re-grab those keys.  Subject to change due to
+user-feedback, of course.... 
+
+As for the tool itself, it's a fairly trivial thing to write a keygrabber, and
+it's a real cinch when you don't have to worry about users muddling about with
+YOUR windows, etc.  But such is life. So here's the way it works: bbkeys will 
+pick up its style-settings from the same places that the other bbtools does.
+But its key-grabbings come from $HOME/.bbkeysrc.  There are several avenues
+open to the user to set any key-grabs that the user wishes.  
+
+-[  First is the qt-tool that is included inside ./bbkeysconf.  I'd 
+    like to get this thing used more than the other two methods, but I'm 
+    also very aware that many users use blackbox because of the fact that
+    they don't like big, bloated things, and as such,
+    they most probably don't have qt on their boxes.  Oh, and on this 
+    qt-conflaguration tool, it's not built by default, so if you want it 
+    (come on, you know you want it =:) ), you'll need to 'cd bbkeysconf'
+    and do a `make` followed again up by a `make install` as root.  
+
+-[  bbkeys can be launched with the -noqt option and whenever the little
+    reconfigure button (the key-hole) on bbkeys is clicked, bbkeys will
+    launch a very simple interactive rc-file generator (written in C) inside
+    of an xterm.  I'm assuming even the anti-big-bloated-things-people
+    have those luxuries on their boxen.  If this is an incorrect assumption,
+    do let me know. =:)
+
+-[  Third is manually editting $HOME/.bbkeysrc. The format is very easy, 
+    and it consists of lines describing the Key to grab, the modifier to 
+    grab the key with (if any, or "None" if none), and the action to 
+    perform. My $HOME/.bbkeysrc file is as follows,
+    for example's sake:
+
+    KeyToGrab(m), WithModifier(Mod1), WithAction(Minimize)
+    KeyToGrab(Up), WithModifier(Mod1), WithAction(Raise)
+    KeyToGrab(Down), WithModifier(Mod1), WithAction(Lower)
+    KeyToGrab(F4), WithModifier(Mod1), WithAction(Close)
+    KeyToGrab(1), WithModifier(Mod1), WithAction(Workspace1)
+    KeyToGrab(2), WithModifier(Mod1), WithAction(Workspace2)
+    KeyToGrab(3), WithModifier(Mod1), WithAction(Workspace3)
+    KeyToGrab(4), WithModifier(Mod1), WithAction(Workspace4)
+    KeyToGrab(Right), WithModifier(Control), WithAction(NextWorkspace)
+    KeyToGrab(Left), WithModifier(Control), WithAction(PrevWorkspace)
+    KeyToGrab(Tab), WithModifier(Mod1), WithAction(NextWindow)
+    KeyToGrab(ISO_Left_Tab), WithModifier(Mod1+Shift), WithAction(PrevWindow)
+    KeyToGrab(F2), WithModifier(Mod1), WithAction(ShadeWindow)
+    KeyToGrab(F10), WithModifier(Mod1), WithAction(MaximizeWindow)
+    KeyToGrab(F1), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xterm -fn sabvga -bg black -fg lightyellow -title 'vanRijn@movingparts_baybee!!')
+
+    It's that easy.  
+
+Whichever avenue you choose, bbkeys will check for a change in its .bbkeysrc
+file every 10 seconds or so, so it'll pick up any changes you've made to it.
+
+Is it perfect? Absolutely not.  
+
+Will it core-dump all over your lap and puke on your shoes? Hopefully not.  
+
+Are there bugs? Oh, you betcha.  
+
+Do I want to know about them there bugs? Yah, for sure.
+
+Are there things that I'm still planning to do? Ayup (that's what TODO is for).
+ 
+-------------------------------------------------------------------------------
+Ye olde liste of bbkeys window-commands....
+
+     Minimize
+     Raise
+     Lower
+     Close
+     Workspace1
+     Workspace2
+     Workspace3
+     Workspace4
+     Workspace5
+     Workspace6
+     Workspace7
+     Workspace8
+     Workspace9
+     Workspace10
+     Workspace11
+     Workspace12
+     NextWorkspace
+     PrevWorkspace
+     NextWindow
+     PrevWindow
+     ShadeWindow
+     MaximizeWindow
+     StickWindow
+     ExecCommand
+     MaximizeVertical
+     MaximizeHorizontal
+     NudgeRight
+     NudgeLeft
+     NudgeUp
+     NudgeDown
+     BigNudgeRight
+     BigNudgeLeft
+     BigNudgeUp
+     BigNudgeDown
+     HorizontalIncrement
+     VerticalIncrement
+     HorizontalDecrement
+     VerticalDecrement
+
+
+... more to come, I'm sure....
+-------------------------------------------------------------------------------
+
+--  Copyright (c) 1999-2000 by Jason Kasper
+--  parts Copyright (c) 1998-1999 by John Kennis
+--  parts Copyright (c) 1997,1998 by Brad Hughes.
+
+--  This program is free software; you can redistribute it and/or modify
+--  it under the terms of the GNU General Public License as published by
+--  the Free Software Foundation; either version 2 of the License, or
+--  (at your option) any later version.
+--
+--  This program is distributed in the hope that it will be useful,
+--  but WITHOUT ANY WARRANTY; without even the implied warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+--  GNU General Public License for more details.
+--
+--  You should have received a copy of the GNU General Public License
+--  along with this program; if not, write to the Free Software
+--  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+--
+-- (See the included file COPYING / GPL-2.0)
+--
+
+The files Image.cc (.hh) are taken from the Blackbox,
+only one class-name was changed.
+
+The files LinkedListed.cc (.hh) are taken from Blackbox without any change.
+
+Thanks to:
+
+Brad Hughes  <bhughes@tcac.net>
+	For writing the Blackbox Windowmanager (and with this a great deal 
+	of the code for this application).
+
+John Kennis <j.m.b.m.kennis@ele.tue.nl>
+	For writing the bbtools that I shamelessly snarfed
+
+The Windowmaker guys for the great examples of key-code grabbing.
