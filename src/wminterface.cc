@@ -83,7 +83,7 @@ void WMInterface::decorateToggleWindow(Window win)
 {
 	XEvent e;
 	e.xclient.type = ClientMessage;
-	e.xclient.message_type = bbtool->getBlackboxHintsAtom();
+	e.xclient.message_type = bbtool->getBlackboxChangeAttributesAtom();
 	e.xclient.window = win;
 	e.xclient.format = 32;
 	e.xclient.data.l[0] = e.xclient.data.l[1] =
@@ -94,16 +94,16 @@ void WMInterface::decorateToggleWindow(Window win)
 	int format;
 	Atom atom_return;
 	unsigned long num, len;
-	BlackboxHints *net_attributes;
+	BlackboxAttributes *net_attributes;
 						
 	if (XGetWindowProperty(bbtool->getXDisplay(), win,
-			bbtool->getBlackboxHintsAtom(), 0,
-			PropBlackboxHintsElements, False,
-			bbtool->getBlackboxHintsAtom(), &atom_return,
+			bbtool->getBlackboxAttributesAtom(), 0,
+			PropBlackboxAttributesElements, False,
+			bbtool->getBlackboxAttributesAtom(), &atom_return,
 			&format, &num, &len, (unsigned char **) &net_attributes)
 			==
 			Success && net_attributes) {
-		if(num == PropBlackboxHintsElements) {
+		if(num == PropBlackboxAttributesElements) {
 			if (net_attributes->decoration == DecorNone)
 				e.xclient.data.l[4] = DecorNormal;
 			else

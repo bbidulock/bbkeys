@@ -54,13 +54,13 @@ typedef struct _blackbox_hints {
 } BlackboxHints;
 
 typedef struct _blackbox_attributes {
-  unsigned long flags, attrib, workspace, stack;
+  unsigned long flags, attrib, workspace, stack, decoration;
   int premax_x, premax_y;
   unsigned int premax_w, premax_h;
 } BlackboxAttributes;
 
 #define PropBlackboxHintsElements      (5)
-#define PropBlackboxAttributesElements (8)
+#define PropBlackboxAttributesElements (9)
 
 #ifndef    __EMX__
 void bexec(const char *, char *);
