@@ -1,5 +1,24 @@
-Author: Jason Kasper (vanRijn) <vR@movingparts.net>
+bbkeys authors/contributors:
 
+Project Maintainer: 
+	Jason 'vanRijn' Kasper <vR@movingparts.net>
+
+Developers:
+	Jason 'vanRijn' Kasper <vR@movingparts.net>
+
+Major Contributors:
+	Ben Jansens <ben@orodu.net>  THANKS!!!
+
+-------------------------------------------------------------------------------
+
+bbkeys 0.90.x was a complete rewrite for bbkeys.  During the rewrite,
+several of the classes that made it into bbkeys came from the epist code
+from openbox, version 2.  The developers for that are as follows....
+	Ben Jansens (ben@orodu.net)
+	Scott Moynes (smoynes@nexus.carleton.ca)
+	Marius Nita (marius@cs.pdx.edu)
+
+-------------------------------------------------------------------------------
 
 Thanks to:
 
@@ -12,4 +31,4 @@ John A. Martin <jam@jamux.com>
 	For his comments and suggestions.
 
 John Kennis <j.m.b.m.kennis@ele.tue.nl>
-	For writing the bbtools that I shamelessly snarfed
+	For writing the bbtools that I shamelessly snarfed (originally) =:)

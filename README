@@ -1,156 +1,118 @@
---  README for bbkeys, a general XWindow keygrabber, meant to be a working
---  example of a better window-hinting scheme with blackbox.
+-[  README for bbkeys, a general XWindow keygrabber, meant to be a working
+-[  example of a better window-hinting scheme with blackbox.
 
-One thing to note on the tool that may seem odd to the user, but... (well, 
-frankly, I didn't see you helping me write this application.... =:) ) and 
-that would be how I handle the configuration tool launch.  As it stands 
-right now, when the user clicks the key-hole button to re-configure the
-key-grabs, bbkeys will freeze itself until the re-configuration tool 
-(explained below, Mr. Impatient) exits.  The problem that this is solved by is
-that I didn't want to dump all keygrabbings in-between configuration sessions.
-I either freeze bbkeys until the config-tool exits or I drop all keygrabbings
-so the configuration tool can re-grab those keys.  Subject to change due to
-user-feedback, of course.... 
+    Check out NEWS for more information....
 
-As for the tool itself, it's a fairly trivial thing to write a keygrabber, and
-it's a real cinch when you don't have to worry about users muddling about with
-YOUR windows, etc.  But such is life. So here's the way it works: bbkeys will 
-pick up its style-settings from the same places that the other bbtools does.
-But its key-grabbings come from $HOME/.bbkeysrc.  There are several avenues
-open to the user to set any key-grabs that the user wishes.  
+    This is the brave new world of bbkeys, the next generation.  The first
+    bbkeys (through 0.8.6) had gotten big and out of control, code-wise.
+    It was the first C++ code I'd ever written and it showed.  Then along
+    came openbox and woodblock's simple and elegant epist keygrabber was
+    beefed up big-time, and now it's known as epist-ng, and it's
+    distributed with openbox2.
 
--[  First is the qt-tool that is included inside ./bbkeysconf.  I'd 
-    like to get this thing used more than the other two methods, but I'm 
-    also very aware that many users use blackbox because of the fact that
-    they don't like big, bloated things, and as such,
-    they most probably don't have qt on their boxes.  Oh, and on this 
-    qt-conflaguration tool, it's not built by default, so if you want it 
-    (come on, you know you want it =:) ), you'll need to 'cd bbkeysconf'
-    and do a `make` followed again up by a `make install` as root.  
+    Wellsir, bbkeys either needed a complete rewrite or project
+    abandonment.  I chose the former.  Time will tell as to the wisdom of
+    that.  Bbkeys now supports a much more flexible configuration file.  It
+    more accurately represents the config file as a tree object, which it
+    is.  It also shares blackbox's menu-file's structure, so hopefully
+    blackbox and bbkeys will be able to share common file-parser code.
 
--[  bbkeys can be launched with the -noqt option and whenever the little
-    reconfigure button (the key-hole) on bbkeys is clicked, bbkeys will
-    launch a very simple interactive rc-file generator (written in C) inside
-    of an xterm.  I'm assuming even the anti-big-bloated-things-people
-    have those luxuries on their boxen.  If this is an incorrect assumption,
-    do let me know. =:)
+    Bbkeys 0.8.6 and before was never designed for parameters in the
+    config-file, nor was it able to handle chained keybindings.  I
+    personally never used emacs before a few months ago, but since I've
+    started using it, I completely understand how valuable it is--and how
+    some users do need chained keybindings (ya just run out of them with
+    emacs).  So, this next generation of bbkeys will allow for both chained
+    keybindings and parameterized keybindings.
 
--[  Third is manually editting $HOME/.bbkeysrc. The format is very easy, 
-    and it consists of lines describing the Key to grab, the modifier to 
-    grab the key with (if any, or "None" if none), and the action to 
-    perform. My $HOME/.bbkeysrc file is as follows,
-    for example's sake:
+    The other neato thing that's coming out of this bbkeys complete
+    overhaul is the fact that it will be sharing code for the first time
+    with blackbox proper!!  This is EXTREMELY good news, and is the best
+    thing to happen to blackbox since sliced bread!
 
-    KeyToGrab(m), WithModifier(Mod1), WithAction(Minimize)
-    KeyToGrab(Up), WithModifier(Mod1), WithAction(Raise)
-    KeyToGrab(Down), WithModifier(Mod1), WithAction(Lower)
-    KeyToGrab(F4), WithModifier(Mod1), WithAction(Close)
-    KeyToGrab(1), WithModifier(Mod1), WithAction(Workspace1)
-    KeyToGrab(2), WithModifier(Mod1), WithAction(Workspace2)
-    KeyToGrab(3), WithModifier(Mod1), WithAction(Workspace3)
-    KeyToGrab(4), WithModifier(Mod1), WithAction(Workspace4)
-    KeyToGrab(Right), WithModifier(Control), WithAction(NextWorkspace)
-    KeyToGrab(Left), WithModifier(Control), WithAction(PrevWorkspace)
-    KeyToGrab(Tab), WithModifier(Mod1), WithAction(NextWindow)
-    KeyToGrab(ISO_Left_Tab), WithModifier(Mod1+Shift), WithAction(PrevWindow)
-    KeyToGrab(F2), WithModifier(Mod1), WithAction(ShadeWindow)
-    KeyToGrab(F10), WithModifier(Mod1), WithAction(MaximizeWindow)
-    KeyToGrab(F1), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xterm -fn sabvga -bg black -fg lightyellow -title 'vanRijn@movingparts_baybee!!')
+-[  A note on the config file....
 
-    It's that easy.  
+    Previously, bbkeys kept its config options and its keybinding
+    definition file in two separate places.  This was yucky and wasteful
+    and was only done because I didn't think 2 seconds about it before now.
+    But learning from mistakes (and learning from others' good code) is a
+    Good Thing (TM).  Thus, bbkeys's config-file has changed.  It resembles
+    blackbox's menu-file structure, as shown below....
 
-Whichever avenue you choose, bbkeys will check for a change in its .bbkeysrc
-file every 10 seconds or so, so it'll pick up any changes you've made to it.
+[begin] (bbkeys configuration file)
 
-Is it perfect? Absolutely not.  
+  [config]
+    [option] (honorModifiers) {false}
+    [option] (stackedCycling) {true}
+    [option] (stackedRaise) {false}
+    [option] (showCycleMenu)  {true}
+    [option] (menuTextJustify) {right}
+    [option] (autoConfig)   {true}
+    [option] (autoConfigCheckTimeout) {10}
+    [option] (workspaceColumns) {4}
+    [option] (workspaceRows) {2}
+  [end]
 
-Will it core-dump all over your lap and puke on your shoes? Hopefully not.  
+  [keybindings] (begin keybindings)
+    [chain] (Mod1-Y)
+      [execute] (1) {xmms}
+      [execute] (2) {aumix -v +5}
+      [execute] (3) {aumix -v -5}
+    [end]
+    [Lower]  (Mod1-Down)
+    [Raise]  (Mod1-Up)
+    [toggleShade]  (Mod1-F9)
+    [Close]  (Mod1-F4)
+    [Iconify]  (Mod1-M)
+    [toggleMaximizeFull]  (Mod1-F12)
+    [toggleMaximizeHorizontal]  (Mod1-F11)
+    [toggleMaximizeVertical]  (Mod1-F10)
+    [toggleOmnipresent]  (Mod1-Control-S)
+    [toggleDecorations]  (Mod1-Control-T)
+    [resizeWindowWidth]  (Mod1-Control-Shift-Left) {-5}
+    [resizeWindowWidth]  (Mod1-Control-Shift-Right) {5}
+    [resizeWindowHeight]  (Mod1-Control-Shift-Up) {-5}
+    [resizeWindowHeight]  (Mod1-Control-Shift-Down) {5}
+    [moveWindowUp]  (Mod1-Control-Up) 
+    [moveWindowDown]  (Mod1-Control-Down)
+    [moveWindowLeft]  (Mod1-Control-Left)
+    [moveWindowRight]  (Mod1-Control-Right)
+    [NextWindow]  (Mod1-Tab)
+    [NextWindowOnAllWorkspaces]  (Mod1-Control-Tab)
+    [PrevWindow]  (Mod1-Shift-Tab)
+    [changeWorkspace]  (Mod1-1) {1}
+    [changeWorkspace]  (Mod1-2) {2}
+    [changeWorkspace]  (Mod1-3) {3}
+    [changeWorkspace]  (Mod1-4) {4}
+    [changeWorkspace]  (Mod1-5) {5}
+    [changeWorkspace]  (Mod1-6) {6}
+    [changeWorkspace]  (Mod1-7) {7}
+    [changeWorkspace]  (Mod1-8) {8}
 
-Are there bugs? Oh, you betcha.  
+    [showRootMenu] (Mod1-Control-Escape)
 
-Do I want to know about them there bugs? Yah, for sure.
+    [Execute]  (Mod1-F5) {xrefresh}
+    [Execute]  (Mod1-F1) {aterm -fn smoothansi -fg white -bg black -trsb -tr -sh 80 -tint steelblue -cr green -sl 5000}
+  [end] (end keybindings)
+[end] (end bbkeys configuration)
 
-Are there things that I'm still planning to do? Ayup (that's what TODO is for).
+    As you can see, it's the same structure as blackbox's menu file.  All
+    config options for bbkeys are kept in a [config] submenu structure, while all
+    keybindings are kept in a [keybindings] submenu structure.  Inside the
+    keybindings structure, the only other submenu structure is the [chain]
+    directive.  It is important to note that both the config submenu
+    structure and the keybindings submenu structure must have an [end] to
+    delimit the section.  If it's not there, well, good luck. =:)
+      
+    
+-[  Is it perfect? Absolutely not.  
+
+    Will it core-dump all over your lap and puke on your blue suede 
+    shoes? Hopefully not.  
+
+    Are there bugs? Oh, you betcha.  
+
+    Do I want to know about them there bugs? Yah, for sure.
+
+    Are there things that I'm still planning to do? Ayup (that's what TODO is for).
  
--------------------------------------------------------------------------------
-Ye olde liste of bbkeys window-commands....
-
-     Minimize
-     Raise
-     Lower
-     Close
-     Workspace1
-     Workspace2
-     Workspace3
-     Workspace4
-     Workspace5
-     Workspace6
-     Workspace7
-     Workspace8
-     Workspace9
-     Workspace10
-     Workspace11
-     Workspace12
-     NextWorkspace
-     PrevWorkspace
-     NextWindow
-     PrevWindow
-     ShadeWindow
-     MaximizeWindow
-     StickWindow
-     ExecCommand
-     MaximizeVertical
-     MaximizeHorizontal
-     NudgeRight
-     NudgeLeft
-     NudgeUp
-     NudgeDown
-     BigNudgeRight
-     BigNudgeLeft
-     BigNudgeUp
-     BigNudgeDown
-     HorizontalIncrement
-     VerticalIncrement
-     HorizontalDecrement
-     VerticalDecrement
-
-
-... more to come, I'm sure....
--------------------------------------------------------------------------------
-
---  Copyright (c) 1999-2000 by Jason Kasper
---  parts Copyright (c) 1998-1999 by John Kennis
---  parts Copyright (c) 1997,1998 by Brad Hughes.
-
---  This program is free software; you can redistribute it and/or modify
---  it under the terms of the GNU General Public License as published by
---  the Free Software Foundation; either version 2 of the License, or
---  (at your option) any later version.
---
---  This program is distributed in the hope that it will be useful,
---  but WITHOUT ANY WARRANTY; without even the implied warranty of
---  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---  GNU General Public License for more details.
---
---  You should have received a copy of the GNU General Public License
---  along with this program; if not, write to the Free Software
---  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
---
--- (See the included file COPYING / GPL-2.0)
---
-
-The files Image.cc (.hh) are taken from the Blackbox,
-only one class-name was changed.
-
-The files LinkedListed.cc (.hh) are taken from Blackbox without any change.
-
-Thanks to:
-
-Brad Hughes  <bhughes@tcac.net>
-	For writing the Blackbox Windowmanager (and with this a great deal 
-	of the code for this application).
-
-John Kennis <j.m.b.m.kennis@ele.tue.nl>
-	For writing the bbtools that I shamelessly snarfed
-
-The Windowmaker guys for the great examples of key-code grabbing.

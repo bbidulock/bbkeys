@@ -1,2 +1,6 @@
-erm. Nothing. This application is perfect and should solve all of your
-problems,  up to and including male pattern baldness and world hunger. 
+- perl configurator script needs to be rewritten for the new file syntax 
+  (must handle config options as well as keybindings)
+
+- popup window-cycling menu/list needs to be implemented still
+
+- other stuff I'm sure
