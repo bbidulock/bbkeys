@@ -1253,6 +1253,8 @@ void ToolWindow::Redraw()
 
 void ToolWindow::process_event(XEvent * e)
 {
+	static unisnged int released_state;
+
 	switch (e->type) {
 	case PropertyNotify:
 		windowAttributeChange(e->xproperty.window);
@@ -1260,7 +1262,9 @@ void ToolWindow::process_event(XEvent * e)
 	
 	case KeyRelease: {
 		if (stackMenu->isVisible()) {
-			stackMenu->key_release(e->xkey.keycode);
+			; // add state bits
+			if ((state bits & mod1) || (state bits & mod2)
+				stackMenu->selectFocused();
 		}
 		break;
 	}
@@ -1307,14 +1311,15 @@ void ToolWindow::process_event(XEvent * e)
 			}
 		}
 
-		if (grabInt < 0) {
-			if (stackMenu->isVisible()) {
-				if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Escape))
-					stackMenu->hide();
-				else if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Return))
-					stackMenu->selectFocused();
-			}
-		} else {
+		if (stackMenu->isVisible()) {
+			if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Escape))
+				stackMenu->hide();
+			else if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Return))
+				stackMenu->selectFocused();
+			else
+				;		// remove state bits
+		}
+		if (grabInt > -1) {
 			if (stackMenu->isVisible())
 				stackMenu->key_press(grabSet.KeyMap[grabInt].action);
 			else {
