@@ -145,7 +145,8 @@ void WindowlistMenu::showCycleMenu( WindowList theList ) {
     std::string newTitle = bt::ellideText(title, 100, " ... ");
     if (! onlyThisDesktop) {
       std::string suffix = _screen->getDesktopName(dNbr);
-      newTitle.append(" (" + suffix + ")");
+      if (suffix.size() > 0)
+        newTitle += " (" + suffix + ")";
     }
     bt::Menu::insertItem( newTitle, i++ );
   }

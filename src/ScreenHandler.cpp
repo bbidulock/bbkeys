@@ -482,14 +482,27 @@ void ScreenHandler::updateDesktopNames()
 {
   assert(_managed);
 
-  if(! _netclient->readDesktopNames(_root, _desktop_names))
+  if(! _netclient->readDesktopNames(_root, _desktop_names)) {
     _desktop_names.clear();
+    return;
+  }
+  
+//  bt::Netwm::UTF8StringList::const_iterator it = _desktop_names.begin(),
+//    end = _desktop_names.end();
+
+//  for (; it != end; ++it) {
+//    std::cout << "name: ->" << *it << "<-\n";
+//    char default_name[80];
+//    sprintf(default_name, "Workspace %u", _id + 1);
+//    the_name = default_name;
+//  }
+  
 }
 
 std::string ScreenHandler::getDesktopName(unsigned int desktopNbr) const {
   
   if (0xFFFFFFFF == desktopNbr)
-    return "all";
+    return "";
 
   if (desktopNbr > _desktop_names.size() ) 
     return "error";
