@@ -646,7 +646,7 @@ void ToolWindow::execCommand(char *ptrCommand)
 
 void ToolWindow::setKeygrabs(void)
 {
-	 int res, pid, status;
+	 int res, pid;
 
 	 pid = fork();
 	 if (pid == -1) {
@@ -664,22 +664,17 @@ void ToolWindow::setKeygrabs(void)
 			}
 
 			if (res != 0) {
-				res = execlp("bbkeysconf", "bbkeysconf", NULL);
-				if (res != 0) {
-					res = execlp("bbkeysConfigGtk", "bbkeysConfigGtk", NULL);
-					if (res != 0) {
-					 	res = execlp("rxvt", "rxvt", "-bg", "black", "-fg", "green",
-										"-e", "bbkeysconf.pl", NULL);
-					 	if (res != 0) {
-								execlp("xterm", "xterm", "-bg", "black", "-fg",
-										"green", "-e", "bbkeysconf.pl", NULL);
-					 	}
-					}
-				}
+			 	res = execlp("rxvt", "rxvt", "-bg", "black", "-fg", "red",
+								"-e", "bbkeysconf.pl", NULL);
+			 	if (res != 0) {
+						execlp("xterm", "xterm", "-bg", "black", "-fg",
+								"red", "-e", "bbkeysconf.pl", NULL);
+			 	}
 			}
 			exit(0);
 	 }
 
+	 /*
 	 do {
 			if (waitpid(pid, &status, 0) == -1) {
 				if (errno != EINTR)
@@ -687,6 +682,7 @@ void ToolWindow::setKeygrabs(void)
 			} else
 				return;
 	 } while (1);
+	 */
 
 }
 

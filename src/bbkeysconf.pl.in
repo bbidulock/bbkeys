@@ -1,4 +1,4 @@
-#!@PERL@ -w
+#!@PERL@
 #
 # Copyright (c) 2001 Damien Tougas <damien@tougas.net>. USA.
 # Copyright (c) 2001 Jason 'vanRijn' Kasper <vR at movingparts dot net>
@@ -26,36 +26,37 @@
 # SUCH DAMAGE.
 #
 
+sub usage() {
+	print "\nbbkeysconf.pl version @VERSION@\n";
+	print "Usage: bbkeysconf.pl [options]\n";
+	print "Options:\n";
+	print " -rc[file] <filename>     Alternate keygrab definition file.\n";
+	print "                          (default is ~/.bbkeysrc)\n";
+	print " -h[elp]                  Display this help\n";
+	print "\n";
+}
+
 # do math in integer rather than double mode--we rely on this for rounding
 use integer;
 
 # prototypes
 sub trim;
 
-my $home = $ENV{HOME};
-my $bbkeysrc;
+my $bbkeysrc = $ENV{HOME} . "/.bbkeysrc";
+
 # get the keyconfig file from the commandline, or use the default
-my $rcpos = 0;
-foreach (@ARGV) {
-	$rcpos++;
-	if ($_ =~ /^-rc(|file)$/) {
-		$bbkeysrc = $ARGV[$rcpos];
-		next;
-	}
-	if ($_ =~ /^-h(|elp)$/) {
-		print "\nbbkeysconf.pl version @VERSION@\n";
-		print "Usage: bbkeysconf.pl [options]\n";
-		print "Options:\n";
-		print " -rc[file] <filename>         Alternate keygrab definition file.\n";
-		print "                               (default is ~/.bbkeysrc)\n";
-		print " -h[elp]                      Display this help\n";
-		print "\n";
+for ( $i=0; $i< @ARGV; $i++) {
+	if ($ARGV[$i] =~ /^-rc(|file)$/) {
+		$bbkeysrc = $ARGV[++$i];
+	} elsif ($_ =~ /^-h(|elp)$/) {
+		usage();
 		exit;
+	} else {
+		usage();
+		die "unknown command. exiting\n\n";
 	}
 }
-if (! $bbkeysrc) {
-	$bbkeysrc = "$home/.bbkeysrc";
-}
+
 my @modifiers = (
 	"None",
 	"Control",

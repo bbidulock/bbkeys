@@ -45,6 +45,13 @@ version 0.8.4 --
   - fix for RPM-building process... install gzipped man pages by default on
     RPM-based systems.  [vanRijn]
 
+  - removing bbkeysconf and bbkeysConfigGtk *shudder* apps from
+    chain-launching mode.  These babies are dead and let's just move on
+    folks....  By keeping them in there, I'm afraid people will think it's
+    okay to use them.  It's not.  They're WAY out of date.  Also, thanks to a
+    smarter way of handling key grabbing configuration in bbconf, we don't
+    have to hang bbkeys while keygrabs are being configured. [vanRijn]
+
 version 0.8.3 --
 
   - changing external app launch order--we go bbconf, bbkeysconf,
