@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.27 2002/06/26 00:14:32 eckzor Exp $
+// $Id: bbkeys.cc,v 1.28 2002/06/27 20:26:13 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -1375,15 +1375,93 @@ void ToolWindow::process_event(XEvent * e)
 
 		int i = 0;
 		int grabInt = -1;
-		Window fw_root, fw_child;
+		Window fw_root, fw_parent;
+    Window *fw_children;
 		int fw_y, fw_x;
-		unsigned int fw_w, fw_h, fw_b, fw_d;
+		unsigned int fw_w, fw_h, fw_b, fw_d, num_children;
 
 		if (focus_window) {
-			XGetGeometry(getXDisplay(), focus_window, &fw_root, &fw_x,
-					&fw_y, &fw_w, &fw_h, &fw_b, &fw_d);
-			XTranslateCoordinates(getXDisplay(), focus_window, fw_root,
-					fw_x, fw_y, &fw_x, &fw_y, &fw_child);
+      // get the frame window (the client window's parent)
+      if (0 != XQueryTree(getXDisplay(), focus_window, &fw_root, &fw_parent,
+                          &fw_children, &num_children)) {
+        int fr_y, fr_x;
+    		unsigned int fr_w, fr_h, fr_b, fr_d;
+
+        XFree(fw_children); // we dont use this
+        // get the client's geometry
+        XGetGeometry(getXDisplay(), focus_window, &fw_root, &fw_x,
+                     &fw_y, &fw_w, &fw_h, &fw_b, &fw_d);
+        // get the frame's geometry
+			  XGetGeometry(getXDisplay(), fw_parent, &fw_root, &fr_x,
+                     &fr_y, &fr_w, &fr_h, &fr_b, &fr_d);
+        // get the client windpw's gravity
+        XSizeHints sizehint;
+        long mask;
+        int gravity;
+        if (XGetWMNormalHints(getXDisplay(), focus_window, &sizehint, &mask) &&
+            sizehint.flags & PWinGravity)
+          gravity = sizehint.win_gravity;
+        else
+          gravity = NorthWestGravity;
+        // find the decorations sizes
+        unsigned int margin_left = fw_x,
+                    margin_right = fr_w - fw_w - margin_left,
+                      margin_top = fw_y,
+                   margin_bottom = fr_h - fw_h - margin_top;
+        // restore horizontal window gravity
+        switch (gravity) {
+        default:
+        case NorthWestGravity:
+        case SouthWestGravity:
+        case WestGravity:
+          fw_x = fr_x;
+          break;
+
+        case NorthGravity:
+        case SouthGravity:
+        case CenterGravity:
+          fw_x = fr_x + (margin_left + margin_right) / 2;
+          break;
+
+        case NorthEastGravity:
+        case SouthEastGravity:
+        case EastGravity:
+          fw_x = fr_x + margin_left + margin_right;
+          break;
+
+        case ForgetGravity:
+        case StaticGravity:
+          fw_x = fr_x + margin_left;
+          break;
+        }
+
+        // restore vertical window gravity
+        switch (gravity) {
+        default:
+        case NorthWestGravity:
+        case NorthEastGravity:
+        case NorthGravity:
+          fw_y = fr_y;
+          break;
+
+        case CenterGravity:
+        case EastGravity:
+        case WestGravity:
+          fw_y = fr_y + (margin_top + margin_bottom) / 2;
+          break;
+
+        case SouthWestGravity:
+        case SouthEastGravity:
+        case SouthGravity:
+          fw_y = fr_y + margin_top + margin_bottom;
+          break;
+
+        case ForgetGravity:
+        case StaticGravity:
+          fw_y = fr_y + margin_top;
+          break;
+        }
+      }
 		}
 		
 		// if our user wants to grab his keystrokes, even though one
