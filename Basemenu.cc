@@ -866,8 +866,10 @@ void Basemenu::motionNotifyEvent(XMotionEvent *me) {
 
       if (itmp->submenu())
 	drawSubmenu(w);
-      else
+      else {
 	drawItem(w, (itmp->isEnabled()), True);
+	setHighlight(w);
+			}
     }
   }
 }
