@@ -67,7 +67,6 @@ AC_PROG_AWK
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
-AC_PROG_RANLIB
 
 dnl minimum version we can live with
 PERL_VERSION=5.004
@@ -98,7 +97,6 @@ fi
 
 
 # Checks for header files.
-AC_PATH_X
 AC_PATH_XTRA
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT

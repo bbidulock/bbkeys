@@ -37,13 +37,13 @@ extern "C" {
 #include <algorithm>
 
 // blackbox lib
-#include <Netwm.hh>
+#include <EWMH.hh>
 
-class Netclient : public bt::Netwm
+class Netclient : public bt::EWMH
 {
 
 private:
-  Display * _display;
+  const bt::Display &_display;
 
   Atom xa_wm_colormap_windows, xa_wm_protocols, xa_wm_state,
     xa_wm_delete_window, xa_wm_take_focus, xa_wm_change_state,
@@ -65,7 +65,7 @@ private:
 
 public:
 
-  Netclient (Display * display);
+  Netclient (const bt::Display &display);
   ~Netclient () ;
 
   // various value accessors...
@@ -77,7 +77,7 @@ public:
   Window * getNetVirtualRootList(Window win);
 
 
-  // atoms Netwm doesn't provide
+  // atoms EWMH doesn't provide
 
   // icccm first
   inline Atom xaWmColormapWindows(void) const {return xa_wm_colormap_windows;}

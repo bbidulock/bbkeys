@@ -77,7 +77,7 @@ ScreenHandler::ScreenHandler (KeyClient * k, unsigned int number)
     return;
   }
 
-  bt::Netwm::AtomList atoms;
+  bt::EWMH::AtomList atoms;
   if (_netclient->readSupported(_root, atoms)) {
     cout << BBTOOL << ": " << "ScreenHandler: Supported atoms: [" << atoms.size() << "].\n";
   } else {
@@ -175,7 +175,7 @@ bool ScreenHandler::findSupportingWM() {
   // and falling back to ansi if that fails
 
 
-  // try netwm
+  // try ewmh
   if (! _netclient->getValue(client, _netclient->wmName(),
                              Netclient::utf8, _wm_name)) {
     if (_debug)
@@ -495,7 +495,7 @@ void ScreenHandler::updateDesktopNames()
     return;
   }
   
-//  bt::Netwm::UTF8StringList::const_iterator it = _desktop_names.begin(),
+//  bt::EWMH::UTF8StringList::const_iterator it = _desktop_names.begin(),
 //    end = _desktop_names.end();
 
 //  for (; it != end; ++it) {

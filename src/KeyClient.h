@@ -80,7 +80,7 @@ private:
   std::string _configFileName;
   Config & _config;
   KeywordMap _keywordMap;
-  bt::Netwm * _netwm;
+  bt::EWMH * _ewmh;
   Netclient * _netclient;
   Display * _display;
   KeyGrabber * _keyGrabber;

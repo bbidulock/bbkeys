@@ -99,7 +99,7 @@ KeyClient::KeyClient (int argc, char **argv,
   // here's our friendly little general-purpose keygrabber
   _keyGrabber = new KeyGrabber(_display, numLockMask(), scrollLockMask() );
 
-  _netclient = new Netclient(_display);
+  _netclient = new Netclient(this->display());
   _active = _clients.end();
 
   initialize();

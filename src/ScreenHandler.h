@@ -44,7 +44,7 @@ extern "C" {
 // the blackbox library
 #include <Display.hh>
 #include <EventHandler.hh>
-#include <Netwm.hh>
+#include <EWMH.hh>
 
 class KeyClient;
 class WindowlistMenu;
@@ -86,7 +86,7 @@ private:
   
   unsigned int _screenNumber;
   KeyClient * _keyClient;
-  bt::Netwm * _netwm;
+  bt::EWMH * _ewmh;
   Netclient * _netclient;
   Config * _config;
   Display * _display;

@@ -26,14 +26,12 @@
 
 #include "Netclient.h"
 
-Netclient::Netclient (Display * display) : bt::Netwm(display)
+Netclient::Netclient (const bt::Display &display)
+  : bt::EWMH(display), _display(display)
 {
-
-  _display = display;
   init_icccm();
   init_extras();
   init_blackbox();
-    
 }
                       
 Netclient::~Netclient ()
@@ -53,7 +51,7 @@ void Netclient::init_icccm(void) {
     "_MOTIF_WM_HINTS"
   };
   Atom atoms_return[9];
-  XInternAtoms(_display, atoms, 9, False, atoms_return);
+  XInternAtoms(_display.XDisplay(), atoms, 9, False, atoms_return);
   xa_wm_colormap_windows = atoms_return[0];
   xa_wm_protocols = atoms_return[1];
   xa_wm_name = atoms_return[2];
@@ -74,7 +72,7 @@ void Netclient::init_extras(void) {
     "_NET_VIRTUAL_ROOTS"
   };
   Atom atoms_return[4];
-  XInternAtoms(_display, atoms, 2, False, atoms_return);
+  XInternAtoms(_display.XDisplay(), atoms, 2, False, atoms_return);
   openbox_show_root_menu = atoms_return[0];
   openbox_show_workspace_menu = atoms_return[1];
   enlightenment_desktop = atoms_return[2];
@@ -89,7 +87,7 @@ void Netclient::init_blackbox(void) {
     "_BLACKBOX_CHANGE_ATTRIBUTES"
   };
   Atom atoms_return[3];
-  XInternAtoms(_display, atoms, 3, False, atoms_return);
+  XInternAtoms(_display.XDisplay(), atoms, 3, False, atoms_return);
   blackbox_hints = atoms_return[0];
   blackbox_attributes = atoms_return[1];
   blackbox_change_attributes = atoms_return[2];
@@ -101,7 +99,7 @@ std::string Netclient::getWindowTitle(Window win) const
 
   std::string _title = "";
 
-  // try netwm
+  // try ewmh
   if (! getValue(win, wmName(), utf8, _title)) {
     // try old x stuff
     getValue(win, XA_WM_NAME, ansi, _title);
@@ -144,7 +142,7 @@ bool Netclient::getValue(Window win, Atom atom, Atom type,
   bool ret = False;
 
   // try get the first element
-  result = XGetWindowProperty(_display, win, atom, 0l, 1l, False,
+  result = XGetWindowProperty(_display.XDisplay(), win, atom, 0l, 1l, False,
                               AnyPropertyType, &ret_type, &ret_size,
                               &nelements, &ret_bytes, &c_val);
   ret = (result == Success && ret_type == type && ret_size == size &&
@@ -162,7 +160,7 @@ bool Netclient::getValue(Window win, Atom atom, Atom type,
       int remain = (ret_bytes - 1)/sizeof(long) + 1 + 1;
       if (remain > size/8 * (signed)maxread) // dont get more than the max
         remain = size/8 * (signed)maxread;
-      result = XGetWindowProperty(_display, win, atom, 0l, remain, False, type,
+      result = XGetWindowProperty(_display.XDisplay(), win, atom, 0l, remain, False, type,
                                   &ret_type, &ret_size, &nelements, &ret_bytes,
                                   &c_val);
       ret = (result == Success && ret_type == type && ret_size == size &&
@@ -269,7 +267,7 @@ bool Netclient::getValue(Window win, Atom atom, StringType type,
  * Removes a property entirely from a window.
  */
 void Netclient::eraseValue(Window win, Atom atom) const {
-  XDeleteProperty(_display, win, atom);
+  XDeleteProperty(_display.XDisplay(), win, atom);
 }
 
 
@@ -289,7 +287,7 @@ void Netclient::sendClientMessage(Window target, Atom type, Window about,
   e.xclient.data.l[3] = data3;
   e.xclient.data.l[4] = data4;
 
-  XSendEvent(_display, target, False,
+  XSendEvent(_display.XDisplay(), target, False,
              SubstructureRedirectMask | SubstructureNotifyMask,
              &e);
 }
@@ -298,7 +296,7 @@ bool Netclient::isAtomSupported(Window win, Atom atom) const {
 
   bool supported = False;
 
-  bt::Netwm::AtomList atoms;
+  bt::EWMH::AtomList atoms;
 
   if (readSupported(win, atoms) && atoms.size() > 0) {
     if (std::find(atoms.begin(), atoms.end(), atom) != atoms.end()) {
@@ -317,7 +315,7 @@ Window * Netclient::getNetVirtualRootList(Window win) {
   unsigned char *data_ret;
   Window *winsReturn = 0;
 
-  int e = XGetWindowProperty(_display, win, xaNetVirtualRoots(),
+  int e = XGetWindowProperty(_display.XDisplay(), win, xaNetVirtualRoots(),
                              0, 0, False, XA_WINDOW, &type_ret,
                              &format_ret, &nitems_ret, &unused, &data_ret);
   
