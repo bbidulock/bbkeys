@@ -26,10 +26,14 @@
 # SUCH DAMAGE.
 #
 
+# prototypes
+sub trim;
+
 my $home = $ENV{HOME};
 my $bbkeysrc = "$home/.bbkeysrc";
 
 my @modifiers = (
+	"None",
 	"Control",
 	"Shift",
 	"Mod1",
@@ -84,7 +88,9 @@ open(R, "$bbkeysrc");
 my @config;
 my $count = 0;
 while (<R>) {
-	next if $_ =~ /^\s*$/;
+	# skip blank lines or comments
+	$_ = trim($_);
+	next if ($_ =~ /^$/ or $_ =~ /^#/) ;
 	chomp($_);
 	$config[$count++] = $_;
 	}
@@ -114,6 +120,15 @@ while ($exit == 0) {
 
 exit(0);
 
+sub trim {
+	local $_ = shift;
+	
+	s/^\s*//;
+	s/\s*$//;
+
+	return $_;
+}
+
 sub list() {
 
 	print "List:> Current Configuration\n";
@@ -122,12 +137,11 @@ sub list() {
 	open(CONFIG_LIST, ">-");
 	for ($i = 0; $i < $count; $i++) {
 
-		if ($config[$i] =~ /Action\(ExecCommand\)/) {
+		if ($config[$i] =~ /KeyToGrab.*?Action\(ExecCommand\)/) {
 			$config[$i] =~ m/Grab\((.*)\).*Modifier\((.*)\).*Action\((.*)\).*This\((.*)\)/;
 			$key_seq = "$2+$1";
 			$result = "$3 $4";
-			}
-		else {
+		} elsif ($config[$i] =~/KeyToGrab/ ) {
 			$config[$i] =~ m/Grab\((.*)\).*Modifier\((.*)\).*Action\((.*)\)/;
 			$key_seq = "$2+$1";
 			$result = "$3";
@@ -148,6 +162,10 @@ sub add() {
 	my $grab = <STDIN>;
 	chomp($grab);
 	$grab =~ s/\s*//g;
+	if ($grab eq "") {
+		print ("\nERROR: Must enter valid key.\n");
+		return;
+	}
 
 	print "Add: Select Modifier> Modifier List\n";
 	print "-----------------------------------------------------------------\n";

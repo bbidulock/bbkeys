@@ -34,7 +34,7 @@ make
 %install
 if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
 mkdir -p $RPM_BUILD_ROOT
-make install-strip DESTDIR=$RPM_BUILD_ROOT
+make install DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -54,6 +54,8 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/man/man5/bbkeysrc.5
  
 %changelog 
+* Mon Nov 5 2001 Jason 'vanRijn' Kasper <vR@movingparts.net>
+- removing bbkeysConfigC and replacing with bbkeysconf.pl
 * Tue Sep 18 2001 Jason Kasper <vR@movingparts.net>
 - changing to a dynamically-created bbkeys.spec
 * Sun Aug 5 2001 Jason Kasper <vR@movingparts.net>
