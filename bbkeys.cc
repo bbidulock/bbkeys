@@ -1295,7 +1295,8 @@ void ToolWindow::process_event(XEvent * e)
 
 	 // if we're doing the CycleWindow thing
    if (stackMenu->isVisible()) {
-     	stackMenu->key_press(grabSet.KeyMap[grabInt].action);
+			if (e->xkey.keycode != XK_Shift_L)
+	     	stackMenu->key_press(grabSet.KeyMap[grabInt].action);
 	 }
 	 else if (grabInt > -1) {
 			/* play with colors for nyz =:) */
