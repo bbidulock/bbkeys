@@ -2,7 +2,7 @@
 // ------ note from the Gee-I'm-Sorry-The-Code-Looks-Ugly department-----
 // ------ for vi users-- ":set ts=2"	=:)
 //
-//	Copyright (c) 1999-2000 by Jason Kasper (vanRijn) vR@movingparts.net
+//	Copyright (c) 1999-2001 by Jason Kasper (vanRijn) vR@movingparts.net
 //	Copyright (c) 2001 by Ben Jansens <xor@x-o-r.net>
 //
 //	This program is free software; you can redistribute it and/or modify
