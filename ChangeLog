@@ -1,4 +1,6 @@
 version 0.8.3 --
+  - changing external app launch order--we go bbconf, bbkeysconf,
+    bbkeysConfigGtk, rxvt, xterm... *phew*
   - fix in stackmenu.cc (hopefully we got it this time?) to fix segfaults
     on some platforms due to screwy X stuff. *shudder*
 

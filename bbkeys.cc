@@ -644,22 +644,24 @@ void ToolWindow::setKeygrabs(void)
 
 	 if (pid == 0) {
 			if (noQt) {
-				// Make 'bbkeysconf' automagically fail...
+				// Make 'bbconf' automagically fail...
 				res = 1;
 			} else {
-				res = execlp("bbkeysconf", "bbkeysconf", NULL);
+				res = execlp("bbconf", "bbconf", NULL);
 			}
 
 			if (res != 0) {
-				res = execlp("bbkeysConfigGtk", "bbkeysConfigGtk", NULL);
+				res = execlp("bbkeysconf", "bbkeysconf", NULL);
 				if (res != 0) {
-					 res =
-							execlp("rxvt", "rxvt", "-bg", "black", "-fg", "green",
-									"-e", "bbkeysConfigC", NULL);
-					 if (res != 0) {
-							execlp("xterm", "xterm", "-bg", "black", "-fg",
-									"green", "-e", "bbkeysConfigC", NULL);
-					 }
+					res = execlp("bbkeysConfigGtk", "bbkeysConfigGtk", NULL);
+					if (res != 0) {
+					 	res = execlp("rxvt", "rxvt", "-bg", "black", "-fg", "green",
+										"-e", "bbkeysConfigC", NULL);
+					 	if (res != 0) {
+								execlp("xterm", "xterm", "-bg", "black", "-fg",
+										"green", "-e", "bbkeysConfigC", NULL);
+					 	}
+					}
 				}
 			}
 			exit(0);
