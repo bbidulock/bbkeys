@@ -63,7 +63,7 @@ extern "C" {
 //--------------------------------------------------------
 KeyClient::KeyClient (int argc, char **argv,
                       Config & config, std::string display):
-  bt::Application(BBTOOL, display.c_str()), _config(config)
+  bt::Application(BBTOOL, display.c_str(), true), _config(config)
 {
     
   // initialize our keyword map for the file tokenizer
