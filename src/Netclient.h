@@ -53,6 +53,8 @@ private:
 
   Atom blackbox_attributes, blackbox_change_attributes, blackbox_hints;
 
+  Atom enlightenment_desktop, net_virtual_roots;
+
   bool getValue(Window win, Atom atom, Atom type,
                 unsigned long &nelements, unsigned char **value,
                 int size) const;
@@ -69,6 +71,10 @@ public:
   // various value accessors...
   std::string getWindowTitle(Window win) const;
   unsigned int getDesktop(Window win) const;
+
+  bool isAtomSupported(Window win, Atom atom) const;
+
+  Window * getNetVirtualRootList(Window win);
 
 
   // atoms Netwm doesn't provide
@@ -93,7 +99,10 @@ public:
   inline Atom xaBlackboxAttributes(void) const {return blackbox_attributes;}
   inline Atom xaBlackboxChangeAttributes(void) const {return blackbox_change_attributes;}
   inline Atom xaBlackboxHints(void) const {return blackbox_hints;}
-                                                                    
+
+  // other things we might have to deal with
+  inline Atom xaEnlightenmentDesktop(void) const {return enlightenment_desktop;}
+  inline Atom xaNetVirtualRoots(void) const {return net_virtual_roots;}
   
   enum StringType {
     ansi,

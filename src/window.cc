@@ -108,17 +108,21 @@ void XWindow::destroyNotifyEvent(const XDestroyWindowEvent * const e) {
 }
 
 void XWindow::updateDimensions() {
-  Window root, child;
-  int x, y;
+
+  Window root, child;   
+  int x, y, transx, transy;
   unsigned int w, h, b, d;
 
-  if (XGetGeometry(_display, _window, &root, &x, &y, &w, &h,
-                   &b, &d) &&
-      XTranslateCoordinates(_display, _window, root, x, y,
-                            &x, &y, &child))
-    _rect.setRect(x, y, w, h);
-  else
+  int e = XGetGeometry(_display, _window, &root, &x, &y, &w, &h,
+                       &b, &d);
+  
+  if (e && XTranslateCoordinates(_display, _window, root, x, y,
+                                 &transx, &transy, &child)) {
+    _rect.setRect(transx -x, transy -y, w, h);
+  } else {
     _rect.setRect(0, 0, 1, 1);
+  }
+
 }
 
 void XWindow::updateBlackboxAttributes() {
@@ -279,8 +283,8 @@ void XWindow::focus(bool raise) const {
 
 void XWindow::decorate(bool d) const {
   _netclient->sendClientMessage(_root,
-                            _netclient->xaBlackboxChangeAttributes(),
-                            _window, AttribDecoration,
+                                _netclient->xaBlackboxChangeAttributes(),
+                                _window, AttribDecoration,
                                 0, 0, 0, (d ? DecorNormal : DecorNone));
 }
 
@@ -297,33 +301,70 @@ void XWindow::move(int x, int y) const {
   Window *children = 0;
   unsigned int nchildren;
   XWindowAttributes wattr;
+  unsigned char *data_ret;
+  Atom type_ret;
+  int i_unused;
+  unsigned long l_unused;
   
   while (XQueryTree(_display, win, &root, &parent, &children,
                     &nchildren)) {
+    
     if (children && nchildren > 0)
       XFree(children); // don't care about the children
 
     if (! parent) // no parent!?
       return;
 
-    // if the parent window is the root window, stop here
-    if (parent == root)
+
+    //-------------------------------------------------
+    // from brad...
+    //--------------------------------------------------
+    // if the parent window is the root window, an Enlightenment virtual root or
+    // a NET WM virtual root window, stop here
+    data_ret = 0;
+    if (parent == root) {
       break;
+      } else if (XGetWindowProperty(_display, parent,
+                                  _netclient->xaEnlightenmentDesktop(),
+                                  0, 1, False, XA_CARDINAL,
+                                  &type_ret, &i_unused, &l_unused, &l_unused,
+                                  &data_ret) == Success &&
+                   type_ret == XA_CARDINAL) {
+      if (data_ret)
+        XFree(data_ret);
+      break;
+    } else if (_netclient->isAtomSupported(_root, _netclient->xaNetVirtualRoots())
+               && _netclient->getNetVirtualRootList(_root)) {
+      int i = 0;
+      Window *wins = _netclient->getNetVirtualRootList(_root);
+      while (wins[i] != 0) {
+        if (wins[i++] == parent) {
+          break;
+        }
+      }
+    }
+
+    // -- end of from Brad...
 
     last = win;
     win = parent;
   }
 
+  int transx, transy;
   if (! (XTranslateCoordinates(_display, last, win, 0, 0,
-                               (int *) &margins.left,
-                               (int *) &margins.top,
+                               &transx, &transy,
                                &parent) &&
          XGetWindowAttributes(_display, win, &wattr)))
     return;
 
+  margins.left = transx;
+  margins.top = transy;
   margins.right = wattr.width - _rect.width() - margins.left;
   margins.bottom = wattr.height - _rect.height() - margins.top;
 
+  // add the border_width for the window managers frame... some window managers
+  // do not use a border_width of zero for their frames, and if we the left and
+  // top strut, we ensure that our position is absolutely correct. 
   margins.left += wattr.border_width;
   margins.right += wattr.border_width;
   margins.top += wattr.border_width;
@@ -332,7 +373,7 @@ void XWindow::move(int x, int y) const {
   // this makes things work. why? i don't know. but you need them.
   margins.right -= 2;
   margins.bottom -= 2;
-  
+
   // find the frame's reference position based on the window's gravity
   switch (_gravity) {
   case NorthWestGravity:
@@ -372,7 +413,7 @@ void XWindow::move(int x, int y) const {
   default:
     break;
   }
-  
+
   XMoveWindow(_display, _window, x, y);
 }
 
