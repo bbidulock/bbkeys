@@ -1294,250 +1294,239 @@ void ToolWindow::process_event(XEvent * e)
 		}
 
 	 // if we're doing the CycleWindow thing
-   if (stackMenu->isVisible()) {
-			if (e->xkey.keycode != XK_Shift_L)
-	     	stackMenu->key_press(grabSet.KeyMap[grabInt].action);
-	 }
-	 else if (grabInt > -1) {
-			/* play with colors for nyz =:) */
-			XSetWindowBackgroundPixmap(getXDisplay(), win_configBtn,
-					pixmap.pix_pressedBtn);
-			Redraw();
+	 if (grabInt > -1) {
+			if (stackMenu->isVisible())
+				stackMenu->key_press(grabSet.KeyMap[grabInt].action);
+			else {
+				/* play with colors for nyz =:) */
+				XSetWindowBackgroundPixmap(getXDisplay(), win_configBtn,
+						pixmap.pix_pressedBtn);
+				Redraw();
 
-			switch (grabSet.KeyMap[grabInt].action) {
-			case grabIconify:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XIconifyWindow(getXDisplay(), focus_window, 0);
-				}
-				break;
-
-			case grabRaise:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XRaiseWindow(getXDisplay(), focus_window);
-				}
-				break;
-
-			case grabLower:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XLowerWindow(getXDisplay(), focus_window);
-				}
-				break;
-
-			case grabClose:
-				if (!focus_window)
+				switch (grabSet.KeyMap[grabInt].action) {
+				case grabIconify:
+					if (focus_window && focus_window != (int)PointerRoot ) {
+						XIconifyWindow(getXDisplay(), focus_window, 0);
+					}
 					break;
 
-				XEvent ce;
-				ce.xclient.type = ClientMessage;
-				ce.xclient.message_type = getWMProtocolsAtom();
-				ce.xclient.display = getXDisplay();
-				ce.xclient.window = focus_window;
-				ce.xclient.format = 32;
-				ce.xclient.data.l[0] = getWMDeleteAtom();
-				ce.xclient.data.l[1] = CurrentTime;
-				ce.xclient.data.l[2] = ce.xclient.data.l[3] =
-				ce.xclient.data.l[4] = 0l;
+				case grabRaise:
+					if (focus_window && focus_window != (int)PointerRoot ) {
+						XRaiseWindow(getXDisplay(), focus_window);
+					}
+					break;
 
-				XSendEvent(getXDisplay(), focus_window, False, NoEventMask, &ce);
-				break;
+				case grabLower:
+					if (focus_window && focus_window != (int)PointerRoot ) {
+						XLowerWindow(getXDisplay(), focus_window);
+					}
+					break;
 
-			case grabWorkspace1:
-				wminterface->changeDesktop(0);
-				break;
+				case grabClose:
+					if (!focus_window)
+						break;
 
-			case grabWorkspace2:
-				wminterface->changeDesktop(1);
-				break;
+					XEvent ce;
+					ce.xclient.type = ClientMessage;
+					ce.xclient.message_type = getWMProtocolsAtom();
+					ce.xclient.display = getXDisplay();
+					ce.xclient.window = focus_window;
+					ce.xclient.format = 32;
+					ce.xclient.data.l[0] = getWMDeleteAtom();
+					ce.xclient.data.l[1] = CurrentTime;
+					ce.xclient.data.l[2] = ce.xclient.data.l[3] =
+					ce.xclient.data.l[4] = 0l;
 
-			case grabWorkspace3:
-				wminterface->changeDesktop(2);
-				break;
+					XSendEvent(getXDisplay(), focus_window, False, NoEventMask, &ce);
+					break;
 
-			case grabWorkspace4:
-				wminterface->changeDesktop(3);
-				break;
-
-			case grabWorkspace5:
-				wminterface->changeDesktop(4);
-				break;
-
-			case grabWorkspace6:
-				wminterface->changeDesktop(5);
-				break;
-
-			case grabWorkspace7:
-				wminterface->changeDesktop(6);
-				break;
-
-			case grabWorkspace8:
-				wminterface->changeDesktop(7);
-				break;
-
-			case grabWorkspace9:
-				wminterface->changeDesktop(8);
-				break;
-
-			case grabWorkspace10:
-				wminterface->changeDesktop(9);
-				break;
-
-			case grabWorkspace11:
-				wminterface->changeDesktop(10);
-				break;
-
-			case grabWorkspace12:
-				wminterface->changeDesktop(11);
-				break;
-
-			case grabNextWorkspace:
-				if (current_desktop->number < (desktop_count-1))
-					wminterface->changeDesktop(current_desktop->number + 1);
-				else
+				case grabWorkspace1:
 					wminterface->changeDesktop(0);
-				break;
+					break;
 
-			case grabPrevWorkspace:
-				if (current_desktop->number > 0)
-					wminterface->changeDesktop(current_desktop->number - 1);
-				else
-					wminterface->changeDesktop(desktop_count - 1);
-				break;
+				case grabWorkspace2:
+					wminterface->changeDesktop(1);
+					break;
 
-			case grabNextWindow:
-				cycleWindowFocus(True);
-				break;
+				case grabWorkspace3:
+					wminterface->changeDesktop(2);
+					break;
 
-			case grabPrevWindow:
-				cycleWindowFocus(False);
-				break;
+				case grabWorkspace4:
+					wminterface->changeDesktop(3);
+					break;
 
-			case grabShade:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					wminterface->shadeWindow(focus_window);
-				}
-				break;
+				case grabWorkspace5:
+					wminterface->changeDesktop(4);
+					break;
 
-			case grabStick:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					wminterface->stickWindow(focus_window);
-				}
-				break;
+				case grabWorkspace6:
+					wminterface->changeDesktop(5);
+					break;
 
-			case grabExecute:
-				execCommand(grabSet.KeyMap[grabInt].execCommand);
-				break;
+				case grabWorkspace7:
+					wminterface->changeDesktop(6);
+					break;
 
-			case grabMaximize:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					wminterface->maximizeWindow(focus_window, True, True);
-				}
-				break;
+				case grabWorkspace8:
+					wminterface->changeDesktop(7);
+					break;
 
-			case grabVertMax:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					wminterface->maximizeWindow(focus_window, False, True);
-				}
-				break;
+				case grabWorkspace9:
+					wminterface->changeDesktop(8);
+					break;
 
-			case grabHorizMax:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					wminterface->maximizeWindow(focus_window, True, False);
-				}
-				break;
+				case grabWorkspace10:
+					wminterface->changeDesktop(9);
+					break;
+
+				case grabWorkspace11:
+					wminterface->changeDesktop(10);
+					break;
+
+				case grabWorkspace12:
+					wminterface->changeDesktop(11);
+					break;
+
+				case grabNextWorkspace:
+					if (current_desktop->number < (desktop_count-1))
+						wminterface->changeDesktop(current_desktop->number + 1);
+					else
+						wminterface->changeDesktop(0);
+					break;
+
+				case grabPrevWorkspace:
+					if (current_desktop->number > 0)
+						wminterface->changeDesktop(current_desktop->number - 1);
+					else
+						wminterface->changeDesktop(desktop_count - 1);
+					break;
+
+				case grabNextWindow:
+					cycleWindowFocus(True);
+					break;
+
+				case grabPrevWindow:
+					cycleWindowFocus(False);
+					break;
+
+				case grabShade:
+					if (focus_window && focus_window != (int)PointerRoot ) {
+						wminterface->shadeWindow(focus_window);
+					}
+					break;
+
+				case grabStick:
+					if (focus_window && focus_window != (int)PointerRoot ) {
+						wminterface->stickWindow(focus_window);
+					}
+					break;
+
+				case grabExecute:
+					execCommand(grabSet.KeyMap[grabInt].execCommand);
+					break;
+
+				case grabMaximize:
+					if (focus_window && focus_window != (int)PointerRoot )
+						wminterface->maximizeWindow(focus_window, True, True);
+					break;
+
+				case grabVertMax:
+					if (focus_window && focus_window != (int)PointerRoot )
+						wminterface->maximizeWindow(focus_window, False, True);
+					break;
+
+				case grabHorizMax:
+					if (focus_window && focus_window != (int)PointerRoot )
+						wminterface->maximizeWindow(focus_window, True, False);
+					break;
 		
-			case grabNudgeRight:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XMoveWindow(getXDisplay(), focus_window, fw_x + 1, fw_y);
-				}
-				break;
+				case grabNudgeRight:
+					if (focus_window && focus_window != (int)PointerRoot )
+						XMoveWindow(getXDisplay(), focus_window, fw_x + 1, fw_y);
+					break;
 
-			case grabNudgeLeft:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XMoveWindow(getXDisplay(), focus_window, fw_x - 1, fw_y);
-				}
-				break;
+				case grabNudgeLeft:
+					if (focus_window && focus_window != (int)PointerRoot )
+						XMoveWindow(getXDisplay(), focus_window, fw_x - 1, fw_y);
+					break;
 
-			case grabNudgeUp:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XMoveWindow(getXDisplay(), focus_window, fw_x, fw_y - 1);
-				}
-				break;
+				case grabNudgeUp:
+					if (focus_window && focus_window != (int)PointerRoot )
+						XMoveWindow(getXDisplay(), focus_window, fw_x, fw_y - 1);
+					break;
 
-			case grabNudgeDown:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XMoveWindow(getXDisplay(), focus_window, fw_x, fw_y + 1);
-				}
-				break;
+				case grabNudgeDown:
+					if (focus_window && focus_window != (int)PointerRoot )
+						XMoveWindow(getXDisplay(), focus_window, fw_x, fw_y + 1);
+					break;
 
-			case grabBigNudgeRight:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XMoveWindow(getXDisplay(), focus_window, fw_x + 10, fw_y);
-				}
-				break;
+				case grabBigNudgeRight:
+					if (focus_window && focus_window != (int)PointerRoot )
+						XMoveWindow(getXDisplay(), focus_window, fw_x + 10, fw_y);
+					break;
 
-			case grabBigNudgeLeft:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XMoveWindow(getXDisplay(), focus_window, fw_x - 10, fw_y);
-				}
-				break;
+				case grabBigNudgeLeft:
+					if (focus_window && focus_window != (int)PointerRoot )
+						XMoveWindow(getXDisplay(), focus_window, fw_x - 10, fw_y);
+					break;
 
-			case grabBigNudgeUp:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XMoveWindow(getXDisplay(), focus_window, fw_x, fw_y - 10);
-				}
-				break;
+				case grabBigNudgeUp:
+					if (focus_window && focus_window != (int)PointerRoot )
+						XMoveWindow(getXDisplay(), focus_window, fw_x, fw_y - 10);
+					break;
 
-			case grabBigNudgeDown:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XMoveWindow(getXDisplay(), focus_window, fw_x, fw_y + 10);
-				}
-				break;
+				case grabBigNudgeDown:
+					if (focus_window && focus_window != (int)PointerRoot )
+						XMoveWindow(getXDisplay(), focus_window, fw_x, fw_y + 10);
+					break;
 
-			case grabHorizInc:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XWindowAttributes foo;
-					XGetWindowAttributes(getXDisplay(), focus_window, &foo);
-					XResizeWindow(getXDisplay(), focus_window,
-							foo.width + 10, foo.height);
-				}
-				break;
+				case grabHorizInc:
+					if (focus_window && focus_window != (int)PointerRoot ) {
+						XWindowAttributes foo;
+						XGetWindowAttributes(getXDisplay(), focus_window, &foo);
+						XResizeWindow(getXDisplay(), focus_window,
+								foo.width + 10, foo.height);
+					}
+					break;
 
-			case grabVertInc:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XWindowAttributes foo;
-					XGetWindowAttributes(getXDisplay(), focus_window, &foo);
-					XResizeWindow(getXDisplay(), focus_window,
-							foo.width, foo.height + 10);
-				}
-				break;
+				case grabVertInc:
+					if (focus_window && focus_window != (int)PointerRoot ) {
+						XWindowAttributes foo;
+						XGetWindowAttributes(getXDisplay(), focus_window, &foo);
+						XResizeWindow(getXDisplay(), focus_window,
+								foo.width, foo.height + 10);
+					}
+					break;
 
-			case grabHorizDec:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XWindowAttributes foo;
-					XGetWindowAttributes(getXDisplay(), focus_window, &foo);
-					if (foo.width < 11)
-						foo.width = 11;
-					XResizeWindow(getXDisplay(), focus_window,
-						foo.width - 10, foo.height);
-				}
-				break;
+				case grabHorizDec:
+					if (focus_window && focus_window != (int)PointerRoot ) {
+						XWindowAttributes foo;
+						XGetWindowAttributes(getXDisplay(), focus_window, &foo);
+						if (foo.width < 11)
+							foo.width = 11;
+						XResizeWindow(getXDisplay(), focus_window,
+							foo.width - 10, foo.height);
+					}
+					break;
 
-			case grabVertDec:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					XWindowAttributes foo;
-					XGetWindowAttributes(getXDisplay(), focus_window, &foo);
-					if (foo.height < 11)
-						foo.height = 11;
-					XResizeWindow(getXDisplay(), focus_window,
-							foo.width, foo.height - 10);
-				}
-				break;
+				case grabVertDec:
+					if (focus_window && focus_window != (int)PointerRoot ) {
+						XWindowAttributes foo;
+						XGetWindowAttributes(getXDisplay(), focus_window, &foo);
+						if (foo.height < 11)
+							foo.height = 11;
+						XResizeWindow(getXDisplay(), focus_window,
+								foo.width, foo.height - 10);
+					}
+					break;
 
-			case grabToggleDecor:
-				if (focus_window && focus_window != (int)PointerRoot ) {
-					wminterface->decorateToggleWindow(focus_window);
+				case grabToggleDecor:
+					if (focus_window && focus_window != (int)PointerRoot ) {
+						wminterface->decorateToggleWindow(focus_window);
+					}
+					break;
 				}
-				break;
 			}
 		}
 		timer->start();
