@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.17 2002/05/27 19:30:31 eckzor Exp $
+// $Id: bbkeys.cc,v 1.18 2002/05/27 19:56:17 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -73,12 +73,9 @@
 #include "Timer.hh"
 #include "Basemenu.hh"
 
-#include <strstream>
 #include <string>
 
 using std::string;
-using std::ostrstream;
-using std::ends;
 
 /*--------------------------------------------------------------------*/
 
@@ -671,23 +668,21 @@ void ToolWindow::setKeygrabs(void)
 			// Make 'bbconf' automagically fail...
 			res = 1;
 		} else {
-			ostrstream ost;
-			ost << "keybindings:loadfile=" << bbkeys_rcfile << ends;
+			string ost = (string)"keybindings:loadfile=" + bbkeys_rcfile;
 			
 			res = execlp("bbconf", "bbconf", "--start-plugin", "key bindings", 
-				"--args", ost.str(), NULL);
+				"--args", ost.c_str(), NULL);
 			
 		}
 		
 		if (res != 0) {
-			ostrstream ost;
-			ost	<< "bbkeysconf.pl -rcfile " << bbkeys_rcfile << ends;
+			string ost = (string)"bbkeysconf.pl -rcfile " + bbkeys_rcfile;
 
 			res = execlp("rxvt", "rxvt", "-bg", "black", "-fg", "green",
-				"-e", "sh", "-c", ost.str(), NULL);
+				"-e", "sh", "-c", ost.c_str(), NULL);
 			if (res != 0) {
 				execlp("xterm", "xterm", "-bg", "black", "-fg", "green", 
-					"-e", "sh", "-c", ost.str(), NULL);
+					"-e", "sh", "-c", ost.c_str(), NULL);
 			}
 		}
 		exit(0);
