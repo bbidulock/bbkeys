@@ -33,6 +33,7 @@ struct CMDOPTIONS {
   bool noQt;
   bool miniMe;
   bool tinyMe;
+  char *bbkeysrc;
 };
 
 #endif // __MAIN_H

@@ -1,4 +1,5 @@
 version 0.8.4 --
+
   - cleaning up build again.  Rather than having 200 -DDEFINE_ statements
     in our compile lines, we use config.h (like normal people).  =:)  This
     very well may break stuff, but it looks good thus far....
@@ -29,10 +30,14 @@ version 0.8.4 --
     now follow blackbox's lead (and follow blackbox's code) and create a name
     for it, "Unnamed".  Thanks to Damien Terrier for this bug report.
 
+  - patch for allowing an alternate keybinding config file (thanks to Scott
+    Moynes!)
+
 
 
 
 version 0.8.3 --
+
   - changing external app launch order--we go bbconf, bbkeysconf,
     bbkeysConfigGtk, rxvt, xterm... *phew*
 

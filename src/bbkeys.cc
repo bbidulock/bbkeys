@@ -705,7 +705,13 @@ void ToolWindow::loadKeygrabs(void)
 
 	 FILE *rc_file = fopen(bbkeys_rcfile, "r");
 	 if (!rc_file) {
-			/* fprintf(stderr, "Can't open bbkeys rc-file (%s)\n", bbkeys_rcfile); */
+			fprintf(stderr, "\nDanger!!!  Warning Will Robinson!!!\n"
+				"I can't open your bbkeys rc-file (%s).\n"
+				"Hmm.  That means I don't have anything to do. Please run \n"
+				"the bbkeys configurator of your choice (click my keyhole) \n"
+				"to allow me to do stuff for ya.  \n"
+				"'Cause otherwise, I just sit here feeling sad....\n\n" 
+				, bbkeys_rcfile);
 			return;
 	 }
 
@@ -794,10 +800,14 @@ ToolWindow::ToolWindow(int argc, char **argv, struct CMDOPTIONS *options):
 	timer = new BTimer(this, this);
 	timer->setTimeout(100);
 	timer->fireOnce(True);
-
-	char *homedir = getenv("HOME");
-	bbkeys_rcfile = new char[strlen(homedir) + 32];
-	sprintf(bbkeys_rcfile, "%s/.bbkeysrc", homedir);
+	
+	if (!(options->bbkeysrc)){
+		char *homedir = getenv("HOME");
+		bbkeys_rcfile = new char[strlen(homedir) + 32];
+		sprintf(bbkeys_rcfile, "%s/.bbkeysrc", homedir);
+	} else {
+		bbkeys_rcfile = options->bbkeysrc;
+	}
 
 	XrmInitialize();
 
