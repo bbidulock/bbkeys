@@ -19,7 +19,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: wminterface.cc,v 1.9 2002/06/07 06:12:26 eckzor Exp $
+// $Id: wminterface.cc,v 1.10 2003/01/19 17:49:35 vanrijn Exp $
 
 #ifdef    HAVE_CONFIG_H
 #  include "config.h"
@@ -29,264 +29,264 @@
 #include "bbkeys.hh"
 
 WMInterface::WMInterface(ToolWindow *toolwindow) : NETInterface(toolwindow) {
-	bbtool=toolwindow;
+  bbtool=toolwindow;
 }
 
 WMInterface::~WMInterface() {
 }
 
 void WMInterface::sendClientMessage(Atom atom, XID data) {
-	XEvent e;
-	unsigned long mask;
+  XEvent e;
+  unsigned long mask;
 
-	e.xclient.type = ClientMessage;
-	e.xclient.window =	bbtool->getCurrentScreenInfo()->getRootWindow();
-	e.xclient.message_type = atom;
-	e.xclient.format = 32;
-	e.xclient.data.l[0] = (unsigned long) data;
-	e.xclient.data.l[1] = 0;
+  e.xclient.type = ClientMessage;
+  e.xclient.window =	bbtool->getCurrentScreenInfo()->getRootWindow();
+  e.xclient.message_type = atom;
+  e.xclient.format = 32;
+  e.xclient.data.l[0] = (unsigned long) data;
+  e.xclient.data.l[1] = 0;
 
-	mask =	SubstructureRedirectMask;
-	XSendEvent(bbtool->getXDisplay(), 
-						 bbtool->getCurrentScreenInfo()->getRootWindow(),
-						 False, mask, &e);
+  mask =	SubstructureRedirectMask;
+  XSendEvent(bbtool->getXDisplay(), 
+             bbtool->getCurrentScreenInfo()->getRootWindow(),
+             False, mask, &e);
 }
 
 void WMInterface::changeDesktop(int desk_number, bool) {
-	sendClientMessage(bbtool->getBlackboxChangeWorkspaceAtom(),
-		static_cast<unsigned long int>(desk_number));
+  sendClientMessage(bbtool->getBlackboxChangeWorkspaceAtom(),
+                    static_cast<unsigned long int>(desk_number));
 }
 
 void WMInterface::sendWindowToDesktop(Window win, int desk_number) {
-	XEvent e;
-	unsigned long mask;
+  XEvent e;
+  unsigned long mask;
 
-	e.xclient.type = ClientMessage;
-	e.xclient.window = win;
-	e.xclient.message_type = bbtool->getBlackboxChangeAttributesAtom();
-	e.xclient.format = 32;
-	e.xclient.data.l[0] = AttribWorkspace;
-	e.xclient.data.l[2] = desk_number;
-	e.xclient.data.l[1] = e.xclient.data.l[3] = 0; 
-	e.xclient.data.l[4] = e.xclient.data.l[5] = 0;
+  e.xclient.type = ClientMessage;
+  e.xclient.window = win;
+  e.xclient.message_type = bbtool->getBlackboxChangeAttributesAtom();
+  e.xclient.format = 32;
+  e.xclient.data.l[0] = AttribWorkspace;
+  e.xclient.data.l[2] = desk_number;
+  e.xclient.data.l[1] = e.xclient.data.l[3] = 0; 
+  e.xclient.data.l[4] = e.xclient.data.l[5] = 0;
 
-	mask =	SubstructureRedirectMask;
-	XSendEvent(bbtool->getXDisplay(), 
-						 bbtool->getCurrentScreenInfo()->getRootWindow(),
-						 False, mask, &e);
-	bbtool->moveWinToDesktop(win, desk_number);
+  mask =	SubstructureRedirectMask;
+  XSendEvent(bbtool->getXDisplay(), 
+             bbtool->getCurrentScreenInfo()->getRootWindow(),
+             False, mask, &e);
+  bbtool->moveWinToDesktop(win, desk_number);
 }
 
 void WMInterface::decorateToggleWindow(Window win)
 {
-	XEvent e;
-	e.xclient.type = ClientMessage;
-	e.xclient.message_type = bbtool->getBlackboxChangeAttributesAtom();
-	e.xclient.window = win;
-	e.xclient.format = 32;
-	e.xclient.data.l[0] = e.xclient.data.l[1] =
-	e.xclient.data.l[2] = e.xclient.data.l[3] = 
-	e.xclient.data.l[4] = e.xclient.data.l[5] = 0l;
-	e.xclient.data.l[0] |= AttribDecoration;
+  XEvent e;
+  e.xclient.type = ClientMessage;
+  e.xclient.message_type = bbtool->getBlackboxChangeAttributesAtom();
+  e.xclient.window = win;
+  e.xclient.format = 32;
+  e.xclient.data.l[0] = e.xclient.data.l[1] =
+    e.xclient.data.l[2] = e.xclient.data.l[3] = 
+    e.xclient.data.l[4] = e.xclient.data.l[5] = 0l;
+  e.xclient.data.l[0] |= AttribDecoration;
 
-	int format;
-	Atom atom_return;
-	unsigned long num, len;
-	BlackboxAttributes *net_attributes;
+  int format;
+  Atom atom_return;
+  unsigned long num, len;
+  BlackboxAttributes *net_attributes;
 						
-	if (XGetWindowProperty(bbtool->getXDisplay(), win,
-			bbtool->getBlackboxAttributesAtom(), 0,
-			PropBlackboxAttributesElements, False,
-			bbtool->getBlackboxAttributesAtom(), &atom_return,
-			&format, &num, &len, (unsigned char **) &net_attributes)
-			==
-			Success && net_attributes) {
-		if(num == PropBlackboxAttributesElements) {
-			if (net_attributes->decoration == DecorNone)
-				e.xclient.data.l[4] = DecorNormal;
-			else
-				e.xclient.data.l[4] = DecorNone;
-		}
-		XFree((void *) net_attributes);
-	} else
-		e.xclient.data.l[4] = DecorNone;
+  if (XGetWindowProperty(bbtool->getXDisplay(), win,
+                         bbtool->getBlackboxAttributesAtom(), 0,
+                         PropBlackboxAttributesElements, False,
+                         bbtool->getBlackboxAttributesAtom(), &atom_return,
+                         &format, &num, &len, (unsigned char **) &net_attributes)
+      ==
+      Success && net_attributes) {
+    if(num == PropBlackboxAttributesElements) {
+      if (net_attributes->decoration == DecorNone)
+        e.xclient.data.l[4] = DecorNormal;
+      else
+        e.xclient.data.l[4] = DecorNone;
+    }
+    XFree((void *) net_attributes);
+  } else
+    e.xclient.data.l[4] = DecorNone;
 
-	XSendEvent(bbtool->getXDisplay(), bbtool->getScreenInfo(0)->getRootWindow(), False,
-			SubstructureRedirectMask, &e);
+  XSendEvent(bbtool->getXDisplay(), bbtool->getScreenInfo(0)->getRootWindow(), False,
+             SubstructureRedirectMask, &e);
 }
 
 void WMInterface::setWindowFocus(Window win) {
-	XEvent e;
-	unsigned long mask;
+  XEvent e;
+  unsigned long mask;
 
-	e.xclient.type = ClientMessage;
-	e.xclient.window =	win;
+  e.xclient.type = ClientMessage;
+  e.xclient.window =	win;
 
-	e.xclient.message_type = bbtool->getBlackboxChangeWindowFocusAtom();
-	e.xclient.format = 32;
-	e.xclient.data.l[0] = 0;
-	e.xclient.data.l[1] = 0;
+  e.xclient.message_type = bbtool->getBlackboxChangeWindowFocusAtom();
+  e.xclient.format = 32;
+  e.xclient.data.l[0] = 0;
+  e.xclient.data.l[1] = 0;
 
-	mask =	SubstructureRedirectMask;
-	XSendEvent(bbtool->getXDisplay(), 
-						 bbtool->getCurrentScreenInfo()->getRootWindow(),
-						 False, mask, &e);
+  mask =	SubstructureRedirectMask;
+  XSendEvent(bbtool->getXDisplay(), 
+             bbtool->getCurrentScreenInfo()->getRootWindow(),
+             False, mask, &e);
 }
 
 void WMInterface::shadeWindow(Window win) {
-	XEvent e;
-	e.xclient.type = ClientMessage;
-	e.xclient.message_type = bbtool->getBlackboxChangeAttributesAtom();
-	e.xclient.window = win;
-	e.xclient.format = 32;
-	e.xclient.data.l[0] = AttribShaded;
-	e.xclient.data.l[2] = e.xclient.data.l[3] = e.xclient.data.l[4] = 0l;
+  XEvent e;
+  e.xclient.type = ClientMessage;
+  e.xclient.message_type = bbtool->getBlackboxChangeAttributesAtom();
+  e.xclient.window = win;
+  e.xclient.format = 32;
+  e.xclient.data.l[0] = AttribShaded;
+  e.xclient.data.l[2] = e.xclient.data.l[3] = e.xclient.data.l[4] = 0l;
 
-	Atom atom_return;
-	int foo;
-	unsigned long ulfoo, nitems;
-	BlackboxAttributes *net;
-	if (XGetWindowProperty(bbtool->getXDisplay(), win,
-			bbtool->getBlackboxAttributesAtom(),
-			0l,
-			PropBlackboxAttributesElements,
-			False,
-			bbtool->getBlackboxAttributesAtom(),
-			&atom_return, &foo, &nitems, &ulfoo, (unsigned char **) &net)
-			==
-			Success && net && nitems
-			==
-			PropBlackboxAttributesElements)
-	{
-		e.xclient.data.l[1] = net->attrib ^ AttribShaded;
-		XFree((void *) net);
-	} else
-		e.xclient.data.l[1] = AttribShaded;
+  Atom atom_return;
+  int foo;
+  unsigned long ulfoo, nitems;
+  BlackboxAttributes *net;
+  if (XGetWindowProperty(bbtool->getXDisplay(), win,
+                         bbtool->getBlackboxAttributesAtom(),
+                         0l,
+                         PropBlackboxAttributesElements,
+                         False,
+                         bbtool->getBlackboxAttributesAtom(),
+                         &atom_return, &foo, &nitems, &ulfoo, (unsigned char **) &net)
+      ==
+      Success && net && nitems
+      ==
+      PropBlackboxAttributesElements)
+  {
+    e.xclient.data.l[1] = net->attrib ^ AttribShaded;
+    XFree((void *) net);
+  } else
+    e.xclient.data.l[1] = AttribShaded;
 
-	XSendEvent(bbtool->getXDisplay(), bbtool->getScreenInfo(0)->getRootWindow(), False,
-					SubstructureRedirectMask, &e);
+  XSendEvent(bbtool->getXDisplay(), bbtool->getScreenInfo(0)->getRootWindow(), False,
+             SubstructureRedirectMask, &e);
 }
 
 void WMInterface::maximizeWindow(Window win, bool maxhorz, bool maxvert) {
-	XEvent e;
-	e.xclient.type = ClientMessage;
-	e.xclient.message_type = bbtool->getBlackboxChangeAttributesAtom();
-	e.xclient.window = win;
-	e.xclient.format = 32;
-	e.xclient.data.l[0] = (maxhorz?AttribMaxHoriz:0) | (maxvert?AttribMaxVert:0);
-	e.xclient.data.l[2] = e.xclient.data.l[3] = e.xclient.data.l[4] = 0l;
+  XEvent e;
+  e.xclient.type = ClientMessage;
+  e.xclient.message_type = bbtool->getBlackboxChangeAttributesAtom();
+  e.xclient.window = win;
+  e.xclient.format = 32;
+  e.xclient.data.l[0] = (maxhorz?AttribMaxHoriz:0) | (maxvert?AttribMaxVert:0);
+  e.xclient.data.l[2] = e.xclient.data.l[3] = e.xclient.data.l[4] = 0l;
 
-	Atom atom_return;
-	int foo;
-	unsigned long ulfoo, nitems;
-	BlackboxAttributes *net;
-	if (XGetWindowProperty(bbtool->getXDisplay(),
-			win,
-			bbtool->getBlackboxAttributesAtom(),
-			0l,
-			PropBlackboxAttributesElements,
-			False,
-			bbtool->getBlackboxAttributesAtom(),
-			&atom_return, &foo, &nitems, &ulfoo, (unsigned char **) &net)
-			==
-			Success && net && nitems
-			==
-			PropBlackboxAttributesElements) {
-		e.xclient.data.l[1] =
-				net->attrib ^ ((maxhorz?AttribMaxHoriz:0) | (maxvert?AttribMaxVert:0));
-		XFree((void *) net);
-	} else
-		e.xclient.data.l[1] = (maxhorz?AttribMaxHoriz:0) | (maxvert?AttribMaxVert:0);
+  Atom atom_return;
+  int foo;
+  unsigned long ulfoo, nitems;
+  BlackboxAttributes *net;
+  if (XGetWindowProperty(bbtool->getXDisplay(),
+                         win,
+                         bbtool->getBlackboxAttributesAtom(),
+                         0l,
+                         PropBlackboxAttributesElements,
+                         False,
+                         bbtool->getBlackboxAttributesAtom(),
+                         &atom_return, &foo, &nitems, &ulfoo, (unsigned char **) &net)
+      ==
+      Success && net && nitems
+      ==
+      PropBlackboxAttributesElements) {
+    e.xclient.data.l[1] =
+      net->attrib ^ ((maxhorz?AttribMaxHoriz:0) | (maxvert?AttribMaxVert:0));
+    XFree((void *) net);
+  } else
+    e.xclient.data.l[1] = (maxhorz?AttribMaxHoriz:0) | (maxvert?AttribMaxVert:0);
 
-	XSendEvent(bbtool->getXDisplay(), bbtool->getScreenInfo(0)->getRootWindow(),
-			False, SubstructureRedirectMask, &e);
+  XSendEvent(bbtool->getXDisplay(), bbtool->getScreenInfo(0)->getRootWindow(),
+             False, SubstructureRedirectMask, &e);
 }
 
 void WMInterface::stickWindow(Window win)
 {
-	XEvent e;
-	e.xclient.type = ClientMessage;
-	e.xclient.message_type = bbtool->getBlackboxChangeAttributesAtom();
-	e.xclient.window = win;
-	e.xclient.format = 32;
-	e.xclient.data.l[0] = AttribOmnipresent;
-	e.xclient.data.l[2] = e.xclient.data.l[3] = e.xclient.data.l[4] = 0l;
+  XEvent e;
+  e.xclient.type = ClientMessage;
+  e.xclient.message_type = bbtool->getBlackboxChangeAttributesAtom();
+  e.xclient.window = win;
+  e.xclient.format = 32;
+  e.xclient.data.l[0] = AttribOmnipresent;
+  e.xclient.data.l[2] = e.xclient.data.l[3] = e.xclient.data.l[4] = 0l;
 
-	Atom atom_return;
-	int foo;
-	unsigned long ulfoo, nitems;
-	BlackboxAttributes *net;
-	if (XGetWindowProperty(bbtool->getXDisplay(),
-			win,
-			bbtool->getBlackboxAttributesAtom(),
-			0l,
-			PropBlackboxAttributesElements,
-			False,
-			bbtool->getBlackboxAttributesAtom(),
-			&atom_return, &foo, &nitems, &ulfoo, (unsigned char **) &net)
-			==
-			Success && net && nitems
-			==
-			PropBlackboxAttributesElements) {
-		e.xclient.data.l[1] = net->attrib ^ AttribOmnipresent;
-		XFree((void *) net);
-	} else
-		e.xclient.data.l[1] = AttribOmnipresent;
+  Atom atom_return;
+  int foo;
+  unsigned long ulfoo, nitems;
+  BlackboxAttributes *net;
+  if (XGetWindowProperty(bbtool->getXDisplay(),
+                         win,
+                         bbtool->getBlackboxAttributesAtom(),
+                         0l,
+                         PropBlackboxAttributesElements,
+                         False,
+                         bbtool->getBlackboxAttributesAtom(),
+                         &atom_return, &foo, &nitems, &ulfoo, (unsigned char **) &net)
+      ==
+      Success && net && nitems
+      ==
+      PropBlackboxAttributesElements) {
+    e.xclient.data.l[1] = net->attrib ^ AttribOmnipresent;
+    XFree((void *) net);
+  } else
+    e.xclient.data.l[1] = AttribOmnipresent;
 
-	XSendEvent(bbtool->getXDisplay(), bbtool->getScreenInfo(0)->getRootWindow(), False,
-			SubstructureRedirectMask, &e);
+  XSendEvent(bbtool->getXDisplay(), bbtool->getScreenInfo(0)->getRootWindow(), False,
+             SubstructureRedirectMask, &e);
 }
 
 int WMInterface::isIconicState(Window win) {
-	Atom real_type;
-	int format;
-	unsigned long n, extra;
-	int status;
-	long *p=0;
-	int y=0;
+  Atom real_type;
+  int format;
+  unsigned long n, extra;
+  int status;
+  long *p=0;
+  int y=0;
 
-	status = XGetWindowProperty(bbtool->getXDisplay(), win, 
-															bbtool->getWMStateAtom(), 0L, 1L,
-															False, bbtool->getWMStateAtom(), &real_type,
-															&format, &n, &extra,	(unsigned char**)&p);
-	if (!status) {
-		if (p) {
-			 y=(int)p[0];
-			 XFree(p);
-			 return (y==IconicState) ? 1 : 0;
-		} else {
-			 return 0;
-		}
-	}
+  status = XGetWindowProperty(bbtool->getXDisplay(), win, 
+                              bbtool->getWMStateAtom(), 0L, 1L,
+                              False, bbtool->getWMStateAtom(), &real_type,
+                              &format, &n, &extra,	(unsigned char**)&p);
+  if (!status) {
+    if (p) {
+      y=(int)p[0];
+      XFree(p);
+      return (y==IconicState) ? 1 : 0;
+    } else {
+      return 0;
+    }
+  }
 
-	return -1;
+  return -1;
 }
 
 int WMInterface::getAttributes(Window win) {
-	Atom real_type;
-	int format;
-	unsigned long n, extra;
-	int status;
-	long *p=0;
-	int y=0;
+  Atom real_type;
+  int format;
+  unsigned long n, extra;
+  int status;
+  long *p=0;
+  int y=0;
 
 	
-	status = XGetWindowProperty(bbtool->getXDisplay(), win, 
-															bbtool->getBlackboxAttributesAtom(), 0L, 1L,
-															False, bbtool->getBlackboxAttributesAtom(), 
-															&real_type, &format,&n, &extra,	 
-															(unsigned char**)&p);
-	if (!status) {
-		if (p) {
-			 y=(int)p[0];
-			 XFree(p);
-			 return y;
-		} else {
-			 return 0;
-		}
-	}
+  status = XGetWindowProperty(bbtool->getXDisplay(), win, 
+                              bbtool->getBlackboxAttributesAtom(), 0L, 1L,
+                              False, bbtool->getBlackboxAttributesAtom(), 
+                              &real_type, &format,&n, &extra,	 
+                              (unsigned char**)&p);
+  if (!status) {
+    if (p) {
+      y=(int)p[0];
+      XFree(p);
+      return y;
+    } else {
+      return 0;
+    }
+  }
 
-	return -1;
+  return -1;
 }
 
 void WMInterface::NETNotifyStartup() {
@@ -302,16 +302,16 @@ void WMInterface::NETNotifyStartup() {
 }
 
 void WMInterface::NETNotifyWindowAdd(Window win,int desktop_nr) {
-	bbtool->addWindow(win, desktop_nr);
+  bbtool->addWindow(win, desktop_nr);
 }
 
 void WMInterface::NETNotifyDel(Window win) {
-	bbtool->removeWindow(win);
+  bbtool->removeWindow(win);
 }
 
 void WMInterface::NETNotifyAttributes(Window win)
 {
-	bbtool->windowAttributeChange(win);
+  bbtool->windowAttributeChange(win);
 }
 
 void WMInterface::NETNotifyFocus(Window win) {
@@ -319,9 +319,9 @@ void WMInterface::NETNotifyFocus(Window win) {
 }
 
 void WMInterface::NETNotifyCurrentWorkspace(int desktop_nr) {
-	bbtool->focusDesktop(desktop_nr);
+  bbtool->focusDesktop(desktop_nr);
 }
 
 void WMInterface::NETNotifyWorkspaceCount(int count) {
-	bbtool->setDesktopCount(count);
+  bbtool->setDesktopCount(count);
 }
