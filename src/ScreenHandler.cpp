@@ -616,7 +616,7 @@ XWindow * ScreenHandler::findWindow(Window window) const {
 void ScreenHandler::execCommand(const string &cmd) const {
   pid_t pid;
   if ((pid = fork()) == 0) {
-    // disconnect the child from epist's session and the tty
+    // disconnect the child from this session and the tty
     if (setsid() == -1) {
       cout << "warning: could not start a new process group\n";
       perror("setsid");

@@ -130,14 +130,6 @@ void XWindow::updateDimensions() {
                          &rx, &ry, &junkwin);
   _rect.setRect(rx, ry, win_attributes.width, win_attributes.height);
   
-#if DEBUG
-  std::cout << endl <<
-    "absolute upper-left x: " << rx << endl <<
-    "absolute upper-left y: " << ry << endl <<
-    "relative upper-left x: " << win_attributes.x << endl <<
-    "relative upper-left y: " << win_attributes.y << endl;
-#endif
-
 }
 
 void XWindow::updateBlackboxAttributes() {

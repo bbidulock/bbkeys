@@ -44,7 +44,8 @@ extern "C" {
 #  include <sys/stat.h>
 #endif // HAVE_SYS_STAT_H
 
-  
+#include <sys/types.h>
+#include <sys/wait.h>
 
 }
   
@@ -350,6 +351,12 @@ void KeyClient::initKeywords(KeywordMap& keywords) {
 
 bool KeyClient::process_signal(int sig) {
   switch (sig) {
+  case SIGCHLD:
+    int unused;
+    while (waitpid(-1, &unused, WNOHANG | WUNTRACED) > 0)
+      ;
+    break;
+
   case SIGHUP:
     reconfigure();
     break;
