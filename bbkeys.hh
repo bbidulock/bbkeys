@@ -124,11 +124,11 @@ public:
 	void lowerWindow(Window);
 
 	// functions for the Linear window cycling style
-	void add_linear(WindowList *,int);
+	void add_linear(WindowList *);
 	void cycle_linear(bool);
 
 	// functions for the Stack window cycling style
-	void add_stack(WindowList *,int);
+	void add_stack(WindowList *);
 	void cycle_stack(bool);
 	void focus_stack(Window);
 	void saveMenuSearch(Window,Basemenu *);

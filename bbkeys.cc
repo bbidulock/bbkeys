@@ -1281,6 +1281,10 @@ unsigned int ToolWindow::KeycodeToModmask(unsigned int code)
 		case XK_Num_Lock:
       return Mod2Mask;
 
+		case XK_Super_L:
+		case XK_Super_R:
+      return Mod3Mask;
+
 		case XK_Meta_L:
 		case XK_Meta_R:
       return Mod4Mask;
@@ -2098,9 +2102,9 @@ void ToolWindow::addWindow(Window win, int desktop)
 	XSelectInput(getXDisplay(),newwin->win,
 			PropertyChangeMask);
 	if (resource->getMenuStackedCycling())
-		add_stack(newwin, desktop);
+		add_stack(newwin);
 	else
-		add_linear(newwin, desktop);
+		add_linear(newwin);
 }
 
 void ToolWindow::cycleWindowFocus(bool forward)
@@ -2117,7 +2121,7 @@ void ToolWindow::cycleWindowFocus(bool forward)
 
 *******************************************************************************/
 
-void ToolWindow::add_linear(WindowList *newwin, int desktop)
+void ToolWindow::add_linear(WindowList *newwin)
 {
 	int i;
 	int index = 0;	// where the new window will be placed (defaults to the
@@ -2126,8 +2130,7 @@ void ToolWindow::add_linear(WindowList *newwin, int desktop)
 	LinkedListIterator<WindowList> it(windowList);
 	for (i=0; i<windowList->count(); i++) {
 		it.set(i);
-		if ((it.current()->win == focus_window)
-				&& (it.current()->desktop == desktop)) {
+		if (it.current()->win == focus_window) {
 			// get the index of the focused window
 			index = i+1;
 			break;
@@ -2193,7 +2196,7 @@ void ToolWindow::cycle_linear(bool forward)
 
 *******************************************************************************/
 
-void ToolWindow::add_stack(WindowList *newwin, int desktop) {
+void ToolWindow::add_stack(WindowList *newwin) {
 	windowList->insert(newwin, 0); // insert at the top of the list
 		stackMenu->setMenuItems();
 }
