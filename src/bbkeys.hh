@@ -146,6 +146,7 @@ public:
 	inline GC getMenuHiGC(void) {return menuHiGC; }
 	inline GC getMenuFrameGC(void) {return menuFrameGC;}
 	inline bool getDoingCycling(void) { return doingCycling; }
+	inline bool getShowAllWorkspaces(void) { return showAllWorkspaces; }
 	unsigned int KeycodeToModmask(unsigned int code);
 
 //	void setNETInit(void) { /*wm_init = True;*/ }
@@ -160,6 +161,7 @@ protected:
 	void addSticky(WindowList *);
 	void removeSticky(const Window,const int);
 	inline void setCycling(bool f) { doingCycling = f; }
+	inline void setShowAllWorkspaces(bool f) { showAllWorkspaces = f; }
 	
 private:
 	XGCValues gcv;	// font stuff
@@ -201,6 +203,7 @@ private:
 
 	Stackmenu *stackMenu;		// variables for the stack cycling style menu
 	bool doingCycling;			// are we in the middle of a stacked cycle?
+	bool showAllWorkspaces;
 	Window menuWin;
 	GC menuGC;
 	GC menuHiBGGC;

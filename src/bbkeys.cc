@@ -553,18 +553,20 @@ int ToolWindow::translateAction(char *action)
 			return grabNextWorkspace;
 	 if (!strcasecmp(action, "PrevWorkspace"))
 			return grabPrevWorkspace;
-	if (!strcasecmp(action, "UpWorkspace"))
+	 if (!strcasecmp(action, "UpWorkspace"))
 			return grabUpWorkspace;
-	if (!strcasecmp(action, "DownWorkspace"))
+	 if (!strcasecmp(action, "DownWorkspace"))
 			return grabDownWorkspace;
-	if (!strcasecmp(action, "LeftWorkspace"))
+	 if (!strcasecmp(action, "LeftWorkspace"))
 			return grabLeftWorkspace;
-	if (!strcasecmp(action, "RightWorkspace"))
+	 if (!strcasecmp(action, "RightWorkspace"))
 			return grabRightWorkspace;
 	 if (!strcasecmp(action, "NextWindow"))
 			return grabNextWindow;
 	 if (!strcasecmp(action, "PrevWindow"))
 			return grabPrevWindow;
+	 if (!strcasecmp(action, "NextWindowAllWorkspaces"))
+			return grabNextWindowAllWorkspaces;
 	 if (!strcasecmp(action, "ShadeWindow"))
 			return grabShade;
 	 if (!strcasecmp(action, "MaximizeWindow"))
@@ -1324,13 +1326,17 @@ void ToolWindow::process_event(XEvent * e)
 			// because 0 might very well be the valid index for those bindings
 			int i = actionList[grabNextWindow];
 			int next = grabSet.KeyMap[i].action == grabNextWindow ? i : -1;
-			int j = actionList[grabPrevWindow];
-			int prev = grabSet.KeyMap[j].action == grabPrevWindow ? j : -1;
+			int j = actionList[grabNextWindowAllWorkspaces];
+			int nextAll = grabSet.KeyMap[j].action == grabNextWindowAllWorkspaces ? j : -1;
+			int k = actionList[grabPrevWindow];
+			int prev = grabSet.KeyMap[k].action == grabPrevWindow ? k : -1;
 
 			// if the key released was the last modifier being held
 			// and being a member of the nextMask or PrevMask, then select
 			// the item in the menu that is currently focued.
 			if (next > -1 && ((state & grabSet.KeyMap[next].modMask) == mask))
+				stackMenu->selectFocused(True);
+			else if (nextAll > -1 && ((state & grabSet.KeyMap[nextAll].modMask) == mask))
 				stackMenu->selectFocused(True);
 			else if (prev > -1 && ((state & grabSet.KeyMap[prev].modMask) == mask))
 				stackMenu->selectFocused(True);
@@ -1339,7 +1345,7 @@ void ToolWindow::process_event(XEvent * e)
 	}
 
 	case KeyPress: {
-		
+
 		int i = 0;
 		int grabInt = -1;
 		Window fw_root, fw_child;
@@ -1391,6 +1397,7 @@ void ToolWindow::process_event(XEvent * e)
 			else
 				stackMenu->key_press(grabSet.KeyMap[grabInt].action);
 		} else if (grabInt > -1) {
+		
 			/* play with colors for nyz =:) */
 			XSetWindowBackgroundPixmap(getXDisplay(), win_configBtn,
 					pixmap.pix_pressedBtn);
@@ -1593,6 +1600,12 @@ void ToolWindow::process_event(XEvent * e)
 				break;
 			
 			case grabNextWindow:
+				showAllWorkspaces=false;
+				cycleWindowFocus(True);
+				break;
+
+			case grabNextWindowAllWorkspaces:
+				showAllWorkspaces=true;
 				cycleWindowFocus(True);
 				break;
 

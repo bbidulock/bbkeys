@@ -49,6 +49,7 @@ enum {
 
 	grabNextWindow, 
 	grabPrevWindow, 
+	grabNextWindowAllWorkspaces,
 	grabShade, 
 	grabMaximize, 
 	grabStick, 

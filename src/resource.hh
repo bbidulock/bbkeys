@@ -86,7 +86,6 @@ struct BUTTON {
 struct MENU {
 	Bool stackedCycling;
 	Bool showCycleMenu;
-	Bool showAll;
 	BTexture texture;
 	BTexture hiTexture;
 	BColor textColor;
@@ -117,7 +116,6 @@ public:
   int rows;
 	Bool getMenuStackedCycling(void) { return menu.stackedCycling; }
 	Bool getMenuShowCycleMenu(void) { return menu.showCycleMenu; }
-	Bool getMenuShowAllWorkspaces(void) { return menu.showAll; }
   int getFocusStyle(void) { return focus_style; }
   int getDesktopFocusStyle(void) { return desktop_focus_style; }
   WHICH_BUTTON getWindowMoveButton(void) { return window_move_button; }

@@ -15,6 +15,13 @@ version 0.8.4 --
 
   - changing bbkeys.cc to look for bbkeysconf.pl rather than bbkeysConfigC
 
+  - removing showAllWorkspaces from bbkeys.{bb,nobb} config file and making it
+    an additional keybinding.  This allows two different ways of showing all
+    open windows and navigating through them--one keybinding for the regular
+    "NextWindow" variety (as in previous versions of bbkeys, and another
+    keybinding, "NextWindowAllWorkspaces", that pops up the window list for
+    navigation for windows open on all workspaces. 
+
 version 0.8.3 --
   - changing external app launch order--we go bbconf, bbkeysconf,
     bbkeysConfigGtk, rxvt, xterm... *phew*

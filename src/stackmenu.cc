@@ -58,16 +58,16 @@ void Stackmenu::setMenuItems() {
 
 	clearMenu();
 	for (; it.current(); it++) {
-		if (((bbtool->getResource()->getMenuShowAllWorkspaces()) &&
+		if (((bbtool->getShowAllWorkspaces()) &&
 				((!it.current()->sticky) ||
 				(it.current()->desktop == bbtool->getCurrentDesktopNr())))
 				||
-				((!bbtool->getResource()->getMenuShowAllWorkspaces()) &&
+				((!bbtool->getShowAllWorkspaces()) &&
 				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) {
 			if (XGetWMName(bbtool->getXDisplay(), it.current()->win, &xtp))
 				if (XTextPropertyToStringList(&xtp, &windowname, &num)) {
 					if (windowname && *windowname) {
-						if (bbtool->getResource()->getMenuShowAllWorkspaces()) {
+						if (bbtool->getShowAllWorkspaces()) {
 							int size = strlen(*windowname) + strlen(" (workspace )") + 2;
 							char *workspace = (char*) malloc(size);
 							if (workspace) {
@@ -95,11 +95,11 @@ void Stackmenu::selectFocused(bool raise)
 	int selected = menuPosition;
 	LinkedListIterator<WindowList> it(bbtool->windowList);
 	for(; it.current(); it++) 
-		if (((bbtool->getResource()->getMenuShowAllWorkspaces()) &&
+		if (((bbtool->getShowAllWorkspaces()) &&
 				((!it.current()->sticky) ||
 				(it.current()->desktop == bbtool->getCurrentDesktopNr())))
 				||
-				((!bbtool->getResource()->getMenuShowAllWorkspaces()) &&
+				((!bbtool->getShowAllWorkspaces()) &&
 				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) {
 			if(!selected--) {
 				bbtool->wminterface->setWindowFocus(it.current()->win);
@@ -130,6 +130,7 @@ void Stackmenu::key_press(int grabInt)
 {
 	switch (grabInt) {
 		case grabNextWindow:
+		case grabNextWindowAllWorkspaces:
 			if(++menuPosition >= getCount())
 				menuPosition = 0;
 			setSelected(menuPosition);

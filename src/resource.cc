@@ -109,15 +109,6 @@ void Resource::LoadBBToolResource(void)
 	} else
 		menu.showCycleMenu = True;
 
-	if (XrmGetResource(resource_db, "bbkeys.menu.showAllWorkspaces",
-										 "Bbkeys.Menu.ShowAllWorkspaces", &value_type, &value)) {
-		if (!strncasecmp("true", value.addr, value.size))
-			menu.showAll = True;
-		else
-			menu.showAll = False;
-	} else
-		menu.showAll = False;
-
 	Frame();
 
 	Menu();
