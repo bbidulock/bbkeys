@@ -62,7 +62,7 @@ void Stackmenu::setMenuItems() {
 				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) {
 			if (XGetWMName(bbtool->getXDisplay(), it.current()->win, &xtp))
 				if (XTextPropertyToStringList(&xtp, &windowname, &num)) {
-					if (*windowname) {
+					if (windowname && *windowname) {
 						if (bbtool->getResource()->getMenuShowAllWorkspaces()) {
 							int size = strlen(*windowname) + strlen(" (workspace )") + 2;
 							char *workspace = (char*) malloc(size);
@@ -74,8 +74,8 @@ void Stackmenu::setMenuItems() {
 							}
 						} else
 							insert((char*) *windowname);
+						XFreeStringList(windowname);
 					}
-					if (windowname) XFreeStringList(windowname);
 				}
 		}
 	}
