@@ -1,10 +1,10 @@
 Summary: bbkeys, a completely configurable key-combo grabber for blackbox
 Name: bbkeys
-Version: 0.8.0
+Version: 0.8.1
 Release: 1
 Copyright: GPL
 Group: X11/Applications
-Source: http://movingparts.net/bbkeys/bbkeys-0.8.0.tar.gz
+Source: http://movingparts.net/bbkeys/bbkeys-0.8.1.tar.gz
 URL: http://movingparts.net
 Packager: vanRijn (vR@movingparts.net)
 Buildroot: /tmp/buildroot
