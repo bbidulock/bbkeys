@@ -66,7 +66,7 @@ private:
   bt::Application & _app;
 
   unsigned int _desktop;
-  std::string _title;
+  bt::ustring _title;
   std::string _app_name;
   std::string _app_class;
   bt::Rect _rect;
@@ -118,7 +118,7 @@ public:
   inline Window window() const { return _window; }
   
   inline unsigned int desktop() const { return _desktop; }
-  inline const std::string &title() const { return _title; }
+  inline const bt::ustring &title() const { return _title; }
   inline const std::string &appName() const { return _app_name; }
   inline const std::string &appClass() const { return _app_class; }
   inline bool canFocus() const { return _can_focus; }

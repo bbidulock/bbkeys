@@ -224,17 +224,21 @@ void XWindow::updateDesktop() {
 
 
 void XWindow::updateTitle() {
-  _title = "";
+  _title = bt::toUnicode("");
   
   // try netwm
-  if (! _netclient->getValue(_window, _netclient->wmName(),
-                             Netclient::utf8, _title)) {
+  std::string s;
+  if (_netclient->getValue(_window, _netclient->wmName(),
+                           Netclient::utf8, s)) {
+    _title = bt::toUtf32(s);
+  } else {
     // try old x stuff
-    _netclient->getValue(_window, XA_WM_NAME, Netclient::ansi, _title);
+    if (_netclient->getValue(_window, XA_WM_NAME, Netclient::ansi, s))
+      _title = bt::toUnicode(s);
   }
   
   if (_title.empty())
-    _title = "Unnamed";
+    _title = bt::toUnicode("Unnamed");
 
 }
 

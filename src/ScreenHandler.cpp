@@ -499,17 +499,15 @@ void ScreenHandler::updateDesktopNames()
   
 }
 
-std::string ScreenHandler::getDesktopName(unsigned int desktopNbr) const {
+bt::ustring ScreenHandler::getDesktopName(unsigned int desktopNbr) const {
   
   if (0xFFFFFFFF == desktopNbr)
-    return "";
+    return bt::toUnicode("");
 
   if (desktopNbr > _desktop_names.size() ) 
-    return "error";
+    return bt::toUnicode("error");
 
-  std::string name = _desktop_names[desktopNbr];
-  
-  return name;
+  return _desktop_names[desktopNbr];
 
 }
 
@@ -559,7 +557,7 @@ void ScreenHandler::updateActiveWindow()
       _last_active = _active;
 
       if ( _debug )
-        cout <<BBTOOL << ": " << "active window now: [" <<(*_active)->title() <<"]" <<endl;
+        cout <<BBTOOL << ": " << "active window now: [" << bt::toLocale((*_active)->title()) <<"]" <<endl;
     }
 
   }
@@ -961,7 +959,7 @@ void ScreenHandler::p()
   for (; it != end; ++it)
     cout << BBTOOL << ": " << "desktop: ["
          << (*it)->desktop()
-         << "], window: [" << (*it)->title() << "]" << endl;
+         << "], window: [" << bt::toLocale((*it)->title()) << "]" << endl;
 
 
 }

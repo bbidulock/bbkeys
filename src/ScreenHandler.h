@@ -59,7 +59,7 @@ public:
   inline unsigned int getScreenNumber() const { return _screenNumber; }
   inline unsigned int getDesktopNumber() const { return _active_desktop; }
   void focusWindow(const XWindow * win);
-  std::string getDesktopName(unsigned int desktopNbr) const;
+  bt::ustring getDesktopName(unsigned int desktopNbr) const;
   inline Window getRootWindow() const { return _screenInfo.rootWindow(); }
   inline KeyClient & getKeyClient() const { return * _keyClient; }
   inline bool isManaged() const { return _managed; }
@@ -101,7 +101,7 @@ private:
 
   unsigned int _num_desktops;
   unsigned int _active_desktop;
-  bt::Netwm::UTF8StringList _desktop_names;
+  std::vector<bt::ustring> _desktop_names;
 
   
   const bt::ScreenInfo & _screenInfo;

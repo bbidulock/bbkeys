@@ -116,7 +116,7 @@ void WindowlistMenu::keyReleaseEvent (const XKeyEvent * const e) {
 void WindowlistMenu::showCycleMenu( WindowList theList ) {
 
   bt::Menu::clear();
-  bt::Menu::setTitle("Switch To...");
+  bt::Menu::setTitle(bt::toUnicode("Switch To..."));
   bt::Menu::showTitle();
 
   _windowList = theList;
@@ -140,13 +140,17 @@ void WindowlistMenu::showCycleMenu( WindowList theList ) {
   unsigned int i = 0;
 
   for (it = theList.begin(); it != end; it++) {
-    std::string title = (*it)->title();
+    bt::ustring title = (*it)->title();
     unsigned int dNbr = (*it)->desktop();
-    std::string newTitle = bt::ellideText(title, 100, " ... ");
+    bt::ustring newTitle = bt::ellideText(title, 100, bt::toUnicode(" ... "));
     if (! onlyThisDesktop) {
-      std::string suffix = _screen->getDesktopName(dNbr);
-      if (suffix.size() > 0)
-        newTitle += " (" + suffix + ")";
+      bt::ustring suffix = _screen->getDesktopName(dNbr);
+      if (suffix.size() > 0) {
+        newTitle += ' ';
+        newTitle += '(';
+        newTitle += suffix;
+        newTitle += ')';
+      }
     }
     bt::Menu::insertItem( newTitle, i++ );
   }
@@ -253,7 +257,7 @@ XWindow * WindowlistMenu::getSelectedWindow() {
 
   if (_debug && win)
     std::cout << BBTOOL << ": " << "WindowlistMenu: getSelectedWindow: currently-selected window: ["
-              << win->title() << "]\n";
+              << bt::toLocale(win->title()) << "]\n";
   return win;
 
 }
