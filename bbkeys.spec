@@ -41,11 +41,13 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/share/bbtools/bbkeys.nobb 
 %{prefix}/doc/bbkeys/README
 %{prefix}/doc/bbkeys/AUTHORS
-%{prefix}/doc/bbkeys/ChangeLog
+%{prefix}/man/man1/bbkeys.1
+%{prefix}/man/man5/bbkeys.bb.5
+%{prefix}/man/man5/bbkeysrc.5
  
 %changelog 
 * Sun Aug 5 2001 Jason Kasper <vR@movingparts.net>
-- added to file list for new included files
+- added to file list for newly included files (docs and man pages)
 - install to %{prefix} instead of /usr
 * Sun May 6 2001 Hollis Blanchard <hollis@terraplex.com> 
 - removed file list in favor of explicit %files section 

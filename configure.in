@@ -90,4 +90,4 @@ AC_STRUCT_TM
 dnl Checks for library functions.
 AC_CHECK_FUNCS(select strstr)
 
-AC_OUTPUT(version.h Makefile data/Makefile)
+AC_OUTPUT(version.h Makefile data/Makefile doc/Makefile)

@@ -1,0 +1,123 @@
+.TH BBKEYSRC 5 "August 04, 2001" bbtools bbkeysrc
+.SH NAME
+bbkeysrc \- bbkeys configuration file
+
+.SH SYNOPSIS
+.B $HOME/.bbkeysrc
+
+.SH DESCRIPTION
+
+\fBbbkeys\fR picks up its style-settings from the same places as the other
+bbtools (such as \fIbbmail(1)\fR).  In most cases, this will be
+\fI$HOME/.blackboxrc\fR. But its key-grabbings come from $HOME/.bbkeysrc.
+There are several avenues open to the user to set any key-grabs that the user
+wishes:
+
+.SS "Using \fIbbkeysconf\fR:"
+This is a Qt-Application distributed with bbkeys.  As a GUI application it is
+rather self-explanatory
+
+.SS "Without \fIbbkeysconf\fR:"
+\fBbbkeys\fR can be launched with the \fI-noqt\fR option and whenever the
+little reconfigure button (the key-hole) on \fBbbkeys\fR is clicked,
+\fBbbkeys\fR will launch a very simple interactive rc-file generator (written
+in C) inside of an xterm.
+
+.SS "Manually editing \fI$HOME/.bbkeysrc\fR:"
+The format is very easy, and it consists of lines describing the Key to grab,
+the modifier to grab the key with (if any, or "None" if none), and the action
+to perform. For example:
+
+KeyToGrab(Tab), WithModifier(Mod1), WithAction(NextWindow)
+.br
+KeyToGrab(t), WithModifier(Mod1), WithAction(ExecCommand),
+                                           DoThis(xterm)
+
+.SH "List of commands"
+
+BigNudgeDown
+.br
+BigNudgeLeft
+.br
+BigNudgeRight
+.br
+BigNudgeUp
+.br
+Close
+.br
+ExecCommand
+.br
+HorizontalDecrement
+.br
+HorizontalIncrement
+.br
+Lower
+.br
+MaximizeHorizontal
+.br
+MaximizeVertical
+.br
+MaximizeWindow
+.br
+Minimize
+.br
+NextWindow
+.br
+NextWorkspace
+.br
+NudgeDown
+.br
+NudgeLeft
+.br
+NudgeUp
+.br
+NudgeRight
+.br
+PrevWindow
+.br
+PrevWorkspace
+.br
+Raise
+.br
+ShadeWindow
+.br
+StickWindow
+.br
+Workspace1
+.br
+Workspace2
+.br
+Workspace3
+.br
+Workspace4
+.br
+Workspace5
+.br
+Workspace6
+.br
+Workspace7
+.br
+Workspace8
+.br
+Workspace9
+.br
+Workspace10
+.br
+Workspace11
+.br
+Workspace12
+.br
+VerticalIncrement
+.br
+VerticalDecrement
+
+
+.SH "SEE ALSO"
+.BR bbkeys(1),
+.BR bbkeys.bb(5)
+
+.SH AUTHOR
+.nr
+Jason Kasper (vanRijn) <vR@movingparts.net> - bbkeys
+.br
+Jan Schaumann <jschauma@netmeister.org> - this man page

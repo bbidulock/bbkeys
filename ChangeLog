@@ -25,6 +25,12 @@ version 0.8.1 --
     window list and cycle through the entries as you go.  Again, harder to
     explain than it is to use....
 
+  - including README, ChangeLog, and AUTHORS in installed files list
+
+  - including first man page files (W00T!!)  =:).  Thanks to Jan Schaumann,
+    bbkeys now has man pages, baybee.  Installing now and including files
+    in bbkeys.spec
+
 version 0.8.0 --
   - BIG changes!!!  w00T!!!  There's some very significant improvements in
     this version, and as such, I'm calling this version 0.8.0 for various
