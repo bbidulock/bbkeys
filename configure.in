@@ -20,8 +20,8 @@ AC_DEFUN(AC_SET_DEBUG,
 
 AC_DEFUN(AC_SET_NODEBUG,
 [
- test "$CFLAGS" = "" && CFLAGS="-O2 -Wall"
- test "$CXXFLAGS" = "" && CXXFLAGS="-O2 -Wall"
+ test "$CFLAGS" = "" && CFLAGS="-O2 -Wall -DNDEBUG"
+ test "$CXXFLAGS" = "" && CXXFLAGS="-O2 -Wall -DNDEBUG"
  test "$LDFLAGS" = "" && LDFLAGS="-s"
 ])
       

@@ -18,7 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: main.cc,v 1.6 2002/05/30 18:46:08 eckzor Exp $
+// $Id: main.cc,v 1.7 2002/05/30 19:23:29 eckzor Exp $
 
 #include "bbkeys.hh"
 #include "main.hh"
@@ -30,6 +30,9 @@
 #ifdef HAVE_STDLIB_H
 #  include <stdlib.h>
 #endif
+
+#include <string>
+using std::string;
 
 void Usage()
 {
@@ -81,7 +84,8 @@ int main(int argc, char **argv)
 			options.display_name = argv[i];
  			
  			// Applications we exec will need the proper display
- 			setenv("DISPLAY", options.display_name,true);
+			string disp = (string)"DISPLAY=" + options.display_name;
+			putenv((char *)disp.c_str());
 
 		} else if ((!strcmp(argv[i], "-config")) |
 			(!strcmp(argv[i], "-c"))) {
