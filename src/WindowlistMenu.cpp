@@ -35,6 +35,8 @@ WindowlistMenu::WindowlistMenu (ScreenHandler * s) :
   _config = s->getKeyClient().getConfig();
   _debug = _config->getBoolValue("debug", false);
   _screen_info = & s->getScreenInfo();
+  _honor_modifiers = _config->getBoolValue("honormodifiers", false);
+  _screen->getKeyClient().getLockModifiers(numLockMask, scrollLockMask);
 }
 
 void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
@@ -43,6 +45,10 @@ void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
 
   if (_debug)
     std::cout << "WindowlistMenu: got keyPressEvent!" << std::endl;
+
+  if (!_honor_modifiers) {
+    state = e->state & ~(LockMask|scrollLockMask|numLockMask);
+  }
 
   const Action *it = _keybindings->getAction(e, state, _screen);
 

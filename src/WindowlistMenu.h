@@ -60,7 +60,9 @@ private:
   Config * _config;
   const bt::ScreenInfo * _screen_info;
   bool _debug;
+  bool _honor_modifiers;
   int _current_index;
+  int numLockMask, scrollLockMask;
 
   void keyPressEvent (const XKeyEvent * const e) ;
   void keyReleaseEvent (const XKeyEvent * const e) ;
