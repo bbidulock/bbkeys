@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.29 2002/06/27 20:35:09 eckzor Exp $
+// $Id: bbkeys.cc,v 1.30 2002/06/27 20:45:50 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -1381,8 +1381,10 @@ void ToolWindow::process_event(XEvent * e)
 		unsigned int fw_w, fw_h, fw_b, fw_d, num_children;
 
 		if (focus_window) {
-      // get the frame window (the client window's parent)
+      // get the frame window (the client window's parent's parent)
       if (0 != XQueryTree(getXDisplay(), focus_window, &fw_root, &fw_parent,
+                          &fw_children, &num_children) &&
+          0 != XQueryTree(getXDisplay(), fw_parent, &fw_root, &fw_parent,
                           &fw_children, &num_children)) {
         int fr_y, fr_x;
     		unsigned int fr_w, fr_h, fr_b, fr_d;
