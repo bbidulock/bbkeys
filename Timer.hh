@@ -47,7 +47,7 @@ public:
 
 
 class BTimer {
-  friend BaseDisplay;
+  friend class BaseDisplay;
 private:
   BaseDisplay *display;
   TimeoutHandler *handler;

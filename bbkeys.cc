@@ -1299,9 +1299,9 @@ void ToolWindow::process_event(XEvent * e)
 			// and being a member of the nextMask or PrevMask, then select
 			// the item in the menu that is currently focued.
 			if (next && ((state & grabSet.KeyMap[next].modMask) == mask))
-				stackMenu->selectFocused();
+				stackMenu->selectFocused(True);
 			else if (prev && ((state & grabSet.KeyMap[prev].modMask) == mask))
-				stackMenu->selectFocused();
+				stackMenu->selectFocused(True);
 		}
 		break;
 	}
@@ -1349,10 +1349,13 @@ void ToolWindow::process_event(XEvent * e)
 		}
 
 		if (stackMenu->isVisible()) {
-			if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Escape))
+			if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Escape)) {
 				stackMenu->hide();
-			else if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Return))
-				stackMenu->selectFocused();
+				// reset focus to the window we were focused on before window
+				// cycling began
+				wminterface->setWindowFocus(focus_window);
+			} else if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Return))
+				stackMenu->selectFocused(True);
 			else
 				stackMenu->key_press(grabSet.KeyMap[grabInt].action);
 		} else	if (grabInt > -1) {
@@ -1862,9 +1865,18 @@ void ToolWindow::removeWindow(Window win)
 
 void ToolWindow::focusWindow(Window win)
 {
-	focus_window = win;
-	if (resource->getMenuStackedCycling())
-		focus_stack(win);
+	// have to only do this when the menu isn't visible, because we're
+	// setting focus while we're cycling....  Unfortunately, a side-effect
+	// of this is that we don't get a final focusWindow hit when we raise
+	// the selected window when done cycling, so we do an explicit
+	// bbtool->focusWindow() call from Stackmenu::selectFocused() after we
+	// XRaise the window....
+
+	if (! stackMenu->isVisible() ) { 
+		focus_window = win;
+		if (resource->getMenuStackedCycling())
+			focus_stack(win);
+	}
 }
 
 void ToolWindow::moveWinToDesktop(Window win, int desktop)

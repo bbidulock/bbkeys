@@ -1,6 +1,7 @@
 // cycling.cc for bbkeys
 //
 //	Copyright (c) 2001 by Ben Jansens <xor@x-o-r.net>
+//	Copyright (c) 2001 by Jason Kasper (vanRijn) <vR@movingparts.net>
 //
 //	This program is free software; you can redistribute it and/or modify
 //	it under the terms of the GNU General Public License as published by
@@ -69,17 +70,30 @@ void Stackmenu::clearMenu() {
 		remove(0);
 }
 
-void Stackmenu::selectFocused()
+void Stackmenu::selectFocused(bool raise)
 {
 	int selected = menuPosition;
 	LinkedListIterator<WindowList> it(bbtool->windowList);
-	for(; it.current(); it++)
+	for(; it.current(); it++) 
 		if (it.current()->desktop == bbtool->getCurrentDesktopNr())
 			if(!selected--) {
 				bbtool->wminterface->setWindowFocus(it.current()->win);
-				XRaiseWindow(bbtool->getXDisplay(), it.current()->win);
+				if (raise) {
+					// okay, an explanation is in order... First, we have to
+					// hide our window so that focusWindow() actually does
+					// anything. Then we XRaiseWindow, because if we did
+					// focusWindow() first, we'd then XRaise() the wrong window.
+					// Lastly, we update bbkey's stack with what we just
+					// raised...
+					hide();
+					XRaiseWindow(bbtool->getXDisplay(), it.current()->win);
+					bbtool->focusWindow(it.current()->win);
+				}
 			}
-	hide();
+
+	if ( raise && isVisible() ) {
+		hide();
+	}
 }
 
 void Stackmenu::key_press(int grabInt)
@@ -88,12 +102,14 @@ void Stackmenu::key_press(int grabInt)
 		case grabNextWindow:
 			if(++menuPosition >= getCount())
 				menuPosition = 0;
-      setSelected(menuPosition);
+			setSelected(menuPosition);
+			selectFocused(False);
 			break;
 		case grabPrevWindow:
 			if(--menuPosition < 0)
 				menuPosition = getCount() - 1;
-      setSelected(menuPosition);
+			setSelected(menuPosition);
+			selectFocused(False);
 			break;
 		default:
 			break;
@@ -120,11 +136,6 @@ void Stackmenu::show(bool forward)
 	}
 
 	XRaiseWindow(bbtool->getXDisplay(), getWindowID());
-	/*
-	XGrabKey(bbtool->getXDisplay(), 64, 0, 
-			bbtool->getScreenInfo(0)->getRootWindow(), True,
-			GrabModeSync, GrabModeAsync);
-	*/
 	XGrabKeyboard(bbtool->getXDisplay(), 
 			bbtool->getScreenInfo(0)->getRootWindow(), True,
 			GrabModeAsync, GrabModeAsync, CurrentTime);

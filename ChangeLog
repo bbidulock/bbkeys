@@ -1,7 +1,21 @@
 version 0.8.1 --
   - bug fixin's--fixed annoying "un-iconify" feature when bbkeys did window
-    cycling, thanks to halt, all else for pointing that one out....
-  - 
+    cycling, thanks to halt, all else for pointing that one out....  Also,
+    removed REPORT struct from resource.hh which only had auto_raise in it
+    (not sure why it's been there, un-used all this time anyway)....
+
+  - changed all "friend .*$" to "friend class .*$" to comply with more
+    strict gcc versions....  Thanks to Jan Schaumann for this!
+
+  - okay. stacked window cycling tweaks.  As a visual clue for the
+    stacked-Cycling folks, we now set focus on cycled-through windows as we
+    go, raising the window selected at the end of the cycle.  This sounds
+    more confusing than it is.   This makes it possible to separate the new
+    and improved cycling method from the popup menu.  I'm not going to take
+    the time to look into that right now, but if we go in that direction,
+    there's a visual indicator as to which window you're switching to
+    before you actually go there.  Oh, and hitting Escape in the middle of
+    cycling will return focus to the window that you started from....
 
 version 0.8.0 --
   - BIG changes!!!  w00T!!!  There's some very significant improvements in

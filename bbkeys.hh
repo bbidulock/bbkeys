@@ -203,7 +203,7 @@ private:
 	GC menuHiGC;
 	GC menuFrameGC;
 
-	friend Stackmenu;
+	friend class Stackmenu;
 	void p();
 };
 
