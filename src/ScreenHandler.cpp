@@ -186,6 +186,11 @@ void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
 
   switch (it->type()) {
 
+  case Action::chain:
+    // if we're doing a chain, then keytree has done everything for us...
+    // just return
+    return;
+
   case Action::nextScreen:
     _keyClient->cycleScreen(_screenNumber, true);
     return;
@@ -511,7 +516,10 @@ void ScreenHandler::updateClientList()
       
       XWindow * wTmp = new XWindow( (*wlIt), _netclient, _screenInfo , *_keyClient );
 
-      _clients.insert(insert_point, wTmp);
+      assert (wTmp);
+      
+      _clients.insert(_active, wTmp);
+ 
     }
   }
 
