@@ -19,19 +19,31 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
 
+dnl Make the $target variable available
+AC_CANONICAL_TARGET
+
+dnl Set target-specific options
+case "$target" in
+*-solaris*)
+  dnl On solaris, we get a ton of multiply-defined errors if we don't include
+  dnl this parameter
+  LDFLAGS="$LDFLAGS -z muldefs"
+  ;;
+ esac
+
 dnl get the debug values right
 AC_DEFUN(AC_SET_DEBUG,
 [
- CFLAGS="$CFLAGS -Wall -DDEBUG"
- CXXFLAGS="$CXXFLAGS -Wall -DDEBUG"
- LDFLAGS="$LDFLAGS "
+  CFLAGS="$CFLAGS -Wall -DDEBUG"
+  CXXFLAGS="$CXXFLAGS -Wall -DDEBUG"
+  LDFLAGS="$LDFLAGS "
 ])
 
 AC_DEFUN(AC_SET_NODEBUG,
 [
- CFLAGS="$CFLAGS -DNDEBUG"
- CXXFLAGS="$CXXFLAGS -DNDEBUG"
- LDFLAGS="$LDFLAGS -s"
+  CFLAGS="$CFLAGS -DNDEBUG"
+  CXXFLAGS="$CXXFLAGS -DNDEBUG"
+  LDFLAGS="$LDFLAGS -s"
 ])
       
 
