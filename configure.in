@@ -10,39 +10,46 @@ if test x$regex_cmd = "x"; then
  AC_MSG_ERROR([error. sed is required to build the default bbtoolsrc file.])
 fi
 
-dnl Checks for programs.
-AC_PROG_CC
-AC_PROG_CXX
-AC_PROG_CPP
-AC_PROG_AWK
-AC_PROG_INSTALL
-AC_PROG_LN_S
-AC_PROG_MAKE_SET
-AC_PROG_RANLIB
-
-case $host_os in
-  *solaris*)
-    dnl On solaris, we get a ton of multiply-defined errors if we don't include
-    dnl this parameter
-    LDFLAGS="$LDFLAGS -z muldefs"
-    ;;
-esac
-
 dnl get the debug values right
 AC_DEFUN(AC_SET_DEBUG,
 [
-  CFLAGS="$CFLAGS -Wall -DDEBUG"
-  CXXFLAGS="$CXXFLAGS -Wall -DDEBUG"
-  LDFLAGS="$LDFLAGS "
+  _CFLAGS="-g -Wall -DDEBUG"
+  _CXXFLAGS="-g -Wall -DDEBUG"
+  _LDFLAGS=""
+  case $host_os in
+  ([*solaris*])
+    dnl On solaris, we get a ton of multiply-defined errors if we don't include
+    dnl this parameter
+    _LDFLAGS="$_LDFLAGS -z muldefs"
+    ;;
+  esac
+  test "$CFLAGS" = "" && CFLAGS=$_CFLAGS
+  test "$CXXFLAGS" = "" && CXXFLAGS=$_CXXFLAGS
+  test "$LDFLAGS" = "" && LDFLAGS=$_LDFLAGS
 ])
 
 AC_DEFUN(AC_SET_NODEBUG,
 [
-  CFLAGS="$CFLAGS -DNDEBUG"
-  CXXFLAGS="$CXXFLAGS -DNDEBUG"
-  LDFLAGS="$LDFLAGS -s"
+  _CFLAGS="-DNDEBUG"
+  _CXXFLAGS="-DNDEBUG"
+  _LDFLAGS="-s"
+  case $host_os in
+  ([*solaris*])
+     _CFLAGS="$_CFLAGS -O"
+     _CXXFLAGS="$_CXXFLAGS -O"
+     dnl On solaris, we get a ton of multiply-defined errors if we don't include
+     dnl this parameter
+     _LDFLAGS="$_LDFLAGS -z muldefs"
+     ;;
+  ([*])
+     _CFLAGS="$_CFLAGS -O2"
+     _CXXFLAGS="$_CXXFLAGS -O2"
+     ;;
+  esac
+  test "$CFLAGS" = "" && CFLAGS=$_CFLAGS
+  test "$CXXFLAGS" = "" && CXXFLAGS=$_CXXFLAGS
+  test "$LDFLAGS" = "" && LDFLAGS=$_LDFLAGS
 ])
-      
 
 AC_ARG_ENABLE(debug,[  --enable-debug	create debugging code [default=no]],
 [
@@ -68,6 +75,16 @@ AC_ARG_ENABLE(
   INTERLACE="-DINTERLACE"
 )
 AC_SUBST(INTERLACE)
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_CPP
+AC_PROG_AWK
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
 
 dnl minimum version we can live with
 PERL_VERSION=5.004
