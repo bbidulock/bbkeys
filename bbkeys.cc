@@ -1283,7 +1283,7 @@ unsigned int ToolWindow::KeycodeToModmask(unsigned int code)
 
 		case XK_Meta_L:
 		case XK_Meta_R:
-      return Mod1Mask;
+      return Mod4Mask;
 
 		case XK_Scroll_Lock:
       return Mod5Mask;
