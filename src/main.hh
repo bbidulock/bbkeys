@@ -19,7 +19,7 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
-#include "version.h"
+#include "../version.h"
 
 struct CMDOPTIONS {
   bool withdrawn;

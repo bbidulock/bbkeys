@@ -38,7 +38,7 @@
 #include <sys/stat.h>
 #include <math.h>
 
-#include "version.h"
+#include "../version.h"
 #include "Image.hh"
 #include "BaseDisplay.hh"
 #include "main.hh"
