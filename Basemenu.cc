@@ -590,7 +590,7 @@ void Basemenu::drawItem(int index, Bool highlight, Bool clear,
     tgc =
     ((highlight) ? bbtool->getMenuHiGC() :
      ((item->isEnabled()) ? bbtool->getMenuFrameGC() :
-      bbtool->getMenuHiGC()));
+      bbtool->getMenuFrameGC()));
   
   sel_x = item_x;
   if (bbtool->getResource()->getBulletPosition() == Right)

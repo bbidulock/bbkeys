@@ -253,24 +253,7 @@ void Resource::SizeAndPosition()
 		frame.font = 0;
 	}
 
-	if (XrmGetResource
-			(resource_db, "bbkeys.heightBy.font", "Bbkeys.heightBy.Font",
-			 &value_type, &value)) {
-		if ((frame.font =
-				 XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL) {
-			fprintf(stderr,
-							" bbkeys: couldn't load font '%s'\n"
-							" ...  reverting to default font.", value.addr);
-			if ((frame.font =
-					 XLoadQueryFont(bbtool->getXDisplay(), defaultFont)) == NULL) {
-				fprintf(stderr,
-								"bbkeys: couldn't load default font.  please check to\n"
-								"make sure the necessary font is installed '%s'\n",
-								defaultFont);
-				exit(2);
-			}
-		}
-	} else if (XrmGetResource // try to load TitleFont, which will pick up *Font
+	if (XrmGetResource // try to load TitleFont, which will pick up *Font
 				 (resource_db, BB_FONT, BB_FONT2, &value_type, &value)) {
 		if ((frame.font =
 				 XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL) {
@@ -302,6 +285,23 @@ void Resource::SizeAndPosition()
 				exit(2);
 			}
 		}
+	} else if (XrmGetResource
+			(resource_db, "bbkeys.heightBy.font", "Bbkeys.heightBy.Font",
+			 &value_type, &value)) {
+		if ((frame.font =
+				 XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL) {
+			fprintf(stderr,
+							" bbkeys: couldn't load font '%s'\n"
+							" ...  reverting to default font.", value.addr);
+			if ((frame.font =
+					 XLoadQueryFont(bbtool->getXDisplay(), defaultFont)) == NULL) {
+				fprintf(stderr,
+								"bbkeys: couldn't load default font.  please check to\n"
+								"make sure the necessary font is installed '%s'\n",
+								defaultFont);
+				exit(2);
+			}
+		}
 	} else {
 		if ((frame.font =
 				 XLoadQueryFont(bbtool->getXDisplay(), defaultFont)) == NULL) {
@@ -316,6 +316,7 @@ void Resource::SizeAndPosition()
 
 void Resource::Label(void)
 {
+
 	XrmValue value;
 	char *value_type;
 
@@ -346,23 +347,6 @@ void Resource::Label(void)
 	}
 
 	if (XrmGetResource
-			(resource_db, "bbkeys.label.font", "Bbkeys.Label.Font",
-			 &value_type, &value)) {
-		if ((label.font =
-				 XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL) {
-			fprintf(stderr,
-							" bbkeys: couldn't load font '%s'\n"
-							" ...  reverting to default font.", value.addr);
-			if ((label.font =
-					 XLoadQueryFont(bbtool->getXDisplay(), defaultFont)) == NULL) {
-				fprintf(stderr,
-								"bbkeys: couldn't load default font.  please check to\n"
-								"make sure the necessary font is installed '%s'\n",
-								defaultFont);
-				exit(2);
-			}
-		}
-	} else if (XrmGetResource
 				 (resource_db, BB_FONT, BB_FONT2, &value_type, &value)) {
 		if ((label.font =
 				 XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL) {
@@ -380,6 +364,23 @@ void Resource::Label(void)
 		}
 	} else if (XrmGetResource // try to load toolbar.font
 				 (resource_db, "toolbar.font", "Toolbar.Font", &value_type, &value)) {
+		if ((label.font =
+				 XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL) {
+			fprintf(stderr,
+							" bbkeys: couldn't load font '%s'\n"
+							" ...  reverting to default font.", value.addr);
+			if ((label.font =
+					 XLoadQueryFont(bbtool->getXDisplay(), defaultFont)) == NULL) {
+				fprintf(stderr,
+								"bbkeys: couldn't load default font.  please check to\n"
+								"make sure the necessary font is installed '%s'\n",
+								defaultFont);
+				exit(2);
+			}
+		}
+	} else if (XrmGetResource
+			(resource_db, "bbkeys.label.font", "Bbkeys.Label.Font",
+			 &value_type, &value)) {
 		if ((label.font =
 				 XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL) {
 			fprintf(stderr,
@@ -440,13 +441,14 @@ void Resource::Menu()
              BB_MENU_HIGHLIGHT_COLOR,BB_MENU_HIGHLIGHT_COLOR2,
              "rgb:c/9/6",&menu.highlightColor);
   
-	readColor("bbkeys.menu.textColor","Bbkeys.Menu.TextColor",
-							      BB_MENU_TEXTCOLOR,BB_MENU_TEXTCOLOR2,
+	readColor(
+		    BB_MENU_TEXTCOLOR,BB_MENU_TEXTCOLOR2,
+			"bbkeys.menu.textColor","Bbkeys.Menu.TextColor",
                     "LightGrey",&menu.textColor);
 
-	readColor("bbkeys.menu.highlight.textColor",
-	    			"Bbkeys.Menu.Highlight.TextColor",
-			 			BB_MENU_HITEXTCOLOR,BB_MENU_HITEXTCOLOR2,
+	readColor(
+ 			BB_MENU_HITEXTCOLOR,BB_MENU_HITEXTCOLOR2,
+			"bbkeys.menu.highlight.textColor", "Bbkeys.Menu.Highlight.TextColor",
             "white",&menu.hiTextColor);
 
   if (XrmGetResource(resource_db,"bbkeys.menuJustify","Bbkeys.MenuJustify",
@@ -530,7 +532,22 @@ void Resource::Menu()
 		menu.font = 0;
 	}
 	
-	if (XrmGetResource(resource_db, "bbkeys.menu.font", "Bbkeys.Menu.Font",
+if  (XrmGetResource(resource_db, BB_MENU_FONT, BB_MENU_FONT2, &value_type, &value))
+	{
+		if ((menu.font = XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL)
+		{
+			fprintf(stderr, " blackbox: couldn't load font '%s'\n"
+	      					" ...  reverting to default font.", value.addr);
+			if ((menu.font = XLoadQueryFont(bbtool->getXDisplay(), defaultFont)) == NULL)
+			{
+				fprintf(stderr,
+					"blackbox: couldn't load default font.  please check to\n"
+					"make sure the necessary font is installed '%s'\n",
+					defaultFont);
+				exit(2);
+			}
+		}
+	} else if (XrmGetResource(resource_db, "bbkeys.menu.font", "Bbkeys.Menu.Font",
 						&value_type, &value))
 	{
 		if ((menu.font = XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL)
@@ -546,25 +563,7 @@ void Resource::Menu()
 			exit(2);
 			}
 		}
-	}
-	else if  (XrmGetResource(resource_db, BB_MENU_FONT, BB_MENU_FONT2, &value_type, &value))
-	{
-		if ((menu.font = XLoadQueryFont(bbtool->getXDisplay(), value.addr)) == NULL)
-		{
-			fprintf(stderr, " blackbox: couldn't load font '%s'\n"
-	      					" ...  reverting to default font.", value.addr);
-			if ((menu.font = XLoadQueryFont(bbtool->getXDisplay(), defaultFont)) == NULL)
-			{
-				fprintf(stderr,
-					"blackbox: couldn't load default font.  please check to\n"
-					"make sure the necessary font is installed '%s'\n",
-					defaultFont);
-				exit(2);
-			}
-		}
-	}
-	else
-	{
+	} else {
 		if ((menu.font = XLoadQueryFont(bbtool->getXDisplay(), defaultFont)) == NULL)
 		{
 			fprintf(stderr,"blackbox: couldn't load default font.  please check to\n"
