@@ -1,135 +1,324 @@
-.\"
-.\" $Id: bbkeysrc.5,v 1.5 2003/01/19 18:57:59 vanrijn Exp $
-.\"
-.TH BBKEYSRC 5 "January 12, 2002" bbtools bbkeysrc
-.SH NAME
-bbkeysrc \- bbkeys keymap configuration file
+.\" 
+.\" $Id: bbkeysrc.5,v 1.6 2004/08/28 03:31:48 vanrijn Exp $
+.\" 
+.TH "BBKEYSRC" "5" "August 27, 2004" "vanRijn" "bbkeysrc"
+.SH "NAME"
+bbkeysrc \- bbkeys configuration file
 
-.SH SYNOPSIS
+.SH "SYNOPSIS"
 .B $HOME/.bbkeysrc
 
-.SH DESCRIPTION
-
-\fBbbkeys\fR picks up its style-settings from the same places as the other
-bbtools (such as \fIbbmail(1)\fR).  In most cases, this will be
-\fI$HOME/.blackboxrc\fR. But its key-grabbings come from $HOME/.bbkeysrc.
-There are several avenues open to the user to set any key-grabs that the user
-wishes:
+.SH "DESCRIPTION"
+\fBbbkeys\fR picks up its configuration settings from $HOME/.bbkeysrc unless overridden on the command line.
+There are several avenues open to the user to set any key\-grabs that the user wishes:
 
 .SS "Using \fIbbconf\fR:"
-This is a Qt-based application available at http://bbconf.sourceforge.net/.
-
-.SS "Using \fIbbkeysconf\fR:"
-This is a Qt-based application previously distributed with bbkeys. It has 
-been superceded by \fIbbconf\fR, and no further development goes into it.
-
-.SS "Without \fIbbkeysconf\fR:"
-\fBbbkeys\fR can be launched with the \fI-noqt\fR option and whenever the
-little reconfigure button (the key-hole) on \fBbbkeys\fR is clicked,
-\fBbbkeys\fR will launch a very simple interactive rc-file generator, called
-bbkeysconf.pl (written in perl) inside of an xterm.  If you choose not to
-use the QT bbconf application, bbkeysconf.pl is the recommended way of
-editting your keybinding rc-file.
+This is a Qt\-based application available at http://bbconf.sourceforge.net/.
 
 .SS "Manually editing \fI$HOME/.bbkeysrc\fR:"
-The format is very easy, and it consists of lines describing the Key to grab,
-the modifier to grab the key with (if any, or "None" if none), and the action
-to perform. For example:
+The format is very easy, and it follows the same format as blackbox's menu files.  It must begin with a "[begin]" tag.  It may contain a "[config]" tag, containing a configuration section, ending with a "[end]" tag.  In fact, all opening section tags must end with an "[end]" tag.  It should also contain a "[keybindings]" section. 
+.br 
+.br 
+For more information, see the man page for blackbox's menu.
 
-KeyToGrab(Tab), WithModifier(Mod1), WithAction(NextWindow)
-.br
-KeyToGrab(t), WithModifier(Mod1), WithAction(ExecCommand),
-                                           DoThis(xterm)
+.SH "LIST OF CONFIG OPTIONS"
+.TP 
+\fIstylefile\fR: 
+filename of blackbox style to use (string)
 
-.SH "List of commands"
+.TP 
+\fIhonorModifiers\fR: 
+whether or not to break if NumLock or ScrollLock is pressed.  (hint: for bbkeys to ignore your keybindings if NumLock or ScrollLock are pressed, set this to true) (true or false)
 
-BigNudgeDown
-.br
-BigNudgeLeft
-.br
-BigNudgeRight
-.br
-BigNudgeUp
-.br
-Close
-.br
-ExecCommand
-.br
-HorizontalDecrement
-.br
-HorizontalIncrement
-.br
-Lower
-.br
-MaximizeHorizontal
-.br
-MaximizeVertical
-.br
-MaximizeWindow
-.br
-Minimize
-.br
-NextWindow
-.br
-NextWindowAllWorkspaces
-.br
-NextWorkspace
-.br
-NudgeDown
-.br
-NudgeLeft
-.br
-NudgeUp
-.br
-NudgeRight
-.br
-PrevWindow
-.br
-PrevWorkspace
-.br
-Raise
-.br
-ShadeWindow
-.br
-StickWindow
-.br
-ToggleDecor
-.br
-Workspace1
-.br
-Workspace2
-.br
-Workspace3
-.br
-Workspace4
-.br
-Workspace5
-.br
-Workspace6
-.br
-Workspace7
-.br
-Workspace8
-.br
-Workspace9
-.br
-Workspace10
-.br
-Workspace11
-.br
-Workspace12
-.br
-VerticalIncrement
-.br
-VerticalDecrement
+.TP 
+\fIraiseWhileCycling\fR:
+should bbkeys raise the windows you're cycling through while cycling through them? (true or false)
+
+.TP 
+\fIshowCycleMenu\fR
+show the window\-cycling menu or cycle without it?  
+(true or false)
+
+.TP 
+\fImenuTextJustify\fR
+how should the menu be justified? (left, center, right)
+
+.TP 
+\fIautoConfig\fR
+should bbkeys watch for changes to its config file?  
+(true or false)
+
+.TP 
+\fIautoConfigCheckTimeout\fR
+how often should bbkeys check for changes made to its 
+config file?  (numeric number of seconds)
+
+.TP 
+\fIworkspaceColumns\fR
+number of columns that you have your workspaces laid 
+out in your pager (numeric)
+
+.TP 
+\fIworkspaceRows\fR
+number of rows that you have your workspaces/desktops laid out in (numeric)
+
+.TP 
+\fIcycleMenuX\fR
+horizontal position that you want the window cycling menu to show up at. (numeric)
+
+.TP 
+\fIcycleMenuY\fR
+vertical position that you want the window cycling menu to show up at. (numeric)
+.SH "KEYBINDINGS"
+.LP 
+The format of this section is similar to the config section, and blackbox's menu structure.  Each line will look like this:
+.IP 
+[command] (keys) {parameters}
+
+.LP 
+\fBParameters:\fR
+.br 
+Not all directives need to have parameters provided, and within the [keybindings] section, the only sub\-group allowed (a group that will have an [end] tag) is the [chain] tag.  The chain tag is special and allows the user to give emacs\-style keybindings, where a certain keystroke is given, released, and then another keystroke is given to complete the action.  A good example would be the following:
+
+.LP 
+.IP 
+    [chain] (Control\-Mod1\-W)
+      [sendToWorkspace] (1) {1}
+      [sendToWorkspace] (2) {2}
+      [sendToWorkspace] (3) {3}
+      [sendToWorkspace] (4) {4}
+    [end]
+
+.LP 
+Note that both the beginning [chain] and the ending [end] tags must be provided.  In this example, the chain is begun by the user pressing (and holding) the Control modifier, the Mod1 (Alt) modifier, and the "W" key on his keyboard.  The user then releases these keys and bbkeys enters the chain.  Bbkeys will then wait for the user to press one of the keybindings from within that chain to execute the next action.  In this case, if bbkeys sees either the 1, 2, 3 or 4 key pressed on the keyboard, it will execute the given action for that key.  Again, in this case, bbkeys will send the currently\-focused window to the workspace specified in the {}\-enclosed parameter (workspace 1, 2, 3, or 4 as the case may be here.
+
+.LP 
+So, the parameters provided in a keybinding directive can be seen as additional information to provide to the "command".  In some cases, it will be a number (what workspace to send a window to, how many pixels to move the window, how many pixels to resize a window, etc.).  In other cases, it will be a string ("xterm \-fn nexus", for example, as an argument to the Execute command.  And for many directives, it is not needed at all.
 
 
+.LP 
+\fBKeys:\fR
+.br 
+The format for the keybindings are using 0 or more modifiers, separated with the "\-" character, finally followed by the key name as known to X.  The "left" key, for example, is known to X as "Left".  The "j" key is known as "J".  You get the idea.  The modifiers are typically, "Shift", "Control", and "Mod1".  An example would be Mod1\-Control\-K.  This would be listed as the second element in a keybinding directive.
+
+.LP 
+\fBCommands:\fR
+.br 
+The following commands are understood by bbkeys.  Bbkeys is not case\-sensitive with regards to its commands, so the case may be mixed accidentally or on purpose.  =:)
+
+
+.TP 
+\fIexecute\fR
+Executes a command.  An string argument/parameter is expected for this directive that lists the command to be executed.
+
+.TP 
+\fIiconify\fR
+
+.TP 
+\fIraise\fR
+
+.TP 
+\fIlower\fR
+
+.TP 
+\fIclose\fR
+
+.TP 
+\fItoggleShade\fR
+
+.TP 
+\fItoggleOmnipresent\fR
+Sets a window to be "sticky"\-\-on all workspaces.
+
+.TP 
+\fImoveWindowUp\fR
+A numeric parameter may be provided which tells bbkeys how many pixels in the given direction to move the currently\-selected window.
+
+.TP 
+\fImoveWindowDown\fR
+A numeric parameter may be provided which tells bbkeys how many pixels in the given direction to move the currently\-selected window.
+
+.TP 
+\fImoveWindowLeft\fR
+A numeric parameter may be provided which tells bbkeys how many pixels in the given direction to move the currently\-selected window.
+
+.TP 
+\fImoveWindowRight\fR
+A numeric parameter may be provided which tells bbkeys how many pixels in the given direction to move the currently\-selected window.
+
+.TP 
+\fIresizeWindowWidth\fR
+A numeric parameter may be provided which tells bbkeys how many pixels in the given direction to resize the currently\-selected window.  This may be a positive or negative number, allowing bbkeys to grow or shrink the window.
+
+.TP 
+\fIresizeWindowHeight\fR
+A numeric parameter may be provided which tells bbkeys how many pixels in the given direction to resize the currently\-selected window.  This may be a positive or negative number, allowing bbkeys to grow or shrink the window.
+
+.TP 
+\fItoggleMaximizeFull\fR
+
+.TP 
+\fItoggleMaximizeVertical\fR
+
+.TP 
+\fItoggleMaximizeHorizontal\fR
+
+.TP 
+\fIsendToWorkspace\fR
+A numeric parameter must be provided which tells bbkeys which workspace (1\-based index) to send the current window to.
+
+.TP 
+\fInextWindow\fR
+Used for window cycling (alt\-tabbing, most often).  Selects the next window according to the window stack.
+
+.TP 
+\fIprevWindow\fR
+Used for window cycling (alt\-tabbing, most often).  Selects the previous window according to the window stack.
+
+.TP 
+\fInextWindowOnAllWorkspaces\fR
+
+.TP 
+\fIprevWindowOnAllWorkspaces\fR
+
+.TP 
+\fInextWindowOnAllScreens\fR
+
+.TP 
+\fIprevWindowOnAllScreens\fR
+
+.TP 
+\fInextWindowOfClass\fR
+
+.TP 
+\fIprevWindowOfClass\fR
+
+.TP 
+\fInextWindowOfClassOnAllWorkspaces\fR
+
+.TP 
+\fIprevWindowOfClassOnAllWorkspaces\fR
+
+.TP 
+\fIchangeWorkspace\fR
+A numeric parameter must be given to tell bbkeys which 1\-based workspace to switch to.
+
+.TP 
+\fInextWorkspace\fR
+
+.TP 
+\fIprevWorkspace\fR
+
+.TP 
+\fIupWorkspace\fR
+
+.TP 
+\fIdownWorkspace\fR
+
+.TP 
+\fIleftWorkspace\fR
+
+.TP 
+\fIrightWorkspace\fR
+
+.TP 
+\fInextScreen\fR
+
+.TP 
+\fIprevScreen\fR
+
+.TP 
+\fIchain\fR
+No parameter is needed for this directive.
+
+.LP 
+
+.SH "EXAMPLE"
+Example config file below...
+.br 
+
+[begin] (bbkeys configuration file)
+
+  [config]
+    [option] (stylefile) {~/local/blackbox\-CVS/share/blackbox/styles/Cthulhain}
+    [option] (honorModifiers) {false}
+    [option] (raiseWhileCycling) {false}
+    [option] (showCycleMenu)  {true}
+    [option] (menuTextJustify) {right}
+    [option] (autoConfig)   {true}
+    [option] (autoConfigCheckTimeout) {2}
+    [option] (workspaceColumns) {4}
+    [option] (workspaceRows) {2}
+    [option] (cycleMenuX) {20}
+    [option] (cycleMenuY) {20}
+  [end]
+
+  [keybindings] (begin keybindings)
+    [chain] (Control\-Mod1\-W)
+      [sendToWorkspace] (1) {1}
+      [sendToWorkspace] (2) {2}
+      [sendToWorkspace] (3) {3}
+      [sendToWorkspace] (4) {4}
+      [sendToWorkspace] (5) {5}
+      [sendToWorkspace] (6) {6}
+      [sendToWorkspace] (7) {7}
+      [sendToWorkspace] (8) {8}
+    [end]
+    [chain] (Mod1\-Y)
+      [execute] (1) {xmms}
+      [execute] (2) {aumix \-v +5}
+      [execute] (3) {aumix \-v \-5}
+    [end]
+    [Lower]  (Mod1\-Down)
+    [Raise]  (Mod1\-Up)
+    [toggleShade]  (Mod1\-F9)
+    [Close]  (Mod1\-F4)
+    [Iconify]  (Mod1\-m)
+    [toggleMaximizeFull]  (Mod1\-F12)
+    [toggleMaximizeHorizontal]  (Mod1\-F11)
+    [toggleMaximizeVertical]  (Mod1\-F10)
+    [toggleOmnipresent]  (Mod1\-Control\-S)
+    [resizeWindowWidth]  (Mod1\-Control\-Shift\-Left) {\-5}
+    [resizeWindowWidth]  (Mod1\-Control\-Shift\-Right) {5}
+    [resizeWindowHeight]  (Mod1\-Control\-Shift\-Up) {\-5}
+    [resizeWindowHeight]  (Mod1\-Control\-Shift\-Down) {5}
+    [moveWindowUp]  (Mod1\-Control\-Up) {1}
+    [moveWindowDown]  (Mod1\-Control\-Down) {1}
+    [moveWindowLeft]  (Mod1\-Control\-Left) {1}
+    [moveWindowRight]  (Mod1\-Control\-Right) {1}
+    [NextWindow]  (Mod1\-Tab)
+    [NextWindowOnAllWorkspaces]  (Mod1\-Control\-Tab)
+    [PrevWindow]  (Mod1\-Shift\-Tab)
+    [changeWorkspace]  (Mod1\-1) {1}
+    [changeWorkspace]  (Mod1\-2) {2}
+    [changeWorkspace]  (Mod1\-3) {3}
+    [changeWorkspace]  (Mod1\-4) {4}
+    [changeWorkspace]  (Mod1\-5) {5}
+    [changeWorkspace]  (Mod1\-6) {6}
+    [changeWorkspace]  (Mod1\-7) {7}
+    [changeWorkspace]  (Mod1\-8) {8}
+
+    [upWorkspace] (Mod1\-Control\-K)
+    [downWorkspace] (Mod1\-Control\-J)
+    [leftWorkspace] (Mod1\-Control\-H)
+    [rightWorkspace] (Mod1\-Control\-L)
+
+    [showRootMenu] (Mod1\-Control\-Escape)
+
+    [Execute]  (Mod1\-F5) {xrefresh}
+    [Execute]  (Mod1\-F1) {gnome\-terminal}
+    #[Execute]  (Mod4\-E) {kfmclient openProfile filemanagement}
+    #[Execute]  (F20) {kfmclient openProfile filemanagement}
+    [Execute]  (Mod4\-E) {nautilus /home/gideon}
+    [Execute]  (F20) {nautilus /home/gideon}
+  [end] (end keybindings)
+[end] (end bbkeys configuration)
 .SH "SEE ALSO"
 .BR bbkeys(1),
-.BR bbkeys.bb(5)
+.BR blackbox(1)
 
-.SH AUTHOR
+.SH "AUTHOR"
 .nr
-Jason 'vanRijn' Kasper <vR@movingparts.net> - bbkeys
-.br
-Jan Schaumann <jschauma@netmeister.org> - this man page
+Jason 'vanRijn' Kasper <vR@movingparts.net> \- bbkeys
+.br 
+Jan Schaumann <jschauma@netmeister.org> \- this man page

@@ -1,105 +1,71 @@
-.\"
-.\" $Id: bbkeys.1.in,v 1.5 2003/01/19 18:57:59 vanrijn Exp $
-.\"
-.TH BBKEYS 1 "January 12, 2002" "bbtools" bbkeys
-.SH NAME
+.\" 
+.\" $Id: bbkeys.1.in,v 1.6 2004/08/28 03:31:48 vanrijn Exp $
+.\" 
+.TH "BBKEYS" "1" "August 27, 2004" "vanRijn" "bbkeys"
+.SH "NAME"
 bbkeys \- a general XWindow keygrabber
 
-.SH SYNOPSIS
+.SH "SYNOPSIS"
 .B bbkeys
 [\fIOPTION\fR]
 
-.SH DESCRIPTION
+.SH "DESCRIPTION"
 \fBbbkeys\fR is the keygrabber for the blackbox window manager. \fBbbkeys\fR
 handles all keybindings and keyboard shortcuts for  blackbox. It uses
 blackbox's Image classes for rendering its look and feel so that \fBbbkeys\fR
 will render itself to match whatever blackbox style is used. It is highly
 configurable either via the \fIbbconf\fR GUI utility or the (now deprecated)
-\fIbbkeysconf\fR GUI utility or by hand-editting bbkeys's config file.
+\fIbbkeysconf\fR GUI utility or by hand\-editting bbkeys's config file.
 
-.SH USAGE
+.SH "USAGE"
 On startup, \fBbbkeys\fR reads \fI$HOME/.bbkeysrc\fR, which you can edit by
 hand or through \fIbbconf\fR or \fIbbkeysconf\fR. This is now configurable
-through a command-line switch as show in OPTIONS.
+through a command\-line switch as show in OPTIONS.
 
-.SH OPTIONS
+.SH "OPTIONS"
 A summary of the options supported by \fBbbkeys\fR is included below.
 
-.TP
-\fB\-c[onfig]\fR \fIfilename\fR
-use alternate 'look and feel' config file
-.TP
-\fB\-rc[file]\fR \fIfilename\fR
-use alternate keygrab definition file.  (default is ~/.bbkeysrc)
-.TP
-\fB\-d[ecorated]\fR
-show 'normal' decorated window
-.TP
-\fB\-display\fR \fIdisplay name\fR
-X server to connect to
-.TP
-\fB\-geom[etry]\fR \fIgeometry\fR
-set geometry of the bbkeys window
-.TP
-\fB\-h[elp]\fR
-show summary of options and exit
-.TP
-\fB\-i[conic]\fR
-start bbkeys in a minimized state (will override the -withdrawn option)
-.TP
-\fB\-m[iniMe]\fR
-like Austin Powers 2. bbkeys, but smaller
-.TP
-\fB\-n[obb]\fR
-fall back on default configuration
-.TP
-\fB\-no[qt]\fR
-use non-qt configuration tool
-.TP
-\fB\-s[hape]\fR
-don't display groundplate
-.TP
-\fB\-t[inyMe]\fR
-all you can see is its keyhole
-.TP
-\fB\-v[ersion]\fR
-display version number and exit
-.TP
-\fB\-w[ithdrawn]\fR
-place bbkeys in the Slit
 
-.SH FILES
+.TP 
+\fB\-d or \-\-display\fR \fI<display name>\fR
+use alternate config file. (default is ~/.bbkeysrc)
+.TP 
+\fB\-D or \-\-debug\fR
+print debugging information
+.TP 
+\fB\-c or \-\-config\fR \fI<filename>\fR
+use alternate config file. (default is ~/.bbkeysrc)
+.TP 
+\fB\-v or \-\-version\fR
+display version number and exit
+.TP 
+\fB\-h or \-\-help\fR
+display help message
+
+.SH "FILES"
 .nr
 Default: \fI$datadir=/usr/local/share/\fR
-.br
+.br 
 \fI$HOME/.bbkeysrc\fR maintains keybindings
-.br
+.br 
 See \fIbbkeysrc(5)\fR
-.SS "Under Blackbox"
-.nf
-\fI$datadir/bbtools/bbkeys.bb\fR the global style configuration file
-\fI$HOME/.bbtools/bbkeys.bb\fR a local style configuration file
 
-.SS "Under other Window managers"
-.nf
-\fI$datadir/bbtools/bbkeys.nobb\fR the global style configuration file
-\fI$HOME/.bbtools/bbkeys.nobb\fR a local style configuration file
 
-.SH VERSION
+.SH "VERSION"
 @VERSION@
 
-.SH BUGS
+.SH "BUGS"
 This application is perfect and should solve all of your problems,  up to and
 including male pattern baldness and world hunger. Should you, against all
 odds, find any bugs, please report them to the author.
 
 
 .SH "SEE ALSO"
-.BR bbkeysrc(5),
-.BR bbkeys.bb(5)
+.BR bbkeysrc(5)
 
-.SH AUTHOR
+
+.SH "AUTHOR"
 .nr
-Jason 'vanRijn' Kasper <vR@movingparts.net> - bbkeys
-.br
-Jan Schaumann <jschauma@netmeister.org> - this man page
+Jason 'vanRijn' Kasper <vR@movingparts.net> \- bbkeys
+.br 
+Jan Schaumann <jschauma@netmeister.org> \- this man page
