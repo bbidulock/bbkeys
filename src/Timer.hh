@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: Timer.hh,v 1.2 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: Timer.hh,v 1.3 2002/05/30 20:47:45 eckzor Exp $
   
 #ifndef   __Timer_hh
 #define   __Timer_hh
@@ -35,12 +35,11 @@
 #  endif // HAVE_SYS_TIME_H
 #endif // TIME_WITH_SYS_TIME
 
+#include "BaseDisplay.hh"
+
 // forward declaration
 class BTimer;
 class TimeoutHandler;
-
-#include "BaseDisplay.hh"
-
 
 class TimeoutHandler {
 public:

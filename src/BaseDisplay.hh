@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: BaseDisplay.hh,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: BaseDisplay.hh,v 1.4 2002/05/30 20:47:45 eckzor Exp $
 
 #ifndef   __BaseDisplay_hh
 #define   __BaseDisplay_hh
@@ -27,12 +27,12 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 
+#include "LinkedList.hh"
+
 // forward declaration
 class BaseDisplay;
 class ScreenInfo;
-
-#include "LinkedList.hh"
-#include "Timer.hh"
+class BTimer;
 
 #define AttribShaded      (1l << 0)
 #define AttribMaxHoriz    (1l << 1)

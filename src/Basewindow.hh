@@ -18,10 +18,34 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: Basewindow.hh,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: Basewindow.hh,v 1.4 2002/05/30 20:47:45 eckzor Exp $
 
 #ifndef __BASEWINDOW_HH
 #define __BASEWINDOW_HH
+
+#ifdef HAVE_STDIO_H
+#  include <stdio.h>
+#endif
+
+#ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+#endif
+
+#ifdef HAVE_STRING_H
+#  include <string.h>
+#endif
+
+#ifdef HAVE_STRINGS_H
+# include <strings.h>
+#endif
+
+#ifdef HAVE_SYS_STAT_H
+#  include <sys/stat.h>
+#endif
+
+#ifdef HAVE_MATH_H
+#  include <math.h>
+#endif
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -29,23 +53,10 @@
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#if HAVE_STRINGS_H
-# include <strings.h>
-#endif
-
-#include <sys/stat.h>
-#include <math.h>
-
-#include "../version.h"
-#include "Image.hh"
 #include "BaseDisplay.hh"
 #include "main.hh"
+#include "Image.hh"
 
-class BImageControl;
 class Resource;
 class BaseDisplay;
 

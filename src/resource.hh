@@ -18,16 +18,14 @@
 //
 // (see the included file copying / gpl-2.0)
 //
-// $Id: resource.hh,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: resource.hh,v 1.4 2002/05/30 20:47:45 eckzor Exp $
 
 
 #ifndef __RESOURCE_HH
 #define __RESOURCE_HH
 
-#include "bbkeys.hh"
 #include "Baseresource.hh"
-
-class BaseResource;
+#include "Image.hh"
 
 enum {none=0, border=1, texture=2};
 enum WHICH_BUTTON { LEFT_BUTTON = 1, MIDDLE_BUTTON, RIGHT_BUTTON,

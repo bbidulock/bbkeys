@@ -20,22 +20,20 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: Basemenu.hh,v 1.4 2002/05/30 18:26:25 eckzor Exp $
+// $Id: Basemenu.hh,v 1.5 2002/05/30 20:47:45 eckzor Exp $
 
 #ifndef   __Basemenu_hh
 #define   __Basemenu_hh
 
 #include <X11/Xlib.h>
 
+#include "LinkedList.hh"
+
 // forward declarations
 class Basemenu;
 class BasemenuItem;
-
 class ToolWindow;
 class BImageControl;
-
-#include "LinkedList.hh"
-
 
 class Basemenu {
 private:

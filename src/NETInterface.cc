@@ -18,13 +18,14 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: NETInterface.cc,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: NETInterface.cc,v 1.4 2002/05/30 20:47:45 eckzor Exp $
 
 #ifdef    HAVE_CONFIG_H
 #  include "../config.h"
 #endif // HAVE_CONFIG_H
 
 #include "NETInterface.hh"
+#include "Basewindow.hh"
 
 NETInterface::NETInterface(Basewindow *basewindow) {
 

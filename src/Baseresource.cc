@@ -18,16 +18,19 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: Baseresource.cc,v 1.4 2002/05/30 18:26:25 eckzor Exp $
+// $Id: Baseresource.cc,v 1.5 2002/05/30 20:47:45 eckzor Exp $
 
-#include <stdlib.h>
+#ifdef    HAVE_CONFIG_H
+#  include "config.h"
+#endif // HAVE_CONFIG_H
+
+#ifdef    HAVE_STDLIB_H
+#  include <stdlib.h>
+#endif // HAVE_STDLIB_H
+
 #include "bbkeys.hh"
 #include "Baseresource.hh"
 #include "blackboxstyle.hh"
-
-#ifdef    HAVE_CONFIG_H
-#  include "../config.h"
-#endif // HAVE_CONFIG_H
 
 BaseResource::BaseResource(ToolWindow *toolwindow) {
   XrmValue value;

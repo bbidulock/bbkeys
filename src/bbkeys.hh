@@ -20,16 +20,17 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.hh,v 1.9 2002/05/30 20:20:45 eckzor Exp $
+// $Id: bbkeys.hh,v 1.10 2002/05/30 20:47:45 eckzor Exp $
 
 #ifndef __BBKEYS_HH
 #define __BBKEYS_HH
 
-#include "grab_defs.hh" // grab* definitions
-#include "Basewindow.hh"
-
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
+
+#include "grab_defs.hh" // grab* definitions
+#include "Basewindow.hh"
+#include "Timer.hh"
 
 class Stackmenu;
 class Resource;

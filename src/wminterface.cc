@@ -19,15 +19,14 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: wminterface.cc,v 1.7 2002/05/30 18:26:25 eckzor Exp $
-
-#include "wminterface.hh"
-#include "resource.hh"
-#include "BaseDisplay.hh"
+// $Id: wminterface.cc,v 1.8 2002/05/30 20:47:45 eckzor Exp $
 
 #ifdef    HAVE_CONFIG_H
-#  include "../config.h"
+#  include "config.h"
 #endif // HAVE_CONFIG_H
+
+#include "wminterface.hh"
+#include "bbkeys.hh"
 
 WMInterface::WMInterface(ToolWindow *toolwindow) : NETInterface(toolwindow) {
 	bbtool=toolwindow;

@@ -18,7 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: NETInterface.hh,v 1.2 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: NETInterface.hh,v 1.3 2002/05/30 20:47:45 eckzor Exp $
 
 #ifndef __NETINTERFACE_HH
 #define __NETINTERFACE_HH
@@ -30,7 +30,6 @@
 #include <X11/Xresource.h>
 
 #include "Timer.hh"
-#include "Basewindow.hh"
 
 class Basewindow;
 

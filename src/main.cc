@@ -18,18 +18,18 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: main.cc,v 1.7 2002/05/30 19:23:29 eckzor Exp $
-
-#include "bbkeys.hh"
-#include "main.hh"
+// $Id: main.cc,v 1.8 2002/05/30 20:47:45 eckzor Exp $
 
 #ifdef HAVE_CONFIG_H
-#  include "../config.h"
+#  include "config.h"
 #endif
 
 #ifdef HAVE_STDLIB_H
 #  include <stdlib.h>
 #endif
+
+#include "bbkeys.hh"
+#include "main.hh"
 
 #include <string>
 using std::string;

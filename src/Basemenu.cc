@@ -20,7 +20,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: Basemenu.cc,v 1.4 2002/05/30 20:20:45 eckzor Exp $
+// $Id: Basemenu.cc,v 1.5 2002/05/30 20:47:45 eckzor Exp $
 
 // stupid macros needed to access some functions in version 2 of the GNU C
 // library
@@ -29,7 +29,7 @@
 #endif // _GNU_SOURCE
 
 #ifdef    HAVE_CONFIG_H
-#  include "../config.h"
+#  include "config.h"
 #endif // HAVE_CONFIG_H
 
 #ifdef    HAVE_STDIO_H

@@ -19,7 +19,11 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: stackmenu.cc,v 1.8 2002/05/30 20:20:45 eckzor Exp $
+// $Id: stackmenu.cc,v 1.9 2002/05/30 20:47:45 eckzor Exp $
+
+#ifdef    HAVE_CONFIG_H
+#  include "config.h"
+#endif // HAVE_CONFIG_H
 
 #include "stackmenu.hh"
 #include "bbkeys.hh"
@@ -27,10 +31,6 @@
 #include "wminterface.hh"
 
 #include <X11/Xutil.h>
-
-#ifdef    HAVE_CONFIG_H
-#  include "../config.h"
-#endif // HAVE_CONFIG_H
 
 Stackmenu::Stackmenu(ToolWindow *tool) :
 		Basemenu(tool)

@@ -18,18 +18,15 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: Basewindow.cc,v 1.4 2002/05/30 18:26:25 eckzor Exp $
+// $Id: Basewindow.cc,v 1.5 2002/05/30 20:47:45 eckzor Exp $
 
-#include "Basewindow.hh"
-#include "resource.hh"
+#ifdef    HAVE_CONFIG_H
+#  include "config.h"
+#endif // HAVE_CONFIG_H
 
 #ifdef    HAVE_SIGNAL_H
 #  include <signal.h>  
 #endif // HAVE_SIGNAL_H
-
-#ifdef    HAVE_CONFIG_H
-#  include "../config.h"
-#endif // HAVE_CONFIG_H
 
 #ifdef    HAVE_SYS_SIGNAL_H
 #  include <sys/signal.h>
@@ -43,6 +40,8 @@
 #  endif // SA_INTERRUPT
 #endif // SA_NODEFER
 
+#include "Basewindow.hh"
+#include "resource.hh"
 
 static int handleXErrors(Display *, XErrorEvent *);
 

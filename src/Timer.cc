@@ -19,7 +19,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: Timer.cc,v 1.2 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: Timer.cc,v 1.3 2002/05/30 20:47:45 eckzor Exp $
   
 // stupid macros needed to access some functions in version 2 of the GNU C 
 // library
@@ -28,7 +28,7 @@
 #endif // _GNU_SOURCE
 
 #ifdef    HAVE_CONFIG_H
-#  include "../config.h"
+#  include "config.h"
 #endif // HAVE_CONFIG_H
 
 #include "BaseDisplay.hh"

@@ -19,44 +19,35 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: BaseDisplay.cc,v 1.2 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: BaseDisplay.cc,v 1.3 2002/05/30 20:47:45 eckzor Exp $
 
 // stupid macros needed to access some functions in version 2 of the GNU C
 // library
 
 #ifndef   _GNU_SOURCE
 #define   _GNU_SOURCE
-#endif													// _GNU_SOURCE
+#endif // _GNU_SOURCE
 
 #ifdef    HAVE_CONFIG_H
-#  include "../config.h"
-#endif													// HAVE_CONFIG_H
-
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
-#include <X11/cursorfont.h>
+#  include "config.h"
+#endif // HAVE_CONFIG_H
 
 #ifdef    SHAPE
 #  include <X11/extensions/shape.h>
-#endif													// SHAPE
-
-#include "BaseDisplay.hh"
-#include "LinkedList.hh"
-#include "Timer.hh"
+#endif // SHAPE
 
 #ifdef    HAVE_FCNTL_H
 #  include <fcntl.h>
-#endif													// HAVE_FCNTL_H
+#endif // HAVE_FCNTL_H
 
 #ifdef    HAVE_STDIO_H
 #  include <stdio.h>
-#endif													// HAVE_STDIO_H
+#endif // HAVE_STDIO_H
 
 #ifdef    STDC_HEADERS
 #  include <stdlib.h>
 #  include <string.h>
-#endif													// STDC_HEADERS
+#endif // STDC_HEADERS
 
 #if HAVE_STRINGS_H
 # include <strings.h>
@@ -65,33 +56,41 @@
 #ifdef    HAVE_UNISTD_H
 #  include <sys/types.h>
 #  include <unistd.h>
-#endif													// HAVE_UNISTD_H
+#endif // HAVE_UNISTD_H
 
 #ifdef    HAVE_SYS_SELECT_H
 #  include <sys/select.h>
-#endif													// HAVE_SYS_SELECT_H
+#endif // HAVE_SYS_SELECT_H
 
 #ifdef    HAVE_SIGNAL_H
 #  include <signal.h>
-#endif													// HAVE_SIGNAL_H
+#endif // HAVE_SIGNAL_H
 
 #ifdef    HAVE_SYS_SIGNAL_H
 // #  include <sys/signal.h>
-#endif													// HAVE_SYS_SIGNAL_H
+#endif // HAVE_SYS_SIGNAL_H
 
 #ifndef   SA_NODEFER
 #  ifdef   SA_INTERRUPT
 #    define SA_NODEFER SA_INTERRUPT
-#  else													// !SA_INTERRUPT
+#  else // !SA_INTERRUPT
 #    define SA_NODEFER (0)
-#  endif												// SA_INTERRUPT
-#endif													// SA_NODEFER
+#  endif // SA_INTERRUPT
+#endif // SA_NODEFER
 
 #ifdef    HAVE_SYS_WAIT_H
 #  include <sys/types.h>
 #  include <sys/wait.h>
-#endif													// HAVE_SYS_WAIT_H
+#endif // HAVE_SYS_WAIT_H
 
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <X11/Xutil.h>
+#include <X11/cursorfont.h>
+
+#include "BaseDisplay.hh"
+#include "LinkedList.hh"
+#include "Timer.hh"
 
 // X error handler to handle any and all X errors while the application is
 // running

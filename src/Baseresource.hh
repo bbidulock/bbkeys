@@ -18,10 +18,27 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: Baseresource.hh,v 1.3 2002/05/30 18:26:25 eckzor Exp $
+// $Id: Baseresource.hh,v 1.4 2002/05/30 20:47:45 eckzor Exp $
 
 #ifndef __BASERESOURCE_HH
 #define __BASERESOURCE_HH
+
+#ifdef HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif
+
+#ifdef HAVE_SYS_STAT_H
+#  include <sys/stat.h>
+#endif
+
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+
+#include <X11/Xlib.h>
+#include <X11/Xresource.h>
+
+#include "Timer.hh"
 
 #define BBTOOLS 1
 #define BLACKBOX 2
@@ -29,10 +46,10 @@
 #define BBTOOL_LOCAL ".bbtools/bbkeys.nobb"
 #define BLACKBOX_LOCAL ".bbtools/bbkeys.bb"
 
-#include "Timer.hh"
-
 class ToolWindow;
 class BImageControl;
+class BColor;
+class BTexture;
 
 struct STYLE {
   bool auto_config;
