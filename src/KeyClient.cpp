@@ -351,27 +351,15 @@ void KeyClient::initKeywords(KeywordMap& keywords) {
 
 bool KeyClient::process_signal(int sig) {
   switch (sig) {
-  case SIGCHLD:
-    int unused;
-    while (waitpid(-1, &unused, WNOHANG | WUNTRACED) > 0)
-      ;
-    break;
-
   case SIGHUP:
     reconfigure();
+    return true;
     break;
 
-  case SIGSEGV:
-  case SIGFPE:
-  case SIGINT:
-  case SIGTERM:
-    bt::Application::shutdown();
-
   default:
-    return False;
+    return (bt::Application::process_signal(sig) );
   }
 
-  return True;
 }
 
 void KeyClient::process_event(XEvent *e) {
