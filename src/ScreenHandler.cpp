@@ -62,11 +62,11 @@ ScreenHandler::ScreenHandler (KeyClient * k, unsigned int number)
   k->getLockModifiers(_numlockMask, _scrolllockMask);
 
   // find a window manager supporting NETWM, waiting for it to load if we must
-  int count = 20;  // try for 20 seconds
+  int count = 20;  // try 20 times
   _managed = false;
   while (! (_keyClient->shuttingDown() || _managed || count <= 0)) {
     if (! (_managed = findSupportingWM()))
-      sleep(1);
+      sleep(5);
     --count;
   }
 
