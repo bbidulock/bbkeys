@@ -64,7 +64,8 @@ extern "C" {
 //--------------------------------------------------------
 KeyClient::KeyClient (int argc, char **argv,
                       Config & config, std::string display):
-  bt::Application(BBTOOL, display.c_str(), true), _config(config)
+  bt::Application(BBTOOL, display.c_str(), true), _config(config),
+  _keybindings(0), config_check_timer(0)
 {
 
   // save off what we're constructed with for reconfiguring later...
