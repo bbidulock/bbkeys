@@ -25,13 +25,35 @@
 #ifndef  WINDOWLISTMENU_HH
 #define  WINDOWLISTMENU_HH
 
+extern "C" {
+#include <X11/Xlib.h>
+}
 
-class WindowlistMenu 
+#include <Menu.hh>
+
+#include "ScreenHandler.h"
+#include "window.hh"
+#include "keytree.hh"
+
+class ScreenHandler;
+class keytree;
+
+class WindowlistMenu : public bt::Menu
 {
 
 public:
-   WindowlistMenu () ;
-   ~WindowlistMenu () ;
+  WindowlistMenu (ScreenHandler * s);
+  ~WindowlistMenu (void) ;
+  void showCycleMenu (WindowList theList ) ;
+  void itemClicked(unsigned int id, unsigned int button);
+
+private:
+  ScreenHandler * _screen;
+  WindowList  _windowList;
+  keytree * _keybindings;
+  Display * _display;
+  void keyPressEvent (const XKeyEvent * const e) ;
+  void keyReleaseEvent (const XKeyEvent * const e) ;
 
 };
 #endif

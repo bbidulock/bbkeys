@@ -47,6 +47,7 @@ extern "C" {
 #include <Netwm.hh>
 
 class KeyClient;
+class WindowlistMenu;
 class keytree;
 
 class ScreenHandler : public bt::EventHandler
@@ -57,6 +58,7 @@ public:
   ~ScreenHandler () ;
   inline unsigned int getScreenNumber() const { return _screenNumber; }
   inline Window getRootWindow() const { return _screenInfo.rootWindow(); }
+  inline KeyClient & getKeyClient() const { return * _keyClient; }
   inline bool isManaged() const { return _managed; }
   inline const bt::ScreenInfo & getScreenInfo() { return _screenInfo; }
   inline int screenNumber() const { return _screenNumber; }
@@ -68,14 +70,12 @@ public:
   const XWindow *lastActiveWindow() const;
   
 private:
-  WindowlistMenu _windowmenu;
-  
+  friend class WindowlistMenu;
   bool _managed;
   bool _debug;
   bool _grabbed; // used for keygrab toggle function
-  bool _cycling; // used for stacked cycling
-  bool _stacked_cycling;
-  bool _stacked_raise;
+  bool _cycling; // used for window cycling
+  bool _raise_while_cycling;
   bool _show_cycle_menu;
   bool _honor_modifiers;
   std::string _menu_text_justify;
@@ -94,6 +94,8 @@ private:
   int _numlockMask;
   int _scrolllockMask;
   std::string _wm_name;
+  WindowlistMenu * _windowmenu;
+  
 
   unsigned int _num_desktops;
   unsigned int _active_desktop;
@@ -125,6 +127,11 @@ private:
                    const bool alldesktops = false,
                    const bool sameclass = false,
                    const std::string &classname = "");
+  WindowList getCycleWindowList(unsigned int state, const bool forward, const int increment,
+                   const bool allscreens = false,
+                   const bool alldesktops = false,
+                   const bool sameclass = false,
+                   const std::string &classname = "");  
   void cycleWorkspace(const bool forward, const int increment,
                       const bool loop = true) const;
   void changeWorkspace(const int num) const;

@@ -60,6 +60,8 @@ public:
   inline Netclient * getNetclient() { return _netclient; }
   inline Config * getConfig() { return &_config; }
   inline KeyGrabber * getKeyGrabber() { return _keyGrabber; }
+  inline bt::Application & getMainApplication() 
+    { return dynamic_cast<bt::Application&> (* this); }
   void cycleScreen(int current, bool forward) const;
 
   void getLockModifiers(int &numlockMask, int &scrolllockMask) const {
