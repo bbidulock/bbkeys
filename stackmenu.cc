@@ -61,6 +61,7 @@ void Stackmenu::setMenuItems() {
 				}
 		}
 	}
+	centerPosition();
 }
 
 void Stackmenu::clearMenu() {
@@ -92,13 +93,11 @@ void Stackmenu::key_press(int grabInt)
 {
 	switch (grabInt) {
 		case grabNextWindow:
-//			setSelected(menuPosition, False);
 			if(++menuPosition >= getCount())
 				menuPosition = 0;
       setSelected(menuPosition);
 			break;
 		case grabPrevWindow:
-//      setSelected(menuPosition, False);
 			if(--menuPosition < 0)
 				menuPosition = getCount() - 1;
       setSelected(menuPosition);

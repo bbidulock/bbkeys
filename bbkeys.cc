@@ -2029,8 +2029,6 @@ void ToolWindow::add_stack(WindowList *newwin, int desktop) {
 void ToolWindow::cycle_stack(bool forward) {
 	if (stackMenu->WaitForUpdate())
 		stackMenu->Update();
-	stackMenu->setMenuItems();
-	stackMenu->centerPosition();
 	stackMenu->show(forward);
 }
 
