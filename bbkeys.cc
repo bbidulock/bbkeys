@@ -1298,6 +1298,14 @@ void ToolWindow::process_event(XEvent * e)
 		windowAttributeChange(e->xproperty.window);
 		break;
 	
+	case VisibilityNotify:
+		// **** This will need to change to a better method of keeping the **** //
+		// **** menu on top when blackbox provides another way!            **** //
+		if (e->xvisibility.window == stackMenu->getWindowID())
+			if (e->xvisibility.state != VisibilityUnobscured)
+				XRaiseWindow(getXDisplay(), stackMenu->getWindowID());
+		break;
+	
 	case KeyRelease: {
 		// if stacked cycling is going on..
 		if (doingCycling) {
