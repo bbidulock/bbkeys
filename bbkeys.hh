@@ -144,6 +144,7 @@ public:
 	inline GC getMenuHiBGGC(void) {return menuHiBGGC;}
 	inline GC getMenuHiGC(void) {return menuHiGC; }
 	inline GC getMenuFrameGC(void) {return menuFrameGC;}
+	unsigned int KeycodeToModmask(unsigned int code);
 
 //	void setNETInit(void) { /*wm_init = True;*/ }
 

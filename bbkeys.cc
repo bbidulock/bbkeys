@@ -1251,10 +1251,40 @@ void ToolWindow::Redraw()
 
 }
 
+unsigned int ToolWindow::KeycodeToModmask(unsigned int code)
+{
+	switch (XKeycodeToKeysym(getXDisplay(), code, 0)) {
+		case XK_Shift_L:
+		case XK_Shift_R:
+			return ShiftMask;
+
+		case XK_Caps_Lock:
+		case XK_Shift_Lock:
+			return LockMask;
+
+		case XK_Control_L:
+		case XK_Control_R:
+			return ControlMask;
+
+		case XK_Alt_L:
+		case XK_Alt_R:
+      return Mod1Mask;
+
+		case XK_Num_Lock:
+      return Mod2Mask;
+
+		case XK_Meta_L:
+		case XK_Meta_R:
+      return Mod1Mask;
+
+		case XK_Scroll_Lock:
+      return Mod5Mask;
+	}
+	return -1;
+}
+
 void ToolWindow::process_event(XEvent * e)
 {
-	static unsigned int released_state;
-
 	switch (e->type) {
 	case PropertyNotify:
 		windowAttributeChange(e->xproperty.window);
@@ -1262,9 +1292,9 @@ void ToolWindow::process_event(XEvent * e)
 	
 	case KeyRelease: {
 		if (stackMenu->isVisible()) {
-			released_state |= e->xkey.state; // add state bits
-			if ((released_state & grabSet.KeyMap[grabNextWindow].modMask) ||
-					(released_state & grabSet.KeyMap[grabPrevWindow].modMask))
+			unsigned int mask = KeycodeToModmask(e->xkey.keycode);
+			if (((e->xkey.state & grabSet.KeyMap[grabNextWindow].modMask) == mask) ||
+					((e->xkey.state & grabSet.KeyMap[grabPrevWindow].modMask) == mask))
 				stackMenu->selectFocused();
 		}
 		break;
@@ -1317,12 +1347,9 @@ void ToolWindow::process_event(XEvent * e)
 				stackMenu->hide();
 			else if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Return))
 				stackMenu->selectFocused();
-			else
-				released_state &= !e->xkey.state;		// remove state bits
 		}
 		if (grabInt > -1) {
 			if (stackMenu->isVisible()) {
-				released_state = 0;
 				stackMenu->key_press(grabSet.KeyMap[grabInt].action);
 			} else {
 				/* play with colors for nyz =:) */
