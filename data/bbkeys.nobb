@@ -9,6 +9,9 @@ bbkeys.honorModifiers:        False
 ! set this to false to use the linear style of window cycling
 !bbkeys.menu.stackedCycling:	False
 
+! set this to false to not show the popup window menu for stacked window cycling
+!bbkeys.menu.showCycleMenu:	False
+
 session.colorsPerChannel:	4
 session.imageDither:		False
 

@@ -30,7 +30,7 @@ public:
 	virtual ~Stackmenu();
 
 	void hide();
-	void show(bool forward);
+	void show(bool forward, bool showMenu);
 	void reconfigure();
 	void key_press(int grabInt);
 	void centerPosition();

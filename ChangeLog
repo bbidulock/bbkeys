@@ -11,11 +11,19 @@ version 0.8.1 --
     stacked-Cycling folks, we now set focus on cycled-through windows as we
     go, raising the window selected at the end of the cycle.  This sounds
     more confusing than it is.   This makes it possible to separate the new
-    and improved cycling method from the popup menu.  I'm not going to take
-    the time to look into that right now, but if we go in that direction,
-    there's a visual indicator as to which window you're switching to
-    before you actually go there.  Oh, and hitting Escape in the middle of
-    cycling will return focus to the window that you started from....
+    and improved cycling method from the popup menu. Oh, and hitting Escape 
+    in the middle of cycling will return focus to the window that you 
+    started from....
+
+  - I've made it possible to turn off the visual menu for the new-and-improved
+    stacked cycling method.  To do this, just put 
+    "bbkeys.menu.showCycleMenu: False" (without the quotes, duh) into your
+    ~/.bbtools/bbkeys.bb or ~/.bbtools/bbkeys.nobb file.  This will let
+    bbkeys still use the new method, will set focus as you cycle through the
+    stack, but won't actually raise the window you want until you tell it
+    to by releasing your keys or hitting <Enter>, and won't show the popup
+    window list and cycle through the entries as you go.  Again, harder to
+    explain than it is to use....
 
 version 0.8.0 --
   - BIG changes!!!  w00T!!!  There's some very significant improvements in

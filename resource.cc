@@ -91,13 +91,23 @@ void Resource::LoadBBToolResource(void)
 	}
 
 	if (XrmGetResource(resource_db, "bbkeys.menu.stackedCycling",
-										 "Bbkeys.menu.StackedCycling", &value_type, &value)) {
+										 "Bbkeys.Menu.StackedCycling", &value_type, &value)) {
 		if (!strncasecmp("true", value.addr, value.size))
 			menu.stackedCycling = True;
 		else
 			menu.stackedCycling = False;
 	} else
 		menu.stackedCycling = True;
+
+	if (XrmGetResource(resource_db, "bbkeys.menu.showCycleMenu",
+										 "Bbkeys.Menu.ShowCycleMenu", &value_type, &value)) {
+		if (!strncasecmp("true", value.addr, value.size))
+			menu.showCycleMenu = True;
+		else
+			menu.showCycleMenu = False;
+	} else
+		menu.showCycleMenu = True;
+
 
 	Frame();
 

@@ -78,7 +78,7 @@ void Stackmenu::selectFocused(bool raise)
 		if (it.current()->desktop == bbtool->getCurrentDesktopNr())
 			if(!selected--) {
 				bbtool->wminterface->setWindowFocus(it.current()->win);
-				if (raise) {
+				if ( raise ) {
 					// okay, an explanation is in order... First, we have to
 					// hide our window so that focusWindow() actually does
 					// anything. Then we XRaiseWindow, because if we did
@@ -91,7 +91,7 @@ void Stackmenu::selectFocused(bool raise)
 				}
 			}
 
-	if ( raise && isVisible() ) {
+	if ( raise ) {
 		hide();
 	}
 }
@@ -120,9 +120,10 @@ void Stackmenu::hide()
 {
 	XUngrabKeyboard(bbtool->getXDisplay(), CurrentTime);
 	Basemenu::hide();
+	bbtool->setCycling(False);
 }	
 
-void Stackmenu::show(bool forward)
+void Stackmenu::show(bool forward, bool showMenu)
 {
 	setMenuItems();
 	if (getCount() < 1)	return;	// no windows, just return
@@ -143,7 +144,8 @@ void Stackmenu::show(bool forward)
 	menuPosition = 0;
 	key_press(forward?grabNextWindow:grabPrevWindow);
 
-	Basemenu::show();
+	if (showMenu)
+		Basemenu::show();
 }
 
 void Stackmenu::centerPosition()

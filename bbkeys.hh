@@ -144,6 +144,7 @@ public:
 	inline GC getMenuHiBGGC(void) {return menuHiBGGC;}
 	inline GC getMenuHiGC(void) {return menuHiGC; }
 	inline GC getMenuFrameGC(void) {return menuFrameGC;}
+	inline bool getDoingCycling(void) { return doingCycling; }
 	unsigned int KeycodeToModmask(unsigned int code);
 
 //	void setNETInit(void) { /*wm_init = True;*/ }
@@ -157,6 +158,7 @@ protected:
 	void timeout(void);
 	void addSticky(WindowList *);
 	void removeSticky(const Window,const int);
+	inline void setCycling(bool f) { doingCycling = f; }
 	
 private:
 	XGCValues gcv;	// font stuff
@@ -197,6 +199,7 @@ private:
 														// window manager
 
 	Stackmenu *stackMenu;		// variables for the stack cycling style menu
+	bool doingCycling;			// are we in the middle of a stacked cycle?
 	Window menuWin;
 	GC menuGC;
 	GC menuHiBGGC;

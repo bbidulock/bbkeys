@@ -817,6 +817,7 @@ ToolWindow::ToolWindow(int argc, char **argv, struct CMDOPTIONS *options):
 	// initialize variables
 	current_desktop = NULL;
 	desktop_count = 0;
+	doingCycling = False;
 	
 	// make draw the bbkeys window
 	MakeWindow(False);
@@ -1290,7 +1291,7 @@ void ToolWindow::process_event(XEvent * e)
 	
 	case KeyRelease: {
 		// if the menu is visible..
-		if (stackMenu->isVisible()) {
+		if (doingCycling) {
 			unsigned int mask = KeycodeToModmask(e->xkey.keycode);
 			unsigned int state = e->xkey.state;
 			int next = actionList[grabNextWindow];
@@ -1348,7 +1349,7 @@ void ToolWindow::process_event(XEvent * e)
 			}
 		}
 
-		if (stackMenu->isVisible()) {
+		if (doingCycling) {
 			if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Escape)) {
 				stackMenu->hide();
 				// reset focus to the window we were focused on before window
@@ -1872,7 +1873,7 @@ void ToolWindow::focusWindow(Window win)
 	// bbtool->focusWindow() call from Stackmenu::selectFocused() after we
 	// XRaise the window....
 
-	if (! stackMenu->isVisible() ) { 
+	if (! doingCycling ) { 
 		focus_window = win;
 		if (resource->getMenuStackedCycling())
 			focus_stack(win);
@@ -2077,7 +2078,9 @@ void ToolWindow::add_stack(WindowList *newwin, int desktop) {
 }
 
 void ToolWindow::cycle_stack(bool forward) {
-	stackMenu->show(forward);
+	register bool showMenu = resource->getMenuShowCycleMenu() ? True : False;
+	doingCycling = True;
+	stackMenu->show(forward, showMenu);
 }
 
 void ToolWindow::focus_stack(Window win)
