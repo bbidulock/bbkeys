@@ -1,9 +1,5 @@
 version 0.8.5 --
 
-  - make bbkeys properly move windows around instead of relying upon the known,
-    and fixed, ConfigureRequet bug in blackbox.
-	[xOr}
-
   - fix a memory leak in ToolWindow::windowAttributeChange.
     [xOr]
 
