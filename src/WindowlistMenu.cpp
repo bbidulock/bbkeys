@@ -51,10 +51,18 @@ void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
     switch (it->type()) {
 
     case Action::nextWindow:
+    case Action::nextWindowOnAllWorkspaces:
+    case Action::nextWindowOnAllScreens:
+    case Action::nextWindowOfClass:
+    case Action::nextWindowOfClassOnAllWorkspaces:
       selectNext();
       break;
       
     case Action::prevWindow:
+    case Action::prevWindowOnAllWorkspaces:
+    case Action::prevWindowOnAllScreens:
+    case Action::prevWindowOfClass:
+    case Action::prevWindowOfClassOnAllWorkspaces:
       selectPrevious();
       break;
 
