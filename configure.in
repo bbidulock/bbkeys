@@ -17,7 +17,7 @@ AC_DEFUN(AC_SET_DEBUG,
   _CXXFLAGS="-g -Wall -DDEBUG"
   _LDFLAGS=""
   case $host_os in
-  ([*solaris*])
+  [*solaris*)]
     dnl On solaris, we get a ton of multiply-defined errors if we don't include
     dnl this parameter
     _LDFLAGS="$_LDFLAGS -z muldefs"
@@ -34,14 +34,14 @@ AC_DEFUN(AC_SET_NODEBUG,
   _CXXFLAGS="-DNDEBUG"
   _LDFLAGS="-s"
   case $host_os in
-  ([*solaris*])
+  [*solaris*)]
      _CFLAGS="$_CFLAGS -O"
      _CXXFLAGS="$_CXXFLAGS -O"
      dnl On solaris, we get a ton of multiply-defined errors if we don't include
      dnl this parameter
      _LDFLAGS="$_LDFLAGS -z muldefs"
      ;;
-  ([*])
+  [*)]
      _CFLAGS="$_CFLAGS -O2"
      _CXXFLAGS="$_CXXFLAGS -O2"
      ;;

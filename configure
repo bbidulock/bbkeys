@@ -888,12 +888,12 @@ if test $enableval = "no";
   _CXXFLAGS="-DNDEBUG"
   _LDFLAGS="-s"
   case $host_os in
-  (*solaris*)
+  *solaris*)
      _CFLAGS="$_CFLAGS -O"
      _CXXFLAGS="$_CXXFLAGS -O"
                _LDFLAGS="$_LDFLAGS -z muldefs"
      ;;
-  (*)
+  *)
      _CFLAGS="$_CFLAGS -O2"
      _CXXFLAGS="$_CXXFLAGS -O2"
      ;;
@@ -907,7 +907,7 @@ if test $enableval = "no";
   _CXXFLAGS="-g -Wall -DDEBUG"
   _LDFLAGS=""
   case $host_os in
-  (*solaris*)
+  *solaris*)
             _LDFLAGS="$_LDFLAGS -z muldefs"
     ;;
   esac
@@ -923,12 +923,12 @@ else
   _CXXFLAGS="-DNDEBUG"
   _LDFLAGS="-s"
   case $host_os in
-  (*solaris*)
+  *solaris*)
      _CFLAGS="$_CFLAGS -O"
      _CXXFLAGS="$_CXXFLAGS -O"
                _LDFLAGS="$_LDFLAGS -z muldefs"
      ;;
-  (*)
+  *)
      _CFLAGS="$_CFLAGS -O2"
      _CXXFLAGS="$_CXXFLAGS -O2"
      ;;
