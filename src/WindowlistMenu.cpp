@@ -106,7 +106,7 @@ void WindowlistMenu::keyReleaseEvent (const XKeyEvent * const e) {
     // if the user is ending his window-cycling adventure, then raise the window
     // for him.
     if (win)
-      win->focus(true);
+      _screen->focusWindow(win);
   }
 
   bt::Menu::keyReleaseEvent(e);
@@ -130,7 +130,7 @@ void WindowlistMenu::showCycleMenu( WindowList theList ) {
   bool onlyThisDesktop = true;
   for (it = theList.begin(); it != end; it++) {
     unsigned int dNbr = (*it)->desktop();
-    if ( (dNbr != _desktop_nbr) && (0xFFFFFFFF != dNbr) ) {
+    if ( (dNbr != _desktop_nbr) && (! (*it)->isSticky()) ) {
       onlyThisDesktop = false;
       break;
     }
@@ -182,7 +182,7 @@ void WindowlistMenu::itemClicked(unsigned int id, unsigned int button) {
   for (; it != end; ++it) {
     XWindow * const win = dynamic_cast<XWindow *>(*it);
     if ( id == x++ ) {
-      win->focus(true);
+      _screen->focusWindow(win);
     }
   }
 

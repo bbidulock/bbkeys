@@ -121,6 +121,7 @@ public:
   inline const std::string &appName() const { return _app_name; }
   inline const std::string &appClass() const { return _app_class; }
   inline bool canFocus() const { return _can_focus; }
+  inline bool isSticky() const { return 0xFFFFFFFF == _desktop; }
   
   inline bool shaded() const { return _shaded; }
   inline bool iconic() const { return _iconic; }

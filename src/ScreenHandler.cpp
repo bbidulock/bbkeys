@@ -820,6 +820,17 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
   }
 }
 
+void ScreenHandler::focusWindow(const XWindow * win) {
+
+  // if the window our little user has selected is on a different 
+  // workspace, go there first
+  if ( ! win->isSticky() && (_active_desktop != win->desktop() ) ) {
+    changeWorkspace(win->desktop() );
+  }
+
+  win->focus(true);
+
+}
 
 void ScreenHandler::cycleWorkspace(const bool forward, const int increment,
 				   const bool loop) const {
