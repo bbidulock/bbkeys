@@ -170,6 +170,10 @@ Ye olde liste of bbkeys window-commands....
      VerticalIncrement
      HorizontalDecrement
      VerticalDecrement
+     UpWorkspace
+     DownWorkspace
+     LeftWorkspace
+     RightWorkspace
 
 
 ... more to come, I'm sure....

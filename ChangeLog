@@ -1,9 +1,31 @@
 version 0.8.2 --
+
+  - patched for matrix-style workspace navigation, updating the 0.3.5 patch written
+    by Markus Ottenbacher (m.ottenbacher@gmx.de) found at
+    http://homepages.compuserve.de/meottenbacher/.  Include UpWorkspace,
+    DownWorkspace, LeftWorkspace and RightWorkspace as WithAction() in your
+    ~/.bbkeysrc, and enable the arrangement in rows and columns in your
+    bbkeys.bb as well as in bbpager.bb (usually placed under
+    /usr/local/share/bbtools/) to use this functionality.  Bill Beal <beal@tunl.duke.edu>
+
   - fixed a bug due to an improper test for next and prev (test for key
     release).  next and prev might just be 0, so we can't do if (next)
     because the correct index of the grabSet.KeyMap might be 0 for either
     prevwindow or nextwindow keybinding and it would fail the test and not
     release the keyboard and not lower the window menu.
+
+  - fixed a bug for the window list popup menu--sticky window bug where
+    sticky windows would show up twice on their originating windows but not
+    at all on the workspace that you switched from immediately prior to
+    switching to the window where the sticky window is "homed"...  =:)
+
+  - xOr's new "showAllWorkspaces" option lets you see every window that you
+    have on any workspace with an indicator as to what workspace that
+    window is living on....  Very sweet code.
+
+  - fix for popup window menu...  Added "always on top" code so that it
+    stays at top of window stack and won't let blackbox hide it with any
+    other window (as occurs when auto-raise is enabled in blackbox).
 
 version 0.8.1 --
   - bug fixin's--fixed annoying "un-iconify" feature when bbkeys did window

@@ -2,6 +2,7 @@
 // workspaces.
 //
 //  Copyright (c) 1998-1999 John Kennis, j.m.b.m.kennis@tue.nl
+//  Copyright (c) 2000-2001 Jason Kasper (vanRijn) <vr at movingparts dot  net>
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
