@@ -26,7 +26,6 @@
 # SUCH DAMAGE.
 #
 
-
 # do math in integer rather than double mode--we rely on this for rounding
 use integer;
 
@@ -36,17 +35,29 @@ sub trim;
 my $home = $ENV{HOME};
 my $bbkeysrc;
 # get the keyconfig file from the commandline, or use the default
+my $rcpos = 0;
 foreach (@ARGV) {
+	$rcpos++;
 	if ($_ =~ /^-rc(|file)$/) {
-		shift;
-		$bbkeysrc = shift;
+		$bbkeysrc = $ARGV[$rcpos];
 		next;
+	}
+	if ($_ =~ /^-h(|elp)$/) {
+		print "\nbbkeysconf version @VERSION@\n";
+		print "Usage: bbkeysconf [options]\n";
+		print "Options:\n";
+		print " -rc[file] <filename>         Alternate keygrab definition file.\n";
+		print "                               (default is ~/.bbkeysrc)\n";
+		print " -h[elp]                      Display this help\n";
+		print "\n";
+		exit;
 	}
 }
 if (! $bbkeysrc) {
 	$bbkeysrc = "$home/.bbkeysrc";
 }
-
+print "$bbkeysrc\n";
+exit;
 my @modifiers = (
 	"None",
 	"Control",
