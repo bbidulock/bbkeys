@@ -118,6 +118,7 @@ public:
   struct BBPAGERWIN desktopwin;
   int columns;
   int rows;
+	Bool getMenuStackedCycling(void) { return menu.stackedCycling; }
   int getFocusStyle(void) { return focus_style; }
   int getDesktopFocusStyle(void) { return desktop_focus_style; }
   WHICH_BUTTON getWindowMoveButton(void) { return window_move_button; }
@@ -135,7 +136,6 @@ public:
   unsigned int getBorderWidth(void) { return 0; }
   int getBulletStyle(void) { return menu.bullet_style; }
   int getBulletPosition(void) { return menu.bullet_pos; }
-	Bool getMenuStackedCycling(void) { return menu.stackedCycling; }
 
   enum { AlignDontCare = 1, AlignTop, AlignBottom };
   enum { Right = 1, Left };
