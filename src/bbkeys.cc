@@ -2032,6 +2032,8 @@ void ToolWindow::setDesktopCount(int count)
 
 void ToolWindow::removeWindow(Window win)
 {
+	if (focus_window == win)
+		focusWindow(0);
 	LinkedListIterator<WindowList> it(windowList);
 	for (; it.current(); it++)
 		if (it.current()->win == win) {
