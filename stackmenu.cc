@@ -52,7 +52,6 @@ void Stackmenu::setMenuItems() {
 	LinkedListIterator<WindowList> it(bbtool->windowList);
 
 	clearMenu();
-
 	for (; it.current(); it++) {
 		if (((bbtool->getResource()->getMenuShowAllWorkspaces()) &&
 				((!it.current()->sticky) ||

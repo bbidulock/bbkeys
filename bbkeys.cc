@@ -1905,18 +1905,16 @@ void ToolWindow::addSticky(WindowList *win) {
 	win->sticky = True;
 
 	LinkedListIterator<DesktopList> it(desktopList);
-	for (; it.current(); it++) {
-		if (getCurrentDesktopNr() == it.current()->number)
-			continue;
-
-		WindowList *copy = new WindowList;
-		copy->win = win->win;
-		copy->iconic = win->iconic;
-		copy->shaded = win->shaded;
-		copy->sticky = True;
-		copy->desktop = it.current()->number;
-		windowList->insert(copy, -1);
-	}
+	for (; it.current(); it++)
+		if (getCurrentDesktopNr() != it.current()->number) {
+			WindowList *copy = new WindowList;
+			copy->win = win->win;
+			copy->iconic = win->iconic;
+			copy->shaded = win->shaded;
+			copy->sticky = True;
+			copy->desktop = it.current()->number;
+			windowList->insert(copy, -1);
+		}
 }
 
 void ToolWindow::removeSticky(const Window win, const int desktop) {
