@@ -92,16 +92,16 @@ void Stackmenu::key_press(int grabInt)
 {
 	switch (grabInt) {
 		case grabNextWindow:
-			setItemSelected(menuPosition, False);
+//			setSelected(menuPosition, False);
 			if(++menuPosition >= getCount())
 				menuPosition = 0;
-      setItemSelected(menuPosition, True);
+      setSelected(menuPosition);
 			break;
 		case grabPrevWindow:
-      setItemSelected(menuPosition, False);
+//      setSelected(menuPosition, False);
 			if(--menuPosition < 0)
 				menuPosition = getCount() - 1;
-      setItemSelected(menuPosition, True);
+      setSelected(menuPosition);
 			break;
 		default:
 			hide();
@@ -142,4 +142,11 @@ void Stackmenu::centerPosition()
 	int y = (bbtool->getCurrentScreenInfo()->getHeight()>>1) - (getHeight()>>1);
 	if (x>0 && y>0)
 		Basemenu::move(x, y);
+}
+
+void Stackmenu::setSelected(int sel)
+{
+	if ((sel<0) || (sel>=getCount())) return;
+
+	setHighlight(sel);	
 }

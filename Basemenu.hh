@@ -57,6 +57,7 @@ private:
       bevel_h;
   } menu;
 
+	int selected_item;
 
 protected:
   inline BasemenuItem *find(int index) { return menuitems->find(index); }
@@ -130,6 +131,8 @@ public:
   enum { Right = 1, Left };
   enum { Empty = 0, Square, Triangle, Diamond };
   enum { LeftJustify = 1, RightJustify, CenterJustify };
+
+	void setHighlight(int);
 };
 
 

@@ -383,7 +383,7 @@ void Basemenu::update(void) {
       drawItem(i, True, 0);
       drawSubmenu(i);
     } else
-      drawItem(i, False, 0);
+      drawItem(i, (i==selected_item?True:False), 0);
 
   if (parent && visible)
     parent->drawSubmenu(parent->which_sub);
@@ -849,7 +849,6 @@ void Basemenu::motionNotifyEvent(XMotionEvent *me) {
       if (which_press != -1 && which_sbl != -1) {
 	int p = (which_sbl * menu.persub) + which_press;
 	BasemenuItem *item = menuitems->find(p);
-
 	drawItem(p, False, True);
 	if (item->submenu())
 	  if (item->submenu()->isVisible() &&
@@ -978,4 +977,12 @@ void Basemenu::reconfigure(void) {
 
   menu.bevel_w = bbtool->getResource()->getBevelWidth();
   update();
+}
+
+void Basemenu::setHighlight(int item)
+{
+//	which_sbl = sublevel;
+//	which_press = item;
+	selected_item = item;
+	update();
 }

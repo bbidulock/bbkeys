@@ -37,11 +37,11 @@ public:
 	void key_press(int grabInt);
 	void centerPosition();
 	bool WaitForUpdate(void) {return wait_for_update;}
+	void setSelected(int);
 
 protected:
 	void setMenuItems();
 	void clearMenu();
-	void setSelected(int);
 	void itemSelected(int,int);
 
 private:
