@@ -79,7 +79,6 @@ void Stackmenu::itemSelected(int button, int index)
 void Stackmenu::key_release(unsigned int key)
 {
 	if (key == 64) {
-printf("Alt Released\n");
 		int selected = menuPosition;
 		LinkedListIterator<WindowList> it(bbtool->windowList);
 		for(; it.current(); it++)
@@ -115,7 +114,6 @@ void Stackmenu::key_press(int grabInt)
 
 void Stackmenu::show(bool forward)
 {
-printf("in Stackmenu::show()\n");
 	XRaiseWindow(bbtool->getXDisplay(), getWindowID());
 	/*
 	XGrabKey(bbtool->getXDisplay(), 64, 0, 

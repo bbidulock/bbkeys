@@ -1294,11 +1294,10 @@ void ToolWindow::process_event(XEvent * e)
 		}
 
 	 // if we're doing the CycleWindow thing
-    if (stackMenu->isVisible()) {
-     	stackMenu->key_press(grabInt);
-		break;
-	 } 
-	 if (grabInt > -1) {
+   if (stackMenu->isVisible()) {
+     	stackMenu->key_press(grabSet.KeyMap[grabInt].action);
+	 }
+	 else if (grabInt > -1) {
 			/* play with colors for nyz =:) */
 			XSetWindowBackgroundPixmap(getXDisplay(), win_configBtn,
 					pixmap.pix_pressedBtn);
