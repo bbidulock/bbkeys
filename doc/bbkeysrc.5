@@ -1,6 +1,6 @@
-.TH BBKEYSRC 5 "August 04, 2001" bbtools bbkeysrc
+.TH BBKEYSRC 5 "January 12, 2002" bbtools bbkeysrc
 .SH NAME
-bbkeysrc \- bbkeys configuration file
+bbkeysrc \- bbkeys keymap configuration file
 
 .SH SYNOPSIS
 .B $HOME/.bbkeysrc
@@ -13,15 +13,20 @@ bbtools (such as \fIbbmail(1)\fR).  In most cases, this will be
 There are several avenues open to the user to set any key-grabs that the user
 wishes:
 
+.SS "Using \fIbbconf\fR:"
+This is a Qt-based application available at http://bbconf.sourceforge.net/.
+
 .SS "Using \fIbbkeysconf\fR:"
-This is a Qt-Application distributed with bbkeys.  As a GUI application it is
-rather self-explanatory
+This is a Qt-based application previously distributed with bbkeys. It has 
+been superceded by \fIbbconf\fR, and no further development goes into it.
 
 .SS "Without \fIbbkeysconf\fR:"
 \fBbbkeys\fR can be launched with the \fI-noqt\fR option and whenever the
 little reconfigure button (the key-hole) on \fBbbkeys\fR is clicked,
-\fBbbkeys\fR will launch a very simple interactive rc-file generator (written
-in C) inside of an xterm.
+\fBbbkeys\fR will launch a very simple interactive rc-file generator, called
+bbkeysconf.pl (written in perl) inside of an xterm.  If you choose not to
+use the QT bbconf application, bbkeysconf.pl is the recommended way of
+editting your keybinding rc-file.
 
 .SS "Manually editing \fI$HOME/.bbkeysrc\fR:"
 The format is very easy, and it consists of lines describing the Key to grab,
@@ -63,6 +68,8 @@ Minimize
 .br
 NextWindow
 .br
+NextWindowAllWorkspaces
+.br
 NextWorkspace
 .br
 NudgeDown
@@ -82,6 +89,8 @@ Raise
 ShadeWindow
 .br
 StickWindow
+.br
+ToggleDecor
 .br
 Workspace1
 .br
@@ -118,6 +127,6 @@ VerticalDecrement
 
 .SH AUTHOR
 .nr
-Jason Kasper (vanRijn) <vR@movingparts.net> - bbkeys
+Jason 'vanRijn' Kasper <vR@movingparts.net> - bbkeys
 .br
 Jan Schaumann <jschauma@netmeister.org> - this man page

@@ -1,8 +1,7 @@
 configdir = $(datadir)/bbtools
 
 config_DATA =	bbkeys.bb \
-		bbkeys.nobb \
-		README.bbkeys
+		bbkeys.nobb
 
 EXTRA_DIST = $(config_DATA)
 

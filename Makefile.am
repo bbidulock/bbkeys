@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = src data doc redhat
 
 docdir = $(prefix)/doc/bbkeys
-doc_DATA = README AUTHORS ChangeLog
+doc_DATA = README AUTHORS BUGS ChangeLog NEWS
 EXTRA_DIST = $(doc_DATA) debian redhat
 
 ## create RPMs

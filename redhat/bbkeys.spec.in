@@ -47,17 +47,20 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root) 
 %{prefix}/bin/bbkeys 
 %{prefix}/bin/bbkeysconf.pl
-%{prefix}/share/bbtools/README.bbkeys 
 %{prefix}/share/bbtools/bbkeys.bb 
 %{prefix}/share/bbtools/bbkeys.nobb 
 %{prefix}/doc/bbkeys/README
 %{prefix}/doc/bbkeys/AUTHORS
+%{prefix}/doc/bbkeys/BUGS
 %{prefix}/doc/bbkeys/ChangeLog
+%{prefix}/doc/bbkeys/NEWS
 %{prefix}/man/man1/bbkeys.1.gz
 %{prefix}/man/man5/bbkeys.bb.5.gz
 %{prefix}/man/man5/bbkeysrc.5.gz
  
 %changelog 
+* Sat Jan 12 2002 Jason 'vanRijn' Kasper <vR@movingparts.net>
+- removing README.bbkeys and adding BUGS and NEWS
 * Sat Jan 5 2002 Jason 'vanRijn' Kasper <vR@movingparts.net>
 - gzipping man pages by default and changing file list to reflect this
 * Mon Nov 5 2001 Jason 'vanRijn' Kasper <vR@movingparts.net>

@@ -1,4 +1,4 @@
-.TH BBKEYS 1 "August 04, 2001" "bbtools" bbkeys
+.TH BBKEYS 1 "January 12, 2002" "bbtools" bbkeys
 .SH NAME
 bbkeys \- a general XWindow keygrabber
 
@@ -11,19 +11,23 @@ bbkeys \- a general XWindow keygrabber
 handles all keybindings and keyboard shortcuts for  blackbox. It uses
 blackbox's Image classes for rendering its look and feel so that \fBbbkeys\fR
 will render itself to match whatever blackbox style is used. It is highly
-configurable either via the included \fIbbkeysconf\fR GUI utility or by
-hand-editting bbkeys's config file.
+configurable either via the \fIbbconf\fR GUI utility or the (now deprecated)
+\fIbbkeysconf\fR GUI utility or by hand-editting bbkeys's config file.
 
 .SH USAGE
 On startup, \fBbbkeys\fR reads \fI$HOME/.bbkeysrc\fR, which you can edit by
-hand or through \fIbbkeysconf\fR.
+hand or through \fIbbconf\fR or \fIbbkeysconf\fR. This is now configurable
+through a command-line switch as show in OPTIONS.
 
 .SH OPTIONS
 A summary of the options supported by \fBbbkeys\fR is included below.
 
 .TP
 \fB\-c[onfig]\fR \fIfilename\fR
-use alternate config file
+use alternate 'look and feel' config file
+.TP
+\fB\-rc[file]\fR \fIfilename\fR
+use alternate keygrab definition file.  (default is ~/.bbkeysrc)
 .TP
 \fB\-d[ecorated]\fR
 Show 'normal' decorated window
@@ -70,13 +74,13 @@ Default: \fI$datadir=/usr/local/share/\fR
 See \fIbbkeysrc(5)\fR
 .SS "Under Blackbox"
 .nf
-\fI$datadir/bbtools/bbkeys.bb\fR the global configuration file
-\fI$HOME/.bbtools/bbkeys.bb\fR a local configuration file
+\fI$datadir/bbtools/bbkeys.bb\fR the global style configuration file
+\fI$HOME/.bbtools/bbkeys.bb\fR a local style configuration file
 
 .SS "Under other Window managers"
 .nf
-\fI$datadir/bbtools/bbkeys.nobb\fR the global configuration file
-\fI$HOME/.bbtools/bbkeys.nobb\fR a local configuration file
+\fI$datadir/bbtools/bbkeys.nobb\fR the global style configuration file
+\fI$HOME/.bbtools/bbkeys.nobb\fR a local style configuration file
 
 .SH VERSION
 @VERSION@
@@ -93,6 +97,6 @@ odds, find any bugs, please report them to the author.
 
 .SH AUTHOR
 .nr
-Jason Kasper (vanRijn) <vR@movingparts.net> - bbkeys
+Jason 'vanRijn' Kasper <vR@movingparts.net> - bbkeys
 .br
 Jan Schaumann <jschauma@netmeister.org> - this man page
