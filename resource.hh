@@ -91,8 +91,8 @@ struct MENU {
 	BTexture texture;
 	BTexture hiTexture;
 	BColor textColor;
+	BColor hiTextColor;
 	BColor highlightColor;
-	BColor hitextColor;
 	int justify;
 	XFontStruct *font;
   int bullet_style;
@@ -125,7 +125,7 @@ public:
   WHICH_BUTTON getWindowFocusButton(void) { return window_focus_button; }
 
   /* menu */
- 	const int getJustification(void) const {return LeftJustify; }
+ 	const int getJustification(void) const {return menu.justify; }
 	int getMenuJustification(void) { return menu.justify; }	
 	XFontStruct *getTitleFont(void) { return menu.font; }
 	XFontStruct *getMenuFont(void) { return menu.font; }

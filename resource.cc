@@ -447,7 +447,7 @@ void Resource::Menu()
 	readColor("bbkeys.menu.highlight.textColor",
 	    			"Bbkeys.Menu.Highlight.TextColor",
 			 			BB_MENU_HITEXTCOLOR,BB_MENU_HITEXTCOLOR2,
-            "white",&menu.hitextColor);
+            "white",&menu.hiTextColor);
 
   if (XrmGetResource(resource_db,"bbkeys.menuJustify","Bbkeys.MenuJustify",
 						&value_type, &value))

@@ -343,7 +343,7 @@ void Basemenu::update(void) {
   if (tmp) image_ctrl->removeImage(tmp);
 
   tmp = menu.hilite_pixmap;
-  texture = &(bbtool->getResource()->menu.hiTexture);
+  texture = &(bbtool->getResource()->menu.texture);
   if (texture->getTexture() == (BImage_Flat | BImage_Solid))
     menu.hilite_pixmap = None;
   else
@@ -586,11 +586,11 @@ void Basemenu::drawItem(int index, Bool highlight, Bool clear,
   
   GC gc =
     ((highlight || item->isSelected()) ? bbtool->getMenuHiGC() :
-     bbtool->getMenuFrameGC()),
+     bbtool->getMenuHiGC()),
     tgc =
     ((highlight) ? bbtool->getMenuHiGC() :
      ((item->isEnabled()) ? bbtool->getMenuFrameGC() :
-      bbtool->getMenuFrameGC()));
+      bbtool->getMenuHiGC()));
   
   sel_x = item_x;
   if (bbtool->getResource()->getBulletPosition() == Right)

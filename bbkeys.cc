@@ -1158,7 +1158,7 @@ void ToolWindow::MakeWindow(bool reconfigure)
 	 	menuHiBGGC = XCreateGC(getXDisplay(), win_frame,GCForeground|
                            GCFillStyle|GCArcMode, &gcv);
 
-	  gcv.foreground = resource->menu.hitextColor.getPixel();	                    	
+	  gcv.foreground = resource->menu.hiTextColor.getPixel();	                    	
 	  menuHiGC = XCreateGC(getXDisplay(), win_frame, GCFont|GCForeground, &gcv);
 
 	  gcv.foreground = resource->menu.textColor.getPixel();                    	
