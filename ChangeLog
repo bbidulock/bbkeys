@@ -1,16 +1,22 @@
 version 0.8.5 --
 
+  - when we recieve a startup message from blackbox, clear out any leftover
+    windows in the window list. These are caused by the fact that on shutdown
+    of blackbox, if any windows are unmanaged after bbkeys, bbkeys doesn't get
+    notified of their destruction and so ends up with extra windows in its list.
+    [xOr]
+
   - fix compiling issues under solaris. Thanks to grub on irc for use of his
-	time for testing.
-	[xOr]
+    time for testing.
+    [xOr]
 
   - get rid of work-around for pre-0.60 blackbox, which fixes bug that let you
     move the toolbar around with bbkeys.
-	[xOr]
+    [xOr]
 
   - fix window focus tracking bug. Fixes bug where you could manipulate the
     last focused window on a nono-visible workspace.
-	[xOr]
+    [xOr]
 
   - fix multi-head bug in main.cc.  We now putenv("DISPLAY=...") so that
     applications launched will be launched on the correct display.  Thanks to
