@@ -1245,12 +1245,14 @@ void ToolWindow::process_event(XEvent * e)
 		break;
 	
 	case KeyRelease: {
-		if (e->xkey.window == stackMenu->getWindowID())
+		if ( stackMenu && stackMenu->isVisible()) {
 			stackMenu->key_release(e->xkey.keycode);
+		}
 		break;
 	}
 
 	case KeyPress: {
+		
 		int i = 0;
 		int grabInt = -1;
 		Window fw_root, fw_child;
@@ -1291,10 +1293,13 @@ void ToolWindow::process_event(XEvent * e)
 			}
 		}
 
-    if (e->xkey.window == stackMenu->getWindowID()) {
-      stackMenu->key_press(grabInt);
-		}
-		else if (grabInt > -1) {
+	 // if we're doing the CycleWindow thing
+    if ( stackMenu && stackMenu->isVisible()) {
+     	stackMenu->key_press(grabInt);
+		break;
+	 } 
+
+	 if (grabInt > -1) {
 			/* play with colors for nyz =:) */
 			XSetWindowBackgroundPixmap(getXDisplay(), win_configBtn,
 					pixmap.pix_pressedBtn);

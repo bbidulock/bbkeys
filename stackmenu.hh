@@ -33,7 +33,7 @@ public:
 	void show(bool forward);
 	void reconfigure();
 	void key_release(unsigned int);
-	void key_press(int);
+	void key_press(int grabInt);
 	void centerPosition();
 	bool WaitForUpdate(void) {return wait_for_update;}
 
