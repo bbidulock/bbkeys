@@ -1,3 +1,10 @@
+version 0.8.2 --
+  - fixed a bug due to an improper test for next and prev (test for key
+    release).  next and prev might just be 0, so we can't do if (next)
+    because the correct index of the grabSet.KeyMap might be 0 for either
+    prevwindow or nextwindow keybinding and it would fail the test and not
+    release the keyboard and not lower the window menu.
+
 version 0.8.1 --
   - bug fixin's--fixed annoying "un-iconify" feature when bbkeys did window
     cycling, thanks to halt, all else for pointing that one out....  Also,

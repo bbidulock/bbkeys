@@ -734,6 +734,7 @@ void ToolWindow::loadKeygrabs(void)
 				grabSet.KeyMap[count].modMask |= translateModifier(tmp);
 
 				grabSet.KeyMap[count].action = translateAction(action);
+				// save off a cross-reference for action->grabSet.KeyMap[index]
 				actionList[grabSet.KeyMap[count].action] = count;
 
 				/* if we're supposed to having an execCommand and we do have
@@ -1294,14 +1295,22 @@ void ToolWindow::process_event(XEvent * e)
 		if (doingCycling) {
 			unsigned int mask = KeycodeToModmask(e->xkey.keycode);
 			unsigned int state = e->xkey.state;
-			int next = actionList[grabNextWindow];
-			int prev = actionList[grabPrevWindow];
+			
+			// get the index for grabSet.KeyMay's prev/next entries, but make
+			// sure we're not just getting 0 because we don't have keybindings
+			// for one of them--also, we can't use > 0 as a test for next/prev
+			// because 0 might very well be the valid index for those bindings
+			int i = actionList[grabNextWindow];
+			int next = grabSet.KeyMap[i].action == grabNextWindow ? i : -1;
+			int j = actionList[grabPrevWindow];
+			int prev = grabSet.KeyMap[j].action == grabPrevWindow ? j : -1;
+
 			// if the key released was the last modifier being held
 			// and being a member of the nextMask or PrevMask, then select
 			// the item in the menu that is currently focued.
-			if (next && ((state & grabSet.KeyMap[next].modMask) == mask))
+			if (next > -1 && ((state & grabSet.KeyMap[next].modMask) == mask))
 				stackMenu->selectFocused(True);
-			else if (prev && ((state & grabSet.KeyMap[prev].modMask) == mask))
+			else if (prev > -1 && ((state & grabSet.KeyMap[prev].modMask) == mask))
 				stackMenu->selectFocused(True);
 		}
 		break;
