@@ -74,7 +74,7 @@ XWindow::~XWindow() {
 
 // Window configure (size, position, stacking, etc.).
 void XWindow::configureNotifyEvent(const XConfigureEvent * const e) {
-  updateDimensions(e);
+  updateDimensions();
 }
 
 // Window property changed/added/deleted.
@@ -113,19 +113,30 @@ void XWindow::updateDimensions(const XConfigureEvent * const e) {
   
 void XWindow::updateDimensions() {
 
-  Window root, child;   
-  int x, y, transx, transy;
-  unsigned int w, h, b, d;
+  XWindowAttributes win_attributes;
+  Window junkwin;
+  int rx, ry;
 
-  int e = XGetGeometry(_display, _window, &root, &x, &y, &w, &h,
-                       &b, &d);
-  
-  if (e && XTranslateCoordinates(_display, _window, root, x, y,
-                                 &transx, &transy, &child)) {
-    _rect.setRect(transx -x, transy -y, w, h);
-  } else {
-    _rect.setRect(0, 0, 1, 1);
+  _rect.setRect(0,0,1,1);
+
+  if (! XGetWindowAttributes(_display, _window, &win_attributes)) {
+    std::cerr << "updateDimensions. couldn't get what I needed, so setting to ridiculously wrong values.\n";
+    return;
   }
+
+  XTranslateCoordinates (_display, _window, win_attributes.root, 
+                         -win_attributes.border_width,
+                         -win_attributes.border_width,
+                         &rx, &ry, &junkwin);
+  _rect.setRect(rx, ry, win_attributes.width, win_attributes.height);
+  
+#if DEBUG
+  std::cout << endl <<
+    "absolute upper-left x: " << rx << endl <<
+    "absolute upper-left y: " << ry << endl <<
+    "relative upper-left x: " << win_attributes.x << endl <<
+    "relative upper-left y: " << win_attributes.y << endl;
+#endif
 
 }
 
@@ -299,126 +310,91 @@ void XWindow::sendTo(unsigned int dest) const {
 
 
 void XWindow::move(int x, int y) const {
-  // get the window's decoration sizes (margins)
-  bt::Netwm::Strut margins;
-  Window win = _window, parent, root, last = None;
-  Window *children = 0;
-  unsigned int nchildren;
-  XWindowAttributes wattr;
-  unsigned char *data_ret;
-  Atom type_ret;
-  int i_unused;
-  unsigned long l_unused;
-  
-  while (XQueryTree(_display, win, &root, &parent, &children,
-                    &nchildren)) {
-    
-    if (children && nchildren > 0)
-      XFree(children); // don't care about the children
 
-    if (! parent) // no parent!?
-      return;
+  XWindowAttributes win_attributes;
+  Window junkwin;
+  int rx, ry;
 
 
-    //-------------------------------------------------
-    // from brad...
-    //--------------------------------------------------
-    // if the parent window is the root window, an Enlightenment virtual root or
-    // a NET WM virtual root window, stop here
-    data_ret = 0;
-    if (parent == root) {
-      break;
-      } else if (XGetWindowProperty(_display, parent,
-                                  _netclient->xaEnlightenmentDesktop(),
-                                  0, 1, False, XA_CARDINAL,
-                                  &type_ret, &i_unused, &l_unused, &l_unused,
-                                  &data_ret) == Success &&
-                   type_ret == XA_CARDINAL) {
-      if (data_ret)
-        XFree(data_ret);
-      break;
-    } else if (_netclient->isAtomSupported(_root, _netclient->xaNetVirtualRoots())
-               && _netclient->getNetVirtualRootList(_root)) {
-      int i = 0;
-      Window *wins = _netclient->getNetVirtualRootList(_root);
-      while (wins[i] != 0) {
-        if (wins[i++] == parent) {
-          break;
-        }
-      }
-    }
-
-    // -- end of from Brad...
-
-    last = win;
-    win = parent;
-  }
-
-  int transx, transy;
-  if (! (XTranslateCoordinates(_display, last, win, 0, 0,
-                               &transx, &transy,
-                               &parent) &&
-         XGetWindowAttributes(_display, win, &wattr)))
+  if (! XGetWindowAttributes(_display, _window, &win_attributes)) {
+    std::cerr << "move: couldn't get what I needed. not able to move, sorry.\n";
     return;
-
-  margins.left = transx;
-  margins.top = transy;
-  margins.right = wattr.width - _rect.width() - margins.left;
-  margins.bottom = wattr.height - _rect.height() - margins.top;
-
-  // add the border_width for the window managers frame... some window managers
-  // do not use a border_width of zero for their frames, and if we the left and
-  // top strut, we ensure that our position is absolutely correct. 
-  margins.left += wattr.border_width;
-  margins.right += wattr.border_width;
-  margins.top += wattr.border_width;
-  margins.bottom += wattr.border_width;
-
-  // this makes things work. why? i don't know. but you need them.
-  margins.right -= 2;
-  margins.bottom -= 2;
-
-  // find the frame's reference position based on the window's gravity
-  switch (_gravity) {
-  case NorthWestGravity:
-    x -= margins.left;
-    y -= margins.top;
-    break;
-  case NorthGravity:
-    x += (margins.left + margins.right) / 2;
-    y -= margins.top;
-    break;
-  case NorthEastGravity:
-    x += margins.right;
-    y -= margins.top;
-  case WestGravity:
-    x -= margins.left;
-    y += (margins.top + margins.bottom) / 2;
-    break;
-  case CenterGravity:
-    x += (margins.left + margins.right) / 2;
-    y += (margins.top + margins.bottom) / 2;
-    break;
-  case EastGravity:
-    x += margins.right;
-    y += (margins.top + margins.bottom) / 2;
-  case SouthWestGravity:
-    x -= margins.left;
-    y += margins.bottom;
-    break;
-  case SouthGravity:
-    x += (margins.left + margins.right) / 2;
-    y += margins.bottom;
-    break;
-  case SouthEastGravity:
-    x += margins.right;
-    y += margins.bottom;
-    break;
-  default:
-    break;
   }
 
-  XMoveWindow(_display, _window, x, y);
+  XTranslateCoordinates (_display, _window, win_attributes.root, 
+                         -win_attributes.border_width,
+                         -win_attributes.border_width,
+                         &rx, &ry, &junkwin);
+      
+  Status status;
+  int xright, ybelow;
+  int dw = _screenInfo.width(), dh = _screenInfo.height();
+
+  
+  /* find our window manager frame, if any */
+  Window wmframe = _window;
+
+  while (True) {
+    Window root, parent;
+    Window *childlist;
+    unsigned int ujunk;
+
+    status = XQueryTree(_display, wmframe, &root, &parent, &childlist, &ujunk);
+    if (parent == root || !parent || !status)
+      break;
+    wmframe = parent;
+    if (status && childlist)
+      XFree((char *)childlist);
+  }
+
+  if (wmframe != _window) {
+    /* WM reparented, so find edges of the frame */
+    /* Only works for ICCCM-compliant WMs, and then only if the
+       window has corner gravity.  We would need to know the original width
+       of the window to correctly handle the other gravities. */
+
+    XWindowAttributes frame_attr;
+
+    if (!XGetWindowAttributes(_display, wmframe, &frame_attr)) {
+      std::cerr << "updateDimensions. error. can't get frame attributes.\n";
+    }
+    
+    switch (_gravity) {
+    case NorthWestGravity: case SouthWestGravity:
+    case NorthEastGravity: case SouthEastGravity:
+    case WestGravity:
+      rx = frame_attr.x;
+    }
+    switch (_gravity) {
+    case NorthWestGravity: case SouthWestGravity:
+    case NorthEastGravity: case SouthEastGravity:
+    case EastGravity:
+      xright = dw - frame_attr.x - frame_attr.width -
+        2*frame_attr.border_width;
+    }
+    switch (_gravity) {
+    case NorthWestGravity: case SouthWestGravity:
+    case NorthEastGravity: case SouthEastGravity:
+    case NorthGravity:
+      ry = frame_attr.y;
+    }
+    switch (_gravity) {
+    case NorthWestGravity: case SouthWestGravity:
+    case NorthEastGravity: case SouthEastGravity:
+    case SouthGravity:
+      ybelow = dh - frame_attr.y - frame_attr.height -
+        2*frame_attr.border_width;
+    }
+  }
+
+  int destx = rx +x, desty = ry +y;
+
+#if DEBUG
+  std::cout<< "moving window to: +" << destx << "+" << desty << endl;
+#endif
+  
+  XMoveWindow(_display, _window, destx, desty);
+
 }
 
 

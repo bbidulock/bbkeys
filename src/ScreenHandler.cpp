@@ -372,23 +372,19 @@ void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
       return;
 
     case Action::moveWindowUp:
-      window->move(window->x(), window->y() -
-                   (it->number() != 0 ? it->number(): 1));
+      window->move(0, -(it->number() != 0 ? it->number(): 1));
       return;
       
     case Action::moveWindowDown:
-      window->move(window->x(), window->y() +
-                   (it->number() != 0 ? it->number(): 1));
+      window->move(0, it->number() != 0 ? it->number(): 1);
       return;
       
     case Action::moveWindowLeft:
-      window->move(window->x() - (it->number() != 0 ? it->number(): 1),
-                   window->y());
+      window->move(-(it->number() != 0 ? it->number(): 1), 0);
       return;
       
     case Action::moveWindowRight:
-      window->move(window->x() + (it->number() != 0 ? it->number(): 1),
-                   window->y());
+      window->move(it->number() != 0 ? it->number(): 1,0);
       return;
       
     case Action::resizeWindowWidth:
