@@ -11,7 +11,9 @@
     [option] (autoConfig)   {true}
     [option] (autoConfigCheckTimeout) {2}
     [option] (workspaceColumns) {4}
-    [option] (workspaceRows) {2}
+#    [option] (workspaceRows) {2}
+#    only one can be effective at a time
+#    if both are given, workspaceColumns takes precedence
     [option] (cycleMenuX) {20}
     [option] (cycleMenuY) {20}
   [end]

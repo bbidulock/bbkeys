@@ -96,8 +96,22 @@ void keytree::grabChildren(keynode *node, ScreenHandler *scr)
   ChildList::const_iterator it, end = node->children.end();
   for (it = node->children.begin(); it != end; ++it) {
     act = (*it)->action;
-    if (act)
-      scr->grabKey(act->keycode(), act->modifierMask());
+    if (act) {
+      bool ret = scr->grabKey(act->keycode(), act->modifierMask());
+      if (!ret) {
+        string key;
+        KeySym _sym = XKeycodeToKeysym(_display, act->keycode(), 0);
+    
+        if (_sym == NoSymbol) key="key not found";
+        else key = XKeysymToString(_sym);
+        
+        cerr << BBTOOL << ": keytree : grabChildren : "
+	    << "could not activate keybinding for  " 
+            << "key: [" << key
+            << "], mask: [" << act->modifierMask()
+            << "], action: [" << act->getActionName() << "]\n";
+      }
+    }
   }
 }
 

@@ -198,14 +198,14 @@ bool ScreenHandler::findSupportingWM() {
 
 }
 
-void ScreenHandler::grabKey(const KeyCode keyCode,
+bool ScreenHandler::grabKey(const KeyCode keyCode,
                             const int modifierMask) const {
-  _keyGrabber->grab(keyCode, modifierMask, _root );
+  return _keyGrabber->grab(keyCode, modifierMask, _root );
 }
 
-void ScreenHandler::ungrabKey(const KeyCode keyCode,
+bool ScreenHandler::ungrabKey(const KeyCode keyCode,
                               const int modifierMask) const {
-  _keyGrabber->ungrab(keyCode, modifierMask, _root );
+  return _keyGrabber->ungrab(keyCode, modifierMask, _root );
 }
 
 void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
@@ -877,56 +877,109 @@ void ScreenHandler::changeWorkspace(const int num) const {
 void ScreenHandler::changeWorkspaceVert(const int num) const {
   assert(_managed);
   int width  = _workspace_columns;
-  int total = (signed)_num_desktops;
-  int n = (signed)_active_desktop;
+  int height = _workspace_rows;
+  int total = (signed)_num_desktops; // starts at 1
+  int n = (signed)_active_desktop;   // starts at 0
   int wnum = 0;
-
-  // if the # of rows is greater than the # of desktops or <= 0, or
-  // if we're not dealing with a rectangle here, return (invalid condition)
-  if ( width > total || width <= 0 ||
-       ( total % width ) != 0 )
-    return;
-
   bool moveUp = (num < 0);
-  if (moveUp) { // we go up...
-    wnum = (n < width) // if we're on the first row
-      ? n + (total - width) // go to the same position in the last row
-      : n - width; // else, just go up one row
+
+// to understand the mathemathics in here, consider the following arrangements:
+
+//      | 0 1 2 columns         | 0 1 2
+//  -------------------       ---------
+//   0  | 0 1 2                0| 0 3 6
+//   1  | 3 4 5                1| 1 4 7
+//   2  | 6 7                  2| 2 5
+//  rows
+
+// left: horizontal arrangement, right: vertical
+// last workspace missing, total number of workspaces = 8
+// n%width = current column
+// n%height = current row
+
+
+  if ( width > 0 ) { // width is set -> assume horizontal arrangement
+                   // (default if height is given as well)
+
+    if ( moveUp ) { // we go up...
+      if ( n < width ) { // we're in the first row and want to change to the last
+        if ( (total-1)%width < n%width ) // last row is incomplete, our column isn't there
+          wnum = total-1 - (total-1)%width + n%width - width; // go to last but one
+              // I guess, there's a more elegant expression for this...
+        else // our column exists in the last row
+          wnum = total-1 - (total-1)%width + n%width; // go to same column in last row
+      } else wnum = n-width; // else, just go up one row
 
   } else { // we go down...
-    wnum = (n < (total - width)) // if we're not on the last row
-      ? n + width // go down one row
-      : n - (total - width); // else go to the same position in the
-			     // first row
 
+      if ( n+width > total-1 ) // next row would be out of range -> we're in the last
+        wnum = n%width; // current column in first row
+      else
+        wnum = n+width; // go down one row
+
+    }
+  } else if ( height > 0 ) { // height is set -> vertical arrangement
+    if ( moveUp ) {
+      if ( n%height==0 ) { // if in first row
+        if ( n + height > total - 1 ) // we're in an incomplete column
+          wnum = total-1;
+        else
+          wnum = n+height-1;
+      }
+      else  // current row>1
+        wnum = n-1;
+    } else { // we're on our way down
+      if ( n==total-1 || n%height==height-1 ) // incomplete column or last row
+        wnum = n - n%height ;
+      else
+        wnum = n+1 ;
   }
+  } else {} // no arrangement given -> do nothing
   changeWorkspace(wnum);
 }
 
 void ScreenHandler::changeWorkspaceHorz(const int num) const {
   assert(_managed);
   int width = _workspace_columns;
+  int height = _workspace_rows;
   int total = (signed)_num_desktops;
   int n = (signed)_active_desktop;
   int wnum = 0;
-
-  int curx = (n % width);
-
-  // if the # of rows is greater than the # of desktops or <= 0, or
-  // if we're not dealing with a rectangle here, return (invalid condition)
-  if ( width > total || width <= 0 ||
-       ( total % width ) != 0 )
-    return;
-
   bool moveLeft = (num < 0);
-  if (moveLeft) {
-    wnum = (curx % width == 0) // if we're on the left edge already
-      ? n + (width -1) // move to the far right side
-      : n -1; // else, just move once left
-  } else {
-    wnum = (curx < width -1) // if we're not on the right side
-      ? n + 1 // move once to the right
-      : n - (width -1); // else move all the way to the left
+
+  if ( width > 0 ) { // width is set -> assume horizontal arrangement
+                   // (default if height is given as well)
+
+    if ( moveLeft ) {
+      if ( n%width == 0 ) { // if in first col
+        if ( n + width > total - 1 ) // we're in an incomplete row
+          wnum = total-1;
+        else
+          wnum = n+width-1;
+      } else wnum = n-1;
+
+    } else { // move right
+      if ( n==total-1 || n%width==width-1 ) // incomplete row or last col
+        wnum = n - n%width ;
+      else
+        wnum = n+1 ;
+    }
+
+    } else if ( height > 0 ) { // height is set -> vertical arrangement
+    if ( moveLeft ) {
+      if ( n < height ) { // move first col -> last
+        if ( (total-1)%height < n%height ) // last col is incomplete
+          wnum = total-1 - (total-1)%height + n%height - height; // go to last but one
+        else // our row exists
+          wnum = total-1 - (total-1)%height + n%height; // go to same row in last col
+      } else wnum = n-height; // else, just go left one col
+
+    } else { // go right
+      if ( n+height > total-1 ) // we would be out of range
+        wnum = n%height; // current row in first col
+      else
+        wnum = n+height; // go down one row
+    }
   }
   changeWorkspace(wnum);
 }

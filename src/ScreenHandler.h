@@ -66,8 +66,8 @@ public:
   inline const bt::ScreenInfo & getScreenInfo() { return _screenInfo; }
 
   void initialize();
-  void grabKey(const KeyCode keyCode, const int modifierMask) const;
-  void ungrabKey(const KeyCode keyCode, const int modifierMask) const;
+  bool grabKey(const KeyCode keyCode, const int modifierMask) const;
+  bool ungrabKey(const KeyCode keyCode, const int modifierMask) const;
 
   const XWindow *lastActiveWindow() const;
   

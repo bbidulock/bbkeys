@@ -22,6 +22,9 @@
 
 // E_O_H_VR
 
+#include <iostream>
+
+#include "version.h"
 #include "KeyGrabber.h"
 //--------------------------------------------------------
 // Constructor/Destructor 
@@ -39,6 +42,7 @@ KeyGrabber::~KeyGrabber ()
 bool KeyGrabber::grab (const KeyCode & keyCode,
                        const unsigned int & modifierMask,  Window window)
 {
+  int ret = 
   XGrabKey(_display, keyCode, modifierMask,
            window, True, GrabModeAsync, GrabModeAsync);
   XGrabKey(_display, keyCode, 
@@ -65,6 +69,8 @@ bool KeyGrabber::grab (const KeyCode & keyCode,
            modifierMask|_numlockMask|LockMask|_scrolllockMask,
            window, True, GrabModeAsync, GrabModeAsync);
 
+  // Um.  Isn't there SOME way we can tell if a grab worked???
+  // return (ret == Success);
   return true;
 }
 //--------------------------------------------------------
