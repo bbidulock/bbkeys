@@ -114,7 +114,9 @@ void WindowlistMenu::showCycleMenu( WindowList theList ) {
   unsigned int i = 0;
 
   for (; it != end; it++) {
-    bt::Menu::insertItem( (*it)->title(), i++ );
+    std::string title = (*it)->title();
+    std::string newTitle = bt::ellideText(title, 100, " ... ");
+    bt::Menu::insertItem( newTitle, i++ );
   }
 
   // this is our current window, before cycling.  set it checked as a
