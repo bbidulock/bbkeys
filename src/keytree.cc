@@ -139,6 +139,14 @@ const Action * keytree::getAction(const XKeyEvent * const e, unsigned int & stat
   if (_current != _head)
     ungrabChildren(_current, scr);
 
+  // With XKB e->xkey.state can hold the group index in high bits, in
+  // addition to the standard modifier bits.  This does not happen on the
+  // first grabbed event, but happens when doing stacked cycling (when
+  // XGrabKeyboard is active).  In order to recognize subsequent keypresses,
+  // we must clear all unneeded bits in the state field.
+
+  state &= (ShiftMask | LockMask | ControlMask | Mod1Mask | Mod2Mask | Mod3Mask | Mod4Mask | Mod5Mask);
+
   ChildList::const_iterator it, end = _current->children.end();
   for (it = _current->children.begin(); it != end; ++it) {
     act = (*it)->action;
