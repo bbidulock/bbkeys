@@ -666,6 +666,8 @@ void ToolWindow::setKeygrabs(void)
 
 				res = execlp("bbconf", "bbconf", "--start-plugin", "key bindings", 
 				"--args", args, NULL);
+
+				delete args;
 			}
 
 			if (res != 0) {
@@ -678,6 +680,7 @@ void ToolWindow::setKeygrabs(void)
 						execlp("xterm", "xterm", "-bg", "black", "-fg",
 								"red", "-e", args, NULL);
 			 	}
+				delete args;
 			}
 			exit(0);
 	 }
