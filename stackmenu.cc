@@ -69,19 +69,23 @@ void Stackmenu::clearMenu() {
 		remove(0);
 }
 
+void Stackmenu::selectFocused()
+{
+	int selected = menuPosition;
+	LinkedListIterator<WindowList> it(bbtool->windowList);
+	for(; it.current(); it++)
+		if (it.current()->desktop == bbtool->getCurrentDesktopNr())
+			if(!selected--) {
+				bbtool->wminterface->setWindowFocus(it.current()->win);
+				XRaiseWindow(bbtool->getXDisplay(), it.current()->win);
+			}
+	hide();
+}
+
 void Stackmenu::key_release(unsigned int key)
 {
-	if (key == 64) {
-		int selected = menuPosition;
-		LinkedListIterator<WindowList> it(bbtool->windowList);
-		for(; it.current(); it++)
-			if (it.current()->desktop == bbtool->getCurrentDesktopNr())
-				if(!selected--) {
-					bbtool->wminterface->setWindowFocus(it.current()->win);
-					XRaiseWindow(bbtool->getXDisplay(), it.current()->win);
-				}
-		hide();
-	}
+	if (key == 64)
+		selectFocused();
 }
 
 void Stackmenu::key_press(int grabInt)

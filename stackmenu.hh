@@ -37,6 +37,7 @@ public:
 	void centerPosition();
 	void setSelected(int);
 	void setMenuItems();
+	void selectFocused();
 
 protected:
 	void clearMenu();

@@ -1308,9 +1308,12 @@ void ToolWindow::process_event(XEvent * e)
 		}
 
 		if (grabInt < 0) {
-			if ((e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Escape)) &&
-					stackMenu->isVisible())
-				stackMenu->hide();
+			if (stackMenu->isVisible()) {
+				if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Escape))
+					stackMenu->hide();
+				else if (e->xkey.keycode == XKeysymToKeycode(getXDisplay(), XK_Return))
+					stackMenu->selectFocused();
+			}
 		} else {
 			if (stackMenu->isVisible())
 				stackMenu->key_press(grabSet.KeyMap[grabInt].action);
