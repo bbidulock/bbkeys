@@ -102,8 +102,8 @@ void WindowlistMenu::showCycleMenu( WindowList theList ) {
   // visual indicator
   bt::Menu::setItemChecked(0, true);
 
-  int x = _config->getNumberValue("cyclemenux", 20);
-  int y = _config->getNumberValue("cyclemenuy", 20);
+  int x = _config->getNumberValue("cyclemenux", _screen_info->width() /2);
+  int y = _config->getNumberValue("cyclemenuy", _screen_info->height() /2);
 
   // now show the menu
   bt::Menu::popup(x, y, false);
