@@ -5,49 +5,51 @@ version 0.8.4 --
     removed was the last window blackbox specified as having the input focus,
     bbkeys now resets what it thinks has the input focus. This prevents the
     bug reproducable by iconifying the last window on a workspace, and then
-    trying to maximize "nothing".
+    trying to maximize "nothing". [xOr]
 
   - cleaning up build again.  Rather than having 200 -DDEFINE_ statements
     in our compile lines, we use config.h (like normal people).  =:)  This
-    very well may break stuff, but it looks good thus far....
+    very well may break stuff, but it looks good thus far.... [vanRijn]
 
   - adding AM_MAINTAINER_MODE to stop the ever-annoying "here, let me run
-    aclocal for you again!!" idiocy of automake and friends
+    aclocal for you again!!" idiocy of automake and friends [vanRijn]
 
   - fixing things for multi-head displays--replacing
     "getScreenInfo(0)->getRootWindow()," with
     "getCurrentScreenInfo()->getRootWindow(),"  So yes, bbkeys now has
     multi-head support.  Sort of.  You need to have a separate instance of
     bbkeys running against each head ("bbkeys -display :1"), etc.  cat
-    complaints >> /dev/null....
+    complaints >> /dev/null.... [vanRijn]
 
   - removing kludgy C command-line configurator with much-improved perl script
-    from Damien Tougas (thanks!!!)
+    from Damien Tougas (thanks!!!) [vanRijn]
 
   - changing bbkeys.cc to look for bbkeysconf.pl rather than bbkeysConfigC
+    [vanRijn]
 
   - removing showAllWorkspaces from bbkeys.{bb,nobb} config file and making it
     an additional keybinding.  This allows two different ways of showing all
     open windows and navigating through them--one keybinding for the regular
     "NextWindow" variety (as in previous versions of bbkeys, and another
     keybinding, "NextWindowAllWorkspaces", that pops up the window list for
-    navigation for windows open on all workspaces. 
+    navigation for windows open on all workspaces.  [vanRijn]
 
   - bugfix....  previously, bbkeys would ignore windows that had no name.  We
     now follow blackbox's lead (and follow blackbox's code) and create a name
     for it, "Unnamed".  Thanks to Damien Terrier for this bug report.
+    [vanRijn]
 
   - patch for allowing an alternate keybinding config file (thanks to Scott
-    Moynes!)
+    Moynes!) [vanRijn]
 
   - sync with blackbox for 0.61.2--attributes element Atom has changed to now
-    include decoration state so that ToggleDecor() works.
+    include decoration state so that ToggleDecor() works. [vanRijn]
 
   - including patch from Sergey Vlasov for allowing use of Meta and Hyper
     modifiers, also try to get the correct Num_Lock and Scroll_Lock modifier
     mask from the X server rather than hard-coded.  I've not had tons of time
     to play with this, though I have made sure that it works on my laptop.
-    =:)
+    =:) [vanRijn]
 
   - fix for RPM-building process... install gzipped man pages by default on
     RPM-based systems.  [vanRijn]
