@@ -44,7 +44,6 @@ void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
   if (_debug)
     std::cout << "WindowlistMenu: got keyPressEvent!" << std::endl;
 
-  // if we've made it this far, handle the action....
   const Action *it = _keybindings->getAction(e, state, _screen);
 
   if (it) {
@@ -92,8 +91,16 @@ void WindowlistMenu::keyReleaseEvent (const XKeyEvent * const e) {
     std::cout << "WindowlistMenu: got keyReleaseEvent!" << std::endl;
 
   if (_screen->nothingIsPressed() ){
+    // get what window is selected so we can focus it
+    XWindow * win = getSelectedWindow();
+
     bt::Menu::hide();
     _screen->keyReleaseEvent(e);
+
+    // if the user is ending his window-cycling adventure, then raise the window
+    // for him.
+    if (win)
+      win->focus(true);
   }
 
   bt::Menu::keyReleaseEvent(e);
