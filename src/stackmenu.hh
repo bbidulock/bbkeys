@@ -18,13 +18,14 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: stackmenu.hh,v 1.4 2002/05/30 18:26:25 eckzor Exp $
+// $Id: stackmenu.hh,v 1.5 2002/05/30 20:20:45 eckzor Exp $
 
 #ifndef __STACKMENU_HH
 #define __STACKMENU_HH
 
-#include "bbkeys.hh"
 #include "Basemenu.hh"
+
+class ToolWindow;
 
 class Stackmenu : public Basemenu {
 public:

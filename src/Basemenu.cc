@@ -20,7 +20,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-// $Id: Basemenu.cc,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: Basemenu.cc,v 1.4 2002/05/30 20:20:45 eckzor Exp $
 
 // stupid macros needed to access some functions in version 2 of the GNU C
 // library
@@ -32,9 +32,6 @@
 #  include "../config.h"
 #endif // HAVE_CONFIG_H
 
-#include "bbkeys.hh"
-#include "Basemenu.hh"
-
 #ifdef    HAVE_STDIO_H
 #  include <stdio.h>
 #endif // HAVE_STDIO_H
@@ -44,6 +41,9 @@
 #  include <string.h>
 #endif // STDC_HEADERS
 
+#include "bbkeys.hh"
+#include "Basemenu.hh"
+#include "resource.hh"
 
 static Basemenu *shown = (Basemenu *) 0;
 

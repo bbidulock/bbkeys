@@ -19,10 +19,12 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: stackmenu.cc,v 1.7 2002/05/30 18:26:25 eckzor Exp $
+// $Id: stackmenu.cc,v 1.8 2002/05/30 20:20:45 eckzor Exp $
 
+#include "stackmenu.hh"
 #include "bbkeys.hh"
 #include "LinkedList.hh"
+#include "wminterface.hh"
 
 #include <X11/Xutil.h>
 
