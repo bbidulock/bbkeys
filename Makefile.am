@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = src data doc
 MAINTAINERCLEANFILES = aclocal.m4 config.h.in configure Makefile.in stamp-h.in
 
-docdir = $(prefix)/doc/bbkeys
+docdir = $(datadir)/doc/bbkeys
 doc_DATA = AUTHORS BUGS ChangeLog LICENSE NEWS README TODO
 EXTRA_DIST = $(doc_DATA) debian
 

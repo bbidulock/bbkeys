@@ -42,15 +42,18 @@
 [begin] (bbkeys configuration file)
 
   [config]
+    [option] (stylefile) {~/local/blackbox/share/blackbox/styles/Blue}
     [option] (honorModifiers) {false}
-    [option] (stackedCycling) {true}
-    [option] (stackedRaise) {false}
+    [option] (raiseWhileCycling) {false}
     [option] (showCycleMenu)  {true}
     [option] (menuTextJustify) {right}
     [option] (autoConfig)   {true}
-    [option] (autoConfigCheckTimeout) {10}
+    [option] (autoConfigCheckTimeout) {2}
     [option] (workspaceColumns) {4}
     [option] (workspaceRows) {2}
+    [option] (cycleMenuX) {20}
+    [option] (cycleMenuY) {20}
+    
   [end]
 
   [keybindings] (begin keybindings)

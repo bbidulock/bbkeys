@@ -1,5 +1,5 @@
 .\" 
-.\" $Id: bbkeysrc.5,v 1.6 2004/08/28 03:31:48 vanrijn Exp $
+.\" $Id: bbkeysrc.5,v 1.7 2004/09/03 23:30:32 vanrijn Exp $
 .\" 
 .TH "BBKEYSRC" "5" "August 27, 2004" "vanRijn" "bbkeysrc"
 .SH "NAME"
@@ -46,7 +46,7 @@ how should the menu be justified? (left, center, right)
 .TP 
 \fIautoConfig\fR
 should bbkeys watch for changes to its config file?  
-(true or false)
+(true or false) Note: if you decide to not do this (though it should be VERY light on system resources), you can always force bbkeys to reconfigure itself by sending it a SIGHUP (killall \-HUP bbkeys).
 
 .TP 
 \fIautoConfigCheckTimeout\fR
@@ -60,7 +60,7 @@ out in your pager (numeric)
 
 .TP 
 \fIworkspaceRows\fR
-number of rows that you have your workspaces/desktops laid out in (numeric)
+number of rows that you have your workspaces/desktops laid out in (numeric).  As way of an example, if you have your pager laid out in a 4x2 grid (4 wide, 2 high), then you would set workspaceColumns to 4 and workspaceRows to 2.
 
 .TP 
 \fIcycleMenuX\fR
@@ -68,7 +68,7 @@ horizontal position that you want the window cycling menu to show up at. (numeri
 
 .TP 
 \fIcycleMenuY\fR
-vertical position that you want the window cycling menu to show up at. (numeric)
+vertical position that you want the window cycling menu to show up at. (numeric)  NOTE.  The cycleMenuX and cycleMenuY config options allow you to place your window\-cycling window exactly where you want to put it on screen.  We at the Bbkeys Foundation For Better Software (TM) call this a feature, though some crazy nuts might call it a bug caused by the fact that blackbox's Menu class doesn't have anything in it to center it on\-screen, etc.  It also doesn't have any methods available to figure out how big the menu will be on\-screen.  This can be worked around by bbkeys, but I've not the time to do it now.  Patch anyone?  Or, you can just consider it a really neat feature that you can place the popup window\-cycling window anywhere you want.  =:D
 .SH "KEYBINDINGS"
 .LP 
 The format of this section is similar to the config section, and blackbox's menu structure.  Each line will look like this:
