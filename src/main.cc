@@ -18,10 +18,18 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: main.cc,v 1.5 2002/05/27 19:14:50 vanrijn Exp $
+// $Id: main.cc,v 1.6 2002/05/30 18:46:08 eckzor Exp $
 
 #include "bbkeys.hh"
 #include "main.hh"
+
+#ifdef HAVE_CONFIG_H
+#  include "../config.h"
+#endif
+
+#ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+#endif
 
 void Usage()
 {
