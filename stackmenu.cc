@@ -155,5 +155,6 @@ void Stackmenu::centerPosition()
 void Stackmenu::setSelected(int sel)
 {
 	if ((sel < 0) || sel >= getCount()) return;
+	setHighlight(sel);
 //	setIndicatorPosition(sel);
 }
