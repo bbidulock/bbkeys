@@ -1,4 +1,29 @@
-version 0.3.7 -- 
+version 0.8.0 --
+  - BIG changes!!!  w00T!!!  There's some very significant improvements in
+    this version, and as such, I'm calling this version 0.8.0 for various
+    reasons....
+      1) I feel like it
+      2) I'm thinking we're about "there", and 0.8.0 sounds like more of a
+      non-beta product than 0.3.8
+
+  - xor (see below) has done some majorly good coding with bbkeys.  He's
+    implemented a different window-cycling scheme that's more
+    "windows"-like (think <alt+tab> popup window with list of things you're
+    cycling through...  Verrrry slick.
+
+  - xor has also fixed a bug in LinkedList.cc (as posted to the blackbox
+    mailing list)
+
+  - I'm considering xOr a co-developer now (as long as he has the time and
+    desire, of course), but we've a project available on sourceforge.net at
+    http://sourceforge.net/cvs/?group_id=32563 .  Of course, this means
+    that all the usual sourceforge advantages are there, like CVS access,
+    etc.  The project is bbconf.sourceforge.net for the time being, so
+    CVS access looks like this:
+
+    cvs -d:pserver:anonymous@cvs.bbconf.sourceforge.net:/cvsroot/bbconf login
+    <hit enter for password>
+    cvs -z3 -d:pserver:anonymous@cvs.bbconf.sourceforge.net:/cvsroot/bbconf co bbkeys
 
   - adding ToggleDecor as an option to toggle ummmm, window decor.... (duh). 
     *** BIG HONKING NOTE ***
@@ -39,6 +64,9 @@ version 0.3.7 --
     making sure the window wasn't our root window.  Doh!  So now we make
     sure 1) we have a focus_window and 2) that focus_window isn't
     PointerRoot.  Hopefully that will do the trick....
+
+
+--------------------------------------------------------------------------------------
 
 
 version 0.3.6 --
