@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.28 2002/06/27 20:26:13 eckzor Exp $
+// $Id: bbkeys.cc,v 1.29 2002/06/27 20:35:09 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -1394,6 +1394,8 @@ void ToolWindow::process_event(XEvent * e)
         // get the frame's geometry
 			  XGetGeometry(getXDisplay(), fw_parent, &fw_root, &fr_x,
                      &fr_y, &fr_w, &fr_h, &fr_b, &fr_d);
+        printf("client: x %i y %i w %i h %i\n", fw_x, fw_y, fw_w, fw_h);
+        printf("frame : x %i y %i w %i h %i\n", fr_x, fr_y, fr_w, fr_h);
         // get the client windpw's gravity
         XSizeHints sizehint;
         long mask;
@@ -1461,6 +1463,7 @@ void ToolWindow::process_event(XEvent * e)
           fw_y = fr_y + margin_top;
           break;
         }
+        printf("client: x %i y %i w %i h %i\n", fw_x, fw_y, fw_w, fw_h);
       }
 		}
 		
