@@ -4,6 +4,9 @@ AM_INIT_AUTOMAKE(bbkeys, 0.8.5-pre)
 AM_MAINTAINER_MODE
 AC_PREFIX_DEFAULT(/usr/local)
 
+dnl Make the $target variable available
+AC_CANONICAL_TARGET
+
 AC_CHECK_PROGS(regex_cmd, sed)
 if test x$regex_cmd = "x"; then
  AC_MSG_ERROR([error. sed is required to build the default bbtoolsrc file.])
@@ -18,9 +21,6 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
-
-dnl Make the $target variable available
-AC_CANONICAL_TARGET
 
 dnl Set target-specific options
 case "$target" in
