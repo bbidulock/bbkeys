@@ -1,2 +1,0 @@
-#define BBTOOL "bbkeys"
-#define BBTOOL_VERSION "@VERSION@"
