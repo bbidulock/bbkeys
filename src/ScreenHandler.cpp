@@ -128,7 +128,15 @@ void ScreenHandler::initialize()
   updateActiveWindow();
 
   // load graphics resource from config file
+  std::string menuTextJustify = 
+    _config->getStringValue("menuTextJustify", "right");
+  std::string menuTitleJustify = 
+    _config->getStringValue("menuTitleJustify", "right");
+
   bt::Resource res(_config->getStringValue("stylefile", DEFAULTSTYLE));
+  res.write("menu.frame.alignment", menuTextJustify.c_str());
+  res.write("menu.title.alignment", menuTitleJustify.c_str());
+
   bt::MenuStyle::get(_keyClient->getMainApplication(),
 		     _screenNumber)->load(res);
 
