@@ -1,24 +1,8 @@
-CPPFLAGS =	@CPPFLAGS@  @INTERLACE@ \
-		-DGLOBAL_BB=\"$(datadir)/bbtools/bbkeys.bb\" \
-		-DGLOBAL_NOBB=\"$(datadir)/bbtools/bbkeys.nobb\"
+# not a GNU package. You can remove this line, if 
+# have all needed files, that a GNU package needs
+AUTOMAKE_OPTIONS = foreign 
 
-SUBDIRS = data doc
-bin_PROGRAMS = bbkeys bbkeysConfigC
-bbkeys_SOURCES = bbkeys.cc Image.cc LinkedList.cc \
-  		  bbkeys.hh Image.hh LinkedList.hh \
-		  Timer.hh Timer.cc \
-			stackmenu.cc stackmenu.hh \
-		  main.cc main.hh \
-		  resource.cc resource.hh \
-		  Baseresource.cc Baseresource.hh \
-		  Basewindow.cc Basewindow.hh \
-		  BaseDisplay.cc BaseDisplay.hh \
-			Basemenu.cc Basemenu.hh \
-		  wminterface.cc wminterface.hh \
-		  NETInterface.cc NETInterface.hh \
-			grab_defs.hh blackboxstyle.hh
-bbkeysConfigC_SOURCES = bbkeysConfigC.c
-bbkeys_LDADD = @X_LIBS@
+SUBDIRS = src data doc
 
 docdir = $(prefix)/doc/bbkeys
 doc_DATA = README AUTHORS ChangeLog
