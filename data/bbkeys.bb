@@ -6,6 +6,9 @@
 ! of not grabbbing keystrokes when caps/shift/num-locks are pressed
 bbkeys.honorModifiers:        False
 
+! set this to false to use the linear style of window cycling
+!bbkeys.menu.stackedCycling:	False
+
 ! ** auto reconfigure when config-file has changed **
 !bbkeys.autoConfig:                False
 ! ** number of seconds between checks **
