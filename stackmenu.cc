@@ -77,7 +77,7 @@ void Stackmenu::Update() {
 
 void Stackmenu::key_release(unsigned int key)
 {
-	if (key == 64) {
+	if (key == XK_Alt_L) {
 		int selected = menuPosition;
 		LinkedListIterator<WindowList> it(bbtool->windowList);
 		for(; it.current(); it++)

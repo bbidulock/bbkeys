@@ -2042,8 +2042,8 @@ void ToolWindow::focus_stack(Window win)
 	WindowList *window = new WindowList;
 	LinkedListIterator<WindowList> it(windowList);
 	for (; it.current(); it++) {
-		if ((it.current()->win == win) &&
-				(it.current()->desktop == getCurrentDesktopNr()))
+		if ((it.current()->win == win) /*&&
+				(it.current()->desktop == getCurrentDesktopNr())*/)
 				break;
 	}
 	if (it.current()) {
@@ -2072,7 +2072,7 @@ void ToolWindow::p()
 printf("window     | stick | shade | icon | desk\n");
 LinkedListIterator<WindowList> it(windowList);
 for (; it.current(); it++)
-	printf("%010i | %d     | %d     | %d    | %d\n", it.current()->win,
+	printf("%010i | %d     | %d     | %d    | %d\n", (int)it.current()->win,
 		it.current()->sticky, it.current()->shaded, it.current()->iconic,
 		it.current()->desktop);
 }
