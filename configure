@@ -2970,6 +2970,8 @@ src/Makefile \
 data/Makefile \
 doc/Makefile \
 doc/bbkeys.1 \
+redhat/Makefile \
+redhat/bbkeys.spec \
 " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -3070,6 +3072,8 @@ src/Makefile \
 data/Makefile \
 doc/Makefile \
 doc/bbkeys.1 \
+redhat/Makefile \
+redhat/bbkeys.spec \
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

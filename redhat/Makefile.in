@@ -57,159 +57,18 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_alias = @build_alias@
-build_triplet = @build@
-host_alias = @host_alias@
-host_triplet = @host@
-target_alias = @target_alias@
-target_triplet = @target@
-ARTSCCONFIG = @ARTSCCONFIG@
-AS = @AS@
-AUTODIRS = @AUTODIRS@
 CC = @CC@
-CONF_FILES = @CONF_FILES@
-CPP = @CPP@
 CXX = @CXX@
-CXXCPP = @CXXCPP@
-DCOPIDL = @DCOPIDL@
-DCOPIDL2CPP = @DCOPIDL2CPP@
-DCOP_DEPENDENCIES = @DCOP_DEPENDENCIES@
-DLLTOOL = @DLLTOOL@
-DPMSINC = @DPMSINC@
-DPMSLIB = @DPMSLIB@
-EXEEXT = @EXEEXT@
-GCJ = @GCJ@
-GCJFLAGS = @GCJFLAGS@
-GLINC = @GLINC@
-GLLIB = @GLLIB@
-GMSGFMT = @GMSGFMT@
-IDL = @IDL@
-IDL_DEPENDENCIES = @IDL_DEPENDENCIES@
-JAR = @JAR@
-JAVAC = @JAVAC@
-JAVAH = @JAVAH@
-JVMLIBS = @JVMLIBS@
-KDECONFIG = @KDECONFIG@
-KDE_CXXFLAGS = @KDE_CXXFLAGS@
-KDE_EXTRA_RPATH = @KDE_EXTRA_RPATH@
-KDE_INCLUDES = @KDE_INCLUDES@
-KDE_LDFLAGS = @KDE_LDFLAGS@
-KDE_PLUGIN = @KDE_PLUGIN@
-KDE_RPATH = @KDE_RPATH@
-KDE_USE_CLOSURE_FALSE = @KDE_USE_CLOSURE_FALSE@
-KDE_USE_CLOSURE_TRUE = @KDE_USE_CLOSURE_TRUE@
-KDE_USE_FINAL_FALSE = @KDE_USE_FINAL_FALSE@
-KDE_USE_FINAL_TRUE = @KDE_USE_FINAL_TRUE@
-KDE_XSL_STYLESHEET = @KDE_XSL_STYLESHEET@
-LIBCOMPAT = @LIBCOMPAT@
-LIBCRYPT = @LIBCRYPT@
-LIBDL = @LIBDL@
-LIBGEN = @LIBGEN@
-LIBJPEG = @LIBJPEG@
-LIBMICO = @LIBMICO@
-LIBOBJS = @LIBOBJS@
-LIBPNG = @LIBPNG@
-LIBPTHREAD = @LIBPTHREAD@
-LIBPYTHON = @LIBPYTHON@
-LIBQIMGIO = @LIBQIMGIO@
-LIBRESOLV = @LIBRESOLV@
-LIBSHADOW = @LIBSHADOW@
-LIBSM = @LIBSM@
-LIBSOCKET = @LIBSOCKET@
-LIBTIFF = @LIBTIFF@
-LIBTOOL = @LIBTOOL@
-LIBUCB = @LIBUCB@
-LIBUTIL = @LIBUTIL@
-LIBXINERAMA = @LIBXINERAMA@
-LIBZ = @LIBZ@
-LIB_KAB = @LIB_KAB@
-LIB_KDECORE = @LIB_KDECORE@
-LIB_KDEUI = @LIB_KDEUI@
-LIB_KFILE = @LIB_KFILE@
-LIB_KFM = @LIB_KFM@
-LIB_KFORMULA = @LIB_KFORMULA@
-LIB_KHTML = @LIB_KHTML@
-LIB_KIMGIO = @LIB_KIMGIO@
-LIB_KIO = @LIB_KIO@
-LIB_KPARTS = @LIB_KPARTS@
-LIB_KSPELL = @LIB_KSPELL@
-LIB_KSYCOCA = @LIB_KSYCOCA@
-LIB_KWRITE = @LIB_KWRITE@
-LIB_QT = @LIB_QT@
-LIB_SMB = @LIB_SMB@
-LIB_X11 = @LIB_X11@
-LN_S = @LN_S@
+INTERLACE = @INTERLACE@
 MAKEINFO = @MAKEINFO@
-MCOPIDL = @MCOPIDL@
-MEINPROC = @MEINPROC@
-MICO_INCLUDES = @MICO_INCLUDES@
-MICO_LDFLAGS = @MICO_LDFLAGS@
-MOC = @MOC@
-MSGFMT = @MSGFMT@
-NOOPT_CXXFLAGS = @NOOPT_CXXFLAGS@
-NOREPO = @NOREPO@
-OBJDUMP = @OBJDUMP@
-OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
-PAMLIBS = @PAMLIBS@
-PASSWDLIBS = @PASSWDLIBS@
-PYTHONINC = @PYTHONINC@
-PYTHONLIB = @PYTHONLIB@
-PYTHONMODDIR = @PYTHONMODDIR@
-QT_INCLUDES = @QT_INCLUDES@
-QT_LDFLAGS = @QT_LDFLAGS@
-RANLIB = @RANLIB@
-REPO = @REPO@
-SETUIDFLAGS = @SETUIDFLAGS@
-STRIP = @STRIP@
-TOPSUBDIRS = @TOPSUBDIRS@
-UIC = @UIC@
-USER_INCLUDES = @USER_INCLUDES@
-USER_LDFLAGS = @USER_LDFLAGS@
-USE_EXCEPTIONS = @USE_EXCEPTIONS@
-USE_RTTI = @USE_RTTI@
-USE_THREADS = @USE_THREADS@
 VERSION = @VERSION@
-XGETTEXT = @XGETTEXT@
-XPMINC = @XPMINC@
-XPMLIB = @XPMLIB@
-X_EXTRA_LIBS = @X_EXTRA_LIBS@
-X_INCLUDES = @X_INCLUDES@
-X_LDFLAGS = @X_LDFLAGS@
-X_PRE_LIBS = @X_PRE_LIBS@
-all_includes = @all_includes@
-all_libraries = @all_libraries@
-idldir = @idldir@
-jni_includes = @jni_includes@
-kde_appsdir = @kde_appsdir@
-kde_bindir = @kde_bindir@
-kde_confdir = @kde_confdir@
-kde_datadir = @kde_datadir@
-kde_htmldir = @kde_htmldir@
-kde_icondir = @kde_icondir@
-kde_includes = @kde_includes@
-kde_libraries = @kde_libraries@
-kde_libs_htmldir = @kde_libs_htmldir@
-kde_libs_prefix = @kde_libs_prefix@
-kde_locale = @kde_locale@
-kde_mimedir = @kde_mimedir@
-kde_moduledir = @kde_moduledir@
-kde_servicesdir = @kde_servicesdir@
-kde_servicetypesdir = @kde_servicetypesdir@
-kde_sounddir = @kde_sounddir@
-kde_templatesdir = @kde_templatesdir@
-kde_wallpaperdir = @kde_wallpaperdir@
-micodir = @micodir@
-qt_includes = @qt_includes@
-qt_libraries = @qt_libraries@
-x_includes = @x_includes@
-x_libraries = @x_libraries@
+regex_cmd = @regex_cmd@
 
-EXTRA_DIST = bbconf.spec.in
-mkinstalldirs = $(SHELL) $(top_srcdir)/admin/mkinstalldirs
-CONFIG_HEADER = ../config.h
-CONFIG_CLEAN_FILES =  bbconf.spec
-DIST_COMMON =  Makefile.am Makefile.in bbconf.spec.in
+EXTRA_DIST = bbkeys.spec.in
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_CLEAN_FILES =  bbkeys.spec
+DIST_COMMON =  Makefile.am Makefile.in bbkeys.spec.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -225,7 +84,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-bbconf.spec: $(top_builddir)/config.status bbconf.spec.in
+bbkeys.spec: $(top_builddir)/config.status bbkeys.spec.in
 	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 tags: TAGS
 TAGS:
@@ -288,7 +147,6 @@ clean-am:  clean-generic mostlyclean-am
 clean: clean-am
 
 distclean-am:  distclean-generic clean-am
-	-rm -f libtool
 
 distclean: distclean-am
 
@@ -316,7 +174,7 @@ dist-rpm:
 	cp -f ${top_srcdir}/@PACKAGE@-@VERSION@.tar.gz ./SOURCES
 	echo "%_topdir ${PWD}"	> rpmmacros
 	echo "macrofiles: /usr/lib/rpm/macros: ... :${PWD}/rpmmacros"	> rpmrc
-	rpm --rcfile rpmrc -ba bbconf.spec
+	rpm --rcfile rpmrc -ba bbkeys.spec
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -70,11 +70,11 @@ regex_cmd = @regex_cmd@
 
 AUTOMAKE_OPTIONS = foreign 
 
-SUBDIRS = src data doc
+SUBDIRS = src data doc redhat
 
 docdir = $(prefix)/doc/bbkeys
 doc_DATA = README AUTHORS ChangeLog
-EXTRA_DIST = $(doc_DATA)
+EXTRA_DIST = $(doc_DATA) debian redhat
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =  version.h
@@ -345,6 +345,13 @@ uninstall-am uninstall all-redirect all-am all installdirs-am \
 installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
+
+dist-rpm: Makefile
+	$(MAKE) dist
+	(cd redhat; make dist-rpm)
+
+dist-deb:
+	dpkg-buildpackage -rfakeroot -us -uc -tc
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
