@@ -2,8 +2,17 @@
 # have all needed files, that a GNU package needs
 AUTOMAKE_OPTIONS = foreign 
 
-SUBDIRS = src data doc
+SUBDIRS = src data doc redhat
 
 docdir = $(prefix)/doc/bbkeys
 doc_DATA = README AUTHORS ChangeLog
-EXTRA_DIST = $(doc_DATA)
+EXTRA_DIST = $(doc_DATA) debian redhat
+
+## create RPMs
+dist-rpm: Makefile
+	$(MAKE) dist
+	(cd redhat; make dist-rpm)
+
+## create Debian package
+dist-deb:
+	dpkg-buildpackage -rfakeroot -us -uc -tc

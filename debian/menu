@@ -1,0 +1,2 @@
+?package(bbkeys):needs=X11 section=Apps/System\
+  title="bbkeys" command="/usr/bin/bbkeys"

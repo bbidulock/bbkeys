@@ -97,4 +97,6 @@ src/Makefile \
 data/Makefile \
 doc/Makefile \
 doc/bbkeys.1 \
+redhat/Makefile \
+redhat/bbkeys.spec \
 )
