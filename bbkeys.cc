@@ -2087,8 +2087,9 @@ void ToolWindow::focus_stack(Window win)
 	WindowList *window = new WindowList;
 	LinkedListIterator<WindowList> it(windowList);
 	for (; it.current(); it++) {
-		if ((it.current()->win == win) /*&&
-				(it.current()->desktop == getCurrentDesktopNr())*/)
+		if (it.current()->win == win)
+			if ((!it.current()->sticky) ||
+			(it.current()->desktop == getCurrentDesktopNr()))
 				break;
 	}
 	if (it.current()) {

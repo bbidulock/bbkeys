@@ -83,7 +83,8 @@ void Stackmenu::selectFocused(bool raise)
 				((!it.current()->sticky) ||
 				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) ||
 				((!bbtool->getResource()->getMenuShowAllWorkspaces()) &&
-				(it.current()->desktop == bbtool->getCurrentDesktopNr())))
+				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) {
+//bbtool->p();
 			if(!selected--) {
 				bbtool->wminterface->setWindowFocus(it.current()->win);
 				if ( raise ) {
@@ -103,9 +104,9 @@ void Stackmenu::selectFocused(bool raise)
 					bbtool->focusWindow(it.current()->win);
 				}
 			}
-
-	if ( raise ) {
-		hide();
+		}
+		if ( raise ) {
+			hide();
 	}
 }
 
