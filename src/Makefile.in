@@ -66,6 +66,7 @@ LN_S = @LN_S@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 PACKAGE = @PACKAGE@
+PERL = @PERL@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
 regex_cmd = @regex_cmd@
@@ -73,14 +74,13 @@ regex_cmd = @regex_cmd@
 CPPFLAGS = @CPPFLAGS@  @INTERLACE@ 		-DGLOBAL_BB=\"$(datadir)/bbtools/bbkeys.bb\" 		-DGLOBAL_NOBB=\"$(datadir)/bbtools/bbkeys.nobb\"
 
 
-bin_PROGRAMS = bbkeys bbkeysConfigC
+bin_PROGRAMS = bbkeys 
 bbkeys_SOURCES = bbkeys.cc Image.cc LinkedList.cc 	bbkeys.hh Image.hh LinkedList.hh 	Timer.hh Timer.cc 	stackmenu.cc stackmenu.hh 	main.cc main.hh 	resource.cc resource.hh 	Baseresource.cc Baseresource.hh 	Basewindow.cc Basewindow.hh 	BaseDisplay.cc BaseDisplay.hh 	Basemenu.cc Basemenu.hh 	wminterface.cc wminterface.hh 	NETInterface.cc NETInterface.hh 	grab_defs.hh blackboxstyle.hh
 
-bbkeysConfigC_SOURCES = bbkeysConfigC.c
 bbkeys_LDADD = @X_LIBS@
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
-CONFIG_CLEAN_FILES = 
+CONFIG_CLEAN_FILES =  bbkeysconf.pl
 PROGRAMS =  $(bin_PROGRAMS)
 
 
@@ -96,10 +96,6 @@ main.o resource.o Baseresource.o Basewindow.o BaseDisplay.o Basemenu.o \
 wminterface.o NETInterface.o
 bbkeys_DEPENDENCIES = 
 bbkeys_LDFLAGS = 
-bbkeysConfigC_OBJECTS =  bbkeysConfigC.o
-bbkeysConfigC_LDADD = $(LDADD)
-bbkeysConfigC_DEPENDENCIES = 
-bbkeysConfigC_LDFLAGS = 
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -108,15 +104,15 @@ CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
-DIST_COMMON =  Makefile.am Makefile.in
+DIST_COMMON =  Makefile.am Makefile.in bbkeysconf.pl.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-SOURCES = $(bbkeys_SOURCES) $(bbkeysConfigC_SOURCES)
-OBJECTS = $(bbkeys_OBJECTS) $(bbkeysConfigC_OBJECTS)
+SOURCES = $(bbkeys_SOURCES)
+OBJECTS = $(bbkeys_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -128,6 +124,8 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
+bbkeysconf.pl: $(top_builddir)/config.status bbkeysconf.pl.in
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 mostlyclean-binPROGRAMS:
 
@@ -176,10 +174,6 @@ maintainer-clean-compile:
 bbkeys: $(bbkeys_OBJECTS) $(bbkeys_DEPENDENCIES)
 	@rm -f bbkeys
 	$(CXXLINK) $(bbkeys_LDFLAGS) $(bbkeys_OBJECTS) $(bbkeys_LDADD) $(LIBS)
-
-bbkeysConfigC: $(bbkeysConfigC_OBJECTS) $(bbkeysConfigC_DEPENDENCIES)
-	@rm -f bbkeysConfigC
-	$(LINK) $(bbkeysConfigC_LDFLAGS) $(bbkeysConfigC_OBJECTS) $(bbkeysConfigC_LDADD) $(LIBS)
 .cc.o:
 	$(CXXCOMPILE) -c $<
 

@@ -69,6 +69,7 @@ LN_S = @LN_S@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 PACKAGE = @PACKAGE@
+PERL = @PERL@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
 regex_cmd = @regex_cmd@

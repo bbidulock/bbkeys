@@ -42,7 +42,7 @@ rm -rf $RPM_BUILD_ROOT
 %files 
 %defattr(-,root,root) 
 %{prefix}/bin/bbkeys 
-%{prefix}/bin/bbkeysConfigC 
+%{prefix}/bin/bbkeysconf.pl
 %{prefix}/share/bbtools/README.bbkeys 
 %{prefix}/share/bbtools/bbkeys.bb 
 %{prefix}/share/bbtools/bbkeys.nobb 

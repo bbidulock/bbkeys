@@ -4,9 +4,11 @@ version 0.8.4 --
     very well may break stuff, but it looks good thus far....
   - adding AM_MAINTAINER_MODE to stop the ever-annoying "here, let me run
     aclocal for you again!!" idiocy of automake and friends
-  - trying to fix things for multi-head displays--replacing
+  - fixing things for multi-head displays--replacing
     "getScreenInfo(0)->getRootWindow()," with
     "getCurrentScreenInfo()->getRootWindow(),"
+  - removing kludgy C command-line configurator with much-improved perl script
+    from Damien Tougas (thanks!!!)
 
 version 0.8.3 --
   - changing external app launch order--we go bbconf, bbkeysconf,
