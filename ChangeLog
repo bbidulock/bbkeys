@@ -240,7 +240,7 @@ version 0.8.0 --
     PointerRoot.  Hopefully that will do the trick....
 
 
---------------------------------------------------------------------------------------
+ 
 
 
 version 0.3.6 --
@@ -321,7 +321,7 @@ version 0.3.2 --
 
     bbkeys.honorModifiers:        False
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
 version 0.3.1 --
   - *sigh* My next release is going to not even have a UI.  =:)  Okay, for 
     those in this world who run blackbox on a 12" monitor (*cough* talmage
@@ -329,7 +329,7 @@ version 0.3.1 --
     luqin *cough), =:)  bbkeys now has a new run-time switch "-tinyMe" which
     will cause bbkeys to draw itself at the old 0.2.7 size.  
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
 version 0.3.0 --
   - buglet fix in MakeWindow so we don't XMapWindow every time (thanks nyz!)
   - alrighty then, the -miniMe controversy continues.  kns mentioned an idea
@@ -339,14 +339,14 @@ version 0.3.0 --
     configurable option (bbkeys.keyhole.size or bbkeys.keyhole.width, etc.),
     I'll be more than happy to look at it. 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
 version 0.2.8 --
   - included new Image classes from the latest blackbox source so luqin's 
     and r00tv's styles work.  =:)  Oh, it'll help other people too, but 
     they pested me first.
   - added Workspace9, 10, 11, and 12 to keygrabs and configurator
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
 version 0.2.7 --
 
   - added MaximizeVertical and MaximizeHorizontal key-grabbability.  Don't 
@@ -392,7 +392,7 @@ version 0.2.7 --
     shows up as bbkeys and not "Unnamed" in blackbox's Icon list.  
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
 version 0.2.6 --
   - Weehee!!!  Much bug-squashing release!!!
   - added ability for bbkeys to minimize itself (right-click on bbkeys's
@@ -409,7 +409,7 @@ version 0.2.6 --
        grabbed keys. XSync(False) does wonders.  =:)
   - updated bbkeysConfigGtk to allow configuration of ExecCommand directives.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
 version 0.2.5 --
   - erm.  forgot to write in this for a while. =:)
   - took out timer implementation for ~/.bbkeysrc changing -- this should fix
@@ -417,12 +417,12 @@ version 0.2.5 --
     with a virtual function call to CheckConfig out of BaseDisplay.cc.
   - thought about changing the configurators, then changed my mind.  =:\
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
 version 0.2.3 --
   - fix for bbkeys not pickup up anything for its frame color/texture
     (thanks to luqin for the patch. =:) )
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
 version 0.2.2 --
   - added ExecCommand feature so users can define programs to execute with
     a given keystroke. Syntax is as follows: 
@@ -439,7 +439,7 @@ version 0.2.2 --
     That should work correctly now.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
 version 0.2.1 -- 
   - fixed several style issues.  
 
@@ -472,12 +472,12 @@ version 0.2.1 --
     bbpager's style files. )  Extra-special thanks to sourceo for pointing 
     this little bit to me and reminding me to put it in the ChangeLog =:)
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
 version 0.2.0 -- 
   - got rid of all the old bbws code base from bbkeys and ported the whole 
     darned thing to kns's bbpager-0.2.5-alpha code base.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
 version 0.1.4 --
 
   - added "-mini-Me" switch =:) for those people *cough* sissies *cough* who
