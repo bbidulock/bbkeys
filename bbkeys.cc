@@ -1296,14 +1296,14 @@ void ToolWindow::process_event(XEvent * e)
 		if (stackMenu->isVisible()) {
 			unsigned int mask = KeycodeToModmask(e->xkey.keycode);
 			unsigned int state = e->xkey.state;
-			int nextMask = grabSet.KeyMap[actionList[grabNextWindow]].modMask;
-			int prevMask = grabSet.KeyMap[actionList[grabPrevWindow]].modMask;
+			int next = actionList[grabNextWindow];
+			int prev = actionList[grabPrevWindow];
 			// if the key released was the last modifier being held
 			// and being a member of the nextMask or PrevMask, then select
 			// the item in the menu that is currently focued.
-			if (nextMask && ((state & nextMask) == mask))
+			if (next && ((state & grabSet.KeyMap[next].modMask) == mask))
 				stackMenu->selectFocused();
-			else if (prevMask && ((state & prevMask) == mask))
+			else if (prev && ((state & grabSet.KeyMap[prev].modMask) == mask))
 				stackMenu->selectFocused();
 		}
 		break;
