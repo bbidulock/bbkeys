@@ -27,6 +27,7 @@
 
 extern "C" {
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
 }
 
 #include <list>
@@ -35,6 +36,7 @@ extern "C" {
 // blackbox lib....
 #include "Application.hh"
 #include "Util.hh"
+#include "Display.hh"
 #include "EventHandler.hh"
 
 #include "Netclient.h"

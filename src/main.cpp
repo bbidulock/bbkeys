@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 
   
   KeyClient * _k=new KeyClient(argc, argv, *_config, dpy_name);
-  _k->eventLoop();
+  _k->run();
 
   delete _k;
   delete _config;
