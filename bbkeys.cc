@@ -1905,7 +1905,7 @@ void ToolWindow::addSticky(WindowList *win) {
 	win->sticky = True;
 	LinkedListIterator<DesktopList> it(desktopList);
 	for (; it.current(); it++)
-		if (win->number != it.current()->number) {
+		if (win->desktop != it.current()->number) {
 			WindowList *copy = new WindowList;
 			copy->win = win->win;
 			copy->iconic = win->iconic;
