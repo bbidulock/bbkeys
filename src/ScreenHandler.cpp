@@ -277,12 +277,12 @@ void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
 
   case Action::showRootMenu:
     _netclient->sendClientMessage(_root, _netclient->xaOpenboxShowRootMenu(),
-                              None);
+                                  None);
     return;
 
   case Action::showWorkspaceMenu:
     _netclient->sendClientMessage(_root, _netclient->xaOpenboxShowWorkspaceMenu(),
-                              None);
+                                  None);
     return;
 
   case Action::toggleGrabs: {
@@ -489,6 +489,9 @@ void ScreenHandler::updateClientList()
 {
   assert(_managed);
 
+  if (_debug)
+    cout << endl << "in updateClientList, client count: [" << _clients.size() << "]" <<endl;
+
   // read the list of windows that our friendly neighborhood window
   // manager knows about
   Netclient::WindowList windowList;
@@ -506,7 +509,7 @@ void ScreenHandler::updateClientList()
     if (insert_point != _clients.end() )
       ++insert_point;
   }
-  
+
   Netclient::WindowList::const_iterator wlIt = windowList.begin(); 
   const Netclient::WindowList::const_iterator  wlEnd = windowList.end();
   
@@ -516,10 +519,15 @@ void ScreenHandler::updateClientList()
       
       XWindow * wTmp = new XWindow( (*wlIt), _netclient, _screenInfo , *_keyClient );
 
+      if (_debug) {
+        cout << "found new window to add: [" << wTmp->title() << "]";
+        cout << endl;
+      }
+
       assert (wTmp);
       
-      _clients.insert(_active, wTmp);
- 
+      _clients.insert(insert_point, wTmp);
+
     }
   }
 
@@ -608,9 +616,9 @@ void ScreenHandler::execCommand(const string &cmd) const {
 }
 
 void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
-                         const int increment, const bool allscreens,
-                         const bool alldesktops, const bool sameclass,
-                         const string &cn)
+                                const int increment, const bool allscreens,
+                                const bool alldesktops, const bool sameclass,
+                                const string &cn)
 {
   assert(_managed);
   assert(increment > 0);
@@ -689,7 +697,7 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
 
 
 void ScreenHandler::cycleWorkspace(const bool forward, const int increment,
-                            const bool loop) const {
+                                   const bool loop) const {
   assert(_managed);
   assert(increment > 0);
 
