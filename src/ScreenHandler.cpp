@@ -702,8 +702,7 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
     WindowList theList = getCycleWindowList(state, forward, increment,
 					    allscreens, alldesktops,
 					    sameclass, cn);
-    // doesn't make much sense showing the window cycling dialog if there's only
-    // one window  =:)
+    // can't show the window list if there's not even one window  =:)
     if (theList.size() >= 1)
       _windowmenu->showCycleMenu(theList);
 
