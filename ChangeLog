@@ -5,14 +5,35 @@ version 0.8.0 --
       1) I feel like it
       2) I'm thinking we're about "there", and 0.8.0 sounds like more of a
       non-beta product than 0.3.8
+      3) I feel like it   =:)
 
-  - xor (see below) has done some majorly good coding with bbkeys.  He's
+  - xOr (see below) has done some majorly good coding with bbkeys.  He's
     implemented a different window-cycling scheme that's more
-    "windows"-like (think <alt+tab> popup window with list of things you're
-    cycling through...  Verrrry slick.
+    "Windows"-like (think <alt+tab> popup window with list of things you're
+    cycling through)...  Verrrry slick.  Umm. Did I say Verrrrry?  
+    
+    Why, yes I did.  You are just going to have to see it to believe it.  Blackbox
+    has just again become my favorite window manager for X, with the help
+    xOr has given to me.  The window cycling methodology has changed, and
+    believe me, this is a change for the better.  There's now two methods
+    of window cycling--both use the same keybindings, so don't get yer
+    panties tied in knots.  xOr has implemented a newer, better "old-style"
+    window cycling, called linear cycling.  It's basically what
+    blackbox/bbkeys has done up until this point, but with a few
+    significant improvements.  But the really exciting new feature in this
+    release of bbkeys is the other way--a "stacked" cycling method.  It
+    makes much more sense than the old way.  And it's purtier, because you
+    can see what you're window-changing to before you actually go there.
+    And when you hit <alt+tab> (example keybinding--you can have it be
+    whatever you want it to be), it goes back to the window you were on
+    right before this one.
 
-  - xor has also fixed a bug in LinkedList.cc (as posted to the blackbox
-    mailing list)
+    It's way cool, uber-neato, and excellently implemented.  I'll expand on
+    this more in README, so look there for more details.
+
+  - xOr has also fixed a bug in LinkedList.cc (as posted to the blackbox
+    mailing list) that affected how the windows were put into the cycling
+    stack.
 
   - I'm considering xOr a co-developer now (as long as he has the time and
     desire, of course), but we've a project available on sourceforge.net at
@@ -25,38 +46,47 @@ version 0.8.0 --
     <hit enter for password>
     cvs -z3 -d:pserver:anonymous@cvs.bbconf.sourceforge.net:/cvsroot/bbconf co bbkeys
 
+    I've imported the bbkeys tree (0.8.0 will be pulled directly from it),
+    and I've also imported a bbconf module.  bbconf will be the new
+    all-in-one blackbox configuration utility (if I get some help).  =:)
+    To get read-only access to it, do this...
+
+    cvs -d:pserver:anonymous@cvs.bbconf.sourceforge.net:/cvsroot/bbconf login
+    <hit enter for password>
+    cvs -z3 -d:pserver:anonymous@cvs.bbconf.sourceforge.net:/cvsroot/bbconf co bbconf
+
   - adding ToggleDecor as an option to toggle ummmm, window decor.... (duh). 
     *** BIG HONKING NOTE ***
     This doesn't currently work.  =:\  The code is in bbkeys, but can't
     actually do anything until blackbox is changed to tell us what the
-    decorated state of the window is.
+    decorated state of the window is.  Hopefully this will be included in
+    blackbox soon....
 
   - changing order of configurator launch again, thanks to a bug report
     from David Lawrence Ramsey (I had " black" instead of "black")--so we
     now try rxvt before xterm, and rxvt should actually work now....
 
   - hopefully fixing strcasecmp issue for AIX boxen--it's in strings.h
-    instead of string.h.  Adding check for strings.h....
+    instead of string.h.  Adding check for strings.h....  PLEASE let me
+    know if this doesn't actually fix anything.  I'd like to put this guy
+    to bed....
 
   - Applying patches from Ben Jansens <xor at x-o-r dot net>.  His comments
     are below....
 
       I've removed all the functionality from the wminterface class that bbkeys
       does not use, and reorganised the header files for wminterface and bbkeys,
-      adding comments for all of the class members. One thing to note, is that
-      i changed the "framewin" variable to "win_frame" to be consistant with all
-      of the other "win_*" variables. With this patch, bbkeys not longer calls
-      the blackbox cycling routines, but maintains its own list of windows, and
-      cycles them itself. One thing to note is that the cycling does not occur
-      in the same order as the buttons on the toolbar cycle. I personally dont
-      think this will be a big issue, and i think the new way is nicer. When a
+      adding comments for all of the class members.  With this patch, bbkeys not 
+      longer calls the blackbox cycling routines, but maintains its own list of 
+      windows, and cycles them itself. One thing to note is that the cycling does 
+      not occur in the same order as the buttons on the toolbar cycle. I personally 
+      dont think this will be a big issue, and i think the new way is nicer. When a
       new window opens, its added to the list right *after* the focused window,
       so that hitting PrevWindow would take you back to the window that was
-      previously focused.  I also ran bbkeys.cc/hh and wminterface.cc/hh through
-      expand and unexpand to fix all of the double spaces to tabs wherever
-      possible.
+      previously focused.  
 
     ....
+
     * VERY nice work, Ben.  Thanks for your work! *
 
   - Bug squashing and fixing galore...  Thanks again to Ben for pointing

@@ -1,3 +1,59 @@
+2001-08-03...
+
+- This hasn't been updated in a LOOONG time, so I'll do so now.  Some
+  exciting new features have been added to bbkeys with this release
+  (0.8.0), and I'll try to explain one of them here.  By default, bbkeys
+  will now window-cycle MUCH better.  Of course, all keybindings are
+  user-configurable as before, and whatever keys you were using before for
+  PrevWindow/NextWindow will still work--they'll just work better.
+
+  xOr has helped me considerably (HUGE THANKS AGAIN, xOr!!) with this
+  release, and one of the new features that we added was a "stackedCycling"
+  methodology to window-switching.  To turn off this incredibly GOOD
+  feature (although I have NO idea why you would want to), put this in your
+  bbtools/bbkeys config file (no, not ~/.bbkeysrc--this is the other one
+  that's by default looked for at ~/.bbtools/bbkeys)....
+
+  ! set this to false to use the linear style of window cycling
+  bbkeys.menu.stackedCycling:	False
+
+  Again, why you'd want to do that is beyond me, because there's SO much
+  more benefit to letting bbkeys do things the way it wants to--the new
+  way.  But if you're absolutely dead-set against progress, then put that
+  in.  What you'll then be using is another improvement--a "linear" cycling
+  method.  This will look the same as the old blackbox/bbkeys window
+  cycling method, but will act a little bit better and make more sense.  It
+  will, for instance, put a newly-created window into the cycling stack
+  immediately after the currently-focused window, so you just have to
+  "alt+tab" to it, rather than having to go all the way around the stack.
+
+  As for the new method for cycling windows...  When you hit your
+  NextWindow keybinding (mine's <alt+tab>), a window menu will pop up and
+  stay up until you release your PrevWindow/NextWindow keys.  This allows you 
+  to navigate through the window list (only showing the windows on the current
+  workspace, but INCLUDING STICKY WINDOWS!!), and then release your keys
+  when you have the window hilighted that you want to switch to.  You can
+  go backwards or forwards through the list, by using your NextWindow and
+  PrevWindow keys.  You can also make the pop-up window menu go away by
+  hitting <Escape>, or if you want, you can select the window currently
+  hilighted with <Return> or <Enter>.  What this last little feature also
+  means is that if you have only one key bound to PrevWindow or NextWindow
+  (i.e. using F11 to cycle forwards and F12 to cycle backwards), you can
+  keep cycling backwards/forwards, and then when you've hilighted the
+  window you want, just hit <Return>, or <Escape> to cancel.
+
+  But that's not all!!  With this new cycling scheme, the window list stack
+  will be re-organized when you cycle to a new/different window.  The
+  window that you had previously focused is now right below the one you now
+  have focused.  So you can switch back and forth between windows with a
+  simple <alt+tab> (or whatever you choose for your NextWindow keybinding.
+
+  I guess that's about it.  Give it a try.  I think you'll be pleasantly
+  suprised.
+
+
+-----------------------------------------------------------------------------
+
 --  README for bbkeys, a general XWindow keygrabber, meant to be a working
 --  example of a better window-hinting scheme with blackbox.
 
