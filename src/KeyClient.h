@@ -90,7 +90,7 @@ private:
   void reconfigure () ;
   void setKeybindings(FileTokenizer &);
 
-  bool handleSignal(int sig);
+  bool process_signal(int sig);
   void process_event(XEvent *e);
 
   WindowList _clients;

@@ -487,77 +487,61 @@ void ScreenHandler::updateActiveWindow()
 
 void ScreenHandler::updateClientList()
 {
+
   assert(_managed);
 
-  if (_debug)
-    cout << endl << "in updateClientList, client count: [" << _clients.size() << "]" <<endl;
-
-  // read the list of windows that our friendly neighborhood window
-  // manager knows about
-  Netclient::WindowList windowList;
-
-  if ( ! _netclient->readClientList(_root, windowList) ) {
-    cerr << "couldn't get client list from WM.\n";
-    return;
-  }
-
-  // where do we add new windows? if we're asked to do stacked
-  // cycling, then it should be at the top of the stack, otherwise,
-  // it's after the currently focused window
   WindowList::iterator insert_point = _active;
-  if (! _stacked_cycling) {
-    if (insert_point != _clients.end() )
-      ++insert_point;
-  }
-
-  Netclient::WindowList::const_iterator wlIt = windowList.begin(); 
-  const Netclient::WindowList::const_iterator  wlEnd = windowList.end();
+  if (insert_point != _clients.end())
+    ++insert_point; // get to the item client the focused client
   
-  // first, add all windows that we care about and didn't know about
-  for (; wlIt != wlEnd; ++wlIt) {
-    if ( careAboutWindow( (*wlIt)) && ( findWindow( (*wlIt) ) == 0) ) {
-      
-      XWindow * wTmp = new XWindow( (*wlIt), _netclient, _screenInfo , *_keyClient );
-
-      if (_debug) {
-        cout << "found new window to add: [" << wTmp->title() << "]";
-        cout << endl;
+  // get the client list from the root window
+  Netclient::WindowList rootclients;
+  unsigned long num = (unsigned) -1;
+  
+  if ( ! _netclient->readClientList(_root, rootclients) ) {
+    cerr << "couldn't get client list from WM.\n";
+    num = 0;
+  } else {
+    num = rootclients.size();
+  }
+  
+  WindowList::iterator it;
+  const WindowList::iterator end = _clients.end();
+  unsigned long i;
+  
+  for (i = 0; i < num; ++i) {
+    for (it = _clients.begin(); it != end; ++it)
+      if (**it == rootclients[i])
+        break;
+    if (it == end) {  // didn't already exist
+      if (careAboutWindow(rootclients[i])) {
+        XWindow * wTmp = new XWindow( rootclients[i], _netclient, _screenInfo , *_keyClient );
+        _clients.insert(insert_point, wTmp);
       }
-
-      assert (wTmp);
-      
-      _clients.insert(insert_point, wTmp);
-
     }
   }
 
-  // now clean up and remove any windows that we have in our list that
-  // don't exist in our window manager's list
-  WindowList::iterator it;
-  bool found;
-  
-  for (it = _clients.begin(); it != _clients.end();) {
+  // remove clients that no longer exist (that belong to this screen)
+  for (it = _clients.begin(); it != end;) {
     WindowList::iterator it2 = it;
     ++it;
-    
-    assert ( (*it2) );
-    // is it on another screen?
+
+    // is on another screen?
     if ((*it2)->getScreenNumber() != _screenNumber)
       continue;
 
-    found = false;
-    for (wlIt = windowList.begin(); wlIt != wlEnd; ++wlIt) {
-      if ((*it2)->window() == (*wlIt) ) {
-        found = true;
+    for (i = 0; i < num; ++i)
+      if (**it2 == rootclients[i])
         break;
-      }
-    }
-
-    if (!found) {
+    if (i == num)  { // no longer exists
+      // watch for the active and last-active window
+      if (it2 == _active)
+        _active = _clients.end();
+      if (it2 == _last_active)
+        _last_active = _clients.end();
       delete *it2;
       _clients.erase(it2);
     }
-
   }
 
 }

@@ -348,7 +348,7 @@ void KeyClient::initKeywords(KeywordMap& keywords) {
 
 }
 
-bool KeyClient::handleSignal(int sig) {
+bool KeyClient::process_signal(int sig) {
   switch (sig) {
   case SIGHUP:
     reconfigure();
@@ -358,7 +358,7 @@ bool KeyClient::handleSignal(int sig) {
   case SIGFPE:
   case SIGINT:
   case SIGTERM:
-    shutdown();
+    setRunState( bt::Application::SHUTDOWN );
 
   default:
     return False;
