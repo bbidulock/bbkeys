@@ -64,7 +64,7 @@ ScreenHandler::ScreenHandler (KeyClient * k, unsigned int number)
   // find a window manager supporting NETWM, waiting for it to load if we must
   int count = 20;  // try for 20 seconds
   _managed = false;
-  while (! (_keyClient->doShutdown() || _managed || count <= 0)) {
+  while (! (_keyClient->shuttingDown() || _managed || count <= 0)) {
     if (! (_managed = findSupportingWM()))
       sleep(1);
     --count;
@@ -509,8 +509,9 @@ void ScreenHandler::updateClientList()
   for (; wlIt != wlEnd; ++wlIt) {
     if ( careAboutWindow( (*wlIt)) && ( findWindow( (*wlIt) ) == 0) ) {
       
-      _clients.insert(insert_point,
-                      new XWindow( (*wlIt), _netclient, _screenInfo , *_keyClient ) );
+      XWindow * wTmp = new XWindow( (*wlIt), _netclient, _screenInfo , *_keyClient );
+
+      _clients.insert(insert_point, wTmp);
     }
   }
 
