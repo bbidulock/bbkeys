@@ -127,17 +127,56 @@ void ScreenHandler::initialize()
 
 bool ScreenHandler::findSupportingWM() {
 
+  if (_debug)
+    cout << endl << "in findSupportingWM."<< endl;
+
   Window client, tmp;
-  if (! (_netclient->readSupportingWMCheck(_root, &client) &&
-	 _netclient->readSupportingWMCheck(client, &tmp) && client == tmp &&
-	 _netclient->readWMName(client, _wm_name))) {
+  bool res = false;
+
+  res = _netclient->readSupportingWMCheck(_root, &client);
+  if (!res) {
+    if (_debug)
+      cout << "first readSupportingWMCheck failed." << endl;
     return false;
-  } else {
-    cout << "ScreenHandler: Found compatible "
-         << "window manager: [" << _wm_name << "] for screen: ["
-         << _screenNumber << "].\n";
-    return true;
   }
+
+  if (_debug)
+    cout << "first readSupportingWMCheck succeeded." << endl;
+  
+  res = _netclient->readSupportingWMCheck(client, &tmp);
+  if (!res || client != tmp) {
+    if (_debug)
+      cout << "second readSupportingWMCheck failed." << endl;
+    return false;
+  }
+
+  if (_debug)
+    cout << "second readSupportingWMCheck worked." << endl;
+  
+  // now try to get the name of the window manager, using utf8 first
+  // and falling back to ansi if that fails
+
+  
+  // try netwm
+  if (! _netclient->getValue(client, _netclient->wmName(),
+                             Netclient::utf8, _wm_name)) {
+    if (_debug)
+      cout << "first try at getting wmName failed." << endl;
+    // try old x stuff
+    _netclient->getValue(client, XA_WM_NAME, Netclient::ansi, _wm_name);
+  }
+  
+  if (_wm_name.empty()) {
+    if (_debug)
+      cout << "couldn't get wm's name.  letting it slide this time...." << endl;
+    _wm_name = "beats the heck out of me";
+  }
+ 
+  cout << "ScreenHandler: Found compatible "
+       << "window manager: [" << _wm_name << "] for screen: ["
+       << _screenNumber << "].\n";
+  
+  return true;
   
 }
 
