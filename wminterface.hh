@@ -1,6 +1,7 @@
 //	wminterface.hh for bbtools.
 //
 //	Copyright (c) 1998-1999 by John Kennis, jkennis@chello.nl
+//	Copyright (c) 2001 by Ben Jansens <xor@x-o-r.net>
 //
 //	This program is free software; you can redistribute it and/or modify
 //	it under the terms of the GNU General Public License as published by
