@@ -1,6 +1,6 @@
 DEFAULT_RC=$(pkgdatadir)/bbkeysrc
 
-CPPFLAGS =	@CPPFLAGS@ -DDEFAULTRC=\"$(DEFAULT_RC)\"
+AM_CPPFLAGS =	@CPPFLAGS@ -DDEFAULTRC=\"$(DEFAULT_RC)\"
 
 bin_PROGRAMS = bbkeys
 bbkeys_SOURCES = actions.cc \

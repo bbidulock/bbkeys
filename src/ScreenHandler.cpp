@@ -789,7 +789,7 @@ void ScreenHandler::changeWorkspaceHorz(const int num) const {
 
   if (num < 0) {
     if (active_desktop % width != 0)
-      changeWorkspace(active_desktop - 1);
+      wnum = active_desktop - 1;
     else {
       wnum = active_desktop + width - 1;
       if (wnum >= num_desktops)

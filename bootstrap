@@ -1,0 +1,16 @@
+#! /bin/sh
+
+sh() {
+  /bin/sh -c "set -x; $*"
+}
+
+export WANT_AUTOMAKE=1.7
+
+sh libtoolize --copy --force --automake
+sh aclocal-1.7
+sh autoconf
+sh automake-1.7 --include-deps --add-missing --copy
+
+echo
+echo You are now ready to run ./configure
+echo enjoy!
