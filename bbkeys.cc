@@ -2079,7 +2079,6 @@ void ToolWindow::add_stack(WindowList *newwin, int desktop) {
 
 void ToolWindow::cycle_stack(bool forward) {
 	register bool showMenu = resource->getMenuShowCycleMenu() ? True : False;
-	doingCycling = True;
 	stackMenu->show(forward, showMenu);
 }
 

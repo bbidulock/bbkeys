@@ -144,6 +144,8 @@ void Stackmenu::show(bool forward, bool showMenu)
 	menuPosition = 0;
 	key_press(forward?grabNextWindow:grabPrevWindow);
 
+	bbtool->setCycling(True);
+
 	if (showMenu)
 		Basemenu::show();
 }
