@@ -27,6 +27,7 @@
 #include "Basewindow.hh"
 #include "resource.hh"
 #include "wminterface.hh"
+#include "stackmenu.hh"
 
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
@@ -78,6 +79,7 @@ struct DesktopList {
 	int number;
 };
 
+class Stackmenu;
 
 class ToolWindow : public Basewindow, public TimeoutHandler {
 public:
@@ -120,12 +122,28 @@ public:
 	// functions for modifying windows
 	void raiseWindow(Window);
 	void lowerWindow(Window);
+
+	// functions for the Linear window cycling style
+	void add_linear(WindowList *,int);
+	void cycle_linear(bool);
+
+	// functions for the Stack window cycling style
+	void add_stack(WindowList *,int);
+	void cycle_stack(bool);
+	void focus_stack(Window);
+	void saveMenuSearch(Window,Basemenu *);
+	void removeMenuSearch(Window);
 	
 	// functions which return information
 	inline int getCurrentDesktopNr(void) {
 		return current_desktop?current_desktop->number:-1;
 	}
 	inline int getDesktopCount(void) { return desktop_count; }
+	inline Resource *getResource() { return resource; }
+	inline GC getMenuTitleGC(void) {return NULL;/*menuTitleGC;*/}
+	inline GC getMenuHiBGGC(void) {return menuHiBGGC;}
+	inline GC getMenuHiGC(void) {return menuHiGC; }
+	inline GC getMenuFrameGC(void) {return menuFrameGC;}
 
 //	void setNETInit(void) { /*wm_init = True;*/ }
 
@@ -174,9 +192,15 @@ private:
 	WMInterface *wminterface; // interface for communicating with the
 														// window manager
 
-//	bool wm_init;
-//	int day,month,year;
-//	fd_set rfds;
+	Stackmenu *stackMenu;		// variables for the stack cycling style menu
+	Window menuWin;
+	GC menuGC;
+	GC menuHiBGGC;
+	GC menuHiGC;
+	GC menuFrameGC;
+	int menuPosition;
+
+	friend Stackmenu;
 };
 
 #endif /* __BBKEYS_HH */

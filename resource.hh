@@ -87,6 +87,17 @@ struct BUTTON {
     BTexture texture_pressed;
 };
 
+struct MENU {
+	BTexture texture;
+	BColor textColor;
+	BColor highlightColor;
+	BColor hitextColor;
+	int justify;
+	XFontStruct *font;
+  int bullet_style;
+  int bullet_pos;
+};
+
 class Resource : public BaseResource {
 
 public:
@@ -100,6 +111,7 @@ public:
   struct POSITION position;
   struct SIZE desktopSize;
   struct REPORT report;
+	struct MENU menu;
   struct BBPAGERWIN pagerwin;
   struct BBPAGERWIN desktopwin;
   int columns;
@@ -111,6 +123,21 @@ public:
   WHICH_BUTTON getWindowRaiseButton(void) { return window_raise_button; }
   WHICH_BUTTON getWindowFocusButton(void) { return window_focus_button; }
 
+  /* menu */
+ 	const int getJustification(void) const {return LeftJustify; }
+	int getMenuJustification(void) { return menu.justify; }	
+	XFontStruct *getTitleFont(void) { return menu.font; }
+	XFontStruct *getMenuFont(void) { return menu.font; }
+	unsigned int getBevelWidth(void) { return frame.bevelWidth; }
+  BColor *getBorderColor(void) { return frame.texture.getColor(); }
+  unsigned int getBorderWidth(void) { return 0; }
+  int getBulletStyle(void) { return menu.bullet_style; }
+  int getBulletPosition(void) { return menu.bullet_pos; }
+
+  enum { AlignDontCare = 1, AlignTop, AlignBottom };
+  enum { Right = 1, Left };
+  enum { Empty = 0, Round, Square, Triangle, Diamond };
+  enum { LeftJustify = 1, RightJustify, CenterJustify };
 
 protected:
   virtual void  LoadBBToolResource(void);
@@ -124,6 +151,7 @@ private:
   void Label(void);
   void Show(void);
   void Button(void);
+	void Menu(void);
   WHICH_BUTTON window_move_button;
   WHICH_BUTTON desktop_change_button;
   WHICH_BUTTON window_raise_button;

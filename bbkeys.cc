@@ -850,6 +850,14 @@ ToolWindow::~ToolWindow()
 	XDestroyWindow(getXDisplay(), win_configBtn);
 	XDestroyWindow(getXDisplay(), win_closeBtn);
 
+	/* destroy GC's */
+	if (frameGC) XFreeGC(getXDisplay(),frameGC);
+  if (menuGC) XFreeGC(getXDisplay(),menuGC);
+	if (menuHiBGGC) XFreeGC(getXDisplay(),menuHiBGGC);
+	if (menuHiGC) XFreeGC(getXDisplay(),menuHiGC);
+	if (menuFrameGC) XFreeGC(getXDisplay(),menuFrameGC);
+
+
 	/* destroy lists */
 	delete windowList;
 	delete desktopList;
@@ -872,6 +880,7 @@ void ToolWindow::reconfigure(void)
 		getImageControl()->removeImage(pixmap.pix_pressedBtn);
 
 	resource->Reload();
+	stackMenu->reconfigure();
 
 	MakeWindow(True);
 
@@ -1005,7 +1014,7 @@ void ToolWindow::MakeWindow(bool reconfigure)
 	 attrib.cursor = getSessionCursor();
 	 attrib.event_mask =
 			ButtonPressMask | ButtonReleaseMask | ExposureMask |
-			FocusChangeMask | KeyPressMask | StructureNotifyMask |
+			FocusChangeMask | KeyPressMask | KeyReleaseMask | StructureNotifyMask |
 			SubstructureRedirectMask;
 
 	 if (!reconfigure) {
@@ -1130,16 +1139,34 @@ void ToolWindow::MakeWindow(bool reconfigure)
 										 pixmap.pix_closeBtn);
 
 
-	 if (!withdrawn && resource->report.auto_raise)
-			XRaiseWindow(getXDisplay(), win_frame);
+	if (!withdrawn && resource->report.auto_raise)
+		XRaiseWindow(getXDisplay(), win_frame);
 
-	 if (!reconfigure) {
-			gcv.font = resource->label.font->fid;
-			gcv.foreground = resource->label.textColor.getPixel();
-			frameGC =
-				XCreateGC(getXDisplay(), win_frame, GCFont | GCForeground,
-							 &gcv);
-	 } else {
+	if (!reconfigure) {
+		gcv.font = resource->label.font->fid;
+		gcv.foreground = resource->label.textColor.getPixel();
+		frameGC =
+				XCreateGC(getXDisplay(), win_frame, GCFont | GCForeground, &gcv);
+
+		gcv.font = resource->menu.font->fid;                    	
+   	gcv.foreground = resource->menu.texture.getColor()->getPixel();
+	  menuGC = XCreateGC(getXDisplay(), win_frame,GCFont|GCForeground, &gcv);
+
+	  gcv.foreground = resource->menu.highlightColor.getPixel();
+    gcv.arc_mode = ArcChord;
+ 		gcv.fill_style = FillSolid;
+	 	menuHiBGGC = XCreateGC(getXDisplay(), win_frame,GCForeground|
+                           GCFillStyle|GCArcMode, &gcv);
+
+	  gcv.foreground = resource->menu.hitextColor.getPixel();	                    	
+	  menuHiGC = XCreateGC(getXDisplay(), win_frame, GCFont|GCForeground, &gcv);
+
+	  gcv.foreground = resource->menu.textColor.getPixel();                    	
+		menuFrameGC = XCreateGC(getXDisplay(), win_frame,GCFont|GCForeground, &gcv);
+                    	
+ 		stackMenu = new Stackmenu(this);
+		stackMenu->Update();
+	} else {
 			gcv.font = resource->label.font->fid;
 			gcv.foreground = resource->label.textColor.getPixel();
 			XChangeGC(getXDisplay(), frameGC, GCFont | GCForeground, &gcv);
@@ -1217,6 +1244,28 @@ void ToolWindow::process_event(XEvent * e)
 //		blah();
 		break;
 	
+	case KeyRelease: {
+//		if (stackMenu->isVisible()) {
+//			if ((e->xkey.keycode == grabSet.KeyMap[grabNextWindow].modMask) ||
+//					(e->xkey.keycode == grabSet.KeyMap[grabPrevWindow].modMask)) {
+			if (e->xkey.keycode == 64) {
+printf("Released\n");
+				int selected = stackMenu->getHighlight();
+				LinkedListIterator<WindowList> it(windowList);
+				for(; it.current(); it++)
+					if (it.current()->desktop == getCurrentDesktopNr())
+						if(!selected--) {
+							wminterface->setWindowFocus(it.current()->win);
+							XRaiseWindow(getXDisplay(), it.current()->win);
+						}
+				XUngrabKey(getXDisplay(), 64, 0, getScreenInfo(0)->getRootWindow());
+				stackMenu->hide();
+//				bbtool->reconfigure();
+			}
+//		}
+		break;
+	}
+
 	case KeyPress: {
 		int i = 0;
 		int grabInt = -1;
@@ -1744,6 +1793,7 @@ void ToolWindow::focusDesktop(int desktop)
 	for (; it.current(); it++)
 		if (it.current()->number == desktop)
 			current_desktop = it.current();
+	stackMenu->reconfigure();
 }
 
 void ToolWindow::setDesktopCount(int count)
@@ -1767,31 +1817,6 @@ void ToolWindow::setDesktopCount(int count)
 
 /*--------------------------------------*/
 
-void ToolWindow::addWindow(Window win, int desktop)
-{
-	int index = 0;	// where the new window will be placed (defaults to the
-									// top of the list)
-	int i;
-	WindowList *newwin = new WindowList;
-	newwin->win = win;
-	newwin->iconic = wminterface->isIconicState(win);
-	newwin->shaded = False;
-	newwin->sticky = False;
-	newwin->desktop = desktop;
-	// insert after the focused window
-	LinkedListIterator<WindowList> it(windowList);
-	for (i=0; i<windowList->count(); i++) {
-		it.set(i);
-		if ((it.current()->win == focus_window)
-				&& (it.current()->desktop == desktop)) {
-			// get the index of the focused window
-			index = i;
-			break;
-		}
-	}
-	windowList->insert(newwin, index);
-}
-
 void ToolWindow::removeWindow(Window win)
 {
 	LinkedListIterator<WindowList> it(windowList);
@@ -1804,6 +1829,7 @@ void ToolWindow::removeWindow(Window win)
 void ToolWindow::focusWindow(Window win)
 {
 	focus_window = win;
+	focus_stack(win);
 }
 
 void ToolWindow::moveWinToDesktop(Window win, int desktop)
@@ -1822,7 +1848,50 @@ void ToolWindow::windowAttributeChange(Window win)
 {
 }
 
+void ToolWindow::addWindow(Window win, int desktop)
+{
+	WindowList *newwin = new WindowList;
+	newwin->win = win;
+	newwin->iconic = wminterface->isIconicState(win);
+	newwin->shaded = False;
+	newwin->sticky = False;
+	newwin->desktop = desktop;
+//	add_linear(newwin, desktop);
+	add_stack(newwin, desktop);
+}
+
 void ToolWindow::cycleWindowFocus(bool forward)
+{
+//	cycle_linear(forward);
+	cycle_stack(forward);
+}
+
+/*******************************************************************************
+
+                          LINEAR CYCLING FUNCTIONS
+
+*******************************************************************************/
+
+void ToolWindow::add_linear(WindowList *newwin, int desktop)
+{
+	int i;
+	int index = 0;	// where the new window will be placed (defaults to the
+									// top of the list)
+	// insert after the focused window
+	LinkedListIterator<WindowList> it(windowList);
+	for (i=0; i<windowList->count(); i++) {
+		it.set(i);
+		if ((it.current()->win == focus_window)
+				&& (it.current()->desktop == desktop)) {
+			// get the index of the focused window
+			index = i+1;
+			break;
+		}
+	}
+	windowList->insert(newwin, index);
+}
+
+void ToolWindow::cycle_linear(bool forward)
 {
 /*******************************************
 	This does the oldschool straight rotation
@@ -1872,3 +1941,63 @@ void ToolWindow::cycleWindowFocus(bool forward)
 		XRaiseWindow(getXDisplay(), next->win);
 	}
 }
+
+/*******************************************************************************
+
+                            STACK CYCLING FUNCTIONS
+
+*******************************************************************************/
+
+void ToolWindow::add_stack(WindowList *newwin, int desktop) {
+	windowList->insert(newwin, 0); // insert at the top of the list
+//	if (stackMenu->isVisible())
+//		stackMenu->reconfigure();
+//	else
+		stackMenu->reconfigure();
+}
+
+void ToolWindow::cycle_stack(bool forward) {
+	if (!stackMenu->isVisible()) {
+		menuPosition = 0;
+		if (stackMenu->WaitForUpdate())
+			stackMenu->Update();
+		stackMenu->reconfigure();
+		stackMenu->centerPosition();
+		stackMenu->show();
+	} else {
+		stackMenu->setHighlight(2);
+	}
+	if (forward) {
+		if(++menuPosition >= stackMenu->getCount())
+			menuPosition = 0;
+	} else {
+		if(--menuPosition < 0)
+			menuPosition = stackMenu->getCount() - 1;
+	}
+	stackMenu->setHighlight(menuPosition);
+}
+
+void ToolWindow::focus_stack(Window win)
+{
+	WindowList *window = new WindowList;
+	LinkedListIterator<WindowList> it(windowList);
+	for (; it.current(); it++)
+		if (it.current()->win == win) {
+			memcpy(window, it.current(), sizeof(WindowList));	// copy it out
+			windowList->remove(it.current());	// remove it
+			break;
+		}
+	windowList->insert(window, 0);		// add it to the top
+}
+
+void ToolWindow::saveMenuSearch(Window window, Basemenu *menu)
+{
+	menuWin = window;
+}
+
+void ToolWindow::removeMenuSearch(Window window)
+{
+	menuWin = (Window)NULL;
+}
+
+

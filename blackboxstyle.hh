@@ -41,5 +41,21 @@
 #define BB_WINDOW_FOCUS "window.label.focus"
 /* bbkeys.focused.window */
 #define BB_WINDOW_UNFOCUS "window.label.unfocus"
+/* bbkeys.menu.frame */
+#define BB_MENU "menu.frame"
+/* bbkeys.menu.highlight.color */
+#define BB_MENU_HIGHLIGHT_COLOR "menu.frame.highlightColor"
+/* bbkeys.menu.textColor */
+#define BB_MENU_TEXTCOLOR "menu.frame.textColor"
+/* bbkeys.menu.highlight.textColor */
+#define BB_MENU_HITEXTCOLOR "menu.frame.hiTextColor"
+/* bbkeys.menuJustify */
+#define BB_MENU_JUSTIFY "menuJustify"
+/* bbkeys.menuFont */
+#define BB_MENU_FONT "menuFont"
+/* bbkeys.menu.bulletStyle */
+#define BB_MENU_BULLETSTYLE "menu.bulletStyle"
+/* bbkeys.menu.bulletPosiotion */
+#define BB_MENU_BULLETPOSITION "menu.bulletPosition"
 
 #endif				/* __BLACKBOXSTYLE_HH */
