@@ -80,7 +80,7 @@ void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
   // window they started with.
   if (e->keycode == XKeysymToKeycode(_display, XK_Escape)) {
     XWindow * win = dynamic_cast<XWindow *>(*_windowList.begin());
-    win->focus(true);
+    win->focus();
   } else if (e->keycode == XKeysymToKeycode(_display, XK_Up)) {
     selectPrevious(false);
   } else if (e->keycode == XKeysymToKeycode(_display, XK_Down)) {
@@ -106,7 +106,7 @@ void WindowlistMenu::keyReleaseEvent (const XKeyEvent * const e) {
     // if the user is ending his window-cycling adventure, then raise the window
     // for him.
     if (win)
-      _screen->focusWindow(win);
+      win->focus();
   }
 
   bt::Menu::keyReleaseEvent(e);
@@ -186,7 +186,7 @@ void WindowlistMenu::itemClicked(unsigned int id, unsigned int button) {
   for (; it != end; ++it) {
     XWindow * const win = dynamic_cast<XWindow *>(*it);
     if ( id == x++ ) {
-      _screen->focusWindow(win);
+      win->focus();
     }
   }
 
@@ -198,7 +198,7 @@ void WindowlistMenu::selectNext(bool manual) {
   trackIndex(1);
 
   XWindow * win = getSelectedWindow();
-  if (win) win->focus(false);
+  if (win) _screen->focusWindow(win);
 
   if (manual) {
     XKeyEvent neo;
@@ -215,7 +215,7 @@ void WindowlistMenu::selectPrevious(bool manual) {
   trackIndex(-1);
 
   XWindow * win = getSelectedWindow();
-  if (win) win->focus(false);
+  if (win) _screen->focusWindow(win);
 
   if (manual) {
     XKeyEvent neo;

@@ -804,16 +804,9 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
 		    GrabModeAsync, CurrentTime);
       _cycling = true;
     }
+    focusWindow(t);
 
-    // if the window is on another desktop, we can't use XSetInputFocus, since
-    // it doesn't imply a workspace change.
-    if ( t->desktop() != _active_desktop &&
-	 t->desktop() != 0xffffffff)
-      t->focus(); // raise
-    else
-      t->focus(false); // don't raise
-  }
-  else {
+  } else {
     t->focus();
   }
 }
@@ -826,7 +819,18 @@ void ScreenHandler::focusWindow(const XWindow * win) {
     changeWorkspace(win->desktop() );
   }
 
-  win->focus(true);
+  // if we're cycling and user wants to raise windows while cycling, 
+  // raise the window, else if we're cycling without raising windows, 
+  // just set focus on the window, else focus and raise the window
+  if (_cycling) {
+    if (_raise_while_cycling) {
+      win->focus();
+    } else {
+      win->focus(false);
+    }
+  } else {
+    win->focus();
+  }
 
 }
 
