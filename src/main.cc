@@ -18,7 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: main.cc,v 1.3 2002/01/13 18:59:39 vanrijn Exp $
+// $Id: main.cc,v 1.4 2002/02/05 13:19:57 vanrijn Exp $
 
 #include "bbkeys.hh"
 #include "main.hh"
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 				exit(2);
 			};
 			options.bbkeysrc=argv[i];
-		} else if ((!strcmp(argv[i], "-nobb")) | (!strcmp(argv[i], "-n"))) {
+		} else if ((!strcmp(argv[i], "-nobb")) || (!strcmp(argv[i], "-n"))) {
 			options.nobb_config = True;
 		} else if ((!strcmp(argv[i], "-v"))
 			|| (!strcmp(argv[i], "-version"))) {
