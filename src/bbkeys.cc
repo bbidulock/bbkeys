@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.35 2002/10/08 02:06:41 vanrijn Exp $
+// $Id: bbkeys.cc,v 1.36 2002/10/15 19:23:16 vanrijn Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -776,7 +776,7 @@ void ToolWindow::loadKeygrabs(void)
 					 execCmdBegin = strchr(actionBegin + 1, '(');
 					 if (execCmdBegin) {
 							strncpy(execCommand, execCmdBegin + 1,
-									 strcspn(execCmdBegin + 1, ")"));
+									 strrchr(execCmdBegin, ')') - execCmdBegin - 1);
 							grabSet.KeyMap[count].execCommand =
 								strdup(execCommand);
 					 }

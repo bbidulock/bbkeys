@@ -5,6 +5,10 @@ version 0.8.6 --
   - fixing compilation issue for Mac OS X (thanks to Thomas F. Burdick!!)
     [vanRijn]
 
+  - fixing bug in token-parsing (thanks to Adam Hooper!!!)--we now allow
+    ")"'s in our ExecCommands.  =:)
+    [vanRijn]
+
 version 0.8.5 --
 
   - fix recursive redhat-build bug (fixes 577135)
