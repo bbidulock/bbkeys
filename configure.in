@@ -9,20 +9,28 @@ if test x$regex_cmd = "x"; then
  AC_MSG_ERROR([error. sed is required to build the default bbtoolsrc file.])
 fi
 
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_AWK
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
 
 dnl get the debug values right
 AC_DEFUN(AC_SET_DEBUG,
 [
- test "$CFLAGS" = "" && CFLAGS="-g -Wall -DDEBUG"
- test "$CXXFLAGS" = "" && CXXFLAGS="-g -Wall -DDEBUG"
- test "$LDFLAGS" = "" && LDFLAGS=""
+ CFLAGS="$CFLAGS -Wall -DDEBUG"
+ CXXFLAGS="$CXXFLAGS -Wall -DDEBUG"
+ LDFLAGS="$LDFLAGS "
 ])
 
 AC_DEFUN(AC_SET_NODEBUG,
 [
- test "$CFLAGS" = "" && CFLAGS="-O2 -Wall -DNDEBUG"
- test "$CXXFLAGS" = "" && CXXFLAGS="-O2 -Wall -DNDEBUG"
- test "$LDFLAGS" = "" && LDFLAGS="-s"
+ CFLAGS="$CFLAGS -DNDEBUG"
+ CXXFLAGS="$CXXFLAGS -DNDEBUG"
+ LDFLAGS="$LDFLAGS -s"
 ])
       
 
@@ -50,16 +58,6 @@ AC_ARG_ENABLE(
   INTERLACE="-DINTERLACE"
 )
 AC_SUBST(INTERLACE)
-
-dnl Checks for programs.
-AC_PROG_CXX
-AC_PROG_AWK
-AC_PROG_CC
-AC_PROG_CPP
-AC_PROG_INSTALL
-AC_PROG_LN_S
-AC_PROG_MAKE_SET
-AC_PROG_RANLIB
 
 dnl minimum version we can live with
 PERL_VERSION=5.004

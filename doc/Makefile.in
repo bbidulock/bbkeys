@@ -61,7 +61,6 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 AWK = @AWK@
 CC = @CC@
-CPP = @CPP@
 CXX = @CXX@
 INTERLACE = @INTERLACE@
 LN_S = @LN_S@
@@ -94,7 +93,7 @@ GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps doc/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --foreign --include-deps doc/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
