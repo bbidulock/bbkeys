@@ -43,7 +43,7 @@ extern "C" {
 using std::cout;
 
 //--------------------------------------------------------
-// Constructor/Destructor 
+// Constructor/Destructor
 //--------------------------------------------------------
 ScreenHandler::ScreenHandler (KeyClient * k, unsigned int number)
   : _managed(true), _screenNumber(number),
@@ -76,7 +76,7 @@ ScreenHandler::ScreenHandler (KeyClient * k, unsigned int number)
          << "compatible window manager for screen: [" << number << "].\n";
     return;
   }
- 
+
   bt::Netwm::AtomList atoms;
   if (_netclient->readSupported(_root, atoms)) {
     cout << "ScreenHandler: Supported atoms: [" << atoms.size() << "].\n";
@@ -87,8 +87,8 @@ ScreenHandler::ScreenHandler (KeyClient * k, unsigned int number)
   }
 
   XSelectInput(_display, _root,
-               PropertyChangeMask | KeyPressMask | KeyReleaseMask); 
-  
+               PropertyChangeMask | KeyPressMask | KeyReleaseMask);
+
   // add an event handler for our root window
   k->insertEventHandler(_root, this);
 
@@ -114,7 +114,7 @@ ScreenHandler::~ScreenHandler ()
   _keyGrabber->ungrabAll(_root);
 
   if (_managed)
-    XSelectInput(_display, _root, None);  
+    XSelectInput(_display, _root, None);
 }
 
 void ScreenHandler::initialize()
@@ -128,10 +128,10 @@ void ScreenHandler::initialize()
 
   // load graphics resource from config file
   bt::Resource res(_config->getStringValue("stylefile", "/tmp/needstyle"));
-  bt::MenuStyle::get(_keyClient->getMainApplication(), 
+  bt::MenuStyle::get(_keyClient->getMainApplication(),
 		     _screenNumber)->load(res);
 
-    
+
 }
 
 bool ScreenHandler::findSupportingWM() {
@@ -151,7 +151,7 @@ bool ScreenHandler::findSupportingWM() {
 
   if (_debug)
     cout << "ScreenHandler: first readSupportingWMCheck succeeded." << endl;
-  
+
   res = _netclient->readSupportingWMCheck(client, &tmp);
   if (!res || client != tmp) {
     if (_debug)
@@ -161,11 +161,11 @@ bool ScreenHandler::findSupportingWM() {
 
   if (_debug)
     cout << "ScreenHandler: second readSupportingWMCheck worked." << endl;
-  
+
   // now try to get the name of the window manager, using utf8 first
   // and falling back to ansi if that fails
 
-  
+
   // try netwm
   if (! _netclient->getValue(client, _netclient->wmName(),
                              Netclient::utf8, _wm_name)) {
@@ -174,19 +174,19 @@ bool ScreenHandler::findSupportingWM() {
     // try old x stuff
     _netclient->getValue(client, XA_WM_NAME, Netclient::ansi, _wm_name);
   }
-  
+
   if (_wm_name.empty()) {
     if (_debug)
       cout << "ScreenHandler: couldn't get wm's name.  letting it slide this time...." << endl;
     _wm_name = "beats the heck out of me";
   }
- 
+
   cout << "ScreenHandler: Found compatible "
        << "window manager: [" << _wm_name << "] for screen: ["
        << _screenNumber << "].\n";
-  
+
   return true;
-  
+
 }
 
 void ScreenHandler::grabKey(const KeyCode keyCode,
@@ -202,7 +202,7 @@ void ScreenHandler::ungrabKey(const KeyCode keyCode,
 void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
 {
   unsigned int state = e->state;
-  
+
   // Mask out the lock modifiers unless our user doesn't want this
   if (! _honor_modifiers) {
     state= e->state & ~(LockMask|_scrolllockMask|_numlockMask);
@@ -217,14 +217,14 @@ void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
     // window for our user
     _cycling = false;
     XUngrabKeyboard(_display, CurrentTime);
-    
+
     const XWindow * la = lastActiveWindow();
 
     if (la) la->focus(true);
 
     return;
   }
-  
+
   // if we've made it this far, handle the action....
   const Action *it = _keybindings->getAction(e, state, this);
 
@@ -245,7 +245,7 @@ void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
   case Action::prevScreen:
     _keyClient->cycleScreen(_screenNumber, false);
     return;
-    
+
   case Action::nextWorkspace:
     cycleWorkspace(true, it->number() != 0 ? it->number(): 1);
     return;
@@ -287,12 +287,12 @@ void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
     cycleWindow(state, false, it->number() != 0 ? it->number(): 1,
                 false, false, true, it->string());
     return;
-      
+
   case Action::nextWindowOfClassOnAllWorkspaces:
     cycleWindow(state, true, it->number() != 0 ? it->number(): 1,
                 false, true, true, it->string());
     return;
-      
+
   case Action::prevWindowOfClassOnAllWorkspaces:
     cycleWindow(state, false, it->number() != 0 ? it->number(): 1,
                 false, true, true, it->string());
@@ -350,7 +350,7 @@ void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
   // these actions require an active window
   if (_active != _clients.end()) {
     XWindow *window = *_active;
-      
+
     switch (it->type()) {
     case Action::iconify:
       window->iconify();
@@ -382,39 +382,39 @@ void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
     case Action::moveWindowUp:
       window->move(0, -(it->number() != 0 ? it->number(): 1));
       return;
-      
+
     case Action::moveWindowDown:
       window->move(0, it->number() != 0 ? it->number(): 1);
       return;
-      
+
     case Action::moveWindowLeft:
       window->move(-(it->number() != 0 ? it->number(): 1), 0);
       return;
-      
+
     case Action::moveWindowRight:
       window->move(it->number() != 0 ? it->number(): 1,0);
       return;
-      
+
     case Action::resizeWindowWidth:
       window->resizeRel(it->number(), 0);
       return;
-      
+
     case Action::resizeWindowHeight:
       window->resizeRel(0, it->number());
       return;
-      
+
     case Action::toggleShade:
       window->shade(! window->shaded());
       return;
-      
+
     case Action::toggleMaximizeHorizontal:
       window->toggleMaximize(XWindow::Max_Horz);
       return;
-      
+
     case Action::toggleMaximizeVertical:
       window->toggleMaximize(XWindow::Max_Vert);
       return;
-      
+
     case Action::toggleMaximizeFull:
       window->toggleMaximize(XWindow::Max_Full);
       return;
@@ -422,11 +422,11 @@ void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
     case Action::toggleDecorations:
       window->decorate(! window->decorated());
       return;
-      
+
     default:
       assert(false);  // unhandled action type!
       break;
-    }  
+    }
   }
 }
 
@@ -450,7 +450,7 @@ void ScreenHandler::keyReleaseEvent (const XKeyEvent * const e)
     }
 
     _cycling = false;
-  }  
+  }
 }
 
 void ScreenHandler::propertyNotifyEvent(const XPropertyEvent * const e)
@@ -523,7 +523,7 @@ void ScreenHandler::updateActiveWindow()
       if ( _debug )
         cout <<"active window now: [" <<(*_active)->title() <<"]" <<endl;
     }
-  
+
   }
 
 }
@@ -536,22 +536,22 @@ void ScreenHandler::updateClientList()
   WindowList::iterator insert_point = _active;
   if (insert_point != _clients.end())
     ++insert_point; // get to the item client the focused client
-  
+
   // get the client list from the root window
   Netclient::WindowList rootclients;
   unsigned long num = (unsigned) -1;
-  
+
   if ( ! _netclient->readClientList(_root, rootclients) ) {
     cerr << "couldn't get client list from WM.\n";
     num = 0;
   } else {
     num = rootclients.size();
   }
-  
+
   WindowList::iterator it;
   const WindowList::iterator end = _clients.end();
   unsigned long i;
-  
+
   for (i = 0; i < num; ++i) {
     for (it = _clients.begin(); it != end; ++it)
       if (**it == rootclients[i])
@@ -651,9 +651,9 @@ WindowList ScreenHandler::getCycleWindowList(unsigned int state, const bool forw
   assert(increment > 0);
 
   WindowList theList;
-  
+
   if (_clients.empty()) return theList;
-  
+
   string classname(cn);
   if (sameclass && classname.empty() && _active != _clients.end())
     classname = (*_active)->appClass();
@@ -664,7 +664,7 @@ WindowList ScreenHandler::getCycleWindowList(unsigned int state, const bool forw
 
   for (; it != end; ++it) {
     XWindow *t = *it;
-    
+
     // determine if this window is invalid for cycling to
     if (t->iconic()) continue;
     if (! allscreens && t->getScreenNumber() != _screenNumber) continue;
@@ -688,7 +688,7 @@ WindowList ScreenHandler::getCycleWindowList(unsigned int state, const bool forw
 //     theList.remove( win );
 //     theList.push_front( win );
 //   }
-  
+
   return theList;
 
 }
@@ -700,34 +700,38 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
 {
   assert(_managed);
   assert(increment > 0);
- 
+
   if (_clients.empty()) return;
-  
+
   // if our user wants the window cycling menu to show (who wouldn't!!
   //  =:) ) and if it's not already showing...
   if ( _show_cycle_menu && ! _windowmenu->isVisible() ) {
     if (_debug)
       std::cout << "ScreenHandler: menu not visible. loading and showing..." << std::endl;
-    
+
     _cycling = true;
     WindowList theList = getCycleWindowList(state, forward, increment,
 					    allscreens, alldesktops,
 					    sameclass, cn);
-    _windowmenu->showCycleMenu(theList);
+    // doesn't make much sense showing the window cycling dialog if there's only
+    // one window  =:)
+    if (theList.size() > 1)
+      _windowmenu->showCycleMenu(theList);
+
     return;
-    
+
   }
- 
+
   string classname(cn);
   if (sameclass && classname.empty() && _active != _clients.end())
     classname = (*_active)->appClass();
-  
+
   WindowList::const_iterator target = _active,
     begin = _clients.begin(),
     end = _clients.end();
-  
+
   XWindow *t = 0;
-  
+
   for (int x = 0; x < increment; ++x) {
     while (1) {
       if (forward) {
@@ -741,15 +745,15 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
 	else
 	  --target;
       }
-      
+
       // must be no window to focus
       if (target == _active)
 	return;
-      
+
       // start back at the beginning of the loop
       if (target == end)
 	continue;
-      
+
       // determine if this window is invalid for cycling to
       t = *target;
       if (t->iconic()) continue;
@@ -759,13 +763,13 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
       if (sameclass && ! classname.empty() &&
 	  t->appClass() != classname) continue;
       if (! t->canFocus()) continue;
-      
+
       // found a good window so break out of the while, and perhaps continue
       // with the for loop
       break;
     }
   }
-  
+
   // phew. we found the window, so focus it.
   if ( state) {
     if (!_cycling) {
@@ -774,7 +778,7 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
 		    GrabModeAsync, CurrentTime);
       _cycling = true;
     }
-    
+
     // if the window is on another desktop, we can't use XSetInputFocus, since
     // it doesn't imply a workspace change.
     if ( t->desktop() != _active_desktop &&
@@ -782,7 +786,7 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
       t->focus(); // raise
     else
       t->focus(false); // don't raise
-  }  
+  }
   else {
     t->focus();
   }
@@ -810,7 +814,7 @@ void ScreenHandler::cycleWorkspace(const bool forward, const int increment,
     }
   }
 
-  if (destination != _active_desktop) 
+  if (destination != _active_desktop)
     changeWorkspace(destination);
 }
 
@@ -858,7 +862,7 @@ void ScreenHandler::changeWorkspaceHorz(const int num) const {
   int wnum = 0;
 
   int curx = (n % width);
-  
+
   // if the # of rows is greater than the # of desktops or <= 0, or
   // if we're not dealing with a rectangle here, return (invalid condition)
   if ( width > total || width <= 0 ||
@@ -914,13 +918,13 @@ void ScreenHandler::p()
 
   WindowList::const_iterator it = _clients.begin();
   const WindowList::const_iterator end = _clients.end();
-  
+
   for (; it != end; ++it)
     cout << "desktop: ["
          << (*it)->desktop()
          << "], window: [" << (*it)->title() << "]" << endl;
 
-  
+
 }
-  
-  
+
+

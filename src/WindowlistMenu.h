@@ -48,8 +48,8 @@ public:
   void showCycleMenu (WindowList theList ) ;
   void itemClicked(unsigned int id, unsigned int button);
 
-  void selectPrevious();
-  void selectNext();
+  void selectPrevious(bool manual = true);
+  void selectNext(bool manual = true);
   XWindow * getSelectedWindow();
 
 private:
@@ -61,9 +61,10 @@ private:
   const bt::ScreenInfo * _screen_info;
   bool _debug;
   int _current_index;
-  
+
   void keyPressEvent (const XKeyEvent * const e) ;
   void keyReleaseEvent (const XKeyEvent * const e) ;
+  void trackIndex (const int movement) ;
 
 };
 #endif

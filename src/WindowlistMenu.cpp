@@ -24,9 +24,9 @@
 
 #include "WindowlistMenu.h"
 //--------------------------------------------------------
-// Constructor/Destructor 
+// Constructor/Destructor
 //--------------------------------------------------------
-WindowlistMenu::WindowlistMenu (ScreenHandler * s) : 
+WindowlistMenu::WindowlistMenu (ScreenHandler * s) :
   bt::Menu( s->getKeyClient().getMainApplication(),
     s->getScreenNumber() ) {
   _screen = s;
@@ -43,7 +43,7 @@ void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
 
   if (_debug)
     std::cout << "WindowlistMenu: got keyPressEvent!" << std::endl;
-  
+
   // if we've made it this far, handle the action....
   const Action *it = _keybindings->getAction(e, state, _screen);
 
@@ -57,7 +57,7 @@ void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
     case Action::nextWindowOfClassOnAllWorkspaces:
       selectNext();
       break;
-      
+
     case Action::prevWindow:
     case Action::prevWindowOnAllWorkspaces:
     case Action::prevWindowOnAllScreens:
@@ -68,7 +68,18 @@ void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
 
     default:
       break;
-    }    
+    }
+  }
+
+  // if the user is cancelling the menu/cycle, then set focus back on the
+  // window they started with.
+  if (e->keycode == XKeysymToKeycode(_display, XK_Escape)) {
+    XWindow * win = dynamic_cast<XWindow *>(*_windowList.begin());
+    win->focus(true);
+  } else if (e->keycode == XKeysymToKeycode(_display, XK_Up)) {
+    selectPrevious(false);
+  } else if (e->keycode == XKeysymToKeycode(_display, XK_Down)) {
+    selectNext(false);
   }
 
   bt::Menu::keyPressEvent(e);
@@ -84,13 +95,13 @@ void WindowlistMenu::keyReleaseEvent (const XKeyEvent * const e) {
     bt::Menu::hide();
     _screen->keyReleaseEvent(e);
   }
-  
+
   bt::Menu::keyReleaseEvent(e);
 
 }
 
 void WindowlistMenu::showCycleMenu( WindowList theList ) {
-  
+
   bt::Menu::clear();
   bt::Menu::setTitle("Switch To...");
   bt::Menu::showTitle();
@@ -116,10 +127,10 @@ void WindowlistMenu::showCycleMenu( WindowList theList ) {
   // now show the menu
   bt::Menu::popup(x, y, false);
   bt::Menu::move(x,y);
-  
+
   // reset our marker as we will increment it in selectNext...
   _current_index = -1;
-  
+
   // we don't have anything selected initially, so we need to set the
   // selection to the second one (the first one is the
   // currently-selected window
@@ -129,7 +140,7 @@ void WindowlistMenu::showCycleMenu( WindowList theList ) {
 }
 
 void WindowlistMenu::itemClicked(unsigned int id, unsigned int button) {
-  
+
   WindowList::const_iterator it = _windowList.begin();
   const WindowList::const_iterator end = _windowList.end();
 
@@ -140,43 +151,53 @@ void WindowlistMenu::itemClicked(unsigned int id, unsigned int button) {
       win->focus(true);
     }
   }
-  
+
 }
 
-void WindowlistMenu::selectNext() {
-
-  XKeyEvent neo;
-
-  KeyCode keyCode = XKeysymToKeycode(_display, XK_Down);
-  neo.keycode = keyCode;
+void WindowlistMenu::selectNext(bool manual) {
 
   // keep track of where we are...
-  if (static_cast<unsigned int>(++_current_index) >= _windowList.size() )
-    _current_index = 0;
+  trackIndex(1);
 
   XWindow * win = getSelectedWindow();
-  if (win) win->focus(false);      
+  if (win) win->focus(false);
 
-  bt::Menu::keyPressEvent(&neo);
-  
+  if (manual) {
+    XKeyEvent neo;
+    KeyCode keyCode = XKeysymToKeycode(_display, XK_Down);
+    neo.keycode = keyCode;
+    bt::Menu::keyPressEvent(&neo);
+  }
+
 }
 
-void WindowlistMenu::selectPrevious() {
-
-  XKeyEvent neo;
-
-  KeyCode keyCode = XKeysymToKeycode(_display, XK_Up);
-  neo.keycode = keyCode;
+void WindowlistMenu::selectPrevious(bool manual) {
 
   // keep track of where we are now...
-  if (--_current_index < 0)
-    _current_index = _windowList.size() -1;
+  trackIndex(-1);
 
   XWindow * win = getSelectedWindow();
-  if (win) win->focus(false);      
-  
-  bt::Menu::keyPressEvent(&neo);
-    
+  if (win) win->focus(false);
+
+  if (manual) {
+    XKeyEvent neo;
+    KeyCode keyCode = XKeysymToKeycode(_display, XK_Up);
+    neo.keycode = keyCode;
+    bt::Menu::keyPressEvent(&neo);
+  }
+
+}
+
+void WindowlistMenu::trackIndex (const int movement) {
+
+  if (movement > 0) {
+    if (static_cast<unsigned int>(++_current_index) >= _windowList.size() )
+      _current_index = 0;
+  } else {
+    if (--_current_index < 0)
+      _current_index = _windowList.size() -1;
+  }
+
 }
 
 XWindow * WindowlistMenu::getSelectedWindow() {
@@ -185,7 +206,7 @@ XWindow * WindowlistMenu::getSelectedWindow() {
   const WindowList::const_iterator end = _windowList.end();
 
   XWindow * win = 0;
-  
+
   unsigned int x = 0;
   for (; it != end; it++) {
     if ( static_cast<unsigned int>(_current_index) == x++ ) {
@@ -198,7 +219,7 @@ XWindow * WindowlistMenu::getSelectedWindow() {
 
   if (_debug && win)
     std::cout << "WindowlistMenu: getSelectedWindow: currently-selected window: ["
-	      << win->title() << "]\n";
+              << win->title() << "]\n";
   return win;
 
 }

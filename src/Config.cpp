@@ -51,7 +51,7 @@ bool Config::getBoolValue(const std::string & key, const  bool & iDefault)
       return true;
     else
       return false;
-      
+
   } else {
     return iDefault;
   }
@@ -68,7 +68,7 @@ int Config::getNumberValue(const std::string & key, const int & iDefault)
     std::string value = it->second;
 
     return (atoi(value.c_str()));
-      
+
   } else {
     return iDefault;
   }
@@ -85,7 +85,7 @@ std::string Config::getStringValue(const std::string & key, const std::string & 
     std::string value = it->second;
 
     return value;
-      
+
   } else {
     return iDefault;
   }
@@ -97,7 +97,7 @@ void Config::setOption(const std::string &name, const std::string &value)
 {
   std::string key=name;
   std::transform(key.begin(), key.end(), key.begin(), tolower);
-  
+
   const ConfigMap::const_iterator it= _configMap.find(key);
   if (it != _configMap.end())
     _configMap.erase(ConfigMap::key_type(key));
