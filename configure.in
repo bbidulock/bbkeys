@@ -13,7 +13,11 @@ dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_CPP
-
+AC_PROG_AWK
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
 
 AC_REQUIRE([AC_CANONICAL_HOST])[]
 case $host_os in
@@ -23,12 +27,6 @@ case $host_os in
     LDFLAGS="$LDFLAGS -z muldefs"
     ;;
 esac
-
-AC_PROG_AWK
-AC_PROG_INSTALL
-AC_PROG_LN_S
-AC_PROG_MAKE_SET
-AC_PROG_RANLIB
 
 dnl get the debug values right
 AC_DEFUN(AC_SET_DEBUG,
