@@ -45,7 +45,6 @@ class WindowlistMenu : public bt::Menu
 
 public:
   WindowlistMenu (ScreenHandler * s);
-  ~WindowlistMenu (void) ;
   void showCycleMenu (WindowList theList ) ;
   void itemClicked(unsigned int id, unsigned int button);
 
@@ -59,6 +58,7 @@ private:
   keytree * _keybindings;
   Display * _display;
   Config * _config;
+  const bt::ScreenInfo * _screen_info;
   bool _debug;
   int _current_index;
   

@@ -365,7 +365,7 @@ bool KeyClient::process_signal(int sig) {
   case SIGFPE:
   case SIGINT:
   case SIGTERM:
-    setRunState( bt::Application::SHUTDOWN );
+    bt::Application::shutdown();
 
   default:
     return False;

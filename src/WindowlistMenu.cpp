@@ -34,8 +34,7 @@ WindowlistMenu::WindowlistMenu (ScreenHandler * s) :
   _display = s->getKeyClient().XDisplay();
   _config = s->getKeyClient().getConfig();
   _debug = _config->getBoolValue("debug", false);
-}
-WindowlistMenu::~WindowlistMenu () {
+  _screen_info = & s->getScreenInfo();
 }
 
 void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
@@ -70,13 +69,16 @@ void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
 
 void WindowlistMenu::keyReleaseEvent (const XKeyEvent * const e) {
 
-  bt::Menu::keyReleaseEvent(e);
+  if (_debug)
+    std::cout << "WindowlistMenu: got keyReleaseEvent!" << std::endl;
 
   if (_screen->nothingIsPressed() ){
     bt::Menu::hide();
     _screen->keyReleaseEvent(e);
   }
   
+  bt::Menu::keyReleaseEvent(e);
+
 }
 
 void WindowlistMenu::showCycleMenu( WindowList theList ) {
@@ -90,19 +92,29 @@ void WindowlistMenu::showCycleMenu( WindowList theList ) {
   WindowList::const_iterator it = theList.begin();
   const WindowList::const_iterator end = theList.end();
 
-  unsigned int x = 0;
+  unsigned int i = 0;
 
   for (; it != end; it++) {
-    bt::Menu::insertItem( (*it)->title(), x++ );
+    bt::Menu::insertItem( (*it)->title(), i++ );
   }
 
+  // this is our current window, before cycling.  set it checked as a
+  // visual indicator
   bt::Menu::setItemChecked(0, true);
 
-  bt::Menu::popup(50, 50);
+  int x = _config->getNumberValue("cyclemenux", 20);
+  int y = _config->getNumberValue("cyclemenuy", 20);
+
+  // now show the menu
+  bt::Menu::popup(x, y, false);
+  bt::Menu::move(x,y);
   
   // reset our marker as we will increment it in selectNext...
   _current_index = -1;
   
+  // we don't have anything selected initially, so we need to set the
+  // selection to the second one (the first one is the
+  // currently-selected window
   selectNext();
   selectNext();
 
@@ -131,7 +143,7 @@ void WindowlistMenu::selectNext() {
   neo.keycode = keyCode;
 
   // keep track of where we are...
-  if (++_current_index >= _windowList.size() )
+  if (static_cast<unsigned int>(++_current_index) >= _windowList.size() )
     _current_index = 0;
 
   XWindow * win = getSelectedWindow();
@@ -164,14 +176,11 @@ XWindow * WindowlistMenu::getSelectedWindow() {
   WindowList::const_iterator it = _windowList.begin();
   const WindowList::const_iterator end = _windowList.end();
 
-  if (_debug)
-    std::cout << "WindowlistMenu: getSelectedWindow: current index is: ["
-	      << _current_index << "]\n";
   XWindow * win = 0;
   
   unsigned int x = 0;
   for (; it != end; it++) {
-    if ( _current_index == x++ ) {
+    if ( static_cast<unsigned int>(_current_index) == x++ ) {
       win = dynamic_cast<XWindow *>(*it);
     }
   }
