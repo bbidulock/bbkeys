@@ -82,6 +82,7 @@ private:
   bool _unmapped;
 
   void updateDimensions();
+  void updateDimensions(const XConfigureEvent * const e);
   void updateBlackboxAttributes();
   void updateNormalHints();
   void updateWMHints();

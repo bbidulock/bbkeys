@@ -74,7 +74,7 @@ XWindow::~XWindow() {
 
 // Window configure (size, position, stacking, etc.).
 void XWindow::configureNotifyEvent(const XConfigureEvent * const e) {
-  updateDimensions();
+  updateDimensions(e);
 }
 
 // Window property changed/added/deleted.
@@ -107,6 +107,10 @@ void XWindow::destroyNotifyEvent(const XDestroyWindowEvent * const e) {
   _unmapped = true;
 }
 
+void XWindow::updateDimensions(const XConfigureEvent * const e) {
+  _rect.setRect(e->x, e->y, e->width, e->height);
+}
+  
 void XWindow::updateDimensions() {
 
   Window root, child;   
