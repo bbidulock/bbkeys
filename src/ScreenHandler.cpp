@@ -235,11 +235,15 @@ void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
   }
 
   // if we've made it this far, handle the action....
-  const Action *it = _keybindings->getAction(e, state, this);
+  Action *it = _keybindings->getAction(e, state, this);
 
   if (!it)
     return;
 
+  if (_debug)
+    cout <<BBTOOL << ": " << "action fired: [" << it->toString() <<"]" <<endl;
+    
+    
   switch (it->type()) {
 
   case Action::chain:

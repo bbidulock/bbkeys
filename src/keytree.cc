@@ -25,9 +25,8 @@
 #include "keytree.hh"
 
 #include <string>
+#include <sstream>
 #include <iostream>
-
-using std::string;
 
 keytree::keytree(Display *display): _display(display)
 {
@@ -144,7 +143,7 @@ void keytree::ungrabChildren(keynode *node, ScreenHandler *scr)
   }
 }
 
-const Action * keytree::getAction(const XKeyEvent * const e, unsigned int & state,
+Action * keytree::getAction(const XKeyEvent * const e, unsigned int & state,
 				  ScreenHandler *scr)
 {
   Action *act;
@@ -189,7 +188,7 @@ const Action * keytree::getAction(const XKeyEvent * const e, unsigned int & stat
 
   // action not found. back to the head
   _current = _head;
-  return (const Action *)NULL;
+  return (Action *)NULL;
 }
 
 void keytree::addAction(Action::ActionType action, unsigned int mask,
@@ -213,7 +212,7 @@ void keytree::addAction(Action::ActionType action, unsigned int mask,
   
   keynode *tmp = new keynode;
 
-  tmp->action = new Action(action, keyCode, mask, arg);
+  tmp->action = new Action(action, _display, keyCode, mask, arg);
   tmp->parent = _current;
   _current->children.push_back(tmp);
 }
@@ -240,7 +239,7 @@ void keytree::setCurrentNodeProps(Action::ActionType action, unsigned int mask,
     delete _current->action;
 
   KeySym sym = XStringToKeysym(key.c_str());
-  _current->action = new Action(action,
+  _current->action = new Action(action, _display,
                                 XKeysymToKeycode(_display, sym),
                                 mask, arg);
 }
@@ -254,17 +253,7 @@ void keytree::showTree(keynode *node) {
     showTree(*it);
 
   if (node->action) {
-
-    string key;
-    KeySym _sym = XKeycodeToKeysym(_display, node->action->keycode(), 0);
-
-    if (_sym == NoSymbol) key="key not found";
-    else key = XKeysymToString(_sym);
-    
-    cout << BBTOOL << ": " << "action: [" << node->action->getActionName()
-         << "], key: [" << key
-         << "], mask: [" << node->action->modifierMask()
-         << "], string: [" << node->action->string() << "]\n";
+    cout << BBTOOL << ": " << "showTree: [" << node->action->toString() << "]" << endl;
   }
     
 }

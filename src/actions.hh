@@ -27,10 +27,14 @@
 
 extern "C" {
 #include <X11/Xlib.h>
+#include <X11/keysym.h>
 }
 
 #include <list>
 #include <string>
+
+#include "Display.hh"
+
 #include "version.h"
 
 class Action {
@@ -114,6 +118,7 @@ private:
 
   int _numberParam;
   std::string _stringParam;
+  Display * _display;
   
 public:
   inline enum ActionType type() const { return _type;}
@@ -123,8 +128,9 @@ public:
   inline unsigned int modifierMask() const { return _modifierMask; }
   inline int number() const { return _numberParam; }
   inline const std::string &string() const { return _stringParam; }
+  const std::string toString();
 
-  Action(enum ActionType type, KeyCode keycode, unsigned int modifierMask,
+  Action(enum ActionType type, Display * _display, KeyCode keycode, unsigned int modifierMask,
          const std::string &str = "");
 };
   

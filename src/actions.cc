@@ -25,11 +25,12 @@
 #include "actions.hh"
 
 #include <iostream>
-using std::cout;
+#include <string>
+#include <sstream>
 
-Action::Action(enum ActionType type, KeyCode keycode, unsigned int modifierMask,
-               const std::string &str)
-  : _type(type), _keycode(keycode), _modifierMask(modifierMask)
+Action::Action(enum ActionType type, Display * display, KeyCode keycode, 
+               unsigned int modifierMask, const std::string &str)
+  : _type(type), _display(display), _keycode(keycode), _modifierMask(modifierMask)
 {
   // These are the action types that take string arguments. This
   // should probably be moved to a static member
@@ -117,8 +118,26 @@ const char * Action::getActionName() {
     }
   }
 
-  cout << BBTOOL << ": " << "ERROR: Invalid action (" << _type << ").\n";
+  std::cout << BBTOOL << ": " << "ERROR: Invalid action (" << _type << ").\n";
   return "not found";
   
 }
 
+
+const std::string Action::toString() {
+    std::string key;
+    KeySym _sym = XKeycodeToKeysym(_display, keycode(), 0);
+
+    if (_sym == NoSymbol) key="key not found";
+    else key = XKeysymToString(_sym);
+
+    std::ostringstream val;
+    val  << "action: [" << getActionName()
+         << "], key: [" << key
+         << "], mask: [" << modifierMask()
+         << "], string: [" << string() << "]";
+
+    return val.str();
+
+
+}

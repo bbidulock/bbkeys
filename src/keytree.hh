@@ -49,7 +49,7 @@ public:
   keytree(Display * display);
   virtual ~keytree();
 
-  const Action * getAction(const XKeyEvent  * const e, unsigned int &, ScreenHandler * screen);
+  Action * getAction(const XKeyEvent  * const e, unsigned int &, ScreenHandler * screen);
   void unloadBindings();
   inline void showTree() {showTree(_head); }
   inline bool isLeaf (keynode *node) { return node->children.empty(); }
