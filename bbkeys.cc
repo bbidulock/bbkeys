@@ -70,7 +70,7 @@
 #include "bbkeys.hh"
 #include "main.hh"
 #include "Timer.hh"
-
+#include "Basemenu.hh"
 
 /*--------------------------------------------------------------------*/
 

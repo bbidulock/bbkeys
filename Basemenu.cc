@@ -44,6 +44,13 @@
 
 static Basemenu *shown = (Basemenu *) 0;
 
+char *bstrdup(const char *s) {
+	int l = strlen(s) + 1;
+	char *n = new char[l];
+	strncpy(n, s, l);
+	return n;
+}
+
 Basemenu::Basemenu(ToolWindow *toolwindow) {
   bbtool = toolwindow;
   image_ctrl = bbtool->getImageControl();

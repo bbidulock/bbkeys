@@ -37,7 +37,6 @@ public:
 	void key_press(int grabInt);
 	void centerPosition();
 	bool WaitForUpdate(void) {return wait_for_update;}
-  void setSelected(int,bool);
 
 protected:
 	void setMenuItems();

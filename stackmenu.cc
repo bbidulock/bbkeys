@@ -30,9 +30,7 @@ Stackmenu::Stackmenu(ToolWindow *tool) :
 
 	setTitleVisibility(False);
 	setMovable(False);
-	setHidable(True);
 	setAlignment(AlignBottom);
-	defaultMenu();
 }
 
 Stackmenu::~Stackmenu() {
@@ -94,16 +92,16 @@ void Stackmenu::key_press(int grabInt)
 {
 	switch (grabInt) {
 		case grabNextWindow:
-			setSelected(menuPosition, False);
+			setItemSelected(menuPosition, False);
 			if(++menuPosition >= getCount())
 				menuPosition = 0;
-      setSelected(menuPosition, True);
+      setItemSelected(menuPosition, True);
 			break;
 		case grabPrevWindow:
-      setSelected(menuPosition, False);
+      setItemSelected(menuPosition, False);
 			if(--menuPosition < 0)
 				menuPosition = getCount() - 1;
-      setSelected(menuPosition, True);
+      setItemSelected(menuPosition, True);
 			break;
 		default:
 			hide();
@@ -144,8 +142,4 @@ void Stackmenu::centerPosition()
 	int y = (bbtool->getCurrentScreenInfo()->getHeight()>>1) - (getHeight()>>1);
 	if (x>0 && y>0)
 		Basemenu::move(x, y);
-}
-
-void Stackmenu::setSelected(int index, bool select)
-{
 }
