@@ -678,17 +678,6 @@ WindowList ScreenHandler::getCycleWindowList(unsigned int state, const bool forw
     theList.push_back(t);
   }
 
-  // okay, now we need to move the currently active window down one
-  // notch in the stacking list...
-//   if (theList.size() > 1) {
-//     WindowList::iterator tlStart = theList.begin();
-//     tlStart++;
-//     XWindow *win = *tlStart;
-//     std::cout << "removing win->" << win->title() << "<-\n";
-//     theList.remove( win );
-//     theList.push_front( win );
-//   }
-
   return theList;
 
 }
@@ -715,7 +704,7 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
 					    sameclass, cn);
     // doesn't make much sense showing the window cycling dialog if there's only
     // one window  =:)
-    if (theList.size() > 1)
+    if (theList.size() >= 1)
       _windowmenu->showCycleMenu(theList);
 
     return;
