@@ -44,7 +44,7 @@ void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
   unsigned int state = e->state;
 
   if (_debug)
-    std::cout << "WindowlistMenu: got keyPressEvent!" << std::endl;
+    std::cout << BBTOOL << ": " << "WindowlistMenu: got keyPressEvent!" << std::endl;
 
   if (!_honor_modifiers) {
     state = e->state & ~(LockMask|scrollLockMask|numLockMask);
@@ -94,7 +94,7 @@ void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
 void WindowlistMenu::keyReleaseEvent (const XKeyEvent * const e) {
 
   if (_debug)
-    std::cout << "WindowlistMenu: got keyReleaseEvent!" << std::endl;
+    std::cout << BBTOOL << ": " << "WindowlistMenu: got keyReleaseEvent!" << std::endl;
 
   if (_screen->nothingIsPressed() ){
     // get what window is selected so we can focus it
@@ -249,10 +249,10 @@ XWindow * WindowlistMenu::getSelectedWindow() {
   }
 
   if (0 == win)
-    std::cerr << "WindowlistMenu: getSelectedWindow--couldn't get window.  this won't turn out well.\n";
+    std::cerr << BBTOOL << ": " << "WindowlistMenu: getSelectedWindow--couldn't get window.  this won't turn out well.\n";
 
   if (_debug && win)
-    std::cout << "WindowlistMenu: getSelectedWindow: currently-selected window: ["
+    std::cout << BBTOOL << ": " << "WindowlistMenu: getSelectedWindow: currently-selected window: ["
               << win->title() << "]\n";
   return win;
 

@@ -117,7 +117,7 @@ const char * Action::getActionName() {
     }
   }
 
-  cout << "ERROR: Invalid action (" << _type << ").\n";
+  cout << BBTOOL << ": " << "ERROR: Invalid action (" << _type << ").\n";
   return "not found";
   
 }

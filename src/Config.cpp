@@ -113,7 +113,7 @@ void Config::reset() {
 void Config::showOptions() {
   ConfigMap::const_iterator it = _configMap.begin(), end = _configMap.end();
   for (; it != end; ++it) {
-    cout << "key: [" << it->first << "], value: [" << it->second << "]\n";
+    cout << BBTOOL << ": " << "key: [" << it->first << "], value: [" << it->second << "]\n";
   }
 
 }

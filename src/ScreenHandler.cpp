@@ -72,16 +72,16 @@ ScreenHandler::ScreenHandler (KeyClient * k, unsigned int number)
   }
 
   if (!_managed) {
-    cout << "ScreenHandler: Unable to find a "
+    cout << BBTOOL << ": " << "ScreenHandler: Unable to find a "
          << "compatible window manager for screen: [" << number << "].\n";
     return;
   }
 
   bt::Netwm::AtomList atoms;
   if (_netclient->readSupported(_root, atoms)) {
-    cout << "ScreenHandler: Supported atoms: [" << atoms.size() << "].\n";
+    cout << BBTOOL << ": " << "ScreenHandler: Supported atoms: [" << atoms.size() << "].\n";
   } else {
-    cout << "ScreenHandler: No supported ewmh hints. Not able to be managed.\n";
+    cout << BBTOOL << ": " << "ScreenHandler: No supported ewmh hints. Not able to be managed.\n";
     _managed = false;
     return;
   }
@@ -138,7 +138,7 @@ void ScreenHandler::initialize()
 bool ScreenHandler::findSupportingWM() {
 
   if (_debug)
-    cout << endl << "ScreenHandler: in findSupportingWM."<< endl;
+    cout << endl << BBTOOL << ": " << "ScreenHandler: in findSupportingWM."<< endl;
 
   Window client, tmp;
   bool res = false;
@@ -146,22 +146,22 @@ bool ScreenHandler::findSupportingWM() {
   res = _netclient->readSupportingWMCheck(_root, &client);
   if (!res) {
     if (_debug)
-      cout << "ScreenHandler: first readSupportingWMCheck failed." << endl;
+      cout << BBTOOL << ": " << "ScreenHandler: first readSupportingWMCheck failed." << endl;
     return false;
   }
 
   if (_debug)
-    cout << "ScreenHandler: first readSupportingWMCheck succeeded." << endl;
+    cout << BBTOOL << ": " << "ScreenHandler: first readSupportingWMCheck succeeded." << endl;
 
   res = _netclient->readSupportingWMCheck(client, &tmp);
   if (!res || client != tmp) {
     if (_debug)
-      cout << "ScreenHandler: second readSupportingWMCheck failed." << endl;
+      cout << BBTOOL << ": " << "ScreenHandler: second readSupportingWMCheck failed." << endl;
     return false;
   }
 
   if (_debug)
-    cout << "ScreenHandler: second readSupportingWMCheck worked." << endl;
+    cout << BBTOOL << ": " << "ScreenHandler: second readSupportingWMCheck worked." << endl;
 
   // now try to get the name of the window manager, using utf8 first
   // and falling back to ansi if that fails
@@ -171,18 +171,18 @@ bool ScreenHandler::findSupportingWM() {
   if (! _netclient->getValue(client, _netclient->wmName(),
                              Netclient::utf8, _wm_name)) {
     if (_debug)
-      cout << "ScreenHandler: first try at getting wmName failed." << endl;
+      cout << BBTOOL << ": " << "ScreenHandler: first try at getting wmName failed." << endl;
     // try old x stuff
     _netclient->getValue(client, XA_WM_NAME, Netclient::ansi, _wm_name);
   }
 
   if (_wm_name.empty()) {
     if (_debug)
-      cout << "ScreenHandler: couldn't get wm's name.  letting it slide this time...." << endl;
+      cout << BBTOOL << ": " << "ScreenHandler: couldn't get wm's name.  letting it slide this time...." << endl;
     _wm_name = "beats the heck out of me";
   }
 
-  cout << "ScreenHandler: Found compatible "
+  cout << BBTOOL << ": " << "ScreenHandler: Found compatible "
        << "window manager: [" << _wm_name << "] for screen: ["
        << _screenNumber << "].\n";
 
@@ -491,7 +491,7 @@ void ScreenHandler::updateDesktopNames()
 //    end = _desktop_names.end();
 
 //  for (; it != end; ++it) {
-//    std::cout << "name: ->" << *it << "<-\n";
+//    std::cout << BBTOOL << ": " << "name: ->" << *it << "<-\n";
 //    char default_name[80];
 //    sprintf(default_name, "Workspace %u", _id + 1);
 //    the_name = default_name;
@@ -559,7 +559,7 @@ void ScreenHandler::updateActiveWindow()
       _last_active = _active;
 
       if ( _debug )
-        cout <<"active window now: [" <<(*_active)->title() <<"]" <<endl;
+        cout <<BBTOOL << ": " << "active window now: [" <<(*_active)->title() <<"]" <<endl;
     }
 
   }
@@ -580,7 +580,7 @@ void ScreenHandler::updateClientList()
   unsigned long num = (unsigned) -1;
 
   if ( ! _netclient->readClientList(_root, rootclients) ) {
-    cerr << "couldn't get client list from WM.\n";
+    cerr << BBTOOL << ": " << "couldn't get client list from WM.\n";
     num = 0;
   } else {
     num = rootclients.size();
@@ -664,19 +664,19 @@ void ScreenHandler::execCommand(const string &cmd) const {
   if ((pid = fork()) == 0) {
     // disconnect the child from this session and the tty
     if (setsid() == -1) {
-      cout << "warning: could not start a new process group\n";
+      cout << BBTOOL << ": " << "warning: could not start a new process group\n";
       perror("setsid");
     }
 
     // make the command run on the correct screen
     if (putenv(const_cast<char*>(_screenInfo.displayString().c_str()))) {
-      cout << "warning: couldn't set environment variable 'DISPLAY'\n";
+      cout << BBTOOL << ": " << "warning: couldn't set environment variable 'DISPLAY'\n";
       perror("putenv()");
     }
     execl("/bin/sh", "sh", "-c", cmd.c_str(), NULL);
     exit(-1);
   } else if (pid == -1) {
-    cout << ": Could not fork a process for executing a command\n";
+    cout << BBTOOL << ": " << ": Could not fork a process for executing a command\n";
   }
 }
 
@@ -735,7 +735,7 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
   //  =:) ) and if it's not already showing...
   if ( _show_cycle_menu && ! _windowmenu->isVisible() ) {
     if (_debug)
-      std::cout << "ScreenHandler: menu not visible. loading and showing..." << std::endl;
+      std::cout << BBTOOL << ": " << "ScreenHandler: menu not visible. loading and showing..." << std::endl;
 
     _cycling = true;
     WindowList theList = getCycleWindowList(state, forward, increment,
@@ -953,13 +953,13 @@ const XWindow *ScreenHandler::lastActiveWindow() const {
 
 void ScreenHandler::p()
 {
-  cout << "\nNOW LISTING CLIENTS!!!" << endl;
+  cout << BBTOOL << ": " << "\nNOW LISTING CLIENTS!!!" << endl;
 
   WindowList::const_iterator it = _clients.begin();
   const WindowList::const_iterator end = _clients.end();
 
   for (; it != end; ++it)
-    cout << "desktop: ["
+    cout << BBTOOL << ": " << "desktop: ["
          << (*it)->desktop()
          << "], window: [" << (*it)->title() << "]" << endl;
 

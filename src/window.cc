@@ -120,7 +120,7 @@ void XWindow::updateDimensions() {
   _rect.setRect(0,0,1,1);
 
   if (! XGetWindowAttributes(_display, _window, &win_attributes)) {
-    std::cerr << "updateDimensions. couldn't get what I needed, so setting to ridiculously wrong values.\n";
+    std::cerr << BBTOOL << ": " << "updateDimensions. couldn't get what I needed, so setting to ridiculously wrong values.\n";
     return;
   }
 
@@ -312,7 +312,7 @@ void XWindow::move(int x, int y) const {
 
 
   if (! XGetWindowAttributes(_display, _window, &win_attributes)) {
-    std::cerr << "move: couldn't get what I needed. not able to move, sorry.\n";
+    std::cerr << BBTOOL << ": " << "move: couldn't get what I needed. not able to move, sorry.\n";
     return;
   }
 
@@ -351,7 +351,7 @@ void XWindow::move(int x, int y) const {
     XWindowAttributes frame_attr;
 
     if (!XGetWindowAttributes(_display, wmframe, &frame_attr)) {
-      std::cerr << "updateDimensions. error. can't get frame attributes.\n";
+      std::cerr << BBTOOL << ": " << "updateDimensions. error. can't get frame attributes.\n";
     }
     
     switch (_gravity) {

@@ -184,7 +184,7 @@ void keytree::addAction(Action::ActionType action, unsigned int mask,
   KeyCode keyCode = XKeysymToKeycode(_display, sym);
 
   if (keyCode == 0) {
-    cerr << "keytree::addAction: keyCode for key: [" << key
+    cerr << BBTOOL << ": " << "keytree::addAction: keyCode for key: [" << key
          << "] not found. can't add it. skipping.\n";
     return;
   }
@@ -239,7 +239,7 @@ void keytree::showTree(keynode *node) {
     if (_sym == NoSymbol) key="key not found";
     else key = XKeysymToString(_sym);
     
-    cout << "action: [" << node->action->getActionName()
+    cout << BBTOOL << ": " << "action: [" << node->action->getActionName()
          << "], key: [" << key
          << "], mask: [" << node->action->modifierMask()
          << "], string: [" << node->action->string() << "]\n";

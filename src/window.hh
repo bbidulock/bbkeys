@@ -40,6 +40,7 @@ extern "C" {
 #include "EventHandler.hh"
 
 #include "Netclient.h"
+#include "version.h"
 
 class XWindow : public bt::EventHandler {
 public:

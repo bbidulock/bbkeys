@@ -29,6 +29,7 @@
 #include <list>
 #include <map>
 #include <algorithm>
+#include "version.h"
 
 typedef std::map<std::string, std::string> ConfigMap;
 

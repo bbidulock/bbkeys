@@ -77,7 +77,7 @@ KeyClient::KeyClient (int argc, char **argv,
   // now connect to the X server
   _display = XDisplay();
   if (! _display ) {
-    cerr << "KeyClient: ERROR: Can't connect to X Server. Bummer! Exiting\n";
+    cerr << BBTOOL << ": " << "KeyClient: ERROR: Can't connect to X Server. Bummer! Exiting\n";
     exit(2);
   }
 
@@ -87,7 +87,7 @@ KeyClient::KeyClient (int argc, char **argv,
 
   struct stat buf;
   if (0 != stat(_configFileName.c_str(), &buf) ||!S_ISREG(buf.st_mode)) {
-    cerr << "KeyClient: ERROR: Couldn't load rc-file: [" << _configFileName
+    cerr << BBTOOL << ": " << "KeyClient: ERROR: Couldn't load rc-file: [" << _configFileName
          << "], falling back to default: [" << DEFAULTRC << "]\n";
     _configFileName = DEFAULTRC;
   } else {
@@ -141,7 +141,7 @@ void KeyClient::initialize() {
   }
 
   if (screenList.empty()) {
-    cerr << "KeyClient: initialize: no compatible window managers found, aborting.\n";
+    cerr << BBTOOL << ": " << "KeyClient: initialize: no compatible window managers found, aborting.\n";
     ::exit(3);
   }
 
@@ -164,7 +164,7 @@ void KeyClient::initialize() {
 void KeyClient::reconfigure ()
 {
   if (_debug)
-    std::cout << "KeyClient: reconfigure: hey, goodie! I got a reconfigure request!!\n";
+    std::cout << BBTOOL << ": " << "KeyClient: reconfigure: hey, goodie! I got a reconfigure request!!\n";
 
 
   // delete all screens
@@ -214,7 +214,7 @@ void KeyClient::handleConfigFile() {
       break;
     case ConfigOpts::option:
       if (_debug)
-        cout << "got a config option!, setting key: [" << block->name
+        cout << BBTOOL << ": " << "got a config option!, setting key: [" << block->name
              << "] to value: [" << block->data << "]\n";
 
       _config.setOption(block->name, block->data);
@@ -228,7 +228,7 @@ void KeyClient::handleConfigFile() {
 
       break;
     default:
-      cerr << "unknown tag found in ConfigOpts block: ["
+      cerr << BBTOOL << ": " << "unknown tag found in ConfigOpts block: ["
            << block->tag << "], name: [" << block->name
            << "], data: [" << block->data << "]\n";
       break;
@@ -281,7 +281,7 @@ void KeyClient::setKeybindings(FileTokenizer & tokenizer) {
       string fullKey = block->name;
 
       if (fullKey.size() <=0) {
-        cerr << "ERROR: No key or modifier given. Ignoring this one, Jimmy.\n";
+        cerr << BBTOOL << ": " << "ERROR: No key or modifier given. Ignoring this one, Jimmy.\n";
         if (block) delete block;
         continue;
       }
@@ -295,7 +295,7 @@ void KeyClient::setKeybindings(FileTokenizer & tokenizer) {
 
       KeySym sym = XStringToKeysym(_key.c_str());
       if (sym == 0) {
-        cerr << "ERROR: Invalid key (" << _key << ")! This may cause odd behavior.\n";
+        cerr << BBTOOL << ": " << "ERROR: Invalid key (" << _key << ")! This may cause odd behavior.\n";
       }
 
       // now iterate through our modifiers and try to match the given string
@@ -314,7 +314,7 @@ void KeyClient::setKeybindings(FileTokenizer & tokenizer) {
             break;
           }
         }
-        if (!found) cerr << "ERROR: Couldn't find modifier for mod: [" << mod << "]\n";
+        if (!found) cerr << BBTOOL << ": " << "ERROR: Couldn't find modifier for mod: [" << mod << "]\n";
       }
 
       // now, if we have a chain, nest down a level and add the keybinding
@@ -426,7 +426,7 @@ void KeyClient::cycleScreen(int current, bool forward) const {
 
 void KeyClient::timeout(bt::Timer *timer) {
   if (_debug)
-    std::cout << "KeyClient: timeout: got timeout from timer...." << std::endl;
+    std::cout << BBTOOL << ": " << "KeyClient: timeout: got timeout from timer...." << std::endl;
   if (timer == config_check_timer) {
     checkConfigFile();
   }
@@ -438,10 +438,10 @@ void KeyClient::checkConfigFile() {
 
   if (stat(_configFileName.c_str(), &file_status) != 0) {
     if (_debug)
-      std::cerr << "Could not open config file: [" << _configFileName << "]";
+      std::cerr << BBTOOL << ": " << "Could not open config file: [" << _configFileName << "]";
   } else if (file_status.st_mtime != _last_time_config_changed) {
     if (_debug)
-      std::cout << "KeyClient: checkConfigFile: config file time changed..." << std::endl;
+      std::cout << BBTOOL << ": " << "KeyClient: checkConfigFile: config file time changed..." << std::endl;
     _last_time_config_changed = file_status.st_mtime;
     reconfigure();
   }

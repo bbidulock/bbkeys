@@ -31,6 +31,7 @@
 #include <cctype>
 #include <algorithm>
 #include <map>
+#include "version.h"
 
 using namespace std;
 

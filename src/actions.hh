@@ -31,6 +31,7 @@ extern "C" {
 
 #include <list>
 #include <string>
+#include "version.h"
 
 class Action {
 public:

@@ -70,7 +70,7 @@ FileTokenizer::FileTokenizer(const KeywordMap& keys, const char* fname,
     file.open(filename.c_str());
 
     if (! file.good()) {
-        cerr << "FileTokenizer::constructor: couldn't open file: [" << filename << "]" << endl;
+        cerr << BBTOOL << ": " << "FileTokenizer::constructor: couldn't open file: [" << filename << "]" << endl;
     }
 }
 
