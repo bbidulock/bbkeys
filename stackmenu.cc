@@ -41,7 +41,6 @@ void Stackmenu::itemSelected(int,int) {
 
 void Stackmenu::reconfigure()
 {
-	setMenuItems();
 	Basemenu::reconfigure();
 }
 

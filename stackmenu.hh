@@ -38,9 +38,9 @@ public:
 	void centerPosition();
 	bool WaitForUpdate(void) {return wait_for_update;}
 	void setSelected(int);
+	void setMenuItems();
 
 protected:
-	void setMenuItems();
 	void clearMenu();
 	void itemSelected(int,int);
 

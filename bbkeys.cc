@@ -2023,16 +2023,13 @@ void ToolWindow::cycle_linear(bool forward)
 
 void ToolWindow::add_stack(WindowList *newwin, int desktop) {
 	windowList->insert(newwin, 0); // insert at the top of the list
-//	if (stackMenu->isVisible())
-//		stackMenu->reconfigure();
-//	else
-		stackMenu->reconfigure();
+		stackMenu->setMenuItems();
 }
 
 void ToolWindow::cycle_stack(bool forward) {
 	if (stackMenu->WaitForUpdate())
 		stackMenu->Update();
-	stackMenu->reconfigure();
+	stackMenu->setMenuItems();
 	stackMenu->centerPosition();
 	stackMenu->show(forward);
 }
