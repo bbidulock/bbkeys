@@ -1,5 +1,10 @@
 version 0.8.5 --
 
+  - fix multi-head bug in main.cc.  We now setenv("DISPLAY"...) so that
+    applications launched will be launched on the correct display.  Thanks to
+    Greg Gilbert for the patch!
+    [vanRijn]
+
   - fix bug in main.cc (| rather than ||).  Thanks to Roman Neuhauser!
     [vanRijn]
 

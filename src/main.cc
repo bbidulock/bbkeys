@@ -18,7 +18,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: main.cc,v 1.4 2002/02/05 13:19:57 vanrijn Exp $
+// $Id: main.cc,v 1.5 2002/05/27 19:14:50 vanrijn Exp $
 
 #include "bbkeys.hh"
 #include "main.hh"
@@ -71,6 +71,10 @@ int main(int argc, char **argv)
 				exit(2);
 			};
 			options.display_name = argv[i];
+ 			
+ 			// Applications we exec will need the proper display
+ 			setenv("DISPLAY", options.display_name,true);
+
 		} else if ((!strcmp(argv[i], "-config")) |
 			(!strcmp(argv[i], "-c"))) {
 			if (++i == argc) {
