@@ -60,6 +60,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
 AWK = @AWK@
 CC = @CC@
 CPP = @CPP@
@@ -88,8 +90,9 @@ CONFIG_CLEAN_FILES =  version.h
 DATA =  $(doc_DATA)
 
 DIST_COMMON =  README ./stamp-h.in AUTHORS COPYING ChangeLog INSTALL \
-Makefile.am Makefile.in NEWS TODO aclocal.m4 config.h.in configure \
-configure.in install-sh ltmain.sh missing mkinstalldirs version.h.in
+Makefile.am Makefile.in NEWS TODO aclocal.m4 config.guess config.h.in \
+config.sub configure configure.in install-sh ltmain.sh missing \
+mkinstalldirs version.h.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)

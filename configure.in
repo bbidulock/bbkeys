@@ -4,9 +4,6 @@ AM_INIT_AUTOMAKE(bbkeys, 0.8.5-pre)
 AM_MAINTAINER_MODE
 AC_PREFIX_DEFAULT(/usr/local)
 
-dnl Make the $target variable available
-AC_CANONICAL_TARGET
-
 AC_CHECK_PROGS(regex_cmd, sed)
 if test x$regex_cmd = "x"; then
  AC_MSG_ERROR([error. sed is required to build the default bbtoolsrc file.])
@@ -16,20 +13,22 @@ dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_CPP
+
+
+AC_REQUIRE([AC_CANONICAL_HOST])[]
+case $host_os in
+  *solaris* )
+    dnl On solaris, we get a ton of multiply-defined errors if we don't include
+    dnl this parameter
+    LDFLAGS="$LDFLAGS -z muldefs"
+    ;;
+esac
+
 AC_PROG_AWK
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
-
-dnl Set target-specific options
-case "$target" in
-*-solaris*)
-  dnl On solaris, we get a ton of multiply-defined errors if we don't include
-  dnl this parameter
-  LDFLAGS="$LDFLAGS -z muldefs"
-  ;;
- esac
 
 dnl get the debug values right
 AC_DEFUN(AC_SET_DEBUG,
