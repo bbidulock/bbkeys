@@ -1903,10 +1903,9 @@ void ToolWindow::moveWinToDesktop(Window win, int desktop)
 
 void ToolWindow::addSticky(WindowList *win) {
 	win->sticky = True;
-
 	LinkedListIterator<DesktopList> it(desktopList);
 	for (; it.current(); it++)
-		if (getCurrentDesktopNr() != it.current()->number) {
+		if (win->number != it.current()->number) {
 			WindowList *copy = new WindowList;
 			copy->win = win->win;
 			copy->iconic = win->iconic;

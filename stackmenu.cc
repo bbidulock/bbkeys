@@ -55,7 +55,8 @@ void Stackmenu::setMenuItems() {
 	for (; it.current(); it++) {
 		if (((bbtool->getResource()->getMenuShowAllWorkspaces()) &&
 				((!it.current()->sticky) ||
-				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) ||
+				(it.current()->desktop == bbtool->getCurrentDesktopNr())))
+				||
 				((!bbtool->getResource()->getMenuShowAllWorkspaces()) &&
 				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) {
 			if (XGetWMName(bbtool->getXDisplay(), it.current()->win, &xtp))
@@ -80,10 +81,10 @@ void Stackmenu::selectFocused(bool raise)
 	for(; it.current(); it++) 
 		if (((bbtool->getResource()->getMenuShowAllWorkspaces()) &&
 				((!it.current()->sticky) ||
-				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) ||
+				(it.current()->desktop == bbtool->getCurrentDesktopNr())))
+				||
 				((!bbtool->getResource()->getMenuShowAllWorkspaces()) &&
 				(it.current()->desktop == bbtool->getCurrentDesktopNr()))) {
-//bbtool->p();
 			if(!selected--) {
 				bbtool->wminterface->setWindowFocus(it.current()->win);
 				if ( raise ) {
