@@ -34,7 +34,18 @@ use integer;
 sub trim;
 
 my $home = $ENV{HOME};
-my $bbkeysrc = "$home/.bbkeysrc";
+my $bbkeysrc;
+# get the keyconfig file from the commandline, or use the default
+foreach (@ARGV) {
+	if ($_ =~ /^-rc(|file)$/) {
+		shift;
+		$bbkeysrc = shift;
+		next;
+	}
+}
+if (! $bbkeysrc) {
+	$bbkeysrc = "$home/.bbkeysrc";
+}
 
 my @modifiers = (
 	"None",
@@ -89,16 +100,17 @@ my @actions = (
 	);
 
 
-open(R, "$bbkeysrc");
 my @config;
 my $count = 0;
-while (<R>) {
-	# skip blank lines or comments
-	$_ = trim($_);
-	next if ($_ =~ /^$/ or $_ =~ /^#/) ;
-	$config[$count++] = $_;
-	}
-close(R);
+if (open(R, "$bbkeysrc")) {
+	while (<R>) {
+		# skip blank lines or comments
+		$_ = trim($_);
+		next if ($_ =~ /^$/ or $_ =~ /^#/) ;
+		$config[$count++] = $_;
+		}
+	close(R);
+}
 
 my $save_state = 0;
 my $exit = 0;
