@@ -1241,7 +1241,7 @@ void ToolWindow::process_event(XEvent * e)
 {
 	switch (e->type) {
 	case PropertyNotify:
-//		blah();
+		windowAttributeChange(e->xproperty.window);
 		break;
 	
 	case KeyRelease: {
@@ -1532,7 +1532,7 @@ void ToolWindow::process_event(XEvent * e)
 				}
 			}
 		}
-		timer->start();
+//		timer->start();
 		break;
 	}
 
@@ -1600,7 +1600,7 @@ void ToolWindow::process_event(XEvent * e)
 
 					loadKeygrabs();
 					activateKeygrabs();
-					timer->start();
+//					timer->start();
 				}
 
 				XSetWindowBackgroundPixmap(getXDisplay(), win_configBtn,
@@ -1826,8 +1826,76 @@ void ToolWindow::moveWinToDesktop(Window win, int desktop)
 		}
 }
 
-void ToolWindow::windowAttributeChange(Window win)
-{
+void ToolWindow::addSticky(WindowList *win) {
+	win->sticky = True;
+
+	LinkedListIterator<DesktopList> it(desktopList);
+	for (; it.current(); it++) {
+		if (getCurrentDesktopNr() == it.current()->number)
+			continue;
+
+		WindowList *copy = new WindowList;
+		copy->win = win->win;
+		copy->iconic = win->iconic;
+		copy->shaded = win->shaded;
+		copy->sticky = True;
+		copy->desktop = it.current()->number;
+		windowList->insert(copy, -1);
+	}
+}
+
+void ToolWindow::removeSticky(const Window win, const int desktop) {
+	LinkedListIterator<WindowList> it(windowList);
+	for (register int i=0; i < desktop_count; i++) {
+		it.reset();
+		for (; it.current(); it++)
+			if (it.current()->win == win &&
+					it.current()->desktop != desktop)
+				windowList->remove(it.current());
+	}
+}
+
+void ToolWindow::windowAttributeChange(Window win) {
+	Atom real_type;
+	int format;
+	unsigned long n, extra;
+	WindowList *window = NULL;
+	BlackboxHints *net_hint;
+	LinkedListIterator<WindowList> it(windowList);
+	
+	for (; it.current(); it++)	// find the window that's changed
+		if (it.current()->win == win)
+			window = it.current();
+	if (!window)
+		return;
+	if (!(XGetWindowProperty(getXDisplay(), window->win,
+			getBlackboxAttributesAtom(), 0L,
+			PropBlackboxHintsElements, False,
+			getBlackboxAttributesAtom(), &real_type,
+			&format, &n, &extra, (unsigned char**)&net_hint)
+			==
+			Success
+			&&
+			net_hint))
+		return;
+	if (n != PropBlackboxHintsElements)
+		return;
+
+	if (net_hint->flags & AttribShaded) {
+		if (net_hint->attrib & AttribShaded)
+			window->shaded = True;
+	} else if (window->shaded)
+		window->shaded = False;
+	
+	if (wminterface->isIconicState(window->win) != window->iconic &&
+			!window->shaded)
+		window->iconic = !window->iconic;
+
+	if (net_hint->flags & AttribOmnipresent) {
+		if (net_hint->attrib & AttribOmnipresent)
+			if (!window->sticky) addSticky(window);
+	} else if (window->sticky)
+			if (window->sticky) removeSticky(window->win, getCurrentDesktopNr());
 }
 
 void ToolWindow::addWindow(Window win, int desktop)
@@ -1838,6 +1906,8 @@ void ToolWindow::addWindow(Window win, int desktop)
 	newwin->shaded = False;
 	newwin->sticky = False;
 	newwin->desktop = desktop;
+	XSelectInput(getXDisplay(),newwin->win,
+			PropertyChangeMask);
 //	add_linear(newwin, desktop);
 	add_stack(newwin, desktop);
 }
@@ -1950,13 +2020,20 @@ void ToolWindow::focus_stack(Window win)
 {
 	WindowList *window = new WindowList;
 	LinkedListIterator<WindowList> it(windowList);
-	for (; it.current(); it++)
-		if (it.current()->win == win) {
-			memcpy(window, it.current(), sizeof(WindowList));	// copy it out
-			windowList->remove(it.current());	// remove it
-			break;
-		}
-	windowList->insert(window, 0);		// add it to the top
+	for (; it.current(); it++) {
+		if ((it.current()->win == win) &&
+				(it.current()->desktop == getCurrentDesktopNr()))
+				break;
+	}
+	if (it.current()) {
+		window->win = it.current()->win;
+		window->shaded = it.current()->shaded;
+		window->sticky = it.current()->sticky;
+		window->iconic = it.current()->iconic;
+		window->desktop = it.current()->desktop;
+		windowList->remove(it.current());	// remove it
+		windowList->insert(window, 0);		// add it to the top
+	}
 }
 
 void ToolWindow::saveMenuSearch(Window window, Basemenu *menu)
@@ -1969,4 +2046,13 @@ void ToolWindow::removeMenuSearch(Window window)
 	menuWin = (Window)NULL;
 }
 
+void ToolWindow::p()
+{
+printf("window     | stick | shade | icon | desk\n");
+LinkedListIterator<WindowList> it(windowList);
+for (; it.current(); it++)
+	printf("%010i | %d     | %d     | %d    | %d\n", it.current()->win,
+		it.current()->sticky, it.current()->shaded, it.current()->iconic,
+		it.current()->desktop);
+}
 

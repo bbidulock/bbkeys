@@ -296,7 +296,8 @@ void WMInterface::NETNotifyDel(Window win) {
 	bbtool->removeWindow(win);
 }
 
-void WMInterface::NETNotifyAttributes(Window win) {
+void WMInterface::NETNotifyAttributes(Window win)
+{
 	bbtool->windowAttributeChange(win);
 }
 

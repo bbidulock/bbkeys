@@ -154,6 +154,8 @@ protected:
 	virtual void process_event(XEvent *);
 	virtual void CheckConfig(void);
 	void timeout(void);
+	void addSticky(WindowList *);
+	void removeSticky(const Window,const int);
 	
 private:
 	XGCValues gcv;	// font stuff
@@ -200,6 +202,7 @@ private:
 	GC menuFrameGC;
 
 	friend Stackmenu;
+	void p();
 };
 
 #endif /* __BBKEYS_HH */
