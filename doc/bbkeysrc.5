@@ -1,5 +1,5 @@
 .\" 
-.\" $Id: bbkeysrc.5,v 1.7 2004/09/03 23:30:32 vanrijn Exp $
+.\" $Id: bbkeysrc.5,v 1.8 2004/09/15 03:23:26 vanrijn Exp $
 .\" 
 .TH "BBKEYSRC" "5" "August 27, 2004" "vanRijn" "bbkeysrc"
 .SH "NAME"
@@ -36,8 +36,11 @@ should bbkeys raise the windows you're cycling through while cycling through the
 
 .TP 
 \fIshowCycleMenu\fR
-show the window\-cycling menu or cycle without it?  
-(true or false)
+show the window\-cycling menu or cycle without it? (true or false)
+
+.TP 
+\fIcycleMenuTitle\fR
+show the given string as the title of the window\-cycling menu.  if an empty string is passed as the parameter to this config option("{}"), then the title will not be drawn. (string value)
 
 .TP 
 \fImenuTextJustify\fR

@@ -61,6 +61,7 @@ private:
   const bt::ScreenInfo * _screen_info;
   bool _debug;
   bool _honor_modifiers;
+  std::string _menu_title;
   int _current_index;
   int numLockMask, scrollLockMask;
   unsigned int _desktop_nbr;

@@ -37,6 +37,7 @@ WindowlistMenu::WindowlistMenu (ScreenHandler * s) :
   _screen_info = & s->getScreenInfo();
   _honor_modifiers = _config->getBoolValue("honormodifiers", false);
   _screen->getKeyClient().getLockModifiers(numLockMask, scrollLockMask);
+  _menu_title = _config->getStringValue("cyclemenutitle", "Switch To...");
 }
 
 void WindowlistMenu::keyPressEvent (const XKeyEvent * const e) {
@@ -116,8 +117,9 @@ void WindowlistMenu::keyReleaseEvent (const XKeyEvent * const e) {
 void WindowlistMenu::showCycleMenu( WindowList theList ) {
 
   bt::Menu::clear();
-  bt::Menu::setTitle(bt::toUnicode("Switch To..."));
-  bt::Menu::showTitle();
+  bt::Menu::setTitle(bt::toUnicode(_menu_title));
+  if (_menu_title.length() > 0) 
+    bt::Menu::showTitle();
 
   _windowList = theList;
 
