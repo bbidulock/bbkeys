@@ -1825,7 +1825,8 @@ void ToolWindow::removeWindow(Window win)
 void ToolWindow::focusWindow(Window win)
 {
 	focus_window = win;
-	focus_stack(win);
+	if (resource->getMenuStackedCycling())
+		focus_stack(win);
 }
 
 void ToolWindow::moveWinToDesktop(Window win, int desktop)
@@ -1924,14 +1925,18 @@ void ToolWindow::addWindow(Window win, int desktop)
 	newwin->desktop = desktop;
 	XSelectInput(getXDisplay(),newwin->win,
 			PropertyChangeMask);
-//	add_linear(newwin, desktop);
-	add_stack(newwin, desktop);
+	if (resource->getMenuStackedCycling())
+		add_stack(newwin, desktop);
+	else
+		add_linear(newwin, desktop);
 }
 
 void ToolWindow::cycleWindowFocus(bool forward)
 {
-//	cycle_linear(forward);
-	cycle_stack(forward);
+	if (resource->getMenuStackedCycling())
+		cycle_stack(forward);
+	else
+		cycle_linear(forward);
 }
 
 /*******************************************************************************

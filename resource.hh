@@ -88,6 +88,7 @@ struct BUTTON {
 };
 
 struct MENU {
+	Bool stackedCycling;
 	BTexture texture;
 	BTexture hiTexture;
 	BColor textColor;
@@ -134,6 +135,7 @@ public:
   unsigned int getBorderWidth(void) { return 0; }
   int getBulletStyle(void) { return menu.bullet_style; }
   int getBulletPosition(void) { return menu.bullet_pos; }
+	Bool getMenuStackedCycling(void) { return menu.stackedCycling; }
 
   enum { AlignDontCare = 1, AlignTop, AlignBottom };
   enum { Right = 1, Left };

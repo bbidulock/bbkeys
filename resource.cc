@@ -426,6 +426,14 @@ void Resource::Menu()
 	XrmValue value;
 	char *value_type;
 
+	if (XrmGetResource(resource_db, "bbkeys.menu.stackedCycling",
+										 "Bbkeys.menu.StackedCycling", &value_type, &value)) {
+		if (!strncasecmp("true", value.addr, value.size))
+			menu.stackedCycling = True;
+		else
+			menu.stackedCycling = False;
+	} else
+		menu.stackedCycling = True;
 	
 	readTexture("bbkeys.menu.frame","Bbkeys.Menu.Frame",BB_MENU_TEXTURE,BB_MENU_TEXTURE2,
               "slategrey","darkslategrey",
