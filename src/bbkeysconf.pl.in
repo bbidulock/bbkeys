@@ -43,8 +43,8 @@ foreach (@ARGV) {
 		next;
 	}
 	if ($_ =~ /^-h(|elp)$/) {
-		print "\nbbkeysconf version @VERSION@\n";
-		print "Usage: bbkeysconf [options]\n";
+		print "\nbbkeysconf.pl version @VERSION@\n";
+		print "Usage: bbkeysconf.pl [options]\n";
 		print "Options:\n";
 		print " -rc[file] <filename>         Alternate keygrab definition file.\n";
 		print "                               (default is ~/.bbkeysrc)\n";
@@ -56,8 +56,6 @@ foreach (@ARGV) {
 if (! $bbkeysrc) {
 	$bbkeysrc = "$home/.bbkeysrc";
 }
-print "$bbkeysrc\n";
-exit;
 my @modifiers = (
 	"None",
 	"Control",
@@ -94,6 +92,7 @@ my @actions = (
 	"Raise",
 	"ShadeWindow",
 	"StickWindow",
+	"ToggleDecor",
 	"Workspace1",
 	"Workspace2",
 	"Workspace3",
