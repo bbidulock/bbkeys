@@ -4,10 +4,11 @@ Version: 0.8.1
 Release: 1
 Copyright: GPL
 Group: X11/Applications
-Source: http://movingparts.net/bbkeys/bbkeys-0.8.1.tar.gz
+Source: http://movingparts.net/bbkeys/bbkeys-%{version}.tar.gz
 URL: http://movingparts.net
 Packager: vanRijn (vR@movingparts.net)
-Buildroot: /tmp/buildroot
+prefix: /usr/local
+Buildroot: /var//tmp/%{name}-buildroot
 
 %description
 bbkeys is a configurable key-grabber designed for the blackbox window manager
@@ -18,24 +19,35 @@ as well.  bbkeys is easily configurable via directly hand-editting the user's
 bbkeysconf (for lack of a better name yet).  
 %prep
 %setup
-./configure
+./configure --prefix=%{prefix}
 
 %build
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT
-
-make prefix=$RPM_BUILD_ROOT/usr/local install
-cd $RPM_BUILD_ROOT
-find . -type d | sed '1,2d;s,^\.,\%attr(-\,root\,root) \%dir ,' > $RPM_BUILD_DIR/file.list.qt
-find . -type f | sed 's,^\.,\%attr(-\,root\,root) ,' >> $RPM_BUILD_DIR/file.list.qt
-find . -type l | sed 's,^\.,\%attr(-\,root\,root) ,' >> $RPM_BUILD_DIR/file.list.qt
+make prefix=$RPM_BUILD_ROOT/%{prefix} install
 
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-rm -rf ../file.list.qt
 
-%files -f ../file.list.qt
+%files 
+%defattr(-,root,root) 
+%{prefix}/bin/bbkeys 
+%{prefix}/bin/bbkeysConfigC 
+%{prefix}/share/bbtools/README.bbkeys 
+%{prefix}/share/bbtools/bbkeys.bb 
+%{prefix}/share/bbtools/bbkeys.nobb 
+%{prefix}/doc/bbkeys/README
+%{prefix}/doc/bbkeys/AUTHORS
+%{prefix}/doc/bbkeys/ChangeLog
+ 
+%changelog 
+* Sun Aug 5 2001 Jason Kasper <vR@movingparts.net>
+- added to file list for new included files
+- install to %{prefix} instead of /usr
+* Sun May 6 2001 Hollis Blanchard <hollis@terraplex.com> 
+- removed file list in favor of explicit %files section 
+- install to /usr instead of /usr/local 
+- buildroot = /var/tmp/bbkeys-buildroot instead of /tmp/buildroot

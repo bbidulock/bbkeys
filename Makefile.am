@@ -2,8 +2,7 @@ CPPFLAGS =	@CPPFLAGS@  @INTERLACE@ \
 		-DGLOBAL_BB=\"$(datadir)/bbtools/bbkeys.bb\" \
 		-DGLOBAL_NOBB=\"$(datadir)/bbtools/bbkeys.nobb\"
 
-
-SUBDIRS = data
+SUBDIRS = data doc
 bin_PROGRAMS = bbkeys bbkeysConfigC
 bbkeys_SOURCES = bbkeys.cc Image.cc LinkedList.cc \
   		  bbkeys.hh Image.hh LinkedList.hh \
@@ -20,3 +19,7 @@ bbkeys_SOURCES = bbkeys.cc Image.cc LinkedList.cc \
 			grab_defs.hh blackboxstyle.hh
 bbkeysConfigC_SOURCES = bbkeysConfigC.c
 bbkeys_LDADD = @X_LIBS@
+
+docdir = $(prefix)/doc/bbkeys
+doc_DATA = README AUTHORS ChangeLog
+EXTRA_DIST = $(doc_DATA)
