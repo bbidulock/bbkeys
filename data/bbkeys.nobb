@@ -21,6 +21,15 @@ bbkeys.honorModifiers:        False
 ! *** menu options for the stacked cycling popup window menu....
 !bbkeys.menu.justify: right
 
+!** define the number of columns, the number of row will grow as
+!** desktops are added (vertical orientation)
+!bbkeys.columns:               3
+
+!** define the number of rows, the number of columns will grow as
+!** desktops are added (horizontal orientation)
+!bbkeys.rows:                  2
+
+
 session.colorsPerChannel:	4
 session.imageDither:		False
 

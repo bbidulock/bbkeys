@@ -35,6 +35,14 @@ bbkeys.raised:                 True
 !** set the window docus style none, border or texture
 !bbkeys.window.focusStyle:      texture
 
+!** define the number of columns, the number of row will grow as
+!** desktops are added (vertical orientation)
+!bbkeys.columns:               3
+
+!** define the number of rows, the number of columns will grow as
+!** desktops are added (horizontal orientation)
+!bbkeys.rows:                  2
+
 ! *************************************************************
 ! ** By default the values below this point are taken from   **
 ! ** the Blackbox style.                                     **
