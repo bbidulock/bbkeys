@@ -41,6 +41,7 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/share/bbtools/bbkeys.nobb 
 %{prefix}/doc/bbkeys/README
 %{prefix}/doc/bbkeys/AUTHORS
+%{prefix}/doc/bbkeys/ChangeLog
 %{prefix}/man/man1/bbkeys.1
 %{prefix}/man/man5/bbkeys.bb.5
 %{prefix}/man/man5/bbkeysrc.5
