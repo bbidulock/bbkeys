@@ -21,7 +21,7 @@
 //
 // (See the included file COPYING / GPL-2.0)
 //
-// $Id: bbkeys.cc,v 1.19 2002/05/27 20:01:18 eckzor Exp $
+// $Id: bbkeys.cc,v 1.20 2002/05/30 07:33:13 eckzor Exp $
 
 #ifdef		HAVE_CONFIG_H
 #	 include "config.h"
@@ -1375,16 +1375,7 @@ void ToolWindow::process_event(XEvent * e)
 		int fw_y, fw_x;
 		unsigned int fw_w, fw_h, fw_b, fw_d;
 
-		/* Need to take out this next bit when nyz has 0.60.0 ready, as
-			 we'll then get our focus_window in a ClientMessage */
-		int revert_to = RevertToPointerRoot;
-		if (!focus_window) {
-			XGetInputFocus(getXDisplay(), &focus_window, &revert_to);
-		}
-
-		/* end temporary focus_window fix */
-
-		if (focus_window && focus_window != (int)PointerRoot ) {
+		if (focus_window) {
 			XGetGeometry(getXDisplay(), focus_window, &fw_root, &fw_x,
 					&fw_y, &fw_w, &fw_h, &fw_b, &fw_d);
 			XTranslateCoordinates(getXDisplay(), focus_window, fw_root,
