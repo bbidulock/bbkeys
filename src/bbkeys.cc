@@ -404,7 +404,7 @@ void ToolWindow::activateKeygrabs(void)
 			if (grabSet.KeyMap[i].keycode != AnyModifier) {
 				XGrabKey(getXDisplay(), grabSet.KeyMap[i].keycode,
 							grabSet.KeyMap[i].modMask | LockMask,
-							getScreenInfo(0)->getRootWindow(), True,
+							getCurrentScreenInfo()->getRootWindow(), True,
 							GrabModeAsync, GrabModeAsync);
 
 				/* Also grab all modifier combinations possible that include,
@@ -414,14 +414,14 @@ void ToolWindow::activateKeygrabs(void)
 
 				wHackedGrabKey(grabSet.KeyMap[i].keycode,
 									grabSet.KeyMap[i].modMask,
-									getScreenInfo(0)->getRootWindow(), True,
+									getCurrentScreenInfo()->getRootWindow(), True,
 									GrabModeAsync, GrabModeAsync);
 			}
 
 			XGrabKey(getXDisplay(), grabSet.KeyMap[i].keycode,
 						grabSet.KeyMap[i].modMask,
-						getScreenInfo(0)->getRootWindow(), True, GrabModeAsync,
-						GrabModeAsync);
+						getCurrentScreenInfo()->getRootWindow(), True,
+						GrabModeAsync, GrabModeAsync);
 	 }
 }
 
