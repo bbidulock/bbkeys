@@ -55,6 +55,7 @@ XWindow::XWindow(Window window, Netclient * netclient,
   updateBlackboxAttributes();
   updateNormalHints();
   updateWMHints();
+  updateMotifHints();
   updateDimensions();
   updateState();
   updateDesktop();
@@ -95,6 +96,8 @@ void XWindow::propertyNotifyEvent(const XPropertyEvent * const e) {
     updateTitle();
   else if (e->atom == _netclient->xaWmClass() )
     updateClass();
+  else if (e->atom == _netclient->xaMotifWmHints() )
+    updateMotifHints();
 }
 
 // Window hidden.
@@ -172,6 +175,72 @@ void XWindow::updateNormalHints() {
   }
 }
 
+
+void XWindow::updateMotifHints() {
+
+// copied straight from blackbox's Window.cc, but hopefully nyz will move
+// this somewhere shareable....  =:D
+
+  /*
+    this structure only contains 3 elements, even though the Motif 2.0
+    structure contains 5, because we only use the first 3
+  */
+  struct PropMotifhints {
+    unsigned long flags;
+    unsigned long functions;
+    unsigned long decorations;
+  };
+  static const unsigned int PROP_MWM_HINTS_ELEMENTS = 3u;
+  enum { // MWM flags
+    MWM_HINTS_FUNCTIONS   = 1<<0,
+    MWM_HINTS_DECORATIONS = 1<<1
+  };
+  enum { // MWM functions
+    MWM_FUNC_ALL      = 1<<0,
+    MWM_FUNC_RESIZE   = 1<<1,
+    MWM_FUNC_MOVE     = 1<<2,
+    MWM_FUNC_MINIMIZE = 1<<3,
+    MWM_FUNC_MAXIMIZE = 1<<4,
+    MWM_FUNC_CLOSE    = 1<<5
+  };
+  enum { // MWM decorations
+    MWM_DECOR_ALL      = 1<<0,
+    MWM_DECOR_BORDER   = 1<<1,
+    MWM_DECOR_RESIZEH  = 1<<2,
+    MWM_DECOR_TITLE    = 1<<3,
+    MWM_DECOR_MENU     = 1<<4,
+    MWM_DECOR_MINIMIZE = 1<<5,
+    MWM_DECOR_MAXIMIZE = 1<<6
+  };
+
+  Atom atom_return;
+  PropMotifhints *prop = 0;
+  int format;
+  unsigned long num, len;
+  int ret = XGetWindowProperty(_display, _window,
+                               _netclient->xaMotifWmHints(), 0,
+                               PROP_MWM_HINTS_ELEMENTS, False,
+                               _netclient->xaMotifWmHints(), &atom_return,
+                               &format, &num, &len,
+                               (unsigned char **) &prop);
+
+  if (ret != Success || !prop || num != PROP_MWM_HINTS_ELEMENTS) {
+    if (prop) XFree(prop);
+    return;
+  }
+
+  if (prop->flags & MWM_HINTS_DECORATIONS) {
+    if (prop->decorations & MWM_DECOR_ALL) {
+      _decorated = true;
+    } else {
+      _decorated = false;
+    }
+  }
+
+  XFree(prop);
+
+
+}
 
 void XWindow::updateWMHints() {
   XWMHints *hints;
@@ -296,10 +365,20 @@ void XWindow::focus(bool raise) const {
 }
 
 void XWindow::decorate(bool d) const {
-  _netclient->sendClientMessage(_root,
-                                _netclient->xaBlackboxChangeAttributes(),
-                                _window, AttribDecoration,
-                                0, 0, 0, (d ? DecorNormal : DecorNone));
+                                
+  // YAY trolltech!!!  =:)
+  // http://lists.trolltech.com/qt-interest/1999-06/thread00047-0.html
+  long prop[5] = {2, 1, 1, 0, 0};
+
+  if (_decorated)
+          prop[2] = 0;
+  else
+          prop[2] = 1;
+
+  XChangeProperty(_display, _window, 
+    _netclient->xaMotifWmHints(),
+    _netclient->xaMotifWmHints(),
+    32, 0, (unsigned char *) prop, 5);
 }
 
 void XWindow::sendTo(unsigned int dest) const {

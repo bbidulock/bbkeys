@@ -94,6 +94,7 @@ private:
   void updateDesktop();
   void updateTitle();
   void updateClass();
+  void updateMotifHints();
 
   // EventHandler methods....
   
