@@ -132,7 +132,7 @@ public:
   enum { Empty = 0, Square, Triangle, Diamond };
   enum { LeftJustify = 1, RightJustify, CenterJustify };
 
-	void setHighlight(int);
+	inline const void setHighlight(int i) { selected_item = i; }
 };
 
 

@@ -978,11 +978,3 @@ void Basemenu::reconfigure(void) {
   menu.bevel_w = bbtool->getResource()->getBevelWidth();
   update();
 }
-
-void Basemenu::setHighlight(int item)
-{
-//	which_sbl = sublevel;
-//	which_press = item;
-	selected_item = item;
-	update();
-}
