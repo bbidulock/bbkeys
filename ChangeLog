@@ -1,5 +1,12 @@
 version 0.8.4 --
 
+  - add a sanity check to the removeWindow function. Basically, blackbox tells
+    bbkeys when a window disappears, or is removed. If the window being
+    removed was the last window blackbox specified as having the input focus,
+    bbkeys now resets what it thinks has the input focus. This prevents the
+    bug reproducable by iconifying the last window on a workspace, and then
+    trying to maximize "nothing".
+
   - cleaning up build again.  Rather than having 200 -DDEFINE_ statements
     in our compile lines, we use config.h (like normal people).  =:)  This
     very well may break stuff, but it looks good thus far....
