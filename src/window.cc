@@ -52,6 +52,7 @@ XWindow::XWindow(Window window, Netclient * netclient,
   // add an event handler for our window
   _app.insertEventHandler(_window, this);  
 
+  updateBlackboxAttributes();
   updateNormalHints();
   updateWMHints();
   updateDimensions();
@@ -104,7 +105,6 @@ void XWindow::destroyNotifyEvent(const XDestroyWindowEvent * const e) {
   _unmapped = true;
 }
 
-
 void XWindow::updateDimensions() {
   Window root, child;
   int x, y;
@@ -117,6 +117,23 @@ void XWindow::updateDimensions() {
     _rect.setRect(x, y, w, h);
   else
     _rect.setRect(0, 0, 1, 1);
+}
+
+void XWindow::updateBlackboxAttributes() {
+  unsigned long *data;
+  unsigned long num = PropBlackboxAttributesElements;
+
+  _decorated = true;
+
+  if (_netclient->getValue(_window,
+                           _netclient->xaBlackboxAttributes(),
+                           _netclient->xaBlackboxAttributes(), 
+                           num, &data)) {
+    if (num == PropBlackboxAttributesElements)
+      if (data[0] & AttribDecoration)
+        _decorated = (data[4] != DecorNone);
+    delete data;
+  }
 }
 
 void XWindow::updateNormalHints() {
@@ -259,7 +276,10 @@ void XWindow::focus(bool raise) const {
 }
 
 void XWindow::decorate(bool d) const {
-
+  _netclient->sendClientMessage(_root,
+                            _netclient->xaBlackboxChangeAttributes(),
+                            _window, AttribDecoration,
+                                0, 0, 0, (d ? DecorNormal : DecorNone));
 }
 
 void XWindow::sendTo(unsigned int dest) const {

@@ -51,12 +51,15 @@ private:
 
   Atom openbox_show_root_menu, openbox_show_workspace_menu;
 
+  Atom blackbox_attributes, blackbox_change_attributes, blackbox_hints;
+
   bool getValue(Window win, Atom atom, Atom type,
                 unsigned long &nelements, unsigned char **value,
                 int size) const;
 
   void init_icccm(void);
   void init_extras(void);
+  void init_blackbox(void);
 
 public:
 
@@ -86,6 +89,11 @@ public:
   inline Atom xaOpenboxShowWorkspaceMenu(void) const
     {return openbox_show_workspace_menu;}
 
+  // old blackbox atoms
+  inline Atom xaBlackboxAttributes(void) const {return blackbox_attributes;}
+  inline Atom xaBlackboxChangeAttributes(void) const {return blackbox_change_attributes;}
+  inline Atom xaBlackboxHints(void) const {return blackbox_hints;}
+                                                                    
   
   enum StringType {
     ansi,

@@ -32,6 +32,7 @@ Netclient::Netclient (Display * display) : bt::Netwm(display)
   _display = display;
   init_icccm();
   init_extras();
+  init_blackbox();
     
 }
                       
@@ -74,6 +75,20 @@ void Netclient::init_extras(void) {
   XInternAtoms(_display, atoms, 2, False, atoms_return);
   openbox_show_root_menu = atoms_return[0];
   openbox_show_workspace_menu = atoms_return[1];
+
+}
+
+void Netclient::init_blackbox(void) {
+  char* atoms[3] = {
+    "_BLACKBOX_HINTS",
+    "_BLACKBOX_ATTRIBUTES",
+    "_BLACKBOX_CHANGE_ATTRIBUTES"
+  };
+  Atom atoms_return[3];
+  XInternAtoms(_display, atoms, 3, False, atoms_return);
+  blackbox_hints = atoms_return[0];
+  blackbox_attributes = atoms_return[1];
+  blackbox_change_attributes = atoms_return[2];
 
 }
 
