@@ -424,8 +424,6 @@ void KeyClient::cycleScreen(int current, bool forward) const {
 }
 
 void KeyClient::timeout(bt::Timer *timer) {
-  if (_debug)
-    std::cout << BBTOOL << ": " << "KeyClient: timeout: got timeout from timer...." << std::endl;
   if (timer == config_check_timer) {
     checkConfigFile();
   }
