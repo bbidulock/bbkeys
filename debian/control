@@ -9,7 +9,8 @@ Package: bbkeys
 Architecture: any
 Depends: ${shlibs:Depends}
 Recommends: blackbox, bbconf
-Description: bbkeys is a configurable key-grabber designed for the blackbox window manager
+Description: A key-grabber for the blackbox window manager.
+ bbkeys is a configurable key-grabber designed for the blackbox window manager
  which is written by Brad Hughes.  It is based on the bbtools object code
  created by John Kennis and re-uses some of the blackbox window manager classes
  as well.  bbkeys is easily configurable via directly hand-editting the user's
