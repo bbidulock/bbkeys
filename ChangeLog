@@ -42,6 +42,9 @@ version 0.8.4 --
     to play with this, though I have made sure that it works on my laptop.
     =:)
 
+  - fix for RPM-building process... install gzipped man pages by default on
+    RPM-based systems.  [vanRijn]
+
 version 0.8.3 --
 
   - changing external app launch order--we go bbconf, bbkeysconf,

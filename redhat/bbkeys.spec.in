@@ -35,6 +35,10 @@ make
 if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
 mkdir -p $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
+cd $RPM_BUILD_ROOT/%{prefix}/man
+[ -f man1/bbkeys.1.gz ] || gzip man1/bbkeys.1
+[ -f man5/bbkeys.bb.5.gz ] || gzip man5/bbkeys.bb.5
+[ -f man5/bbkeysrc.5.gz ] || gzip man5/bbkeysrc.5
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -49,11 +53,13 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/doc/bbkeys/README
 %{prefix}/doc/bbkeys/AUTHORS
 %{prefix}/doc/bbkeys/ChangeLog
-%{prefix}/man/man1/bbkeys.1
-%{prefix}/man/man5/bbkeys.bb.5
-%{prefix}/man/man5/bbkeysrc.5
+%{prefix}/man/man1/bbkeys.1.gz
+%{prefix}/man/man5/bbkeys.bb.5.gz
+%{prefix}/man/man5/bbkeysrc.5.gz
  
 %changelog 
+* Sat Jan 5 2002 Jason 'vanRijn' Kasper <vR@movingparts.net>
+- gzipping man pages by default and changing file list to reflect this
 * Mon Nov 5 2001 Jason 'vanRijn' Kasper <vR@movingparts.net>
 - removing bbkeysConfigC and replacing with bbkeysconf.pl
 * Tue Sep 18 2001 Jason Kasper <vR@movingparts.net>
