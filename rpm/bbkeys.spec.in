@@ -1,4 +1,4 @@
-# $Id: bbkeys.spec.in,v 1.1 2005/03/05 15:49:04 vanrijn Exp $
+# $Id: bbkeys.spec.in,v 1.2 2005/03/05 16:59:07 vanrijn Exp $
 
 %define name		@PACKAGE@
 %define version		@VERSION@
@@ -41,12 +41,11 @@ make install DESTDIR=%{buildroot}
 
 %clean
 rm -rf %{buildroot}
-rm ../file.list.%{name}
 
 %files
 %defattr(-, root, root) 
 %doc AUTHORS BUGS ChangeLog LICENSE NEWS README TODO
-%exclude %{_prefix}/doc
+%exclude %{_prefix}/share/doc
 %{_bindir}/*
 %dir %{_datadir}/bbkeys
 %config %{_datadir}/bbkeys/*

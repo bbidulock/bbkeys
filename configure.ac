@@ -145,6 +145,8 @@ src/Makefile \
 doc/Makefile \
 data/Makefile \
 doc/bbkeys.1 \
+rpm/Makefile \
+rpm/bbkeys.spec \
 )
 
 dnl Print results

@@ -2,7 +2,7 @@
 # have all needed files, that a GNU package needs
 AUTOMAKE_OPTIONS = foreign 
 
-SUBDIRS = src data doc
+SUBDIRS = src data doc rpm
 MAINTAINERCLEANFILES = aclocal.m4 config.h.in configure Makefile.in stamp-h.in
 
 docdir = $(datadir)/doc/bbkeys
@@ -16,3 +16,9 @@ dist-hook:
 ## create Debian package
 dist-deb:
 	dpkg-buildpackage -rfakeroot -us -uc -tc
+
+## create RPMs
+dist-rpm: Makefile
+	$(MAKE) dist
+	(cd rpm; make dist-rpm)
+
