@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src/main.cpp)
-AM_INIT_AUTOMAKE(bbkeys, 0.9.1cvs)
+AM_INIT_AUTOMAKE(bbkeys, 1.0.0cvs)
 AM_MAINTAINER_MODE
 AC_PREFIX_DEFAULT(/usr/local)
 
@@ -10,7 +10,7 @@ if test x$regex_cmd = "x"; then
 fi
 
 dnl get the debug values right
-AC_DEFUN(AC_SET_DEBUG,
+AC_DEFUN([AC_SET_DEBUG],
 [
   _CFLAGS="-g -Wall -DDEBUG"
   _CXXFLAGS="-g -Wall -DDEBUG"
@@ -27,7 +27,7 @@ AC_DEFUN(AC_SET_DEBUG,
   test "$LDFLAGS" = "" && LDFLAGS=$_LDFLAGS
 ])
 
-AC_DEFUN(AC_SET_NODEBUG,
+AC_DEFUN([AC_SET_NODEBUG],
 [
   _CFLAGS="-DNDEBUG"
   _CXXFLAGS="-DNDEBUG"
@@ -92,7 +92,7 @@ if test "$_perl_res" != 0; then
     AC_MSG_RESULT([no])
     AC_MSG_ERROR([Cannot find Config.pm or \$Config{archlib}.  A full perl installation is required.])
 else
-    AC_MSG_RESULT([yes])    
+    AC_MSG_RESULT([yes])
 fi
 
 
@@ -135,7 +135,7 @@ CXXFLAGS="$CXXFLAGS $LIBBT_CFLAGS"
 LIBS="$LIBS $LIBBT_LIBS"
 
 dnl generate the config header
-AM_CONFIG_HEADER(config.h) 
+AM_CONFIG_HEADER(config.h)
 
 dnl Output files
 AC_OUTPUT( \

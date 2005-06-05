@@ -70,7 +70,7 @@ public:
   bool ungrabKey(const KeyCode keyCode, const int modifierMask) const;
 
   const XWindow *lastActiveWindow() const;
-  
+
 private:
   friend class WindowlistMenu;
   bool _managed;
@@ -80,10 +80,12 @@ private:
   bool _raise_while_cycling;
   bool _show_cycle_menu;
   bool _honor_modifiers;
+  bool _follow_window_on_send;
+  bool _include_iconified_windows_in_cycle;
   std::string _menu_text_justify;
   unsigned int _workspace_columns;
   unsigned int _workspace_rows;
-  
+
   unsigned int _screenNumber;
   KeyClient * _keyClient;
   bt::EWMH * _ewmh;
@@ -97,13 +99,13 @@ private:
   int _scrolllockMask;
   std::string _wm_name;
   WindowlistMenu * _windowmenu;
-  
+
 
   unsigned int _num_desktops;
   unsigned int _active_desktop;
   std::vector<bt::ustring> _desktop_names;
 
-  
+
   const bt::ScreenInfo & _screenInfo;
 
   bool careAboutWindow(Window window) const ;
@@ -136,7 +138,7 @@ private:
                    const bool allscreens = false,
                    const bool alldesktops = false,
                    const bool sameclass = false,
-                   const std::string &classname = "");  
+                   const std::string &classname = "");
   void cycleWorkspace(const bool forward, const int increment,
                       const bool loop = true) const;
   void changeWorkspace(const int num) const;

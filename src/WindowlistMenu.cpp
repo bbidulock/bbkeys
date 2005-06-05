@@ -118,7 +118,7 @@ void WindowlistMenu::showCycleMenu( WindowList theList ) {
 
   bt::Menu::clear();
   bt::Menu::setTitle(bt::toUnicode(_menu_title));
-  if (_menu_title.length() > 0) 
+  if (_menu_title.length() > 0)
     bt::Menu::showTitle();
 
   _windowList = theList;
@@ -142,19 +142,24 @@ void WindowlistMenu::showCycleMenu( WindowList theList ) {
   unsigned int i = 0;
 
   for (it = theList.begin(); it != end; it++) {
-    bt::ustring title = (*it)->title();
-    unsigned int dNbr = (*it)->desktop();
-    bt::ustring newTitle = bt::ellideText(title, 100, bt::toUnicode(" ... "));
-    if (! onlyThisDesktop) {
-      bt::ustring suffix = _screen->getDesktopName(dNbr);
-      if (suffix.size() > 0) {
-        newTitle += ' ';
-        newTitle += '(';
-        newTitle += suffix;
-        newTitle += ')';
-      }
-    }
-    bt::Menu::insertItem( newTitle, i++ );
+	  XWindow *win = (*it);
+	  bt::ustring title = win->title();
+	  unsigned int dNbr = win->desktop();
+	  bt::ustring newTitle = bt::ellideText(title, 100, bt::toUnicode(" ... "));
+	  if (! onlyThisDesktop) {
+		  bt::ustring suffix = _screen->getDesktopName(dNbr);
+		  if (suffix.size() > 0) {
+			  newTitle.append(bt::toUnicode(" ("));
+			  newTitle.append(suffix);
+			  newTitle.append(bt::toUnicode(")"));
+		  }
+	  }
+	  if (win->iconic()) {
+		  newTitle.insert(0, bt::toUnicode("("));
+		  newTitle.append(bt::toUnicode(")"));
+	  }
+
+	  bt::Menu::insertItem( newTitle, i++ );
   }
 
   // this is our current window, before cycling.  set it checked as a

@@ -1,5 +1,5 @@
 .\" 
-.\" $Id: bbkeysrc.5,v 1.10 2004/09/16 00:44:55 vanrijn Exp $
+.\" $Id: bbkeysrc.5,v 1.11 2005/06/05 06:19:11 vanrijn Exp $
 .\" 
 .TH "BBKEYSRC" "5" "August 27, 2004" "vanRijn" "bbkeysrc"
 .SH "NAME"
@@ -33,6 +33,14 @@ whether or not to break if NumLock or ScrollLock is pressed.  (hint: for bbkeys 
 .TP 
 \fIraiseWhileCycling\fR:
 should bbkeys raise the windows you're cycling through while cycling through them? (true or false)
+
+.TP 
+\fIfollowWindowOnSend\fR:
+should bbkeys follow the window that you send to another workspace?  this will apply to all send\-to operations such that if this is set to true, bbkeys will change workspaces to the workspace that you send the window to. (true or false)
+
+.TP 
+\fIincludeIconifiedWindowsInCycle\fR:
+should bbkeys include iconified windows in its window-cycling list? (true or false)
 
 .TP 
 \fIshowCycleMenu\fR
@@ -177,6 +185,12 @@ A numeric parameter may be provided which tells bbkeys how many pixels in the gi
 .TP 
 \fIsendToWorkspace\fR
 A numeric parameter must be provided which tells bbkeys which workspace (1\-based index) to send the current window to.
+
+.TP 
+\fIsendToNextWorkspace\fR
+
+.TP 
+\fIsendToPrevWorkspace\fR
 
 .TP 
 \fInextWindow\fR

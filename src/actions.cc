@@ -40,6 +40,8 @@ Action::Action(enum ActionType type, Display * display, KeyCode keycode,
     prevWindowOfClass,
     nextWindowOfClassOnAllWorkspaces,
     prevWindowOfClassOnAllWorkspaces,
+    sendToNextWorkspace,
+    sendToPrevWorkspace,
     noaction
   };
 
@@ -81,6 +83,8 @@ const char * Action::getActionName() {
     { "togglemaximizevertical", Action::toggleMaximizeVertical },
     { "togglemaximizehorizontal", Action::toggleMaximizeHorizontal },
     { "sendtoworkspace", Action::sendToWorkspace },
+    { "sendtonextworkspace", Action::sendToNextWorkspace },
+    { "sendtoprevworkspace", Action::sendToPrevWorkspace },
     { "nextwindow", Action::nextWindow },
     { "prevwindow", Action::prevWindow },
     { "nextwindowonallworkspaces", Action::nextWindowOnAllWorkspaces },

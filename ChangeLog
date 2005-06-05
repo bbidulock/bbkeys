@@ -1,12 +1,39 @@
-Patch: reworked matrix-style navigation, as it lacked some features (eg
-    navigation if workspaces do not form a complete rectangle)
-    M. Ottenbacher <m.ottenbacher at gmx de>
+version 1.0.0 --
+  - including modified patch from Ciprian.  This gives us sendToPrevWorkspace
+    and sendToNextWorkspace functionality.
+    [vanRijn]
+
+  - new configuration option for followWindowOnSend--this allows bbkeys to
+    change workspaces to the window that it just sent a window to, if the user
+    desires...
+    [vanRijn]
+
+  - including patch from Martijn Ras (sf.net tracker 1097889) fixing underquoted
+    definitions in configure.ac (Thanks!!!)
+    [vanRijn]
+
+  - fixing annoying behavior that we had when we were cycling through windows on
+    all workspaces.  previously, we would change workspaces while cycling, which
+    irritated me enough to stop it
+    [vanRijn]
+
+  - adding new configuration option that allows the user to tell us to include iconified
+    windows in our window cycling list.  if includeIconifiedWindowsInCycle is set to
+    true in the user's bbkeysrc (it's defaulted to true in code and sample bbkeysrc),
+    iconified windows will show in the cycling list, surrounded with "()".  this will
+    fix sf.net tracker #877698 (yay!).
+    [vanRijn]
+
 
 version 0.9.0 --
   - complete rewrite!!!  =:)  See the README and NEWS files for more info.
 
+  Patch: reworked matrix-style navigation, as it lacked some features (eg
+    navigation if workspaces do not form a complete rectangle)
+    M. Ottenbacher <m.ottenbacher at gmx de>
+
 version 0.8.6 --
-  - pulling patch in from David Dellanave (solaris compile issues) 
+  - pulling patch in from David Dellanave (solaris compile issues)
     [vanRijn]
 
   - fixing compilation issue for Mac OS X (thanks to Thomas F. Burdick!!)
@@ -60,7 +87,7 @@ version 0.8.5 --
     [vanRijn]
 
   - fix in bbkeys.cc -- XUngrabKey changed to use same call to find what
-    screen we're on as the XGrabKey call 
+    screen we're on as the XGrabKey call
     [vanRijn]
 
   - fix in bbkeys.cc -- doing "xterm -e sh -c $command" rather than "xterm -e
@@ -192,12 +219,12 @@ version 0.8.1 --
     stacked-Cycling folks, we now set focus on cycled-through windows as we
     go, raising the window selected at the end of the cycle.  This sounds
     more confusing than it is.   This makes it possible to separate the new
-    and improved cycling method from the popup menu. Oh, and hitting Escape 
-    in the middle of cycling will return focus to the window that you 
+    and improved cycling method from the popup menu. Oh, and hitting Escape
+    in the middle of cycling will return focus to the window that you
     started from....
 
   - I've made it possible to turn off the visual menu for the new-and-improved
-    stacked cycling method.  To do this, just put 
+    stacked cycling method.  To do this, just put
     "bbkeys.menu.showCycleMenu: False" (without the quotes, duh) into your
     ~/.bbtools/bbkeys.bb or ~/.bbtools/bbkeys.nobb file.  This will let
     bbkeys still use the new method, will set focus as you cycle through the
@@ -224,8 +251,8 @@ version 0.8.0 --
   - xOr (see below) has done some majorly good coding with bbkeys.  He's
     implemented a different window-cycling scheme that's more
     "Windows"-like (think <alt+tab> popup window with list of things you're
-    cycling through)...  Verrrry slick.  Umm. Did I say Verrrrry?  
-    
+    cycling through)...  Verrrry slick.  Umm. Did I say Verrrrry?
+
     Why, yes I did.  You are just going to have to see it to believe it.  Blackbox
     has just again become my favorite window manager for X, with the help
     xOr has given to me.  The window cycling methodology has changed, and
@@ -269,7 +296,7 @@ version 0.8.0 --
     <hit enter for password>
     cvs -z3 -d:pserver:anonymous@cvs.bbconf.sourceforge.net:/cvsroot/bbconf co bbconf
 
-  - adding ToggleDecor as an option to toggle ummmm, window decor.... (duh). 
+  - adding ToggleDecor as an option to toggle ummmm, window decor.... (duh).
     *** BIG HONKING NOTE ***
     This doesn't currently work.  =:\  The code is in bbkeys, but can't
     actually do anything until blackbox is changed to tell us what the
@@ -290,14 +317,14 @@ version 0.8.0 --
 
       I've removed all the functionality from the wminterface class that bbkeys
       does not use, and reorganised the header files for wminterface and bbkeys,
-      adding comments for all of the class members.  With this patch, bbkeys not 
-      longer calls the blackbox cycling routines, but maintains its own list of 
-      windows, and cycles them itself. One thing to note is that the cycling does 
-      not occur in the same order as the buttons on the toolbar cycle. I personally 
+      adding comments for all of the class members.  With this patch, bbkeys not
+      longer calls the blackbox cycling routines, but maintains its own list of
+      windows, and cycles them itself. One thing to note is that the cycling does
+      not occur in the same order as the buttons on the toolbar cycle. I personally
       dont think this will be a big issue, and i think the new way is nicer. When a
       new window opens, its added to the list right *after* the focused window,
       so that hitting PrevWindow would take you back to the window that was
-      previously focused.  
+      previously focused.
 
     ....
 
@@ -310,7 +337,7 @@ version 0.8.0 --
     PointerRoot.  Hopefully that will do the trick....
 
 
- 
+
 
 
 version 0.3.6 --
@@ -336,16 +363,16 @@ version 0.3.6 --
 		since we trounce on whatever was in ~/.bbkeysrc, added printout of all
 		available keygrabs now....
 
-version 0.3.5 -- 
+version 0.3.5 --
   - Doh!!  In the midst of the glorious bug-squashing that 0.3.4 offered, I
 		introduced a new bug (just to see if anybody actually uses my code,
 		erm, or something).  =:)  I was getting rid of all the strdups that I
 		could and in the process forgot to replace it with a working solution
-		for the ExecCommand part of bbkeys's functionality.  
+		for the ExecCommand part of bbkeys's functionality.
 
 version 0.3.4 --
   - updated Image.cc, Image.hh, BaseDisplay.hh to newest (0.61.0) blackbox
-	  files to correct bug that reared its ugly little head when running on 
+	  files to correct bug that reared its ugly little head when running on
 		SPARC boxen Ultra 5 (Bus Error).  Thanks to Tibor Simko for reporting
 		this one....
 	- many bug fixes and killing of leaks =:)  thanks to memprof and X
@@ -359,77 +386,77 @@ version 0.3.4 --
 		buglet report (and others too).  =:)
 	- updated bbkeysconf--couple of fixes for compiling on solaris....
 	  - added -lX11 to the link line (should be there anyway)
-		- changed a QString.left to a QString.at function call 
+		- changed a QString.left to a QString.at function call
 		- thanks to Bo Thorsen for these buglet-reports!  =:)
 
 version 0.3.3 --
-  - changes and updates (thanks to nyz for the help!!!) to change the 
+  - changes and updates (thanks to nyz for the help!!!) to change the
 	  communication Atoms between blackbox-0.60.1 and bbkeys (READ: YOU MUST
 		BE RUNNING BBKEYS 3.3 OR LATER IF YOU USE BLACKBOX 0.60.1 OR LATER)...
 
 version 0.3.2 --
-  - Weehee!!  Get along, little doggie!!  Or something....  Thanks to the 
-    man, the myth, the legend, the zzzeek-meister, one of those irritating 
+  - Weehee!!  Get along, little doggie!!  Or something....  Thanks to the
+    man, the myth, the legend, the zzzeek-meister, one of those irritating
     little problems that I've never had enough interest in fixing has been
     fixed!!  You know the one--where you're going merrily along through your
     day, using bbkeys happily, when all of a sudden, things appear to have
-    just stopped working altogether.  And then you start cursing that 
+    just stopped working altogether.  And then you start cursing that
     darned bbkeys author, and in general, have a horrid day thereafter.  Well
-    fear no more, little pilgrim--that "feature" has been hunted down and 
+    fear no more, little pilgrim--that "feature" has been hunted down and
     wrestled to the ground, thanks to zzzeek (classic@io.com).  The 'feature'
-    was one that I was never worried about--since it followed blackbox's 
-    'feature' that did exactly the same thing.  What thing is that?  Why, 	
-    I'm so glad you asked.  If you hadn't noticed before, if you have your 
-    CapsLock, NumLock, or ShiftLock pressed (or any other funky modifier 
-    key pressed), bbkeys stopped performing your key-grabs.  
+    was one that I was never worried about--since it followed blackbox's
+    'feature' that did exactly the same thing.  What thing is that?  Why,
+    I'm so glad you asked.  If you hadn't noticed before, if you have your
+    CapsLock, NumLock, or ShiftLock pressed (or any other funky modifier
+    key pressed), bbkeys stopped performing your key-grabs.
 
     Well, anywho, I've rambled enough.  I'm going to have bbkeys by default
     work with any modifiers now.  If you want bbkeys to work the way it does
-    now and stop grabbing keys when you have Caps/Num/ShiftLock pressed, 
-    you'll have to change this line to True in your bbkeys config file 
+    now and stop grabbing keys when you have Caps/Num/ShiftLock pressed,
+    you'll have to change this line to True in your bbkeys config file
     ($HOME/bbtools/bbkeys.bb, not ~/.bbkeysrc):
 
     bbkeys.honorModifiers:        False
 
-  
+
 version 0.3.1 --
-  - *sigh* My next release is going to not even have a UI.  =:)  Okay, for 
+  - *sigh* My next release is going to not even have a UI.  =:)  Okay, for
     those in this world who run blackbox on a 12" monitor (*cough* talmage
     *cough*), or refuse to upgrade because -miniMe is toooooo big (*cough*
     luqin *cough), =:)  bbkeys now has a new run-time switch "-tinyMe" which
-    will cause bbkeys to draw itself at the old 0.2.7 size.  
+    will cause bbkeys to draw itself at the old 0.2.7 size.
 
-  
+
 version 0.3.0 --
   - buglet fix in MakeWindow so we don't XMapWindow every time (thanks nyz!)
   - alrighty then, the -miniMe controversy continues.  kns mentioned an idea
     for a new miniMe look and I like it.  _I_ may even use -miniMe now.
     =:)  Here's the thing, I really don't care at all about -miniMe, since
-    I use him at full-size.  If somebody wants to code for this to be a 
+    I use him at full-size.  If somebody wants to code for this to be a
     configurable option (bbkeys.keyhole.size or bbkeys.keyhole.width, etc.),
-    I'll be more than happy to look at it. 
+    I'll be more than happy to look at it.
 
-  
+
 version 0.2.8 --
-  - included new Image classes from the latest blackbox source so luqin's 
-    and r00tv's styles work.  =:)  Oh, it'll help other people too, but 
+  - included new Image classes from the latest blackbox source so luqin's
+    and r00tv's styles work.  =:)  Oh, it'll help other people too, but
     they pested me first.
   - added Workspace9, 10, 11, and 12 to keygrabs and configurator
 
-  
+
 version 0.2.7 --
 
-  - added MaximizeVertical and MaximizeHorizontal key-grabbability.  Don't 
+  - added MaximizeVertical and MaximizeHorizontal key-grabbability.  Don't
     know why it didn't occur to me earlier.  =:)  nyz did all the hard work
     4 releases ago.
 
   - As of this release of bbkeys, I'm no longer going to support the gtk
-    configurator (unless I get a WHOLE lot of of input to the contrary). 
-    I've re-written the gui configurator in qt (thanks to luqin for the 
-    beginnings of this) and let me tell you, it is a WHOLE lot easier to 
-    work with qt2 than gtk.  Much, much cleaner.  You doubt?  
+    configurator (unless I get a WHOLE lot of of input to the contrary).
+    I've re-written the gui configurator in qt (thanks to luqin for the
+    beginnings of this) and let me tell you, it is a WHOLE lot easier to
+    work with qt2 than gtk.  Much, much cleaner.  You doubt?
 
-          (gideon@judea)[bbkeysConfigGtk/src]-% wc -l *.{c,h}   
+          (gideon@judea)[bbkeysConfigGtk/src]-% wc -l *.{c,h}
               538 bbkeysConfig.c
               689 bbkeysConfigSig.c
               158 support.c
@@ -449,20 +476,20 @@ version 0.2.7 --
     734 lines of code versus 1588 makes me a happy, happy SE.  =:)
 
   - So, I'm pulling out the bbkeysConfigGtk directory from the bbkeys source
-    tarball and in its place is bbkeysconf.  I'll also be regulaly 
+    tarball and in its place is bbkeysconf.  I'll also be regulaly
     posting rpms of both bbkeys and bbkeysconf as new releases rear their
     ugly little heads, as well as one last RPM of bbkeysConfigGtk as well
     as the tarball for bbkeysConfigGtk if anybody just HAS to have the gtk
     version.  =:)
 
   - As a result of this, the -no[gtk] for bbkeys will change to -no[qt].
-  
-  - Slight buglet fix for bbkeys when he's in iconic mode to properly set 
+
+  - Slight buglet fix for bbkeys when he's in iconic mode to properly set
     WM_ICON_NAME (Thanks to Mats Jonson for the bug-report.  =:) ) so bbkeys
-    shows up as bbkeys and not "Unnamed" in blackbox's Icon list.  
+    shows up as bbkeys and not "Unnamed" in blackbox's Icon list.
 
 
-  
+
 version 0.2.6 --
   - Weehee!!!  Much bug-squashing release!!!
   - added ability for bbkeys to minimize itself (right-click on bbkeys's
@@ -471,7 +498,7 @@ version 0.2.6 --
   - added "-iconic" switch, so bbkeys can be launched in minimized mode.
     Again, *sniff*  Nobody likes my pretty window.  =:)
   - fixed a few undocumented features...
-    -- bbkeys queued up all keystroke combos while external gooey configurator 
+    -- bbkeys queued up all keystroke combos while external gooey configurator
        was running and then did then all at once, really quick-like when you
        came back from the configurator.  This tended to annoy my users.  =:)
     -- bbkeys wasn't releasing grabbed keys before it launched the
@@ -479,7 +506,7 @@ version 0.2.6 --
        grabbed keys. XSync(False) does wonders.  =:)
   - updated bbkeysConfigGtk to allow configuration of ExecCommand directives.
 
-  
+
 version 0.2.5 --
   - erm.  forgot to write in this for a while. =:)
   - took out timer implementation for ~/.bbkeysrc changing -- this should fix
@@ -487,74 +514,74 @@ version 0.2.5 --
     with a virtual function call to CheckConfig out of BaseDisplay.cc.
   - thought about changing the configurators, then changed my mind.  =:\
 
-  
+
 version 0.2.3 --
   - fix for bbkeys not pickup up anything for its frame color/texture
     (thanks to luqin for the patch. =:) )
 
-  
+
 version 0.2.2 --
   - added ExecCommand feature so users can define programs to execute with
-    a given keystroke. Syntax is as follows: 
+    a given keystroke. Syntax is as follows:
 
     KeyToGrab(F1), WithModifier(Mod1), WithAction(ExecCommand), DoThis(PROGRAM)
- 
+
     where PROGRAM is whatever you want to launch.  PROGRAM must be in your PATH
     if it is not given with a path. (duh) =:)
 
-  - improved the logic (hopefully) surrounding resource loading.  Took 
+  - improved the logic (hopefully) surrounding resource loading.  Took
     loadKeygrabs out of reconfigure() (which gets hit on every Expose event)
-    which should improve bbkeys's performance.  Also, apparently I've never 
+    which should improve bbkeys's performance.  Also, apparently I've never
     put in the code that I thought I did which checks ~/.bbkeysrc for changes.
     That should work correctly now.
 
 
-  
-version 0.2.1 -- 
-  - fixed several style issues.  
+
+version 0.2.1 --
+  - fixed several style issues.
 
   - fixed the bug with having two "-n" switches. =:)  now, "-no[gtk]" is the
     way to tell bbkeys to launch the xterm-based conflagurator
 
   - re-coded bbkeys' internals (made them much more intuitive and easy to read).
-    bbkeys uses 3 basic objects: Window's, GEOM(etry objects), and Pixmap 
+    bbkeys uses 3 basic objects: Window's, GEOM(etry objects), and Pixmap
     objects. The Windows are physical units of space that X communicates with.
     The GEOM objects are pretty self-explanatory, x, y, height, width.  And
     the Pixmap objects contain the image that is mapped onto the window itself.
     It goes like this:
     ----------------------------------------------------------------------------
-    Windows:      GEOMs:         Pixmaps:           resource->objects and what  
+    Windows:      GEOMs:         Pixmaps:           resource->objects and what
                                                 resources bbkeys uses for them
     ----------------------------------------------------------------------------
     win_title     geom_title     pix_title             label.texture
-                                                          window.label.focus 
+                                                          window.label.focus
     win_back      geom_back      pix_back              frame.texture
                                                           window.title.focus
     win_closeBtn  geom_closeBtn  pix_closeBtn          button.texture
                                                           window.button.focus
-    win_configBtn geom_configBtn pix_configBtn         button.texture 
+    win_configBtn geom_configBtn pix_configBtn         button.texture
                                                           window.button.focus
                                  pix_pressedBtn        button.texture_pressed
                                                           window.button.pressed
     ----------------------------------------------------------------------------
-     
-  - fixed style files in data/ (silly me, I forgot to change them over from 
-    bbpager's style files. )  Extra-special thanks to sourceo for pointing 
+
+  - fixed style files in data/ (silly me, I forgot to change them over from
+    bbpager's style files. )  Extra-special thanks to sourceo for pointing
     this little bit to me and reminding me to put it in the ChangeLog =:)
 
-  
-version 0.2.0 -- 
-  - got rid of all the old bbws code base from bbkeys and ported the whole 
+
+version 0.2.0 --
+  - got rid of all the old bbws code base from bbkeys and ported the whole
     darned thing to kns's bbpager-0.2.5-alpha code base.
 
-  
+
 version 0.1.4 --
 
   - added "-mini-Me" switch =:) for those people *cough* sissies *cough* who
-    complain about bbkeys' size.  So size DOES matter.... erm, anyway, if 
+    complain about bbkeys' size.  So size DOES matter.... erm, anyway, if
     launched with the "-mini-Me" option, bbkeys will draw a cute little window
     10x10 in size (or whatever I feel like, dangit) containing just the button
-    to launch the configurator, instead of the regular, full-blown window.  No 
+    to launch the configurator, instead of the regular, full-blown window.  No
     exit button for YOU!  =:)  Let me know if this doesn't suit you....
 
   - improved documentation of sorts.  Ugly habit, this documentation stuff. If

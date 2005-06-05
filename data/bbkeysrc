@@ -8,6 +8,8 @@
     [option] (raiseWhileCycling) {false}
     [option] (showCycleMenu)  {true}
     [option] (menuTextJustify) {right}
+    [option] (followWindowOnSend)  {false}
+    [option] (includeIconifiedWindowsInCycle)  {true}
     [option] (autoConfig)   {true}
     [option] (autoConfigCheckTimeout) {2}
     [option] (workspaceColumns) {4}

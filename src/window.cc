@@ -50,7 +50,7 @@ XWindow::XWindow(Window window, Netclient * netclient,
                PropertyChangeMask | StructureNotifyMask);
 
   // add an event handler for our window
-  _app.insertEventHandler(_window, this);  
+  _app.insertEventHandler(_window, this);
 
   updateBlackboxAttributes();
   updateNormalHints();
@@ -80,13 +80,13 @@ void XWindow::configureNotifyEvent(const XConfigureEvent * const e) {
 
 // Window property changed/added/deleted.
 void XWindow::propertyNotifyEvent(const XPropertyEvent * const e) {
-  
+
   if (e->atom == XA_WM_NORMAL_HINTS)
     updateNormalHints();
   else if (e->atom == XA_WM_HINTS)
     updateWMHints();
   else if (e->atom == _netclient->xaBlackboxAttributes())
-    updateBlackboxAttributes();  
+    updateBlackboxAttributes();
   else if (e->atom == _netclient->wmState() )
     updateState();
   else if (e->atom == _netclient->wmDesktop() )
@@ -113,7 +113,7 @@ void XWindow::destroyNotifyEvent(const XDestroyWindowEvent * const e) {
 void XWindow::updateDimensions(const XConfigureEvent * const e) {
   _rect.setRect(e->x, e->y, e->width, e->height);
 }
-  
+
 void XWindow::updateDimensions() {
 
   XWindowAttributes win_attributes;
@@ -127,12 +127,12 @@ void XWindow::updateDimensions() {
     return;
   }
 
-  XTranslateCoordinates (_display, _window, win_attributes.root, 
+  XTranslateCoordinates (_display, _window, win_attributes.root,
                          -win_attributes.border_width,
                          -win_attributes.border_width,
                          &rx, &ry, &junkwin);
   _rect.setRect(rx, ry, win_attributes.width, win_attributes.height);
-  
+
 }
 
 void XWindow::updateBlackboxAttributes() {
@@ -143,7 +143,7 @@ void XWindow::updateBlackboxAttributes() {
 
   if (_netclient->getValue(_window,
                            _netclient->xaBlackboxAttributes(),
-                           _netclient->xaBlackboxAttributes(), 
+                           _netclient->xaBlackboxAttributes(),
                            num, &data)) {
     if (num == PropBlackboxAttributesElements)
       if (data[0] & AttribDecoration)
@@ -160,7 +160,7 @@ void XWindow::updateNormalHints() {
   _gravity = NorthWestGravity;
   _inc_x = _inc_y = 1;
   _base_x = _base_y = 0;
-  
+
   if (XGetWMNormalHints(_display, _window, &size, &ret)) {
     if (size.flags & PWinGravity)
       _gravity = size.win_gravity;
@@ -247,7 +247,7 @@ void XWindow::updateWMHints() {
 
   // assume a window takes input if it doesnt specify
   _can_focus = True;
-  
+
   if ((hints = XGetWMHints(_display, _window)) != NULL) {
     if (hints->flags & InputHint)
       _can_focus = hints->input;
@@ -259,7 +259,7 @@ void XWindow::updateWMHints() {
 void XWindow::updateState() {
   // set the defaults
   _shaded = _skip_pager = _iconic = _max_vert = _max_horz = false;
-  
+
   unsigned long num = (unsigned) -1;
   Atom *state;
   if (! _netclient->getValue(_window, _netclient->wmState(), XA_ATOM,
@@ -294,7 +294,7 @@ void XWindow::updateDesktop() {
 
 void XWindow::updateTitle() {
   _title = bt::toUnicode("");
-  
+
   // try netwm
   std::string s;
   if (_netclient->getValue(_window, _netclient->wmName(),
@@ -305,7 +305,7 @@ void XWindow::updateTitle() {
     if (_netclient->getValue(_window, XA_WM_NAME, Netclient::ansi, s))
       _title = bt::toUnicode(s);
   }
-  
+
   if (_title.empty())
     _title = bt::toUnicode("Unnamed");
 
@@ -365,7 +365,7 @@ void XWindow::focus(bool raise) const {
 }
 
 void XWindow::decorate(bool d) const {
-                                
+
   // YAY trolltech!!!  =:)
   // http://lists.trolltech.com/qt-interest/1999-06/thread00047-0.html
   long prop[5] = {2, 1, 1, 0, 0};
@@ -375,7 +375,7 @@ void XWindow::decorate(bool d) const {
   else
           prop[2] = 1;
 
-  XChangeProperty(_display, _window, 
+  XChangeProperty(_display, _window,
     _netclient->xaMotifWmHints(),
     _netclient->xaMotifWmHints(),
     32, 0, (unsigned char *) prop, 5);
@@ -399,16 +399,16 @@ void XWindow::move(int x, int y) const {
     return;
   }
 
-  XTranslateCoordinates (_display, _window, win_attributes.root, 
+  XTranslateCoordinates (_display, _window, win_attributes.root,
                          -win_attributes.border_width,
                          -win_attributes.border_width,
                          &rx, &ry, &junkwin);
-      
+
   Status status;
   int xright, ybelow;
   int dw = _screenInfo.width(), dh = _screenInfo.height();
 
-  
+
   /* find our window manager frame, if any */
   Window wmframe = _window;
 
@@ -436,7 +436,7 @@ void XWindow::move(int x, int y) const {
     if (!XGetWindowAttributes(_display, wmframe, &frame_attr)) {
       std::cerr << BBTOOL << ": " << "updateDimensions. error. can't get frame attributes.\n";
     }
-    
+
     switch (_gravity) {
     case NorthWestGravity: case SouthWestGravity:
     case NorthEastGravity: case SouthEastGravity:
@@ -475,7 +475,7 @@ void XWindow::move(int x, int y) const {
 void XWindow::resizeRel(int dwidth, int dheight) const {
   // resize in increments if requested by the window
   unsigned int width = _rect.width(), height = _rect.height();
-  
+
   unsigned int wdest = width + (dwidth * _inc_x) / _inc_x * _inc_x + _base_x;
   unsigned int hdest = height + (dheight * _inc_y) / _inc_y * _inc_y + _base_y;
 
@@ -503,7 +503,7 @@ void XWindow::resizeAbs(unsigned int width, unsigned int height) const {
     while (height < hdest)
       hdest -= _inc_y;
   }
-  
+
   XResizeWindow(_display, _window, wdest, hdest);
 }
 
@@ -531,7 +531,7 @@ void XWindow::toggleMaximize(Max max) const {
                         _window, 2,
                         _netclient->wmStateMaximizedVert());
     break;
-    
+
   case Max_None:
     assert(false);  // you should not do this. it is pointless and probly a bug
     break;

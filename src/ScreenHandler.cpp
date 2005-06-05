@@ -99,6 +99,8 @@ ScreenHandler::ScreenHandler (KeyClient * k, unsigned int number)
   _menu_text_justify = _config->getStringValue("menutextjustify", "left");
   _workspace_columns = _config->getNumberValue("workspacecolumns", 0);
   _workspace_rows    = _config->getNumberValue("workspacerows", 0);
+  _follow_window_on_send    = _config->getBoolValue("followwindowonsend", false);
+  _include_iconified_windows_in_cycle    = _config->getBoolValue("includeiconifiedwindowsincycle", true);
   _debug             = _config->getBoolValue("debug", false);
 
   _cycling = false;
@@ -128,9 +130,9 @@ void ScreenHandler::initialize()
   updateActiveWindow();
 
   // load graphics resource from config file
-  std::string menuTextJustify = 
+  std::string menuTextJustify =
     _config->getStringValue("menuTextJustify", "right");
-  std::string menuTitleJustify = 
+  std::string menuTitleJustify =
     _config->getStringValue("menuTitleJustify", "right");
 
   bt::Resource res(_config->getStringValue("stylefile", DEFAULTSTYLE));
@@ -210,237 +212,262 @@ bool ScreenHandler::ungrabKey(const KeyCode keyCode,
 
 void ScreenHandler::keyPressEvent (const XKeyEvent * const e)
 {
-  unsigned int state = e->state;
+	unsigned int state = e->state;
 
   // Mask out the lock modifiers unless our user doesn't want this
-  if (! _honor_modifiers) {
-    state= e->state & ~(LockMask|_scrolllockMask|_numlockMask);
-  }
+	if (! _honor_modifiers) {
+		state= e->state & ~(LockMask|_scrolllockMask|_numlockMask);
+	}
 
   // first, check to see if we're in the middle of a window cycling
   // loop-de-loop and we're getting a cancel....
-  if (_cycling && e->keycode == XKeysymToKeycode(_display, XK_Escape)) {
+	if (_cycling && e->keycode == XKeysymToKeycode(_display, XK_Escape)) {
 
     // we've been told to cancel out of a cycleWindow loop, so we turn
     // off cycling, ungrab the keyboard, then raise the last-active
     // window for our user
-    _cycling = false;
-    XUngrabKeyboard(_display, CurrentTime);
+		_cycling = false;
+		XUngrabKeyboard(_display, CurrentTime);
 
-    const XWindow * la = lastActiveWindow();
+		const XWindow * la = lastActiveWindow();
 
-    if (la) la->focus(true);
+		if (la) la->focus(true);
 
-    return;
-  }
+		return;
+	}
 
   // if we've made it this far, handle the action....
-  Action *it = _keybindings->getAction(e, state, this);
+	Action *it = _keybindings->getAction(e, state, this);
 
-  if (!it)
-    return;
+	if (!it)
+		return;
 
-  if (_debug)
-    cout <<BBTOOL << ": " << "action fired: [" << it->toString() <<"]" <<endl;
-    
-    
-  switch (it->type()) {
+	if (_debug)
+		cout <<BBTOOL << ": " << "action fired: [" << it->toString() <<"]" <<endl;
 
-  case Action::chain:
+
+	switch (it->type()) {
+
+		case Action::chain:
     // if we're doing a chain, then keytree has done everything for us...
     // just return
-    return;
+			return;
 
-  case Action::nextScreen:
-    _keyClient->cycleScreen(_screenNumber, true);
-    return;
+		case Action::nextScreen:
+			_keyClient->cycleScreen(_screenNumber, true);
+			return;
 
-  case Action::prevScreen:
-    _keyClient->cycleScreen(_screenNumber, false);
-    return;
+		case Action::prevScreen:
+			_keyClient->cycleScreen(_screenNumber, false);
+			return;
 
-  case Action::nextWorkspace:
-    cycleWorkspace(true, it->number() != 0 ? it->number(): 1);
-    return;
+		case Action::nextWorkspace:
+			cycleWorkspace(true, it->number() != 0 ? it->number(): 1);
+			return;
 
-  case Action::prevWorkspace:
-    cycleWorkspace(false, it->number() != 0 ? it->number(): 1);
-    return;
+		case Action::prevWorkspace:
+			cycleWorkspace(false, it->number() != 0 ? it->number(): 1);
+			return;
 
-  case Action::nextWindow:
-    cycleWindow(state, true, it->number() != 0 ? it->number(): 1);
-    return;
+		case Action::nextWindow:
+			cycleWindow(state, true, it->number() != 0 ? it->number(): 1);
+			return;
 
-  case Action::prevWindow:
-    cycleWindow(state, false, it->number() != 0 ? it->number(): 1);
-    return;
+		case Action::prevWindow:
+			cycleWindow(state, false, it->number() != 0 ? it->number(): 1);
+			return;
 
-  case Action::nextWindowOnAllWorkspaces:
-    cycleWindow(state, true, it->number() != 0 ? it->number(): 1,  false, true);
-    return;
+		case Action::nextWindowOnAllWorkspaces:
+			cycleWindow(state, true, it->number() != 0 ? it->number(): 1,  false, true);
+			return;
 
-  case Action::prevWindowOnAllWorkspaces:
-    cycleWindow(state, false, it->number() != 0 ? it->number(): 1, false, true);
-    return;
+		case Action::prevWindowOnAllWorkspaces:
+			cycleWindow(state, false, it->number() != 0 ? it->number(): 1, false, true);
+			return;
 
-  case Action::nextWindowOnAllScreens:
-    cycleWindow(state, true, it->number() != 0 ? it->number(): 1, true);
-    return;
+		case Action::nextWindowOnAllScreens:
+			cycleWindow(state, true, it->number() != 0 ? it->number(): 1, true);
+			return;
 
-  case Action::prevWindowOnAllScreens:
-    cycleWindow(state, false, it->number() != 0 ? it->number(): 1, true);
-    return;
+		case Action::prevWindowOnAllScreens:
+			cycleWindow(state, false, it->number() != 0 ? it->number(): 1, true);
+			return;
 
-  case Action::nextWindowOfClass:
-    cycleWindow(state, true, it->number() != 0 ? it->number(): 1,
-                false, false, true, it->string());
-    return;
+		case Action::nextWindowOfClass:
+			cycleWindow(state, true, it->number() != 0 ? it->number(): 1,
+						false, false, true, it->string());
+			return;
 
-  case Action::prevWindowOfClass:
-    cycleWindow(state, false, it->number() != 0 ? it->number(): 1,
-                false, false, true, it->string());
-    return;
+		case Action::prevWindowOfClass:
+			cycleWindow(state, false, it->number() != 0 ? it->number(): 1,
+						false, false, true, it->string());
+			return;
 
-  case Action::nextWindowOfClassOnAllWorkspaces:
-    cycleWindow(state, true, it->number() != 0 ? it->number(): 1,
-                false, true, true, it->string());
-    return;
+		case Action::nextWindowOfClassOnAllWorkspaces:
+			cycleWindow(state, true, it->number() != 0 ? it->number(): 1,
+						false, true, true, it->string());
+			return;
 
-  case Action::prevWindowOfClassOnAllWorkspaces:
-    cycleWindow(state, false, it->number() != 0 ? it->number(): 1,
-                false, true, true, it->string());
-    return;
+		case Action::prevWindowOfClassOnAllWorkspaces:
+			cycleWindow(state, false, it->number() != 0 ? it->number(): 1,
+						false, true, true, it->string());
+			return;
 
-  case Action::changeWorkspace:
-    changeWorkspace(it->number());
-    return;
+		case Action::changeWorkspace:
+			changeWorkspace(it->number());
+			return;
 
-  case Action::upWorkspace:
-    changeWorkspaceVert(-1);
-    return;
+		case Action::upWorkspace:
+			changeWorkspaceVert(-1);
+			return;
 
-  case Action::downWorkspace:
-    changeWorkspaceVert(1);
-    return;
+		case Action::downWorkspace:
+			changeWorkspaceVert(1);
+			return;
 
-  case Action::leftWorkspace:
-    changeWorkspaceHorz(-1);
-    return;
+		case Action::leftWorkspace:
+			changeWorkspaceHorz(-1);
+			return;
 
-  case Action::rightWorkspace:
-    changeWorkspaceHorz(1);
-    return;
+		case Action::rightWorkspace:
+			changeWorkspaceHorz(1);
+			return;
 
-  case Action::execute:
-    execCommand(it->string());
-    return;
+		case Action::execute:
+			execCommand(it->string());
+			return;
 
-  case Action::showRootMenu:
-    _netclient->sendClientMessage(_root, _netclient->xaOpenboxShowRootMenu(),
-                                  None);
-    return;
+		case Action::showRootMenu:
+			_netclient->sendClientMessage(_root, _netclient->xaOpenboxShowRootMenu(),
+										  None);
+			return;
 
-  case Action::showWorkspaceMenu:
-    _netclient->sendClientMessage(_root, _netclient->xaOpenboxShowWorkspaceMenu(),
-                                  None);
-    return;
+		case Action::showWorkspaceMenu:
+			_netclient->sendClientMessage(_root, _netclient->xaOpenboxShowWorkspaceMenu(),
+										  None);
+			return;
 
-  case Action::toggleGrabs: {
-    if (_grabbed) {
-      _keybindings->ungrabDefaults(this);
-      _grabbed = false;
-    } else {
-      _keybindings->grabDefaults(this);
-      _grabbed = true;
-    }
-    return;
-  }
+			case Action::toggleGrabs: {
+				if (_grabbed) {
+					_keybindings->ungrabDefaults(this);
+					_grabbed = false;
+				} else {
+					_keybindings->grabDefaults(this);
+					_grabbed = true;
+				}
+				return;
+			}
 
-  default:
-    break;
-  }
+		default:
+			break;
+	}
 
   // these actions require an active window
-  if (_active != _clients.end()) {
-    XWindow *window = *_active;
+	if (_active != _clients.end()) {
+		XWindow *window = *_active;
 
-    switch (it->type()) {
-    case Action::iconify:
-      window->iconify();
-      return;
+		switch (it->type()) {
+			case Action::iconify:
+				window->iconify();
+				return;
 
-    case Action::close:
-      window->close();
-      return;
+			case Action::close:
+				window->close();
+				return;
 
-    case Action::raise:
-      window->raise();
-      return;
+			case Action::raise:
+				window->raise();
+				return;
 
-    case Action::lower:
-      window->lower();
-      return;
+			case Action::lower:
+				window->lower();
+				return;
 
-    case Action::sendToWorkspace:
-      window->sendTo(it->number());
-      return;
+			case Action::sendToWorkspace:
+				window->sendTo(it->number());
+				if (_follow_window_on_send ) {
+					window->focus(true);
+				}
+				return;
 
-    case Action::toggleOmnipresent:
-      if (window->desktop() == 0xffffffff)
-        window->sendTo(_active_desktop);
-      else
-        window->sendTo(0xffffffff);
-      return;
+			case Action::sendToNextWorkspace:
+				if (_active_desktop == _num_desktops - 1) {
+					window->sendTo(0);
+				}  else {
+					window->sendTo(_active_desktop + 1);
+				}
+				if (_follow_window_on_send ) {
+					window->focus(true);
+				}
+				return;
 
-    case Action::moveWindowUp:
-      window->move(0, -(it->number() != 0 ? it->number(): 1));
-      return;
+			case Action::sendToPrevWorkspace:
+				if (_active_desktop == 0) {
+					window->sendTo(_num_desktops - 1);
+				} else {
+					window->sendTo(_active_desktop - 1);
+				}
+				if (_follow_window_on_send ) {
+					window->focus(true);
+				}
+				return;
 
-    case Action::moveWindowDown:
-      window->move(0, it->number() != 0 ? it->number(): 1);
-      return;
+			case Action::toggleOmnipresent:
+				if (window->desktop() == 0xffffffff)
+					window->sendTo(_active_desktop);
+				else
+					window->sendTo(0xffffffff);
+				return;
 
-    case Action::moveWindowLeft:
-      window->move(-(it->number() != 0 ? it->number(): 1), 0);
-      return;
+			case Action::moveWindowUp:
+				window->move(0, -(it->number() != 0 ? it->number(): 1));
+				return;
 
-    case Action::moveWindowRight:
-      window->move(it->number() != 0 ? it->number(): 1,0);
-      return;
+			case Action::moveWindowDown:
+				window->move(0, it->number() != 0 ? it->number(): 1);
+				return;
 
-    case Action::resizeWindowWidth:
-      window->resizeRel(it->number(), 0);
-      return;
+			case Action::moveWindowLeft:
+				window->move(-(it->number() != 0 ? it->number(): 1), 0);
+				return;
 
-    case Action::resizeWindowHeight:
-      window->resizeRel(0, it->number());
-      return;
+			case Action::moveWindowRight:
+				window->move(it->number() != 0 ? it->number(): 1,0);
+				return;
 
-    case Action::toggleShade:
-      window->shade(! window->shaded());
-      return;
+			case Action::resizeWindowWidth:
+				window->resizeRel(it->number(), 0);
+				return;
 
-    case Action::toggleMaximizeHorizontal:
-      window->toggleMaximize(XWindow::Max_Horz);
-      return;
+			case Action::resizeWindowHeight:
+				window->resizeRel(0, it->number());
+				return;
 
-    case Action::toggleMaximizeVertical:
-      window->toggleMaximize(XWindow::Max_Vert);
-      return;
+			case Action::toggleShade:
+				window->shade(! window->shaded());
+				return;
 
-    case Action::toggleMaximizeFull:
-      window->toggleMaximize(XWindow::Max_Full);
-      return;
+			case Action::toggleMaximizeHorizontal:
+				window->toggleMaximize(XWindow::Max_Horz);
+				return;
 
-    case Action::toggleDecorations:
-      window->decorate(! window->decorated());
-      return;
+			case Action::toggleMaximizeVertical:
+				window->toggleMaximize(XWindow::Max_Vert);
+				return;
 
-    default:
-      assert(false);  // unhandled action type!
-      break;
-    }
-  }
+			case Action::toggleMaximizeFull:
+				window->toggleMaximize(XWindow::Max_Full);
+				return;
+
+			case Action::toggleDecorations:
+				window->decorate(! window->decorated());
+				return;
+
+			default:
+				assert(false);  // unhandled action type!
+				break;
+		}
+	}
 }
 
 void ScreenHandler::keyReleaseEvent (const XKeyEvent * const e)
@@ -498,7 +525,7 @@ void ScreenHandler::updateDesktopNames()
     _desktop_names.clear();
     return;
   }
-  
+
 //  bt::EWMH::UTF8StringList::const_iterator it = _desktop_names.begin(),
 //    end = _desktop_names.end();
 
@@ -508,15 +535,15 @@ void ScreenHandler::updateDesktopNames()
 //    sprintf(default_name, "Workspace %u", _id + 1);
 //    the_name = default_name;
 //  }
-  
+
 }
 
 bt::ustring ScreenHandler::getDesktopName(unsigned int desktopNbr) const {
-  
+
   if (0xFFFFFFFF == desktopNbr)
     return bt::toUnicode("");
 
-  if (desktopNbr > _desktop_names.size() ) 
+  if (desktopNbr > _desktop_names.size() )
     return bt::toUnicode("error");
 
   return _desktop_names[desktopNbr];
@@ -714,7 +741,7 @@ WindowList ScreenHandler::getCycleWindowList(unsigned int state, const bool forw
     XWindow *t = *it;
 
     // determine if this window is invalid for cycling to
-    if (t->iconic()) continue;
+	if (t->iconic() && !_include_iconified_windows_in_cycle) continue;
     if (! allscreens && t->getScreenNumber() != _screenNumber) continue;
     if (! alldesktops && ! (t->desktop() == _active_desktop ||
 			    t->desktop() == 0xffffffff)) continue;
@@ -739,13 +766,17 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
   assert(_managed);
   assert(increment > 0);
 
-  if (_clients.empty()) return;
+  if (_clients.empty()) {
+	  if (_debug)
+		  std::cout << BBTOOL << ": " << "ScreenHandler: cycleWindow: no clients list. can't do anything..." << std::endl;
+	  return;
+  }
 
   // if our user wants the window cycling menu to show (who wouldn't!!
   //  =:) ) and if it's not already showing...
   if ( _show_cycle_menu && ! _windowmenu->isVisible() ) {
     if (_debug)
-      std::cout << BBTOOL << ": " << "ScreenHandler: menu not visible. loading and showing..." << std::endl;
+		std::cout << BBTOOL << ": " << "ScreenHandler: cycleWindow: menu not visible. loading and showing..." << std::endl;
 
     _cycling = true;
     WindowList theList = getCycleWindowList(state, forward, increment,
@@ -759,6 +790,9 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
 
   }
 
+  if (_debug)
+	  std::cout << BBTOOL << ": " << "ScreenHandler: cycleWindow: doing non-menu-based cycling..." << std::endl;
+
   string classname(cn);
   if (sameclass && classname.empty() && _active != _clients.end())
     classname = (*_active)->appClass();
@@ -770,69 +804,83 @@ void ScreenHandler::cycleWindow(unsigned int state, const bool forward,
   XWindow *t = 0;
 
   for (int x = 0; x < increment; ++x) {
-    while (1) {
-      if (forward) {
-	if (target == end)
-	  target = begin;
-	else
-	  ++target;
-      } else {
-	if (target == begin)
-	  target = end;
-	else
-	  --target;
-      }
+	  while (1) {
+		  if (forward) {
+			  if (target == end)
+				  target = begin;
+			  else
+				  ++target;
+		  } else {
+			  if (target == begin)
+				  target = end;
+			  else
+				  --target;
+		  }
 
-      // must be no window to focus
-      if (target == _active)
-	return;
+	// must be no window to focus
+		  if (target == _active) {
+			  if (_debug)
+				  std::cout << BBTOOL << ": " << "ScreenHandler: cycleWindow: target == _active..." << std::endl;
+			  return;
+		  }
 
-      // start back at the beginning of the loop
-      if (target == end)
-	continue;
+	// start back at the beginning of the loop
+		  if (target == end)
+			  continue;
 
-      // determine if this window is invalid for cycling to
-      t = *target;
-      if (t->iconic()) continue;
-      if (! allscreens && t->getScreenNumber() != _screenNumber) continue;
-      if (! alldesktops && ! (t->desktop() == _active_desktop ||
-			      t->desktop() == 0xffffffff)) continue;
-      if (sameclass && ! classname.empty() &&
-	  t->appClass() != classname) continue;
-      if (! t->canFocus()) continue;
-      if (t->skipPager()) continue;
+	// determine if this window is invalid for cycling to
+		  t = *target;
+		  if (t->iconic() && !_include_iconified_windows_in_cycle) continue;
+		  if (! allscreens && t->getScreenNumber() != _screenNumber) continue;
+		  if (! alldesktops && ! (t->desktop() == _active_desktop ||
+					  t->desktop() == 0xffffffff)) continue;
+		  if (sameclass && ! classname.empty() &&
+					t->appClass() != classname) continue;
+		  if (! t->canFocus()) continue;
+		  if (t->skipPager()) continue;
 
-      // found a good window so break out of the while, and perhaps continue
-      // with the for loop
-      break;
-    }
+	// found a good window so break out of the while, and perhaps continue
+	// with the for loop
+		  break;
+	  }
   }
 
+  if (_debug)
+	  std::cout << BBTOOL << ": " << "ScreenHandler: cycleWindow: dealing  with window: ["  << bt::toLocale(t->title()) << "]..." << std::endl;
   // phew. we found the window, so focus it.
   if ( state) {
-    if (!_cycling) {
+	  if (!_cycling) {
+		  if (_debug)
+			  std::cout << BBTOOL << ": " << "ScreenHandler: cycleWindow: not cycling. grabbing keyboard..." << std::endl;
       // grab keyboard so we can intercept KeyReleases from it
-      XGrabKeyboard(_display, _root, True, GrabModeAsync,
-		    GrabModeAsync, CurrentTime);
-      _cycling = true;
-    }
-    focusWindow(t);
+		  XGrabKeyboard(_display, _root, True, GrabModeAsync,
+						GrabModeAsync, CurrentTime);
+		  _cycling = true;
+	  }
+	  if (_debug)
+		  std::cout << BBTOOL << ": " << "ScreenHandler: cycleWindow: focusing window while cycling..." << std::endl;
+	  focusWindow(t);
 
   } else {
-    t->focus();
+	  if (_debug)
+		  std::cout << BBTOOL << ": " << "ScreenHandler: cycleWindow: done cycling, focusing window now" << std::endl;
+	  t->focus();
   }
 }
 
 void ScreenHandler::focusWindow(const XWindow * win) {
 
-  // if the window our little user has selected is on a different 
+  // if the window our little user has selected is on a different
   // workspace, go there first
   if ( ! win->isSticky() && (_active_desktop != win->desktop() ) ) {
-    changeWorkspace(win->desktop() );
+	  // this turns out to be yucky.  if we're not on the same desktop as the
+	  // window we're told to focus, just return and don't do anything...
+	  // changeWorkspace(win->desktop() );
+	  return;
   }
 
-  // if we're cycling and user wants to raise windows while cycling, 
-  // raise the window, else if we're cycling without raising windows, 
+  // if we're cycling and user wants to raise windows while cycling,
+  // raise the window, else if we're cycling without raising windows,
   // just set focus on the window, else focus and raise the window
   if (_cycling) {
     if (_raise_while_cycling) {

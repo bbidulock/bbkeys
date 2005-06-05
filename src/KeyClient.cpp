@@ -354,6 +354,8 @@ void KeyClient::initKeywords(KeywordMap& keywords) {
   keywords.insert(KeywordMap::value_type("togglemaximizehorizontal", Action::toggleMaximizeHorizontal));
 
   keywords.insert(KeywordMap::value_type("sendtoworkspace", Action::sendToWorkspace));
+  keywords.insert(KeywordMap::value_type("sendtonextworkspace", Action::sendToNextWorkspace));
+  keywords.insert(KeywordMap::value_type("sendtoprevworkspace", Action::sendToPrevWorkspace));
 
   keywords.insert(KeywordMap::value_type("nextwindow", Action::nextWindow));
   keywords.insert(KeywordMap::value_type("prevwindow", Action::prevWindow));

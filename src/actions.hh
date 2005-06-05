@@ -43,67 +43,69 @@ public:
   enum ActionType {
     START = 0,
     noaction,
-    execute, //done
-    iconify, //done
-    raise, //done
-    lower, //done
-    close, //done
-    toggleShade, //done
-    toggleOmnipresent, //done
-    moveWindowUp, //done
-    moveWindowDown, //done
-    moveWindowLeft, //done
-    moveWindowRight, //done
-    resizeWindowWidth, //done
-    resizeWindowHeight, //done
+    execute,
+    iconify,
+    raise,
+    lower,
+    close,
+    toggleShade,
+    toggleOmnipresent,
+    moveWindowUp,
+    moveWindowDown,
+    moveWindowLeft,
+    moveWindowRight,
+    resizeWindowWidth,
+    resizeWindowHeight,
 
-    toggleMaximizeFull, //done
-    toggleMaximizeVertical, //done
-    toggleMaximizeHorizontal, //done
+    toggleMaximizeFull,
+    toggleMaximizeVertical,
+    toggleMaximizeHorizontal,
 
-    sendToWorkspace, //done
+    sendToWorkspace,
+    sendToNextWorkspace,
+    sendToPrevWorkspace,
 
-    nextWindow, //done for now
-    prevWindow, //done for now
-    nextWindowOnAllWorkspaces, //done for now
-    prevWindowOnAllWorkspaces, //done for now
+    nextWindow,
+    prevWindow,
+    nextWindowOnAllWorkspaces,
+    prevWindowOnAllWorkspaces,
 
-    nextWindowOnAllScreens, //done for now
-    prevWindowOnAllScreens, //done for now
+    nextWindowOnAllScreens,
+    prevWindowOnAllScreens,
 
-    nextWindowOfClass, //done for now
-    prevWindowOfClass, //done for now
-    nextWindowOfClassOnAllWorkspaces, //done for now
-    prevWindowOfClassOnAllWorkspaces, //done for now
+    nextWindowOfClass,
+    prevWindowOfClass,
+    nextWindowOfClassOnAllWorkspaces,
+    prevWindowOfClassOnAllWorkspaces,
 
     upWindow,
     downWindow,
     leftWindow,
     rightWindow,
 
-    changeWorkspace, //done
-    nextWorkspace, //done
-    prevWorkspace, //done
+    changeWorkspace,
+    nextWorkspace,
+    prevWorkspace,
 
-    upWorkspace, //all done
+    upWorkspace,
     downWorkspace,
     leftWorkspace,
     rightWorkspace,
 
-    nextScreen, //done for now
-    prevScreen, //done for now
-  
+    nextScreen,
+    prevScreen,
+
     // these are openbox extensions
     showRootMenu,
     showWorkspaceMenu,
-    toggleDecorations,
 
+    toggleDecorations,
     toggleGrabs,
-    stringChain, 
+    stringChain,
     keyChain,
     numberChain,
 
-    cancelChain, //done
+    cancelChain,
 
     chain,
 
@@ -119,7 +121,7 @@ private:
   int _numberParam;
   std::string _stringParam;
   Display * _display;
-  
+
 public:
   inline enum ActionType type() const { return _type;}
   const char * getActionName();
@@ -133,7 +135,7 @@ public:
   Action(enum ActionType type, Display * _display, KeyCode keycode, unsigned int modifierMask,
          const std::string &str = "");
 };
-  
+
 typedef std::list<Action> ActionList;
 
 #endif
