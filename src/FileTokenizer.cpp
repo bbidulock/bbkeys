@@ -120,8 +120,12 @@ TokenBlock* FileTokenizer::next(void) {
             state = WANT_DATA;
         } else if (state == WANT_DATA && line[pos] == '{') {
             string::size_type start = ++pos;
-            while (pos < len && line[pos] != '}') {
-                if (line[pos++] == '\\') ++pos;
+	    // now start to search for the closing curly bracket at the end
+	    // as there might be a curly bracket in between starting and
+	    // ending brackets
+            pos = len;
+            while (pos > start && line[pos] != '}') {
+		    --pos;
             }
 
             block->data.assign(line, start, pos - start);
