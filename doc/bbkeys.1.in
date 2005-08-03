@@ -1,5 +1,5 @@
 .\" 
-.\" $Id: bbkeys.1.in,v 1.6 2004/08/28 03:31:48 vanrijn Exp $
+.\" $Id: bbkeys.1.in,v 1.7 2005/08/03 02:13:31 vanrijn Exp $
 .\" 
 .TH "BBKEYS" "1" "August 27, 2004" "vanRijn" "bbkeys"
 .SH "NAME"
@@ -28,7 +28,7 @@ A summary of the options supported by \fBbbkeys\fR is included below.
 
 .TP 
 \fB\-d or \-\-display\fR \fI<display name>\fR
-use alternate config file. (default is ~/.bbkeysrc)
+X server to connect to
 .TP 
 \fB\-D or \-\-debug\fR
 print debugging information
