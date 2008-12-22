@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src/main.cpp)
-AM_INIT_AUTOMAKE(bbkeys, 1.0.0cvs)
+AM_INIT_AUTOMAKE(bbkeys, 0.9.1)
 AM_MAINTAINER_MODE
 AC_PREFIX_DEFAULT(/usr/local)
 
