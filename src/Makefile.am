@@ -33,7 +33,7 @@ bbkeys_SOURCES = actions.cc \
 
 
 
-bbkeys_LDADD = @X_LIBS@
+bbkeys_LDADD = @LIBS@
 
 #EXTRA_DIST = bbkeysconf.pl.in
 

@@ -58,6 +58,7 @@ extern "C" {
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <strings.h>
 
 //--------------------------------------------------------
 // Constructor/Destructor
@@ -307,7 +308,7 @@ void KeyClient::setKeybindings(FileTokenizer & tokenizer) {
         bool found=false;
         string mod = results[j];
 
-        for (int i = 0; modifiers[i].str != ""; ++i) {
+        for (int i = 0; modifiers[i].str[0] != '\0'; ++i) {
           if ( strcasecmp(modifiers[i].str, mod.c_str()) == 0 ) {
             _mask |= modifiers[i].mask;
             found = true;

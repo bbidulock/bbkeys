@@ -30,6 +30,7 @@
 #include <map>
 #include <algorithm>
 #include "version.h"
+#include <strings.h>
 
 typedef std::map<std::string, std::string> ConfigMap;
 

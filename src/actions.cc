@@ -24,11 +24,12 @@
 
 #include "actions.hh"
 
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <sstream>
 
-Action::Action(enum ActionType type, Display * display, KeyCode keycode, 
+Action::Action(enum ActionType type, Display * display, KeyCode keycode,
                unsigned int modifierMask, const std::string &str)
   : _type(type), _display(display), _keycode(keycode), _modifierMask(modifierMask)
 {
@@ -51,7 +52,7 @@ Action::Action(enum ActionType type, Display * display, KeyCode keycode,
       return;
     }
   }
- 
+
   _numberParam = atoi( str.c_str() );
 
   // workspace 1 to the user is workspace 0 to us
@@ -116,7 +117,7 @@ const char * Action::getActionName() {
     { "", Action::noaction }
   };
 
-  for (int i = 0; actions[i].str != ""; ++i) {
+  for (int i = 0; actions[i].str[0] != '\0' ; ++i) {
     if ( actions[i].act ==  _type) {
         return actions[i].str;
     }
@@ -124,7 +125,7 @@ const char * Action::getActionName() {
 
   std::cout << BBTOOL << ": " << "ERROR: Invalid action (" << _type << ").\n";
   return "not found";
-  
+
 }
 
 

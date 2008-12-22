@@ -25,6 +25,7 @@
 // Methods, ideas, implementations taken from Openbox's XAtom class *sigh*
 
 #include "Netclient.h"
+#include <string.h>
 
 Netclient::Netclient (const bt::Display &display)
   : bt::EWMH(display), _display(display)
