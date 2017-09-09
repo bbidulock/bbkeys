@@ -1,10 +1,28 @@
-dnl Process this file with autoconf to produce a configure script.
-AC_INIT(src/main.cpp)
-AM_INIT_AUTOMAKE(bbkeys, 0.9.1)
-AM_MAINTAINER_MODE
-AC_PREFIX_DEFAULT(/usr/local)
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
 
-AC_CHECK_PROGS(regex_cmd, sed)
+AC_PREREQ([2.69])
+AC_INIT([bbkeys],[0.9.1],[https://github.com/bbidulock/bbkeys/issues])
+AC_REVISION([0.9.1])
+AC_CONFIG_SRCDIR([src/main.cpp])
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([scripts])
+AC_USE_SYSTEM_EXTENSIONS
+AC_CANONICAL_TARGET
+
+DATE='2017-09-08'
+AC_SUBST([DATE])
+
+BRANCH='master'
+AC_SUBST([BRANCH])
+
+# Initialize Automake
+AM_INIT_AUTOMAKE([1.13.4 dist-xz no-dist-gzip std-options -Wall color-tests silent-rules tar-pax])
+AM_MAINTAINER_MODE
+AC_PREFIX_DEFAULT([/usr])
+
+AC_CHECK_PROGS([regex_cmd],[sed])
 if test x$regex_cmd = "x"; then
  AC_MSG_ERROR([error. sed is required to build the default bbtoolsrc file.])
 fi
@@ -129,13 +147,13 @@ dnl Checks for Xextension
 AC_CHECK_LIB(Xext, XMissingExtension, LIBS="$LIBS -lXext",
              AC_MSG_ERROR(XMissingExtension not found in -lXext))
 
+PKG_PROG_PKG_CONFIG
+
 dnl pkgconfig checks for blackbox library
 PKG_CHECK_MODULES(LIBBT, libbt)
-CXXFLAGS="$CXXFLAGS $LIBBT_CFLAGS"
-LIBS="$LIBS $LIBBT_LIBS"
-
-dnl generate the config header
-AM_CONFIG_HEADER(config.h)
+PKG_CHECK_MODULES(XFT, xft)
+CXXFLAGS="$CXXFLAGS $LIBBT_CFLAGS $XFT_CFLAGS"
+LIBS="$LIBS $LIBBT_LIBS $XFT_LIBS"
 
 dnl Output files
 AC_OUTPUT( \

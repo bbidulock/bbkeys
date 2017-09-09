@@ -1,11 +1,12 @@
 DEFAULT_RC=$(pkgdatadir)/bbkeysrc
 DEFAULT_STYLE=$(pkgdatadir)/defaultStyle
 
-AM_CPPFLAGS =	@CPPFLAGS@ \
+AM_CPPFLAGS =	$(CPPFLAGS) \
 	-DDEFAULTRC=\"$(DEFAULT_RC)\" \
 	-DDEFAULTSTYLE=\"$(DEFAULT_STYLE)\"
 
 bin_PROGRAMS = bbkeys
+
 bbkeys_SOURCES = actions.cc \
 	actions.hh \
 	Config.cpp \
@@ -31,10 +32,6 @@ bbkeys_SOURCES = actions.cc \
 	WindowlistMenu.cpp \
 	WindowlistMenu.h 
 
+bbkeys_LDADD = $(LIBS)
 
-
-bbkeys_LDADD = @LIBS@
-
-#EXTRA_DIST = bbkeysconf.pl.in
-
-#bin_SCRIPTS = bbkeysconf.pl
+AM_INSTALLCHECK_STD_OPTIONS_EXEMPT = bbkeys

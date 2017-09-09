@@ -1,17 +1,70 @@
-# not a GNU package. You can remove this line, if 
-# have all needed files, that a GNU package needs
-AUTOMAKE_OPTIONS = foreign 
+ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = src data doc rpm
-MAINTAINERCLEANFILES = aclocal.m4 config.h.in configure Makefile.in stamp-h.in
 
-docdir = $(datadir)/doc/bbkeys
-doc_DATA = AUTHORS BUGS ChangeLog LICENSE NEWS README TODO
-EXTRA_DIST = $(doc_DATA) debian
+EXTRA_DIST = INSTALL COPYING AUTHORS NEWS README README.md README.md.in THANKS TODO ChangeLog
+
+dist_noinst_SCRIPTS = gennews.sh autogen.sh configure.sh rebuild.sh dist.sh
+
+DISTCLEANFILES = ChangeLog AUTHORS NEWS README README.md README.html README.txt
 
 dist-hook:
-	rm -rf `find $(distdir) -name CVS`
-	rm -f  `find $(distdir) -name ".\#*"`
+	$(AM_V_GEN)if test -x "`which git 2>/dev/null`" -a -d "$(srcdir)/.git" ; then \
+		chmod u+w $(distdir)/{ChangeLog,AUTHORS,NEWS} ; \
+		( cd $(srcdir) ; \
+		  echo -e "# created with git log --stat=76 -M -C -300|fmt -sct -w80\n" ; \
+		  git log --stat=76 -M -C -300|fmt -sct -w80 \
+		)|head -5000>$(distdir)/ChangeLog ; \
+		( cd $(srcdir) ; \
+		  echo "$(PACKAGE) -- authors file.  $(DATE)" ; \
+		  echo "" ; \
+		  git log|grep '^Author:'|awk '{if(!authors[$$0]){print$$0;authors[$$0]=1;}}' \
+		)>$(distdir)/AUTHORS ; \
+		( cd $(srcdir) ; \
+		  echo "$(PACKAGE) -- history of user-visible changes.  $(DATE)" ; \
+		  PACKAGE="$(PACKAGE)" $(srcdir)/gennews.sh \
+		)>$(distdir)/NEWS ; \
+	fi ; \
+	chmod u+w $(distdir)/{README.md,README} ; \
+	sed -r -e 's:\@PACKAGE\@:$(PACKAGE):g;s:\@VERSION\@:$(VERSION):g;s:\@DATE\@:$(DATE):g;s:\@BRANCH\@:$(BRANCH):g' $(distdir)/README.md.in >$(distdir)/README.md ; \
+	cat $(distdir)/README.md | fmt -sct -w80 -g72 >$(distdir)/README
+
+ChangeLog:
+	$(AM_V_GEN)if test -x "`which git 2>/dev/null`" -a -d "$(srcdir)/.git" ; then \
+		( cd $(srcdir) ; \
+		  echo -e "# created with git log --stat=76 -M -C -300|fmt -sct -w80\n" ; \
+		  git log --stat=76 -M -C -300|fmt -sct -w80 \
+		)|head -5000>$@ ; \
+	else touch $@ ; fi
+
+AUTHORS:
+	$(AM_V_GEN)if test -x "`which git 2>/dev/null`" -a -d "$(srcdir)/.git" ; then \
+		( cd $(srcdir) ; \
+		  echo "$(PACKAGE) -- authors file.  $(DATE)" ; \
+		  echo "" ; \
+		  git log|grep '^Author:'|awk '{if(!authors[$$0]){print$$0;authors[$$0]=1;}}' \
+		)>$@ ; \
+	else touch $@ ; fi
+
+NEWS:
+	$(AM_V_GEN)if test -x "`which git 2>/dev/null`" -a -d "$(srcdir)/.git" ; then \
+		( cd $(srcdir) ; \
+		  echo "$(PACKAGE) -- history of user-visible changes.  $(DATE)" ; \
+		  PACKAGE="$(PACKAGE)" $(srcdir)/gennews.sh \
+		)>$@ ; \
+	else touch $@ ; fi
+
+README.md: README.md.in
+	$(AM_V_GEN)sed -r -e 's:\@PACKAGE\@:$(PACKAGE):g;s:\@VERSION\@:$(VERSION):g;s:\@DATE\@:$(DATE):g;s:\@BRANCH\@:$(BRANCH):g' $< >$@
+
+README: README.md
+	$(AM_V_GEN)cat $< | fmt -sct -w80 -g72 >$@
+
+README.html: README.md
+	$(AM_V_GEN)$(MARKDOWN) $< >$@
+
+README.txt: README.html
+	$(AM_V_GEN)links -dump -width 80 -codepage utf-8 $< >$@
 
 ## create Debian package
 dist-deb:

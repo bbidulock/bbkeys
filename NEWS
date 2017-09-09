@@ -1,134 +1,837 @@
-2003-01-01
+bbkeys -- history of user-visible changes.  2017-09-08
 
-- Um.  A later note on plaigarism....  
+Release bbkeys-0.9.1.1 released 2017-09-08
+------------------------------------------
 
-- Wellsir, I started this rewrite out with the intention of not copying any
-  code from anyone else.  Of course, that wasn't how bbkeys started 4+
-  years ago, so I don't know why I expected it to be different this time
-  around....  bbkeys borrowed heavily from XEmacs and windowmaker before...
-  I guess I was hoping to not have to do the same thing again this time
-  around.  
+git shortlog -e -n -w80,6,8 rel-091...HEAD
 
-  Well anyway, I started the bbkeys re-write out with 0 existing code.  I
-  did class diagrams and sequence diagrams, designing the new system to be
-  truly object-oriented and reusable for other bbtools, etc.  I started off
-  the re-write by focusing on the config classes.  I think they're clean
-  and well-done, and am pleased with them.  Then I started into the hard
-  stuff.  As the CVS repository will tell, I didn't originally start out
-  with any anything other than my class-diagram-generated code base.
-
-  But as I started working on coding the screen handler, the main client
-  itself, and the keybindings interface, I frequently looked at epist's
-  code.  And the more I looked at their code for ideas and sanity-checks,
-  the more I realized that they truly did a marvelous job.  Not only that,
-  but some of their classes were exactly what I had in mind with my early
-  class and sequence diagrams.  I also quickly realized that I could either
-  take some of their classes inline or spend quite a lot of time writing
-  just about exactly the same thing myself.  I chose the former.
-
-  In particular, I've brought in epist's actions, keytree, and window
-  classes and modified them to work with the new blackbox library.  I've
-  also borrowed code from openbox's XAtom class and used it in Netclient.
-  I was determined that I could do it better than they did with screen, and
-  I think I've done some good things, but all in all, much of ScreenHandler
-  uses epists's screen methods.
-
-  That being said, I feel less than happy about the means, but I do believe
-  that the end will still be good.  bbkeys has an extremely good code base
-  now--much, much better than it did before.  It's not quite a code-fork
-  from epist, but it feels sort of the same, which isn't nearly as
-  satisfying as I had hoped.   But credit does need to be given where
-  credit is due, and I hope I've done that.
-
-  *sigh*
-
------------------------------------------------------------------------------
-
-2002-11-02
-
-- Okay. complete rewrite time....  Check out the README for the new
-  low-down....
-
-- A note on plaigarism...  I've poured through epist-ng's code and it is
-  truly a thing of beauty.  xOr, woodblock, and shrimpx did an EXTREMELY
-  nice job with the code.  I personally don't like the lexx/yacc parser
-  stuff, and since ob2 doesn't have a common window manager library to go
-  against, it's really tied very closely to openbox2.  This means, if
-  people want to use epist-nb with blackbox, they have to first download
-  and build openbox2.  =:)  All that's to say that I would loved to have
-  used more of epist-ng's code, but couldn't because it is so deeply
-  dependent on openbox2's code.  The funny thing is--some of the syntax
-  that epist uses (actions, etc.), look very similar to those which were
-  in bbkeys.  And oddly enough, some of the code looks rather familiar to
-  the epist-ng code.  The reason for this is... there's not honestly that
-  many different ways to do this stuff, folks.  So, hush to all you
-  nay-sayers and "he jacked epist-ng's code!"-sayers too.  Zip it, even.
-  =:)
+Brian Bidulock <bidulock@openss7.org> (1):
+      add some maintainer scripts
 
 
------------------------------------------------------------------------------
+Release bbkeys-0.9.1 released 2008-12-22
+----------------------------------------
 
-2001-11-15
+git shortlog -e -n -w80,6,8 RELEASE_0_9_0...rel-091
 
-- Make use of this file. :) Stuff like the note from 2001-08-03 should
-  really be in here, so it moved. README will contain non-INSTALL-related
-  usage instructions.
-
------------------------------------------------------------------------------
-
-2001-08-03...
-
-- This hasn't been updated in a LOOONG time, so I'll do so now.  Some
-  exciting new features have been added to bbkeys with this release
-  (0.8.0), and I'll try to explain one of them here.  By default, bbkeys
-  will now window-cycle MUCH better.  Of course, all keybindings are
-  user-configurable as before, and whatever keys you were using before for
-  PrevWindow/NextWindow will still work--they'll just work better.
-
-  xOr has helped me considerably (HUGE THANKS AGAIN, xOr!!) with this
-  release, and one of the new features that we added was a "stackedCycling"
-  methodology to window-switching.  To turn off this incredibly GOOD
-  feature (although I have NO idea why you would want to), put this in your
-  bbtools/bbkeys config file (no, not ~/.bbkeysrc--this is the other one
-  that's by default looked for at ~/.bbtools/bbkeys.bb or
-  ~/.bbtools/bbkeys.nobb)....
-
-  ! set this to false to use the linear style of window cycling
-  bbkeys.menu.stackedCycling:	False
-
-  Again, why you'd want to do that is beyond me, because there's SO much
-  more benefit to letting bbkeys do things the way it wants to--the new
-  way.  But if you're absolutely dead-set against progress, then put that
-  in.  What you'll then be using is another improvement--a "linear" cycling
-  method.  This will look the same as the old blackbox/bbkeys window
-  cycling method, but will act a little bit better and make more sense.  It
-  will, for instance, put a newly-created window into the cycling stack
-  immediately after the currently-focused window, so you just have to
-  "alt+tab" to it, rather than having to go all the way around the stack.
-
-  As for the new method for cycling windows...  When you hit your
-  NextWindow keybinding (mine's <alt+tab>), a window menu will pop up and
-  stay up until you release your PrevWindow/NextWindow keys.  This allows you 
-  to navigate through the window list (only showing the windows on the current
-  workspace, but INCLUDING STICKY WINDOWS!!), and then release your keys
-  when you have the window hilighted that you want to switch to.  You can
-  go backwards or forwards through the list, by using your NextWindow and
-  PrevWindow keys.  You can also make the pop-up window menu go away by
-  hitting <Escape>, or if you want, you can select the window currently
-  hilighted with <Return> or <Enter>.  What this last little feature also
-  means is that if you have only one key bound to PrevWindow or NextWindow
-  (i.e. using F11 to cycle forwards and F12 to cycle backwards), you can
-  keep cycling backwards/forwards, and then when you've hilighted the
-  window you want, just hit <Return>, or <Escape> to cancel.
-
-  But that's not all!!  With this new cycling scheme, the window list stack
-  will be re-organized when you cycle to a new/different window.  The
-  window that you had previously focused is now right below the one you now
-  have focused.  So you can switch back and forth between windows with a
-  simple <alt+tab> (or whatever you choose for your NextWindow keybinding.
-
-  I guess that's about it.  Give it a try.  I think you'll be pleasantly
-  suprised.
+Jason Kasper <vR@movingparts.net> (7):
+      - patch from Stefan Farfeleder...
+      moving to common Makefile.cvs instead of bootstrap
+      - including modified patch from Ciprian.  This gives us
+        sendToPrevWorkspace     and sendToNextWorkspace functionality.
+        [vanRijn]
+      - fix for bracket-parsing bug, thanks to Bernhard Fischer
+      whoops.  bug in man page caught, thanks to xed.  =;)
+      Adding a patch the OpenSUSE folks have been carrying for the last few
+        releases to clean up string comparisons. Also adding patch from Ego
+        Braun and Art Haas to clean up some includes that are needed with newer
+        versions of gcc.
+      Bumping version up to 0.9.1. Release early, release... every 4 years....?
 
 
+Release bbkeys-0.9.0 released 2005-03-05
+----------------------------------------
+
+git shortlog -e -n -w80,6,8 start...RELEASE_0_9_0
+
+Jason Kasper <vR@movingparts.net> (147):
+      initial import
+      adding xOr to authors... updating ChangeLog with myriad of enhancement,
+        etc. configure.in updated to 0.8.0-pre to signify major jump forward in
+        version
+      baby steps.
+      adding setHighlight(sel) back into setSelected.
+      complete overhaul of resource.cc/blackboxstyle.hh to match 0.6x.x styles
+      basemenu now uses menu.hiTexture... updated other files to provide it.
+      getting regular font working in windowlist menu
+      fixed hilighted menu texture
+      more fixes for resource-getting order
+      WOOTmake  Fixed font resource reloading
+      okay, last fix for foreground texture on theme change
+      changing version number to 0.8.0, changing copyright date to 2001
+      documentation changes, setting configure to version 0.8.0
+      updating rpm-building spec file
+      fix in documentation for turning off new stackCycling
+      removing auto_raise from resource.hh, XRaiseWindow() from bbkeys.cc to fix
+        un-iconify problem; raising version for next release to 0.8.1
+      - changed "friend blah" to "friend class blah" for gcc 3, etc. -
+        implemented a set-focus on cycle but don't raise until we're done
+        method.   focus is returned to beginning window if cycle is cancelled.
+      - added a new resource to allow not showing popup window menu with stacked
+          cycling - implemented new method of using stacked cycling code but not
+        showing   popup window menu - documented said goodies
+      updating rpm-build file for new version
+      Adding README, AUTHORS, and ChangeLog into installed files list, re-doing
+        bbkeys.spec for RPM build with changes from Hollis Blanchard, updating
+        ChangeLog accordingly
+      adding man pages to bbkeys, updating other files appropriately
+      forgot ChangeLog in rpm build file
+      fixing small buglet around stacked cycling in a workspace with no windows
+        to cycle
+      - incrementing version count to 0.8.2 for next release.... - fixing flawed
+        logic test for prev/next window in keyrelease--valid index   might be 0,
+        so we can't do (if (prev/next))....
+      Updating documentation, adding new features, etc.
+      updating version in bbkeys.spec and man page to new version... *note to
+        self* redo this with automake -i automatically.....
+      hrm. this should have been there a long time ago
+      adding documentation in ChangeLog for bug-fix in stackmenu.cc
+      going to version 0.8.3...
+      - by default we launch bbconf first now to configure keybindings
+      - umm. major cleanup. moving all source files into src. - also, making our
+        bbkeys manpage be generated for us so we don't have to   keep up with
+        the version changes, etc.
+      whoops, forgot 2
+      changing 'version.h' to '../version.h' due to changed directory structure
+      - adding debian and redhat build directories, ala bbconf
+      fixing man page Makefile.am
+      fix for debian control file \(apparently it doesn't like blank lines at
+        the end\)
+      - I'm drinking the aclocal; autoheader; autoscan ; autoconf; automake
+        potion, baybee.  We now have a cleaner build where we don't have to pass
+          300 -DDEFINE's in our compile statement.  All modified source files
+        were   to add an include for ../config.h to take advantage of this.
+        Added files   were so we can do this deep magic.
+      updating to 0.8.4 and trying to get multi-head working
+      moving from C configurator which sucked to perl configurator which is MUCH
+        better
+      rebuilding perl bbkeys configurator script at configure time
+      - updating debian and redhat build files for version 0.8.4 - minor code
+        tweakage in bbkeysconf.pl.in so we skip blank lines and   comments
+      bbkeysconf.pl now firmly in place rather than bbkeysConfigC
+      formatting fixes
+      improvements in CLI configurator
+      making nextWindowAllWorkspaces a separate keybinding
+      - bug fix for unnamed windows not showing up in bbkeys window list
+      patch to allow alternate keybindings config file
+      putting ToggleDecor back in properly for blackbox 0.61.2 release
+      fixing windows hyper modifier annoyance
+      finishing touches on bbkeysconf.pl--adding ToggleDecor and taking out
+        extra print; exit;
+      fix for RPM-building gzipped man file problem
+      taking out old configurators from loop as well as removing wait for
+        configurator to exit
+      adding logic to launch configurators with arguments to load correct
+        rc-files
+      forgot to delete the new char*'s
+      adding ownership to ChangeLog  =:)
+      adding Darryll to the ChangeLog for bug report on RPM build process
+      documentation updates
+      documentation update changes build fix for RPM process due to above
+      adding CVS version id's to all files
+      whoops. re-running automake with -i
+      cross-compilation patch from Bo Thorsen
+      cleaning up ChangeLog
+      fixing bitwise rather than logical or bug
+      - changing MaxInstructions to 100 for cthulhain (crazy nut) =:)
+      fix for XUngrabKey for multi-head
+      fix for configurator launch
+      adding original c code to project for posterity's sake
+      fix for multi-head DISPLAY problem
+      changing to 0.8.5 so our rpm friends can compile
+      fixing bug redhat build bug
+      adding fix for solaris compilation
+      fixing mac os/x compile issue
+      fixing parse error in execcommand
+      last bit of fiddling before removing everything for bbkeys-ng
+      removing all files to bring bbkeys-ng inline
+      Initial revision
+      bringing in bbkeys-ng
+      trying this import again
+      importing bbkeys-ng into bbkeys module
+      apparently we need this too
+      now looking for lib and headers separately
+      setting multi_head to true by default for bt::Application
+      trying to squash bug in updateClientList
+      the beginnings of toggleDecorations.  half-broke currently and no time to
+        fix it...
+      toggleDecor working now
+      waiting longer
+      whoops -- chained grabs were borked, but now they're fixed
+      okay, this now works with sawfish and ob2.  syncing and trying another
+        attack
+      window moving and updatedimensions cleanups
+      blargh, syncpoint before tearing updateClientList apart
+      - yay!!  hopefully squashed the SIGSEGV bug in ScreenHandler - implemented
+        the new libbt signal handler (still doesn't do anything   useful, but at
+        least doesn't die on HUP now)
+      fixing support for wmaker
+      passing move increments now, not position. also bringing in code from
+        xwininfo for figuring out correct geometry
+      fixing SIGCHLD problem
+      intel compiler fix for nyz
+      compile fixes for newest blackbox lib
+      Initial revision
+      new project started
+      - fixing leftWorkspace bug - cleaning up files--auto-generated ones
+        shouldn't be in CVS - putting kdevelop project file in
+      auto-generated file buh bye
+      bringing window list menu in, slowly
+      working menu, yay!!
+      small positioning fixes
+      centering popup by default
+      fixing signal handling
+      cleaning up and fixing horiz/vert workspace movements
+      adding all other nav options to popup window
+      adding c++ builder project file
+      fixing escape, up, down arrows handling
+      adding ellided text to menu popup when necessary
+      removing debug statements
+      fixing window-focus behavior at end of window cycling
+      adding auto-config-checker timer, woot
+      - popping window cycling menu if we only have one window
+      fixing incorrect comment
+      not cycling to windows that request to not be in skipped in a pager.  the
+        problem was that we were trying to cycle to desktop-type windows, which
+        isn't something that we should be doing, really.
+      applying a variation of patch 939710--numlock patch
+      i18n changes
+      updating man pages for new version of bbkeys
+      updated rc-file
+      removing old c++builder file
+      shipping with new default file now so we don't look ugly out of the box
+      updating copyright
+      version bump
+      adding display of desktop name in window list if we're cycling windows
+        outside of just the current desktop
+      cleanups with all workspaces windowlist menu
+      - bumping version up to 0.90-beta2-pre - new screen method to set focus on
+        a window - window->isSticky() method
+      changing version number to be slackware-compatible
+      adding program name to all logging
+      adding nyz's patch for unicode text, w00t!
+      bumping version number for release
+      - adding fixes proposed by Jeremy Reed (thanks!!!) - changing docdir from
+        $(prefix)/doc/bbkeys to $(datadir)/doc/bbkeys - cleaning up
+        README--removing old things and adding new - adding documentation to
+        manpage, yay! - defaulting menucycle position to +20+20, since centering
+        doesn't work   anyway
+      - fixing raiseWhileCycling....  now, it works whether we are using the
+        cycling menu or not
+      logging reconfigure requests always now
+      stupid debug line:
+      - bumping to version 0.90beta3 in preparation for the next public release
+        - adding configuration option for changing the cycle-menu title - this
+        also has the effect of turning it off altogether if the string value
+        parameter passed is empty
+      adding ability to override menu justification
+      - YAY!!!!  bbkeys now has toggleDecorations again!!  HUGE thanks to nyz
+        for   the discussion this morning.  Matter of fact, I'm not sure why we
+        ever   did the blackbox-specific atoms for decorations before, since
+        this worked   so easily.  I tested it with blackbox and metacity and
+        both work just   fine.  w00t!!  =:)
+      updating man page for toggleDecorations
+      - nyz's patches for changing netwm to emwh...
+      - adding fix submitted by Petr Matousek and Sergey Vlasov... "I have made
+        a   patch which adds clearing of all unneeded bits; with this   patch
+        window cycling works even if a non-default XKB group is active."
+      - committing code from Markus Ottenbacher for cleaned-up panel navigation
+        - various and sundry other cleanups
+      updating debian package build to new beta
+      phew. debugging actions now
+      bumping to version 0.9.0
+      - rpm stuff coming in again
+      should be done now.  rpm builds successfully, I think
+
+eckzor <eckzor> (103):
+      Addes the new windows style cycling. not quite perfect yet, but almost
+        working right!
+      cleaned up some code. made the menus close when anotehr event occurs, like
+        switching desktops. menus no longer draw right, and i haven't a clue
+        why.. :\ this is my job for otmorrow i suppose.
+      reverting to before my last update. it was broken, and the changes are
+        going to be irrelvant with newer additions to come
+      changed up stack cycling to grab the entire keyboard, and moved the key
+        handling for during stack cycling into stackmenu.cc
+      took out the use of getHighlight() as it is not needed.
+      reapplied the changes that were lost, and fixed the GrabKeyboard call
+      nothing changed really. but this compiles now :)
+      small fix
+      fixed the button press routine to correctly grab the right event from the
+        key stroke. almost all functional!
+      test for ignoring shift
+      stack cycling works! this fixed the KeyPress handling to make it go
+        correctly
+      changed the menu to not pop up with there are none or only 1 window that
+        are going to be in the menu.
+      bunch of changes to the menu code. no highlighting is going on at all
+        atm.. soon to be fixed. and Escape will exit the menu now.
+      stupid bug. stupid
+      new Basemenu.*. woop! let the debugging begin..
+      getting dots now.. sorta. and it compiles
+      preliminary real highlighting
+      moved little but bewtween basemenu and stackmenu
+      sticky works! segfaults fixed! (hopefully all of them) iconfied windows
+        work! TODO: make bbkeys not uniconfy when alt-tab is pressed TODO: add
+        resources for changing how to cycle windows
+      squashed a bug in removeSticky()
+      fixed timer, cuz i broke it before in debugging. fixed Stackmenu::show()
+        so that if 1 window is present, it sents the focus to it and leaves,
+        instead of ignoring it.
+      everything is working.. removed debugging messages. ill put em back in if
+        i get a seggie somewheres along the way.
+      added a resource for switching between linear and stacked window cycling.
+      added the new resource to the config files for window cycling styles
+      moved the resource loading to a more appropriate place
+      added my name to the top of the files i made large changes on and didnt
+        have my name in.
+      hopefully fix a core dump in setMenuItems()
+      got rid of the compiler warning the the debugging function p(). i think
+        i've made it possible to do a "show windows on all workspaces" option. I
+        don't want to try code that from work tho.. so I will look into that
+        later. if the cycling order stops being correct this can be removed
+        again, it consists of removing the check in focus_stack, to not focus a
+        window on a desktop other than the current one.
+      chaged the menu's reconfigureing and how items are added.
+      fix alt relaese change the checks in setMenuItems for the Xlib calls
+      readded old checks to setMenuItems as well for extra caution
+      fix nonappearing menu?
+      moved a couple things into show() from bbkeys::cycle_stack() removed a
+        couple commented out lines
+      fix the checks on the Xlib calls in setMenuItems to watch for success, not
+        failure. oops.
+      got rid of thew Update in stackmenu, as it was a completely useless waste
+        of cpu power
+      fixed Basemenu hopefully to play nice when using setHighlight and the
+        mouse in tandom to select menu items. This is done by calling
+        setHighlight, with what i think is the selected item, in motionNotify in
+        Basemenu.cc
+      hardcode "Return" key to select the current menu item and use it. break
+        out the selecting the currently focused menu item and acting on it into
+        seperate function, selectFocused()
+      other keybndings dont close the menu now
+      add where state will be staved for keypressing/releasing in the menu
+      new menu keyreleasing code! hoe this works
+      redone the catching key releases for closing the menu.
+      fully working keyRelease for the menu now. a faster method should be
+        implemented though.
+      cleaned up keypress in bbkeys.cc process_events
+      this has a new method for keyRelease, and adds teh actionList memver
+        variable to ToolWindow, which is a reference from a given action, to the
+        entry for that action in grabSet.
+      added a few checks in releaseKey, and reset the actionList variable when
+        keygrabs are loaded.
+      fixed login in keyRelease:
+      added the "showAllWorkspaces" option. I've tested it a little, hope it
+        works right!
+      some fixes for focusing windows with stickyness around. fixed showAll to
+        work right with sticky windows as well as normal stacked again.
+      changed addSticky(). maybe this will get rid of the bug.
+      fixed the bug with windows being turned sticky from desktops other than
+        where they were originally on.
+      fixed compilation with the past commit. *oops*
+      when "showAllWorkspaces" is on, the window list for stacked cycling
+        appends "(workspace 1)" to each window in the list (with the correct
+        number). Also squashed a bug where the first time the menu was brought
+        up after starting bbkeys, it would not center properly.
+      patched in the code to have a matrix like workspace setup, and have bbkeys
+        switch between them.
+      this keeps the menu on top of all other windows. if another app ends up
+        doing the same thing as this..there will be problems, as we accomplish
+        this by catching XEvents that tell us we're hiden, and raising ourselves
+        back to the top. We only do this becuase blackbox does not provide us a
+        way to keep the menu always on top as best as we can find. When a better
+        solution is available, this will be switched over to it.
+      added a couple things to the TODO
+      changed the convert function so that Meta_[LR] look for the Mod4Mask, as
+        this is how it would be on a 104 key keyboard, i believe. In xev, i get
+        state of 0x40, which is 1<<6, which is Mod4Mask for the Meta_L key.
+      this change supposedly fixes a siggie. deals with a bug in X.
+      got rid of a useless variables. added the XK_Super_[LR] keys to be
+        associated with the Mod3Mask.
+      fixed the description in debian/control
+      changed my email addres everywhere (except in the Changelog)
+      added a -rc[file] command line parameter to the perl script, and so it can
+        now have it's rcfile specified at the command line.
+      Added a -h[elp] option.
+      fix iconify last window on workspace -- maximixe bug that makes blackbox
+        seggie. When a window is removed, if it was the focus window, the focus
+        window is changed to 0 (None).
+      added a description of my last patch. the sanity check in removeWindow()
+      set the DISPLAY environment variable for exec's commands when tehy are run
+        so they run on the correct head.
+      using string instead of ostrstream. more portable. set the DISPLAY env var
+        when execing a command so they run on the right display.
+      use vr's fix for setenv =)
+      make bbkeys stop trying to perform action
+      "Need to take out this next bit when nyz has 0.60.0 ready"
+      last focus_window cleanups, and some braces cleanups =)
+      fix (hopefully) all the solaris compiling issues.
+      include stdlib for the setenv call
+      use putenv instead of setenv, solaris doesnt seem to have setenv.
+      update auto* system to work on solaris now too?
+      oops, removed something
+      regenerated files
+      some header dependancy cleanups
+      header dependancy cleanups
+      more solaris fixes
+      set up linker flags specifically for the solaris platform so that we
+        compile.
+      these files are needed to get the system host type
+      readding files
+      properly get the host system type
+      readding files
+      reorder
+      properly grab the host os
+      even more correctly get the host!
+      even better solaris support? no more -g all teh time when compiling, etc
+      get rid of a syntax error
+      update with changes ive made for the last few days
+      better linked list removal
+      when we are notified that blackbox is starting, clear out our windows
+        list, in case we have any rogues from the last shutdown.
+      add entry for change where window list is cleared when a blackbox startup
+        message is received.
+      remove the X server grabs. They actually can cause the server to lock
+        indefinately, and they are not needed.
+      fix a memory leak
+      change how the window's position is retreived for window nudging. The old
+        code relied ona  bug in blackbox, which has been fixed. So now we have
+        to do this right.
+      add some debug printfs
+      to get the window's decorations sizes, we have to compare to the window's
+        parent's parent
+      properly acquire window margins and positions, so that nudging works
+        properly
+      back out changes to window nudging. they are no longer required.
+      possible fix for the mouse-over-the-menu focus problem
+      proper window nudging at last.
+      remove some debugging printfs
+
+
+Release bbkeys- released 2003-11-26
+-----------------------------------
+
+git shortlog -e -n -w80,6,8 branch_0_90-pre...start
+
+Jason Kasper <vR@movingparts.net> (1):
+      new project started
+
+
+Release bbkeys-0.90.pre released 2003-01-19
+-------------------------------------------
+
+git shortlog -e -n -w80,6,8 bbkeys-old-final-before-ng...branch_0_90-pre
+
+eckzor <eckzor> (103):
+      Addes the new windows style cycling. not quite perfect yet, but almost
+        working right!
+      cleaned up some code. made the menus close when anotehr event occurs, like
+        switching desktops. menus no longer draw right, and i haven't a clue
+        why.. :\ this is my job for otmorrow i suppose.
+      reverting to before my last update. it was broken, and the changes are
+        going to be irrelvant with newer additions to come
+      changed up stack cycling to grab the entire keyboard, and moved the key
+        handling for during stack cycling into stackmenu.cc
+      took out the use of getHighlight() as it is not needed.
+      reapplied the changes that were lost, and fixed the GrabKeyboard call
+      nothing changed really. but this compiles now :)
+      small fix
+      fixed the button press routine to correctly grab the right event from the
+        key stroke. almost all functional!
+      test for ignoring shift
+      stack cycling works! this fixed the KeyPress handling to make it go
+        correctly
+      changed the menu to not pop up with there are none or only 1 window that
+        are going to be in the menu.
+      bunch of changes to the menu code. no highlighting is going on at all
+        atm.. soon to be fixed. and Escape will exit the menu now.
+      stupid bug. stupid
+      new Basemenu.*. woop! let the debugging begin..
+      getting dots now.. sorta. and it compiles
+      preliminary real highlighting
+      moved little but bewtween basemenu and stackmenu
+      sticky works! segfaults fixed! (hopefully all of them) iconfied windows
+        work! TODO: make bbkeys not uniconfy when alt-tab is pressed TODO: add
+        resources for changing how to cycle windows
+      squashed a bug in removeSticky()
+      fixed timer, cuz i broke it before in debugging. fixed Stackmenu::show()
+        so that if 1 window is present, it sents the focus to it and leaves,
+        instead of ignoring it.
+      everything is working.. removed debugging messages. ill put em back in if
+        i get a seggie somewheres along the way.
+      added a resource for switching between linear and stacked window cycling.
+      added the new resource to the config files for window cycling styles
+      moved the resource loading to a more appropriate place
+      added my name to the top of the files i made large changes on and didnt
+        have my name in.
+      hopefully fix a core dump in setMenuItems()
+      got rid of the compiler warning the the debugging function p(). i think
+        i've made it possible to do a "show windows on all workspaces" option. I
+        don't want to try code that from work tho.. so I will look into that
+        later. if the cycling order stops being correct this can be removed
+        again, it consists of removing the check in focus_stack, to not focus a
+        window on a desktop other than the current one.
+      chaged the menu's reconfigureing and how items are added.
+      fix alt relaese change the checks in setMenuItems for the Xlib calls
+      readded old checks to setMenuItems as well for extra caution
+      fix nonappearing menu?
+      moved a couple things into show() from bbkeys::cycle_stack() removed a
+        couple commented out lines
+      fix the checks on the Xlib calls in setMenuItems to watch for success, not
+        failure. oops.
+      got rid of thew Update in stackmenu, as it was a completely useless waste
+        of cpu power
+      fixed Basemenu hopefully to play nice when using setHighlight and the
+        mouse in tandom to select menu items. This is done by calling
+        setHighlight, with what i think is the selected item, in motionNotify in
+        Basemenu.cc
+      hardcode "Return" key to select the current menu item and use it. break
+        out the selecting the currently focused menu item and acting on it into
+        seperate function, selectFocused()
+      other keybndings dont close the menu now
+      add where state will be staved for keypressing/releasing in the menu
+      new menu keyreleasing code! hoe this works
+      redone the catching key releases for closing the menu.
+      fully working keyRelease for the menu now. a faster method should be
+        implemented though.
+      cleaned up keypress in bbkeys.cc process_events
+      this has a new method for keyRelease, and adds teh actionList memver
+        variable to ToolWindow, which is a reference from a given action, to the
+        entry for that action in grabSet.
+      added a few checks in releaseKey, and reset the actionList variable when
+        keygrabs are loaded.
+      fixed login in keyRelease:
+      added the "showAllWorkspaces" option. I've tested it a little, hope it
+        works right!
+      some fixes for focusing windows with stickyness around. fixed showAll to
+        work right with sticky windows as well as normal stacked again.
+      changed addSticky(). maybe this will get rid of the bug.
+      fixed the bug with windows being turned sticky from desktops other than
+        where they were originally on.
+      fixed compilation with the past commit. *oops*
+      when "showAllWorkspaces" is on, the window list for stacked cycling
+        appends "(workspace 1)" to each window in the list (with the correct
+        number). Also squashed a bug where the first time the menu was brought
+        up after starting bbkeys, it would not center properly.
+      patched in the code to have a matrix like workspace setup, and have bbkeys
+        switch between them.
+      this keeps the menu on top of all other windows. if another app ends up
+        doing the same thing as this..there will be problems, as we accomplish
+        this by catching XEvents that tell us we're hiden, and raising ourselves
+        back to the top. We only do this becuase blackbox does not provide us a
+        way to keep the menu always on top as best as we can find. When a better
+        solution is available, this will be switched over to it.
+      added a couple things to the TODO
+      changed the convert function so that Meta_[LR] look for the Mod4Mask, as
+        this is how it would be on a 104 key keyboard, i believe. In xev, i get
+        state of 0x40, which is 1<<6, which is Mod4Mask for the Meta_L key.
+      this change supposedly fixes a siggie. deals with a bug in X.
+      got rid of a useless variables. added the XK_Super_[LR] keys to be
+        associated with the Mod3Mask.
+      fixed the description in debian/control
+      changed my email addres everywhere (except in the Changelog)
+      added a -rc[file] command line parameter to the perl script, and so it can
+        now have it's rcfile specified at the command line.
+      Added a -h[elp] option.
+      fix iconify last window on workspace -- maximixe bug that makes blackbox
+        seggie. When a window is removed, if it was the focus window, the focus
+        window is changed to 0 (None).
+      added a description of my last patch. the sanity check in removeWindow()
+      set the DISPLAY environment variable for exec's commands when tehy are run
+        so they run on the correct head.
+      using string instead of ostrstream. more portable. set the DISPLAY env var
+        when execing a command so they run on the right display.
+      use vr's fix for setenv =)
+      make bbkeys stop trying to perform action
+      "Need to take out this next bit when nyz has 0.60.0 ready"
+      last focus_window cleanups, and some braces cleanups =)
+      fix (hopefully) all the solaris compiling issues.
+      include stdlib for the setenv call
+      use putenv instead of setenv, solaris doesnt seem to have setenv.
+      update auto* system to work on solaris now too?
+      oops, removed something
+      regenerated files
+      some header dependancy cleanups
+      header dependancy cleanups
+      more solaris fixes
+      set up linker flags specifically for the solaris platform so that we
+        compile.
+      these files are needed to get the system host type
+      readding files
+      properly get the host system type
+      readding files
+      reorder
+      properly grab the host os
+      even more correctly get the host!
+      even better solaris support? no more -g all teh time when compiling, etc
+      get rid of a syntax error
+      update with changes ive made for the last few days
+      better linked list removal
+      when we are notified that blackbox is starting, clear out our windows
+        list, in case we have any rogues from the last shutdown.
+      add entry for change where window list is cleared when a blackbox startup
+        message is received.
+      remove the X server grabs. They actually can cause the server to lock
+        indefinately, and they are not needed.
+      fix a memory leak
+      change how the window's position is retreived for window nudging. The old
+        code relied ona  bug in blackbox, which has been fixed. So now we have
+        to do this right.
+      add some debug printfs
+      to get the window's decorations sizes, we have to compare to the window's
+        parent's parent
+      properly acquire window margins and positions, so that nudging works
+        properly
+      back out changes to window nudging. they are no longer required.
+      possible fix for the mouse-over-the-menu focus problem
+      proper window nudging at last.
+      remove some debugging printfs
+
+Jason Kasper <vR@movingparts.net> (75):
+      initial import
+      adding xOr to authors... updating ChangeLog with myriad of enhancement,
+        etc. configure.in updated to 0.8.0-pre to signify major jump forward in
+        version
+      baby steps.
+      adding setHighlight(sel) back into setSelected.
+      complete overhaul of resource.cc/blackboxstyle.hh to match 0.6x.x styles
+      basemenu now uses menu.hiTexture... updated other files to provide it.
+      getting regular font working in windowlist menu
+      fixed hilighted menu texture
+      more fixes for resource-getting order
+      WOOTmake  Fixed font resource reloading
+      okay, last fix for foreground texture on theme change
+      changing version number to 0.8.0, changing copyright date to 2001
+      documentation changes, setting configure to version 0.8.0
+      updating rpm-building spec file
+      fix in documentation for turning off new stackCycling
+      removing auto_raise from resource.hh, XRaiseWindow() from bbkeys.cc to fix
+        un-iconify problem; raising version for next release to 0.8.1
+      - changed "friend blah" to "friend class blah" for gcc 3, etc. -
+        implemented a set-focus on cycle but don't raise until we're done
+        method.   focus is returned to beginning window if cycle is cancelled.
+      - added a new resource to allow not showing popup window menu with stacked
+          cycling - implemented new method of using stacked cycling code but not
+        showing   popup window menu - documented said goodies
+      updating rpm-build file for new version
+      Adding README, AUTHORS, and ChangeLog into installed files list, re-doing
+        bbkeys.spec for RPM build with changes from Hollis Blanchard, updating
+        ChangeLog accordingly
+      adding man pages to bbkeys, updating other files appropriately
+      forgot ChangeLog in rpm build file
+      fixing small buglet around stacked cycling in a workspace with no windows
+        to cycle
+      - incrementing version count to 0.8.2 for next release.... - fixing flawed
+        logic test for prev/next window in keyrelease--valid index   might be 0,
+        so we can't do (if (prev/next))....
+      Updating documentation, adding new features, etc.
+      updating version in bbkeys.spec and man page to new version... *note to
+        self* redo this with automake -i automatically.....
+      hrm. this should have been there a long time ago
+      adding documentation in ChangeLog for bug-fix in stackmenu.cc
+      going to version 0.8.3...
+      - by default we launch bbconf first now to configure keybindings
+      - umm. major cleanup. moving all source files into src. - also, making our
+        bbkeys manpage be generated for us so we don't have to   keep up with
+        the version changes, etc.
+      whoops, forgot 2
+      changing 'version.h' to '../version.h' due to changed directory structure
+      - adding debian and redhat build directories, ala bbconf
+      fixing man page Makefile.am
+      fix for debian control file \(apparently it doesn't like blank lines at
+        the end\)
+      - I'm drinking the aclocal; autoheader; autoscan ; autoconf; automake
+        potion, baybee.  We now have a cleaner build where we don't have to pass
+          300 -DDEFINE's in our compile statement.  All modified source files
+        were   to add an include for ../config.h to take advantage of this.
+        Added files   were so we can do this deep magic.
+      updating to 0.8.4 and trying to get multi-head working
+      moving from C configurator which sucked to perl configurator which is MUCH
+        better
+      rebuilding perl bbkeys configurator script at configure time
+      - updating debian and redhat build files for version 0.8.4 - minor code
+        tweakage in bbkeysconf.pl.in so we skip blank lines and   comments
+      bbkeysconf.pl now firmly in place rather than bbkeysConfigC
+      formatting fixes
+      improvements in CLI configurator
+      making nextWindowAllWorkspaces a separate keybinding
+      - bug fix for unnamed windows not showing up in bbkeys window list
+      patch to allow alternate keybindings config file
+      putting ToggleDecor back in properly for blackbox 0.61.2 release
+      fixing windows hyper modifier annoyance
+      finishing touches on bbkeysconf.pl--adding ToggleDecor and taking out
+        extra print; exit;
+      fix for RPM-building gzipped man file problem
+      taking out old configurators from loop as well as removing wait for
+        configurator to exit
+      adding logic to launch configurators with arguments to load correct
+        rc-files
+      forgot to delete the new char*'s
+      adding ownership to ChangeLog  =:)
+      adding Darryll to the ChangeLog for bug report on RPM build process
+      documentation updates
+      documentation update changes build fix for RPM process due to above
+      adding CVS version id's to all files
+      whoops. re-running automake with -i
+      cross-compilation patch from Bo Thorsen
+      cleaning up ChangeLog
+      fixing bitwise rather than logical or bug
+      - changing MaxInstructions to 100 for cthulhain (crazy nut) =:)
+      fix for XUngrabKey for multi-head
+      fix for configurator launch
+      adding original c code to project for posterity's sake
+      fix for multi-head DISPLAY problem
+      changing to 0.8.5 so our rpm friends can compile
+      fixing bug redhat build bug
+      adding fix for solaris compilation
+      fixing mac os/x compile issue
+      fixing parse error in execcommand
+      last bit of fiddling before removing everything for bbkeys-ng
+      bringing in bbkeys-ng
+
+
+Release bbkeys- released 2003-01-19
+-----------------------------------
+
+git shortlog -e -n -w80,6,8 rel-084...bbkeys-old-final-before-ng
+
+eckzor <eckzor> (39):
+      set the DISPLAY environment variable for exec's commands when tehy are run
+        so they run on the correct head.
+      using string instead of ostrstream. more portable. set the DISPLAY env var
+        when execing a command so they run on the right display.
+      use vr's fix for setenv =)
+      make bbkeys stop trying to perform action
+      "Need to take out this next bit when nyz has 0.60.0 ready"
+      last focus_window cleanups, and some braces cleanups =)
+      fix (hopefully) all the solaris compiling issues.
+      include stdlib for the setenv call
+      use putenv instead of setenv, solaris doesnt seem to have setenv.
+      update auto* system to work on solaris now too?
+      oops, removed something
+      regenerated files
+      some header dependancy cleanups
+      header dependancy cleanups
+      more solaris fixes
+      set up linker flags specifically for the solaris platform so that we
+        compile.
+      these files are needed to get the system host type
+      readding files
+      properly get the host system type
+      readding files
+      reorder
+      properly grab the host os
+      even more correctly get the host!
+      even better solaris support? no more -g all teh time when compiling, etc
+      get rid of a syntax error
+      update with changes ive made for the last few days
+      better linked list removal
+      when we are notified that blackbox is starting, clear out our windows
+        list, in case we have any rogues from the last shutdown.
+      add entry for change where window list is cleared when a blackbox startup
+        message is received.
+      remove the X server grabs. They actually can cause the server to lock
+        indefinately, and they are not needed.
+      fix a memory leak
+      change how the window's position is retreived for window nudging. The old
+        code relied ona  bug in blackbox, which has been fixed. So now we have
+        to do this right.
+      add some debug printfs
+      to get the window's decorations sizes, we have to compare to the window's
+        parent's parent
+      properly acquire window margins and positions, so that nudging works
+        properly
+      back out changes to window nudging. they are no longer required.
+      possible fix for the mouse-over-the-menu focus problem
+      proper window nudging at last.
+      remove some debugging printfs
+
+Jason Kasper <vR@movingparts.net> (13):
+      cleaning up ChangeLog
+      fixing bitwise rather than logical or bug
+      - changing MaxInstructions to 100 for cthulhain (crazy nut) =:)
+      fix for XUngrabKey for multi-head
+      fix for configurator launch
+      adding original c code to project for posterity's sake
+      fix for multi-head DISPLAY problem
+      changing to 0.8.5 so our rpm friends can compile
+      fixing bug redhat build bug
+      adding fix for solaris compilation
+      fixing mac os/x compile issue
+      fixing parse error in execcommand
+      last bit of fiddling before removing everything for bbkeys-ng
+
+
+Release bbkeys-0.8.4 released 2002-01-18
+----------------------------------------
+
+git shortlog -e -n -w80,6,8 rel-083...rel-084
+
+Jason Kasper <vR@movingparts.net> (25):
+      - I'm drinking the aclocal; autoheader; autoscan ; autoconf; automake
+        potion, baybee.  We now have a cleaner build where we don't have to pass
+          300 -DDEFINE's in our compile statement.  All modified source files
+        were   to add an include for ../config.h to take advantage of this.
+        Added files   were so we can do this deep magic.
+      updating to 0.8.4 and trying to get multi-head working
+      moving from C configurator which sucked to perl configurator which is MUCH
+        better
+      rebuilding perl bbkeys configurator script at configure time
+      - updating debian and redhat build files for version 0.8.4 - minor code
+        tweakage in bbkeysconf.pl.in so we skip blank lines and   comments
+      bbkeysconf.pl now firmly in place rather than bbkeysConfigC
+      formatting fixes
+      improvements in CLI configurator
+      making nextWindowAllWorkspaces a separate keybinding
+      - bug fix for unnamed windows not showing up in bbkeys window list
+      patch to allow alternate keybindings config file
+      putting ToggleDecor back in properly for blackbox 0.61.2 release
+      fixing windows hyper modifier annoyance
+      finishing touches on bbkeysconf.pl--adding ToggleDecor and taking out
+        extra print; exit;
+      fix for RPM-building gzipped man file problem
+      taking out old configurators from loop as well as removing wait for
+        configurator to exit
+      adding logic to launch configurators with arguments to load correct
+        rc-files
+      forgot to delete the new char*'s
+      adding ownership to ChangeLog  =:)
+      adding Darryll to the ChangeLog for bug report on RPM build process
+      documentation updates
+      documentation update changes build fix for RPM process due to above
+      adding CVS version id's to all files
+      whoops. re-running automake with -i
+      cross-compilation patch from Bo Thorsen
+
+eckzor <eckzor> (6):
+      fixed the description in debian/control
+      changed my email addres everywhere (except in the Changelog)
+      added a -rc[file] command line parameter to the perl script, and so it can
+        now have it's rcfile specified at the command line.
+      Added a -h[elp] option.
+      fix iconify last window on workspace -- maximixe bug that makes blackbox
+        seggie. When a window is removed, if it was the focus window, the focus
+        window is changed to 0 (None).
+      added a description of my last patch. the sanity check in removeWindow()
+
+
+Release bbkeys-0.8.3 released 2001-09-19
+----------------------------------------
+
+git shortlog -e -n -w80,6,8 rel-082...rel-083
+
+Jason Kasper <vR@movingparts.net> (10):
+      hrm. this should have been there a long time ago
+      adding documentation in ChangeLog for bug-fix in stackmenu.cc
+      going to version 0.8.3...
+      - by default we launch bbconf first now to configure keybindings
+      - umm. major cleanup. moving all source files into src. - also, making our
+        bbkeys manpage be generated for us so we don't have to   keep up with
+        the version changes, etc.
+      whoops, forgot 2
+      changing 'version.h' to '../version.h' due to changed directory structure
+      - adding debian and redhat build directories, ala bbconf
+      fixing man page Makefile.am
+      fix for debian control file \(apparently it doesn't like blank lines at
+        the end\)
+
+eckzor <eckzor> (4):
+      added a couple things to the TODO
+      changed the convert function so that Meta_[LR] look for the Mod4Mask, as
+        this is how it would be on a 104 key keyboard, i believe. In xev, i get
+        state of 0x40, which is 1<<6, which is Mod4Mask for the Meta_L key.
+      this change supposedly fixes a siggie. deals with a bug in X.
+      got rid of a useless variables. added the XK_Super_[LR] keys to be
+        associated with the Mod3Mask.
 

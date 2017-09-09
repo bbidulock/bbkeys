@@ -1,10 +1,8 @@
 EXTRA_DIST = bbkeys.spec.in
 
-CLEANFILES = bbkeys.spec
-
-clean-generic:
-	rm -rf BUILD SPECS RPMS SOURCES SRPMS
-	rm -f rpmrc rpmmacros
+CLEANFILES = bbkeys.spec \
+	BUILD SPECS RPMS SOURCES SRPMS \
+	rpmrc rpmmacros
 
 dist-rpm:
 	$(MAKE) clean

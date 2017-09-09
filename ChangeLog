@@ -1,590 +1,3296 @@
-version 1.0.0 --
-  - including modified patch from Ciprian.  This gives us sendToPrevWorkspace
-    and sendToNextWorkspace functionality.
-    [vanRijn]
-
-  - new configuration option for followWindowOnSend--this allows bbkeys to
-    change workspaces to the window that it just sent a window to, if the user
-    desires...
-    [vanRijn]
-
-  - including patch from Martijn Ras (sf.net tracker 1097889) fixing underquoted
-    definitions in configure.ac (Thanks!!!)
-    [vanRijn]
-
-  - fixing annoying behavior that we had when we were cycling through windows on
-    all workspaces.  previously, we would change workspaces while cycling, which
-    irritated me enough to stop it
-    [vanRijn]
-
-  - adding new configuration option that allows the user to tell us to include iconified
-    windows in our window cycling list.  if includeIconifiedWindowsInCycle is set to
-    true in the user's bbkeysrc (it's defaulted to true in code and sample bbkeysrc),
-    iconified windows will show in the cycling list, surrounded with "()".  this will
-    fix sf.net tracker #877698 (yay!).
-    [vanRijn]
-
-
-version 0.9.0 --
-  - complete rewrite!!!  =:)  See the README and NEWS files for more info.
-
-  Patch: reworked matrix-style navigation, as it lacked some features (eg
-    navigation if workspaces do not form a complete rectangle)
-    M. Ottenbacher <m.ottenbacher at gmx de>
-
-version 0.8.6 --
-  - pulling patch in from David Dellanave (solaris compile issues)
-    [vanRijn]
-
-  - fixing compilation issue for Mac OS X (thanks to Thomas F. Burdick!!)
-    [vanRijn]
-
-  - fixing bug in token-parsing (thanks to Adam Hooper!!!)--we now allow
-    ")"'s in our ExecCommands.  =:)
-    [vanRijn]
-
-version 0.8.5 --
-
-  - fix recursive redhat-build bug (fixes 577135)
-    [vanRijn]
-
-  - fix a memory leak in ToolWindow::windowAttributeChange.
-    [xOr]
-
-  - remove server grabs from the Image code. They prove to not be needed (they
-    no longer exist in the blackbox code.) And they cause the X server to lock
-    indefinately if you run 2 bbkeys on the same display, running the second
-    one from a terminal on the display.
-    [xOr]
-
-  - when we recieve a startup message from blackbox, clear out any leftover
-    windows in the window list. These are caused by the fact that on shutdown
-    of blackbox, if any windows are unmanaged after bbkeys, bbkeys doesn't get
-    notified of their destruction and so ends up with extra windows in its list.
-    [xOr]
-
-  - fix compiling issues under solaris. Thanks to grub on irc for use of his
-    time for testing.
-    [xOr]
-
-  - get rid of work-around for pre-0.60 blackbox, which fixes bug that let you
-    move the toolbar around with bbkeys.
-    [xOr]
-
-  - fix window focus tracking bug. Fixes bug where you could manipulate the
-    last focused window on a nono-visible workspace.
-    [xOr]
-
-  - fix multi-head bug in main.cc.  We now putenv("DISPLAY=...") so that
-    applications launched will be launched on the correct display.  Thanks to
-    Greg Gilbert for his patch!
-    [vanRijn]
+# created with git log --stat=76 -M -C -300|fmt -sct -w80
+
+commit 6d23eeb9c6d2ab8eebb3e0801cb0ee7f33af3aa1
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Fri Sep 8 07:22:12 2017 -0600
+
+    add some maintainer scripts
+
+ autogen.sh   | 34 ++++++++++++++++++++++++++++++++++
+ configure.sh | 43 +++++++++++++++++++++++++++++++++++++++++++
+ dist.sh      |  9 +++++++++
+ gennews.sh   | 35 +++++++++++++++++++++++++++++++++++
+ rebuild.sh   |  9 +++++++++
+ 5 files changed, 130 insertions(+)
+
+commit d2c15adf6470a23df19c704a8492faa4cfd79ed2
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Dec 22 03:11:48 2008 +0000
+
+    Bumping version up to 0.9.1. Release early, release... every 4 years....?
+
+ Makefile.cvs | 4 ++--
+ configure.ac | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit c7561329f41397065a914d29f3b8fe6bb73d342c
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Dec 22 03:04:08 2008 +0000
+
+    Adding a patch the OpenSUSE folks have been carrying for the last few
+    releases to clean up string comparisons. Also adding patch from Ego Braun
+    and Art Haas to clean up some includes that are needed with newer versions
+    of gcc.
+
+ src/Config.h      | 1 +
+ src/KeyClient.cpp | 3 ++-
+ src/Makefile.am   | 2 +-
+ src/Netclient.cpp | 1 +
+ src/actions.cc    | 9 +++++----
+ src/main.cpp      | 1 +
+ 6 files changed, 11 insertions(+), 6 deletions(-)
+
+commit 2aa0f850d3b881da1d957bc8be15771372de7ed1
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Aug 3 02:13:31 2005 +0000
+
+    whoops.  bug in man page caught, thanks to xed.  =;)
+
+ doc/bbkeys.1.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit db20de56c9ce273074481ec886ab50d9d70ab499
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Jul 11 15:21:09 2005 +0000
+
+    - fix for bracket-parsing bug, thanks to Bernhard Fischer
+
+ src/FileTokenizer.cpp | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+commit 4489749ab6ec39e97b6425fdebf8cacb19d01839
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jun 5 06:19:11 2005 +0000
+
+      - including modified patch from Ciprian.  This gives us
+      sendToPrevWorkspace
+        and sendToNextWorkspace functionality.
+        [vanRijn]
+
+      - new configuration option for followWindowOnSend--this allows bbkeys to
+        change workspaces to the window that it just sent a window to,
+        if the user
+        desires...
+        [vanRijn]
+
+      - including patch from Martijn Ras (sf.net tracker 1097889) fixing
+        underquoted
+        definitions in configure.ac (Thanks!!!)
+        [vanRijn]
+
+      - fixing annoying behavior that we had when we were cycling through
+        windows on
+        all workspaces.  previously, we would change workspaces while
+        cycling, which
+        irritated me enough to stop it
+        [vanRijn]
+
+      - adding new configuration option that allows the user to tell us to
+        include iconified
+        windows in our window cycling list.  if includeIconifiedWindowsInCycle
+        is set to
+        true in the user's bbkeysrc (it's defaulted to true in code and
+        sample bbkeysrc),
+        iconified windows will show in the cycling list, surrounded with
+        "()".  this will
+        fix sf.net tracker #877698 (yay!).
+        [vanRijn]
+
+ ChangeLog              | 183 ++++++++------
+ configure.ac           |  10 +-
+ data/bbkeysrc          |   2 +
+ doc/bbkeysrc.5         |  16 +-
+ src/KeyClient.cpp      |   2 +
+ src/ScreenHandler.cpp  | 580 ++++++++++++++++++++++++---------------------
+ src/ScreenHandler.h    |  12 +-
+ src/WindowlistMenu.cpp |  33 +--
+ src/actions.cc         |   4 +
+ src/actions.hh         |  90 +++----
+ src/window.cc          |  42 ++--
+ 11 files changed, 540 insertions(+), 434 deletions(-)
+
+commit 7b12fcfcc2f32b9b47f9fb24e80886283fe1091f
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Jun 4 20:25:32 2005 +0000
+
+    moving to common Makefile.cvs instead of bootstrap
+
+ Makefile.cvs | 15 +++++++++++++++
+ bootstrap    | 16 ----------------
+ 2 files changed, 15 insertions(+), 16 deletions(-)
+
+commit 028cd15bf9cbd1e60d567d05ef3059a78c620fb2
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Mar 17 03:26:27 2005 +0000
 
-  - fix bug in main.cc (| rather than ||).  Thanks to Roman Neuhauser!
-    [vanRijn]
+    - patch from Stefan Farfeleder...
+
+    here is a patch that enables me to run bbkeys 0.9.0 on FreeBSD
+    6-current.  You forgot to set the members _keybindings and
+    config_check_timer in the constructor to 0, which caused the
+    initialisation code to be skipped (KeyClient.cpp:194 and
+    KeyClient.cpp:152).  If you wonder why this didn't happen to you,
+    FreeBSD's malloc() fills allocated memory with 0xd0 to catch such
+    errors.
+
+ configure.ac      | 2 +-
+ src/KeyClient.cpp | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 0ab03b0898eaa8f573fb0b6cd36e52df57e6a970
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Mar 5 16:59:07 2005 +0000
+
+    should be done now.  rpm builds successfully, I think
+
+ Makefile.am        | 8 +++++++-
+ configure.ac       | 2 ++
+ rpm/bbkeys.spec.in | 5 ++---
+ 3 files changed, 11 insertions(+), 4 deletions(-)
+
+commit 35cd800aa5831c4d1fd14b09ca942f881b7f6bb1
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Mar 5 15:49:04 2005 +0000
+
+    - rpm stuff coming in again
+
+ rpm/Makefile.am    | 15 +++++++++
+ rpm/bbkeys.spec.in | 91 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 106 insertions(+)
+
+commit 2b5f7de5fa63acab1c567a930edeebc442c20164
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Mar 5 14:56:40 2005 +0000
+
+    bumping to version 0.9.0
+
+ configure.ac     | 2 +-
+ debian/changelog | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit ce8e57e83b4dc3ca900bc4b094245c51c47805bf
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Feb 20 21:11:29 2005 +0000
+
+    phew. debugging actions now
+
+ src/ScreenHandler.cpp |  6 +++++-
+ src/actions.cc        | 29 ++++++++++++++++++++++++-----
+ src/actions.hh        |  8 +++++++-
+ src/keytree.cc        | 23 ++++++-----------------
+ src/keytree.hh        |  2 +-
+ 5 files changed, 43 insertions(+), 25 deletions(-)
+
+commit 83ad8c0d8aec2c046fde76f78c5e85eee99349ba
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Jan 19 13:50:15 2005 +0000
+
+    updating debian package build to new beta
+
+ debian/changelog | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+commit 29f0221aa72451b4a09ac574a012c04c087c2dda
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Jan 13 03:13:14 2005 +0000
+
+    - committing code from Markus Ottenbacher for cleaned-up panel navigation
+    - various and sundry other cleanups
+
+ ChangeLog             |   4 ++
+ data/bbkeysrc         |   4 +-
+ src/KeyGrabber.cpp    |   6 +++
+ src/ScreenHandler.cpp | 123 +++++++++++++++++++++++++++++++++-------------
+ src/ScreenHandler.h   |   4 +-
+ src/keytree.cc        |  18 ++++++-
+ 6 files changed, 119 insertions(+), 40 deletions(-)
+
+commit 079103329315d345044efba62fec9500e1e736d9
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Nov 8 21:41:15 2004 +0000
+
+    - adding fix submitted by Petr Matousek and Sergey Vlasov... "I have made a
+      patch which adds clearing of all unneeded bits; with this
+      patch window cycling works even if a non-default XKB group is active."
+
+ src/keytree.cc | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+commit 465e5acd8d5030ac653fac9179275f5c558f4bd1
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Sep 26 02:30:44 2004 +0000
+
+    - nyz's patches for changing netwm to emwh...
+
+ config.h.in           |  6 ++++--
+ configure.ac          |  2 --
+ src/KeyClient.cpp     |  2 +-
+ src/KeyClient.h       |  2 +-
+ src/Netclient.cpp     | 26 ++++++++++++--------------
+ src/Netclient.h       | 10 +++++-----
+ src/ScreenHandler.cpp |  6 +++---
+ src/ScreenHandler.h   |  4 ++--
+ 8 files changed, 28 insertions(+), 30 deletions(-)
+
+commit 20c6d80f1b261185b16f0e6365e019a311a9085d
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Sep 16 00:44:55 2004 +0000
+
+    updating man page for toggleDecorations
+
+ doc/bbkeysrc.5 | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+commit e82f0b16257372556b7124ae8be537d8603744c4
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Sep 16 00:40:46 2004 +0000
+
+    - YAY!!!!  bbkeys now has toggleDecorations again!!  HUGE thanks to nyz for
+      the discussion this morning.  Matter of fact, I'm not sure why we ever
+      did the blackbox-specific atoms for decorations before, since this worked
+      so easily.  I tested it with blackbox and metacity and both work just
+      fine.  w00t!!  =:)
+
+ src/window.cc | 87 ++++++++++++++++++++++++++++++++++++++++++++++++++++---
+ src/window.hh |  1 +
+ 2 files changed, 84 insertions(+), 4 deletions(-)
 
-  - fix bug in bbkeys.hh--increasing MaxInstructions to 100 for cthulhain
-    [vanRijn]
-
-  - fix in bbkeys.cc -- XUngrabKey changed to use same call to find what
-    screen we're on as the XGrabKey call
-    [vanRijn]
-
-  - fix in bbkeys.cc -- doing "xterm -e sh -c $command" rather than "xterm -e
-    $command".  Thanks to Magnus Solvang for the bug report.  Also, changing
-    hideous char* and snprintf() to ostrstream, YAY!!
-    [vanRijn]
-
-version 0.8.4 --
-
-  - add a sanity check to the removeWindow function. Basically, blackbox tells
-    bbkeys when a window disappears, or is removed. If the window being
-    removed was the last window blackbox specified as having the input focus,
-    bbkeys now resets what it thinks has the input focus. This prevents the
-    bug reproducable by iconifying the last window on a workspace, and then
-    trying to maximize "nothing". [xOr]
-
-  - cleaning up build again.  Rather than having 200 -DDEFINE_ statements
-    in our compile lines, we use config.h (like normal people).  =:)  This
-    very well may break stuff, but it looks good thus far.... [vanRijn]
-
-  - adding AM_MAINTAINER_MODE to stop the ever-annoying "here, let me run
-    aclocal for you again!!" idiocy of automake and friends [vanRijn]
-
-  - fixing things for multi-head displays--replacing
-    "getScreenInfo(0)->getRootWindow()," with
-    "getCurrentScreenInfo()->getRootWindow(),"  So yes, bbkeys now has
-    multi-head support.  Sort of.  You need to have a separate instance of
-    bbkeys running against each head ("bbkeys -display :1"), etc.  cat
-    complaints >> /dev/null.... [vanRijn]
-
-  - removing kludgy C command-line configurator with much-improved perl script
-    from Damien Tougas (thanks!!!) [vanRijn]
-
-  - changing bbkeys.cc to look for bbkeysconf.pl rather than bbkeysConfigC
-    [vanRijn]
-
-  - removing showAllWorkspaces from bbkeys.{bb,nobb} config file and making it
-    an additional keybinding.  This allows two different ways of showing all
-    open windows and navigating through them--one keybinding for the regular
-    "NextWindow" variety (as in previous versions of bbkeys, and another
-    keybinding, "NextWindowAllWorkspaces", that pops up the window list for
-    navigation for windows open on all workspaces.  [vanRijn]
-
-  - bugfix....  previously, bbkeys would ignore windows that had no name.  We
-    now follow blackbox's lead (and follow blackbox's code) and create a name
-    for it, "Unnamed".  Thanks to Damien Terrier for this bug report.
-    [vanRijn]
-
-  - patch for allowing an alternate keybinding config file (thanks to Scott
-    Moynes!) [vanRijn]
-
-  - sync with blackbox for 0.61.2--attributes element Atom has changed to now
-    include decoration state so that ToggleDecor() works. [vanRijn]
-
-  - including patch from Sergey Vlasov for allowing use of Meta and Hyper
-    modifiers, also try to get the correct Num_Lock and Scroll_Lock modifier
-    mask from the X server rather than hard-coded.  I've not had tons of time
-    to play with this, though I have made sure that it works on my laptop.
-    =:) [vanRijn]
-
-  - fix for RPM-building process... install gzipped man pages by default on
-    RPM-based systems.  Thanks to Darryll for the bug report!!  =:) [vanRijn]
-
-  - removing bbkeysconf and bbkeysConfigGtk *shudder* apps from
-    chain-launching mode.  These babies are dead and let's just move on
-    folks....  By keeping them in there, I'm afraid people will think it's
-    okay to use them.  It's not.  They're WAY out of date.  Also, thanks to a
-    smarter way of handling key grabbing configuration in bbconf, we don't
-    have to hang bbkeys while keygrabs are being configured. [vanRijn]
-
-  - adding logic to bbkeys to pass configurators correct command-line
-    arguments so we load the rc-file that our user is running bbkeys with.
-    [vanRijn]
-
-  - long-overdue documentation finessing, thanks to Roman Neuhauser for the
-    patches and suggestions!  =:)  Also, adding CVS version id's to all source
-    and documentation files, woot!  =:) [vanRijn]
-
-  - cross-compilation patch from Bo Thorsen--moves -lX11 to LIBS [vanRijn]
-
-version 0.8.3 --
-
-  - changing external app launch order--we go bbconf, bbkeysconf,
-    bbkeysConfigGtk, rxvt, xterm... *phew*
-
-  - fix in stackmenu.cc (hopefully we got it this time?) to fix segfaults
-    on some platforms due to screwy X stuff. *shudder*
-
-
-version 0.8.2 --
-
-  - patched for matrix-style workspace navigation, updating the 0.3.5 patch written
-    by Markus Ottenbacher (m.ottenbacher@gmx.de) found at
-    http://homepages.compuserve.de/meottenbacher/.  Include UpWorkspace,
-    DownWorkspace, LeftWorkspace and RightWorkspace as WithAction() in your
-    ~/.bbkeysrc, and enable the arrangement in rows and columns in your
-    bbkeys.bb as well as in bbpager.bb (usually placed under
-    /usr/local/share/bbtools/) to use this functionality.  Bill Beal <beal@tunl.duke.edu>
-
-  - fixed a bug due to an improper test for next and prev (test for key
-    release).  next and prev might just be 0, so we can't do if (next)
-    because the correct index of the grabSet.KeyMap might be 0 for either
-    prevwindow or nextwindow keybinding and it would fail the test and not
-    release the keyboard and not lower the window menu.
-
-  - fixed a bug for the window list popup menu--sticky window bug where
-    sticky windows would show up twice on their originating windows but not
-    at all on the workspace that you switched from immediately prior to
-    switching to the window where the sticky window is "homed"...  =:)
-
-  - xOr's new "showAllWorkspaces" option lets you see every window that you
-    have on any workspace with an indicator as to what workspace that
-    window is living on....  Very sweet code.
-
-  - fix for popup window menu...  Added "always on top" code so that it
-    stays at top of window stack and won't let blackbox hide it with any
-    other window (as occurs when auto-raise is enabled in blackbox).
-
-version 0.8.1 --
-  - bug fixin's--fixed annoying "un-iconify" feature when bbkeys did window
-    cycling, thanks to halt, all else for pointing that one out....  Also,
-    removed REPORT struct from resource.hh which only had auto_raise in it
-    (not sure why it's been there, un-used all this time anyway)....
-
-  - changed all "friend .*$" to "friend class .*$" to comply with more
-    strict gcc versions....  Thanks to Jan Schaumann for this!
-
-  - okay. stacked window cycling tweaks.  As a visual clue for the
-    stacked-Cycling folks, we now set focus on cycled-through windows as we
-    go, raising the window selected at the end of the cycle.  This sounds
-    more confusing than it is.   This makes it possible to separate the new
-    and improved cycling method from the popup menu. Oh, and hitting Escape
-    in the middle of cycling will return focus to the window that you
-    started from....
-
-  - I've made it possible to turn off the visual menu for the new-and-improved
-    stacked cycling method.  To do this, just put
-    "bbkeys.menu.showCycleMenu: False" (without the quotes, duh) into your
-    ~/.bbtools/bbkeys.bb or ~/.bbtools/bbkeys.nobb file.  This will let
-    bbkeys still use the new method, will set focus as you cycle through the
-    stack, but won't actually raise the window you want until you tell it
-    to by releasing your keys or hitting <Enter>, and won't show the popup
-    window list and cycle through the entries as you go.  Again, harder to
-    explain than it is to use....
-
-  - including README, ChangeLog, and AUTHORS in installed files list
-
-  - including first man page files (W00T!!)  =:).  Thanks to Jan Schaumann,
-    bbkeys now has man pages, baybee.  Installing now and including files
-    in bbkeys.spec
-
-version 0.8.0 --
-  - BIG changes!!!  w00T!!!  There's some very significant improvements in
-    this version, and as such, I'm calling this version 0.8.0 for various
-    reasons....
-      1) I feel like it
-      2) I'm thinking we're about "there", and 0.8.0 sounds like more of a
-      non-beta product than 0.3.8
-      3) I feel like it   =:)
-
-  - xOr (see below) has done some majorly good coding with bbkeys.  He's
-    implemented a different window-cycling scheme that's more
-    "Windows"-like (think <alt+tab> popup window with list of things you're
-    cycling through)...  Verrrry slick.  Umm. Did I say Verrrrry?
-
-    Why, yes I did.  You are just going to have to see it to believe it.  Blackbox
-    has just again become my favorite window manager for X, with the help
-    xOr has given to me.  The window cycling methodology has changed, and
-    believe me, this is a change for the better.  There's now two methods
-    of window cycling--both use the same keybindings, so don't get yer
-    panties tied in knots.  xOr has implemented a newer, better "old-style"
-    window cycling, called linear cycling.  It's basically what
-    blackbox/bbkeys has done up until this point, but with a few
-    significant improvements.  But the really exciting new feature in this
-    release of bbkeys is the other way--a "stacked" cycling method.  It
-    makes much more sense than the old way.  And it's purtier, because you
-    can see what you're window-changing to before you actually go there.
-    And when you hit <alt+tab> (example keybinding--you can have it be
-    whatever you want it to be), it goes back to the window you were on
-    right before this one.
-
-    It's way cool, uber-neato, and excellently implemented.  I'll expand on
-    this more in README, so look there for more details.
-
-  - xOr has also fixed a bug in LinkedList.cc (as posted to the blackbox
-    mailing list) that affected how the windows were put into the cycling
-    stack.
-
-  - I'm considering xOr a co-developer now (as long as he has the time and
-    desire, of course), but we've a project available on sourceforge.net at
-    http://sourceforge.net/cvs/?group_id=32563 .  Of course, this means
-    that all the usual sourceforge advantages are there, like CVS access,
-    etc.  The project is bbconf.sourceforge.net for the time being, so
-    CVS access looks like this:
-
-    cvs -d:pserver:anonymous@cvs.bbconf.sourceforge.net:/cvsroot/bbconf login
-    <hit enter for password>
-    cvs -z3 -d:pserver:anonymous@cvs.bbconf.sourceforge.net:/cvsroot/bbconf co bbkeys
-
-    I've imported the bbkeys tree (0.8.0 will be pulled directly from it),
-    and I've also imported a bbconf module.  bbconf will be the new
-    all-in-one blackbox configuration utility (if I get some help).  =:)
-    To get read-only access to it, do this...
-
-    cvs -d:pserver:anonymous@cvs.bbconf.sourceforge.net:/cvsroot/bbconf login
-    <hit enter for password>
-    cvs -z3 -d:pserver:anonymous@cvs.bbconf.sourceforge.net:/cvsroot/bbconf co bbconf
-
-  - adding ToggleDecor as an option to toggle ummmm, window decor.... (duh).
-    *** BIG HONKING NOTE ***
-    This doesn't currently work.  =:\  The code is in bbkeys, but can't
-    actually do anything until blackbox is changed to tell us what the
-    decorated state of the window is.  Hopefully this will be included in
-    blackbox soon....
-
-  - changing order of configurator launch again, thanks to a bug report
-    from David Lawrence Ramsey (I had " black" instead of "black")--so we
-    now try rxvt before xterm, and rxvt should actually work now....
-
-  - hopefully fixing strcasecmp issue for AIX boxen--it's in strings.h
-    instead of string.h.  Adding check for strings.h....  PLEASE let me
-    know if this doesn't actually fix anything.  I'd like to put this guy
-    to bed....
-
-  - Applying patches from Ben Jansens <xor at x-o-r dot net>.  His comments
-    are below....
-
-      I've removed all the functionality from the wminterface class that bbkeys
-      does not use, and reorganised the header files for wminterface and bbkeys,
-      adding comments for all of the class members.  With this patch, bbkeys not
-      longer calls the blackbox cycling routines, but maintains its own list of
-      windows, and cycles them itself. One thing to note is that the cycling does
-      not occur in the same order as the buttons on the toolbar cycle. I personally
-      dont think this will be a big issue, and i think the new way is nicer. When a
-      new window opens, its added to the list right *after* the focused window,
-      so that hitting PrevWindow would take you back to the window that was
-      previously focused.
-
-    ....
-
-    * VERY nice work, Ben.  Thanks for your work! *
-
-  - Bug squashing and fixing galore...  Thanks again to Ben for pointing
-    these out.  The issue was that we were doing stuff to windows without
-    making sure the window wasn't our root window.  Doh!  So now we make
-    sure 1) we have a focus_window and 2) that focus_window isn't
-    PointerRoot.  Hopefully that will do the trick....
-
-
-
-
-
-version 0.3.6 --
-  - Fixed slight bug in font-loading for label.font and frame.font.  As
-		things were, we only looked for TitleFont (a bbtools-specific directive
-		which most probably isn't in most style files), a bbkeys-specific font
-		directive (which was less likely to be found).  I added to the search
-		criteria toolbar.font, which for sure will be in every
-		toolbox/bbconf-generated style file and is most probably in every other
-		style file as well.  Long story short, fonts should now load according
-		to the individual style used, rather than relying so heavily on
-		helvetica....
-	- applied patch submitted from MrFab (Scott Garner for the irc-challenged)
-		to manipulate window placement via keypress!!!  VERY clean and nice
-		work, MrFab!!  And useful, to boot!  =:)
-	- reworked and applied patch from Alex (dicerandom @ earthlink dot net)
-		for keystroke-resizing of focused windows.  Very nice work, Alex!
-		Thanks!!  =:)
-	- reworked fork() section for configurator launch--based on Kyle
-		Donaldson's idea....  We now try bbkeysconf, bbkeysConfigGtk, xterm,
-		rxvt--in that order...  Thanks Kyle!
-	- new and improved bbkeysConfigC--better functioning, disclaimer added
-		since we trounce on whatever was in ~/.bbkeysrc, added printout of all
-		available keygrabs now....
-
-version 0.3.5 --
-  - Doh!!  In the midst of the glorious bug-squashing that 0.3.4 offered, I
-		introduced a new bug (just to see if anybody actually uses my code,
-		erm, or something).  =:)  I was getting rid of all the strdups that I
-		could and in the process forgot to replace it with a working solution
-		for the ExecCommand part of bbkeys's functionality.
-
-version 0.3.4 --
-  - updated Image.cc, Image.hh, BaseDisplay.hh to newest (0.61.0) blackbox
-	  files to correct bug that reared its ugly little head when running on
-		SPARC boxen Ultra 5 (Bus Error).  Thanks to Tibor Simko for reporting
-		this one....
-	- many bug fixes and killing of leaks =:)  thanks to memprof and X
-		man-page reading (shudder).  I found quite a few memory leaks (some
-		that bbkeys inherited from the XEmacs code) and discovered some
-		undocumented features that may not qualify as leaks, but the net result
-		was that bbkeys could chew up RAM far more than he should.  So, the end
-		result is that bbkeys now has far fewer memory problems.  I'm pretty
-		sure that there are more buglets to be found, but that's for when I get
-		bored again, I guess.  =:)  Thanks to Sean 'Shaleh' Perry for this
-		buglet report (and others too).  =:)
-	- updated bbkeysconf--couple of fixes for compiling on solaris....
-	  - added -lX11 to the link line (should be there anyway)
-		- changed a QString.left to a QString.at function call
-		- thanks to Bo Thorsen for these buglet-reports!  =:)
-
-version 0.3.3 --
-  - changes and updates (thanks to nyz for the help!!!) to change the
-	  communication Atoms between blackbox-0.60.1 and bbkeys (READ: YOU MUST
-		BE RUNNING BBKEYS 3.3 OR LATER IF YOU USE BLACKBOX 0.60.1 OR LATER)...
-
-version 0.3.2 --
-  - Weehee!!  Get along, little doggie!!  Or something....  Thanks to the
-    man, the myth, the legend, the zzzeek-meister, one of those irritating
-    little problems that I've never had enough interest in fixing has been
-    fixed!!  You know the one--where you're going merrily along through your
-    day, using bbkeys happily, when all of a sudden, things appear to have
-    just stopped working altogether.  And then you start cursing that
-    darned bbkeys author, and in general, have a horrid day thereafter.  Well
-    fear no more, little pilgrim--that "feature" has been hunted down and
-    wrestled to the ground, thanks to zzzeek (classic@io.com).  The 'feature'
-    was one that I was never worried about--since it followed blackbox's
-    'feature' that did exactly the same thing.  What thing is that?  Why,
-    I'm so glad you asked.  If you hadn't noticed before, if you have your
-    CapsLock, NumLock, or ShiftLock pressed (or any other funky modifier
-    key pressed), bbkeys stopped performing your key-grabs.
-
-    Well, anywho, I've rambled enough.  I'm going to have bbkeys by default
-    work with any modifiers now.  If you want bbkeys to work the way it does
-    now and stop grabbing keys when you have Caps/Num/ShiftLock pressed,
-    you'll have to change this line to True in your bbkeys config file
-    ($HOME/bbtools/bbkeys.bb, not ~/.bbkeysrc):
-
-    bbkeys.honorModifiers:        False
-
-
-version 0.3.1 --
-  - *sigh* My next release is going to not even have a UI.  =:)  Okay, for
-    those in this world who run blackbox on a 12" monitor (*cough* talmage
-    *cough*), or refuse to upgrade because -miniMe is toooooo big (*cough*
-    luqin *cough), =:)  bbkeys now has a new run-time switch "-tinyMe" which
-    will cause bbkeys to draw itself at the old 0.2.7 size.
-
-
-version 0.3.0 --
-  - buglet fix in MakeWindow so we don't XMapWindow every time (thanks nyz!)
-  - alrighty then, the -miniMe controversy continues.  kns mentioned an idea
-    for a new miniMe look and I like it.  _I_ may even use -miniMe now.
-    =:)  Here's the thing, I really don't care at all about -miniMe, since
-    I use him at full-size.  If somebody wants to code for this to be a
-    configurable option (bbkeys.keyhole.size or bbkeys.keyhole.width, etc.),
-    I'll be more than happy to look at it.
-
-
-version 0.2.8 --
-  - included new Image classes from the latest blackbox source so luqin's
-    and r00tv's styles work.  =:)  Oh, it'll help other people too, but
-    they pested me first.
-  - added Workspace9, 10, 11, and 12 to keygrabs and configurator
-
-
-version 0.2.7 --
-
-  - added MaximizeVertical and MaximizeHorizontal key-grabbability.  Don't
-    know why it didn't occur to me earlier.  =:)  nyz did all the hard work
-    4 releases ago.
-
-  - As of this release of bbkeys, I'm no longer going to support the gtk
-    configurator (unless I get a WHOLE lot of of input to the contrary).
-    I've re-written the gui configurator in qt (thanks to luqin for the
-    beginnings of this) and let me tell you, it is a WHOLE lot easier to
-    work with qt2 than gtk.  Much, much cleaner.  You doubt?
-
-          (gideon@judea)[bbkeysConfigGtk/src]-% wc -l *.{c,h}
-              538 bbkeysConfig.c
-              689 bbkeysConfigSig.c
-              158 support.c
-                7 bbkeysConfig.h
-              139 bbkeysConfigSig.h
-               57 support.h
-             1588 total
-
-          (gideon@judea)[bbkeys-0.2.7/bbkeysconf-1.1]-% wc -l *.{cc,hh}
-              593 gui.cc
-               24 main.cc
-               27 myapplication.cc
-               67 gui.hh
-               23 myapplication.hh
-              734 total
-
-    734 lines of code versus 1588 makes me a happy, happy SE.  =:)
-
-  - So, I'm pulling out the bbkeysConfigGtk directory from the bbkeys source
-    tarball and in its place is bbkeysconf.  I'll also be regulaly
-    posting rpms of both bbkeys and bbkeysconf as new releases rear their
-    ugly little heads, as well as one last RPM of bbkeysConfigGtk as well
-    as the tarball for bbkeysConfigGtk if anybody just HAS to have the gtk
-    version.  =:)
-
-  - As a result of this, the -no[gtk] for bbkeys will change to -no[qt].
-
-  - Slight buglet fix for bbkeys when he's in iconic mode to properly set
-    WM_ICON_NAME (Thanks to Mats Jonson for the bug-report.  =:) ) so bbkeys
-    shows up as bbkeys and not "Unnamed" in blackbox's Icon list.
-
-
-
-version 0.2.6 --
-  - Weehee!!!  Much bug-squashing release!!!
-  - added ability for bbkeys to minimize itself (right-click on bbkeys's
-    "close" button).  This should satisfy those of us who would like to not
-    see the beautiful little application I wrote and just use it.  *sniff*  =:)
-  - added "-iconic" switch, so bbkeys can be launched in minimized mode.
-    Again, *sniff*  Nobody likes my pretty window.  =:)
-  - fixed a few undocumented features...
-    -- bbkeys queued up all keystroke combos while external gooey configurator
-       was running and then did then all at once, really quick-like when you
-       came back from the configurator.  This tended to annoy my users.  =:)
-    -- bbkeys wasn't releasing grabbed keys before it launched the
-       configurator, so the configurator wasn't receiving any of the previously
-       grabbed keys. XSync(False) does wonders.  =:)
-  - updated bbkeysConfigGtk to allow configuration of ExecCommand directives.
-
-
-version 0.2.5 --
-  - erm.  forgot to write in this for a while. =:)
-  - took out timer implementation for ~/.bbkeysrc changing -- this should fix
-    the abnormally high CPU/MEM usage that bbkeys has shown -- and replaced it
-    with a virtual function call to CheckConfig out of BaseDisplay.cc.
-  - thought about changing the configurators, then changed my mind.  =:\
-
-
-version 0.2.3 --
-  - fix for bbkeys not pickup up anything for its frame color/texture
-    (thanks to luqin for the patch. =:) )
-
-
-version 0.2.2 --
-  - added ExecCommand feature so users can define programs to execute with
-    a given keystroke. Syntax is as follows:
-
-    KeyToGrab(F1), WithModifier(Mod1), WithAction(ExecCommand), DoThis(PROGRAM)
-
-    where PROGRAM is whatever you want to launch.  PROGRAM must be in your PATH
-    if it is not given with a path. (duh) =:)
-
-  - improved the logic (hopefully) surrounding resource loading.  Took
-    loadKeygrabs out of reconfigure() (which gets hit on every Expose event)
-    which should improve bbkeys's performance.  Also, apparently I've never
-    put in the code that I thought I did which checks ~/.bbkeysrc for changes.
-    That should work correctly now.
-
-
-
-version 0.2.1 --
-  - fixed several style issues.
-
-  - fixed the bug with having two "-n" switches. =:)  now, "-no[gtk]" is the
-    way to tell bbkeys to launch the xterm-based conflagurator
-
-  - re-coded bbkeys' internals (made them much more intuitive and easy to read).
-    bbkeys uses 3 basic objects: Window's, GEOM(etry objects), and Pixmap
-    objects. The Windows are physical units of space that X communicates with.
-    The GEOM objects are pretty self-explanatory, x, y, height, width.  And
-    the Pixmap objects contain the image that is mapped onto the window itself.
-    It goes like this:
-    ----------------------------------------------------------------------------
-    Windows:      GEOMs:         Pixmaps:           resource->objects and what
-                                                resources bbkeys uses for them
-    ----------------------------------------------------------------------------
-    win_title     geom_title     pix_title             label.texture
-                                                          window.label.focus
-    win_back      geom_back      pix_back              frame.texture
-                                                          window.title.focus
-    win_closeBtn  geom_closeBtn  pix_closeBtn          button.texture
-                                                          window.button.focus
-    win_configBtn geom_configBtn pix_configBtn         button.texture
-                                                          window.button.focus
-                                 pix_pressedBtn        button.texture_pressed
-                                                          window.button.pressed
-    ----------------------------------------------------------------------------
-
-  - fixed style files in data/ (silly me, I forgot to change them over from
-    bbpager's style files. )  Extra-special thanks to sourceo for pointing
-    this little bit to me and reminding me to put it in the ChangeLog =:)
-
-
-version 0.2.0 --
-  - got rid of all the old bbws code base from bbkeys and ported the whole
-    darned thing to kns's bbpager-0.2.5-alpha code base.
-
-
-version 0.1.4 --
-
-  - added "-mini-Me" switch =:) for those people *cough* sissies *cough* who
-    complain about bbkeys' size.  So size DOES matter.... erm, anyway, if
-    launched with the "-mini-Me" option, bbkeys will draw a cute little window
-    10x10 in size (or whatever I feel like, dangit) containing just the button
-    to launch the configurator, instead of the regular, full-blown window.  No
-    exit button for YOU!  =:)  Let me know if this doesn't suit you....
-
-  - improved documentation of sorts.  Ugly habit, this documentation stuff. If
-    you look in README, you'll now see all of the commands that bbkeys will
-    think about obeying. If it feels like it.  And if you ask really, really
-    nicely.
+commit 3b00c3d02f8e0ed44d97c7c759a2bcd139df7499
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Sep 15 10:55:38 2004 +0000
+
+    adding ability to override menu justification
+
+ doc/bbkeysrc.5        | 8 ++++++--
+ src/ScreenHandler.cpp | 8 ++++++++
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+commit 481dbc9f74b85b1375bf5588beee23113e14ce72
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Sep 15 03:23:26 2004 +0000
+
+    - bumping to version 0.90beta3 in preparation for the next public release
+    - adding configuration option for changing the cycle-menu title
+    - this also has the effect of turning it off altogether if the string value
+      parameter passed is empty
+
+ configure.ac           | 2 +-
+ doc/bbkeysrc.5         | 9 ++++++---
+ src/WindowlistMenu.cpp | 6 ++++--
+ src/WindowlistMenu.h   | 1 +
+ 4 files changed, 12 insertions(+), 6 deletions(-)
+
+commit 1758a18a63e93334a02de1bfa208eb986e7705d1
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Sep 4 00:52:08 2004 +0000
+
+    stupid debug line:
+
+ src/KeyClient.cpp | 2 --
+ 1 file changed, 2 deletions(-)
+
+commit c19f44c4b95c6402a88f98dab668da706550ab3e
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Sep 4 00:38:18 2004 +0000
+
+    logging reconfigure requests always now
+
+ src/KeyClient.cpp | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+commit 6972f406dcc2b310582f5725a9ed9a1d613c345c
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Sep 4 00:36:06 2004 +0000
+
+    - fixing raiseWhileCycling....  now, it works whether we are using the
+      cycling menu or not
+
+ src/ScreenHandler.cpp  | 24 ++++++++++++++----------
+ src/WindowlistMenu.cpp | 10 +++++-----
+ 2 files changed, 19 insertions(+), 15 deletions(-)
+
+commit 300eaaeb8c1d3dd7f56c77965c65b0bcf3f95f00
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Sep 3 23:30:32 2004 +0000
+
+    - adding fixes proposed by Jeremy Reed (thanks!!!)
+    - changing docdir from $(prefix)/doc/bbkeys to $(datadir)/doc/bbkeys
+    - cleaning up README--removing old things and adding new
+    - adding documentation to manpage, yay!
+    - defaulting menucycle position to +20+20, since centering doesn't work
+      anyway
+
+ Makefile.am            | 2 +-
+ README                 | 9 ++++++---
+ doc/bbkeysrc.5         | 8 ++++----
+ src/WindowlistMenu.cpp | 4 ++--
+ 4 files changed, 13 insertions(+), 10 deletions(-)
+
+commit 69e6dea1887c798880b10c705577b1990ea3a68d
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Sep 3 21:26:50 2004 +0000
+
+    bumping version number for release
+
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 77c33d425a278263fe397e1cf862d03fe933c5a1
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Sep 3 21:15:31 2004 +0000
+
+    adding nyz's patch for unicode text, w00t!
+
+ src/ScreenHandler.cpp  | 14 ++++++--------
+ src/ScreenHandler.h    |  4 ++--
+ src/WindowlistMenu.cpp | 18 +++++++++++-------
+ src/window.cc          | 14 +++++++++-----
+ src/window.hh          |  4 ++--
+ 5 files changed, 30 insertions(+), 24 deletions(-)
+
+commit 52353579149363071b53f81b7a04db6516d2d971
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Sep 3 01:22:50 2004 +0000
+
+    adding program name to all logging
+
+ src/Config.cpp         |  2 +-
+ src/Config.h           |  1 +
+ src/FileTokenizer.cpp  |  2 +-
+ src/FileTokenizer.h    |  1 +
+ src/KeyClient.cpp      | 24 ++++++++++++------------
+ src/ScreenHandler.cpp  | 40 ++++++++++++++++++++--------------------
+ src/WindowlistMenu.cpp |  8 ++++----
+ src/actions.cc         |  2 +-
+ src/actions.hh         |  1 +
+ src/keytree.cc         |  4 ++--
+ src/window.cc          |  6 +++---
+ src/window.hh          |  1 +
+ 12 files changed, 48 insertions(+), 44 deletions(-)
+
+commit 9bdf14dcc78c1364a6547aab0acba8b50fae0f19
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Sep 1 20:57:43 2004 +0000
+
+    changing version number to be slackware-compatible
+
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit c94da6663b0ed59720db110a6f89aeaf17528acd
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Aug 31 02:42:17 2004 +0000
+
+    - bumping version up to 0.90-beta2-pre
+    - new screen method to set focus on a window
+    - window->isSticky() method
+
+ configure.ac           |  2 +-
+ src/ScreenHandler.cpp  | 11 +++++++++++
+ src/ScreenHandler.h    |  1 +
+ src/WindowlistMenu.cpp |  6 +++---
+ src/window.hh          |  1 +
+ 5 files changed, 17 insertions(+), 4 deletions(-)
+
+commit baeac83c7da3987dc904e5e3425e2d09d08e14f9
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Aug 31 01:36:46 2004 +0000
+
+    cleanups with all workspaces windowlist menu
+
+ src/ScreenHandler.cpp  | 17 +++++++++++++++--
+ src/WindowlistMenu.cpp |  3 ++-
+ 2 files changed, 17 insertions(+), 3 deletions(-)
+
+commit fb7527101db64c62d0a6ff39d93bb1100869fbf4
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Aug 30 21:52:54 2004 +0000
+
+    adding display of desktop name in window list if we're cycling windows
+    outside of just the current desktop
+
+ src/KeyClient.cpp      |  2 +-
+ src/ScreenHandler.cpp  | 25 +++++++++++++++++++++++++
+ src/ScreenHandler.h    |  6 +++++-
+ src/WindowlistMenu.cpp | 22 ++++++++++++++++++++--
+ src/WindowlistMenu.h   |  1 +
+ src/window.cc          |  1 +
+ 6 files changed, 53 insertions(+), 4 deletions(-)
+
+commit fa3ed3347f7f70e378fe029cb56bb75b483a0cfe
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Aug 28 04:19:47 2004 +0000
+
+    version bump
+
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit dbeaf18366ce1d49a5818db717a92603f24be748
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Aug 28 04:19:24 2004 +0000
+
+    updating copyright
+
+ LICENSE | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 42d797140623fad268f3d9b7aaddaac3e6591f31
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Aug 28 04:18:43 2004 +0000
+
+    shipping with new default file now so we don't look ugly out of the box
+
+ data/Makefile.am      |   2 +-
+ data/defaultStyle     | 144 ++++++++++++++++++++++++++++++++++++++++++++++
+ src/Makefile.am       |  12 ++--
+ src/ScreenHandler.cpp |   2 +-
+ 4 files changed, 154 insertions(+), 6 deletions(-)
+
+commit bbdaf8d894d6073f603a11506dabd849447cd457
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Aug 28 04:18:15 2004 +0000
+
+    removing old c++builder file
+
+ bbkeys.cbx | 73 ----------------------------------------------------------
+ 1 file changed, 73 deletions(-)
+
+commit a1d29fbad9fef45ad94ac399faabe24d49c97f27
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Aug 28 03:44:44 2004 +0000
+
+    updated rc-file
+
+ data/bbkeysrc | 63 +++++++++++++++++++++++++++----------------------------
+ 1 file changed, 31 insertions(+), 32 deletions(-)
+
+commit ee88d2ac3a4a7cdfe2ff7a1150c188e4936c6dbf
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Aug 28 03:31:48 2004 +0000
+
+    updating man pages for new version of bbkeys
+
+ doc/bbkeys.1.in | 108 +++++--------
+ doc/bbkeysrc.5  | 433 +++++++++++++++++++++++++++++++++++++---------------
+ 2 files changed, 348 insertions(+), 193 deletions(-)
+
+commit 332a88efbc8cf61801458badbb286deec6a75d62
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Jul 27 23:51:33 2004 +0000
+
+    i18n changes
+
+ src/KeyClient.h | 1 -
+ src/main.cpp    | 3 ---
+ 2 files changed, 4 deletions(-)
+
+commit 33754047d7186fd76c3905f09213fbd7fb88f4b4
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Apr 22 03:01:21 2004 +0000
+
+    applying a variation of patch 939710--numlock patch
+
+ src/WindowlistMenu.cpp | 6 ++++++
+ src/WindowlistMenu.h   | 2 ++
+ 2 files changed, 8 insertions(+)
+
+commit b79088138778f2cc3c73b6d6b7a5da8298bd657b
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Mar 13 19:01:55 2004 +0000
+
+    not cycling to windows that request to not be in skipped in a pager.
+    the problem was that we were trying to cycle to desktop-type windows,
+    which isn't something that we should be doing, really.
+
+ src/ScreenHandler.cpp | 2 ++
+ src/window.cc         | 4 +++-
+ src/window.hh         | 2 ++
+ 3 files changed, 7 insertions(+), 1 deletion(-)
+
+commit e414594b9c8dbe49530dcd3d79c3a07ea6cfd98f
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Mar 13 18:17:14 2004 +0000
+
+    fixing incorrect comment
+
+ src/ScreenHandler.cpp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+commit 4772db6125e0d96f867fe94708bfb9456937f75a
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Mar 1 04:39:37 2004 +0000
+
+    - popping window cycling menu if we only have one window
+
+ src/ScreenHandler.cpp | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
+
+commit 6c89d7053db563d4ef5dae70e6a2e8c94e67378b
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Feb 17 05:34:25 2004 +0000
+
+    adding auto-config-checker timer, woot
+
+ src/Config.cpp    |   4 ++
+ src/Config.h      |   3 +-
+ src/KeyClient.cpp | 145 ++++++++++++++++++++++++++++++++++++--------------
+ src/KeyClient.h   |  23 +++++---
+ src/main.cpp      |  12 ++---
+ 5 files changed, 133 insertions(+), 54 deletions(-)
+
+commit 0bb097b008aeee925cecc6070f421dde12f957be
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Feb 12 04:33:22 2004 +0000
+
+    fixing window-focus behavior at end of window cycling
+
+ src/WindowlistMenu.cpp | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+commit ad1cb37b5bbc570019ee54f93fec3c642985ce2b
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Feb 10 22:38:57 2004 +0000
+
+    removing debug statements
+
+ src/window.cc | 4 ----
+ 1 file changed, 4 deletions(-)
+
+commit f85cb16d6e37de55dc06d89f5a5820a81473a6bd
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Feb 8 19:45:43 2004 +0000
+
+    adding ellided text to menu popup when necessary
+
+ bbkeys.cbx             | 15 ++++++++++++++-
+ src/WindowlistMenu.cpp |  4 +++-
+ 2 files changed, 17 insertions(+), 2 deletions(-)
+
+commit 8895e1a5a166249e4ede722f90434a260480392c
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Jan 9 15:17:12 2004 +0000
+
+    fixing escape, up, down arrows handling
+
+ src/Config.cpp         |   8 +--
+ src/ScreenHandler.cpp  | 132 +++++++++++++++++++++++----------------------
+ src/WindowlistMenu.cpp |  93 +++++++++++++++++++-------------
+ src/WindowlistMenu.h   |   7 +--
+ 4 files changed, 133 insertions(+), 107 deletions(-)
+
+commit 5776ad392fbe71e65180d389a3527b0a08ce9eaa
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Jan 9 15:11:31 2004 +0000
+
+    adding c++ builder project file
+
+ bbkeys.cbx | 60 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+
+commit 0d0ad3678e9bb53b0a68cab7a49f4021c3541d5a
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Jan 8 03:21:59 2004 +0000
+
+    adding all other nav options to popup window
+
+ src/ScreenHandler.cpp | 77 +++++++++++++++++++++++------------------------
+ 1 file changed, 37 insertions(+), 40 deletions(-)
+
+commit 147bc0b39b0992474870305da16886274160b6a2
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Jan 8 03:21:41 2004 +0000
+
+    cleaning up and fixing horiz/vert workspace movements
+
+ src/WindowlistMenu.cpp | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+commit 43d208f12dd9eac7d71f14fc85da98cd52b2476d
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Jan 6 15:51:47 2004 +0000
+
+    fixing signal handling
+
+ src/KeyClient.cpp | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
+
+commit b87fc26b1112082dd39ba4f118b4b8670b738491
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Jan 6 05:01:05 2004 +0000
+
+    centering popup by default
+
+ src/WindowlistMenu.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit cb26e598ac4c1bad3c248a46b2b09bc4726a216a
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Jan 6 04:38:01 2004 +0000
+
+    small positioning fixes
+
+ src/KeyClient.cpp      |  2 +-
+ src/WindowlistMenu.cpp | 31 ++++++++++++++++++++-----------
+ src/WindowlistMenu.h   |  2 +-
+ 3 files changed, 22 insertions(+), 13 deletions(-)
+
+commit b86cf8fb009f2b951e35ef42ce157c002eaf410b
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Jan 6 02:15:55 2004 +0000
+
+    working menu, yay!!
+
+ src/ScreenHandler.cpp  |  20 ++++++---
+ src/WindowlistMenu.cpp | 107 ++++++++++++++++++++++++++++++++++++++-------
+ src/WindowlistMenu.h   |  10 +++++
+ 3 files changed, 115 insertions(+), 22 deletions(-)
+
+commit 88e1b450bb922674153d7fdf4f8728c6d3fb0f73
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Jan 5 07:28:50 2004 +0000
+
+    bringing window list menu in, slowly
+
+ src/KeyClient.h        |   2 +
+ src/ScreenHandler.cpp  | 173 +++++++++++++++++++++++++++++++--------------
+ src/ScreenHandler.h    |  17 +++--
+ src/WindowlistMenu.cpp |  88 +++++++++++++++++++++--
+ src/WindowlistMenu.h   |  28 +++++++-
+ 5 files changed, 241 insertions(+), 67 deletions(-)
+
+commit 68e6dc21ea51dad62aebd72a738f9113772d2b77
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Nov 28 01:01:42 2003 +0000
+
+    auto-generated file buh bye
+
+ aclocal.m4 | 958 ---------------------------------------------------------
+ 1 file changed, 958 deletions(-)
+
+commit 9c078205ad8fe5b45c524e59bf4b7a3182ae373a
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Nov 27 04:20:19 2003 +0000
+
+    - fixing leftWorkspace bug
+    - cleaning up files--auto-generated ones shouldn't be in CVS
+    - putting kdevelop project file in
+
+ Makefile.in                      |  563 ---
+ aclocal.m4                       |  188 +-
+ bbkeys.kdevprj                   |  188 +-
+ bbkeys/.cvsignore                |    4 -
+ bbkeys/templates/.cvsignore      |    4 -
+ bbkeys/templates/cpp_template    |   16 -
+ bbkeys/templates/header_template |   16 -
+ bootstrap                        |   16 +
+ configure                        | 7431 ----------------------------------
+ configure.ac                     |   80 +-
+ data/Makefile.in                 |  290 --
+ doc/Makefile.in                  |  370 --
+ src/Makefile.am                  |    2 +-
+ src/Makefile.in                  |  474 ---
+ src/ScreenHandler.cpp            |    2 +-
+ 15 files changed, 358 insertions(+), 9286 deletions(-)
+
+commit 0f1b74850f75b0e6a4f4cfe7357a2b8a49ac564a
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Nov 26 18:10:55 2003 +0000
+
+    Initial revision
+
+ .cvsignore                       |  4 ++
+ bbkeys.kdevprj                   | 84 ++++++++++++++++++++++++++++++++++++
+ bbkeys/.cvsignore                |  4 ++
+ bbkeys/templates/.cvsignore      |  4 ++
+ bbkeys/templates/cpp_template    | 16 +++++++
+ bbkeys/templates/header_template | 16 +++++++
+ 6 files changed, 128 insertions(+)
+
+commit 71808b5ddbb7bcec264ad546c0521088d2e593ba
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Nov 21 05:09:10 2003 +0000
+
+    compile fixes for newest blackbox lib
+
+ src/main.cpp  | 2 +-
+ src/window.hh | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+commit f3b09d4ec03bbe406f4e0d055ee582fcef0ae097
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Nov 13 15:24:32 2003 +0000
+
+    intel compiler fix for nyz
+
+ src/Netclient.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit bfc186f7d2c8b88f0c477f599528e65519c212b3
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Jul 11 00:13:20 2003 +0000
+
+    fixing SIGCHLD problem
+
+ src/KeyClient.cpp     | 9 ++++++++-
+ src/ScreenHandler.cpp | 2 +-
+ src/window.cc         | 8 --------
+ 3 files changed, 9 insertions(+), 10 deletions(-)
+
+commit 4ddac29b0eca005db833c6ce8205ed7a5524ac0e
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Jul 7 05:34:51 2003 +0000
+
+    passing move increments now, not position. also bringing in code from
+    xwininfo for figuring out correct geometry
+
+ src/ScreenHandler.cpp |  12 +--
+ src/window.cc         | 220 +++++++++++++++++++++-------------------------
+ 2 files changed, 102 insertions(+), 130 deletions(-)
+
+commit 170dc7bdef71f3b90f3c5973f58e228a887eab9b
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Jul 5 01:43:19 2003 +0000
+
+    fixing support for wmaker
+
+ src/ScreenHandler.cpp | 55 ++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 47 insertions(+), 8 deletions(-)
+
+commit acf080c1ae969dbfae902d5bf7f63c28e40bb1e8
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Jul 4 18:40:26 2003 +0000
+
+    - yay!!  hopefully squashed the SIGSEGV bug in ScreenHandler
+    - implemented the new libbt signal handler (still doesn't do anything
+      useful, but at least doesn't die on HUP now)
+
+ src/KeyClient.cpp     |  4 +--
+ src/KeyClient.h       |  2 +-
+ src/ScreenHandler.cpp | 90 +++++++++++++++++++----------------------------
+ 3 files changed, 40 insertions(+), 56 deletions(-)
+
+commit 755f476e6df7d9c00254a5578bb0de34a4ef7eae
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Jul 4 18:09:30 2003 +0000
+
+    blargh, syncpoint before tearing updateClientList apart
+
+ src/ScreenHandler.cpp | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
+
+commit 28446d2d01c52751f852aed23e1122f07f889e03
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Jul 4 06:44:43 2003 +0000
+
+    window moving and updatedimensions cleanups
+
+ src/window.cc | 6 +++++-
+ src/window.hh | 1 +
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+commit 48c17e5c1ec38198921f996e75988ae9bfe4f191
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Jul 4 05:51:36 2003 +0000
+
+    okay, this now works with sawfish and ob2.  syncing and trying another
+    attack
+
+ src/Netclient.cpp | 65 ++++++++++++++++++++++++++++++++++++++-------
+ src/Netclient.h   | 11 +++++++-
+ src/window.cc     | 73 ++++++++++++++++++++++++++++++++++++++++-----------
+ 3 files changed, 122 insertions(+), 27 deletions(-)
+
+commit a7494206533e6ed82d7eda3dd287eb09e2cbb841
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Jun 27 00:11:37 2003 +0000
+
+    whoops -- chained grabs were borked, but now they're fixed
+
+ src/ScreenHandler.cpp | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+commit e8e20427b8c944f6bca11009f49c04cfcb8a780f
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Jun 12 18:40:53 2003 +0000
+
+    waiting longer
+
+ src/ScreenHandler.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit cd5e49284cb416dfadfa8e7d42e1ed091ea0dd3c
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jun 1 00:48:47 2003 +0000
+
+    toggleDecor working now
+
+ src/window.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit af9f4b9223370a4c1840a54fc945aa026c20c23c
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue May 6 14:31:25 2003 +0000
+
+    the beginnings of toggleDecorations.  half-broke currently and no time
+    to fix it...
+
+ src/Netclient.cpp | 15 +++++++++++++++
+ src/Netclient.h   |  8 ++++++++
+ src/window.cc     | 24 ++++++++++++++++++++++--
+ 3 files changed, 45 insertions(+), 2 deletions(-)
+
+commit 607e88a7e98d4019e9d1db5ab298814cd43b5e99
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Mar 14 13:02:23 2003 +0000
+
+    trying to squash bug in updateClientList
+
+ src/ScreenHandler.cpp | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+commit 3a7277dea8a672850ea0323de975994df7465316
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Feb 8 17:12:01 2003 +0000
+
+    setting multi_head to true by default for bt::Application
+
+ src/KeyClient.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit a9c05e518b650d978adecbefe3057b288410205d
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jan 19 19:49:20 2003 +0000
+
+    now looking for lib and headers separately
+
+ configure    | 38 ++++++++++++++++++++++++++++++++++++--
+ configure.ac | 33 +++++++++++++++++++++++++++++----
+ 2 files changed, 65 insertions(+), 6 deletions(-)
+
+commit 41b303e04f07faddf0a333784cb61731aa64b3e1
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jan 19 19:03:19 2003 +0000
+
+    apparently we need this too
+
+ depcomp | 423 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 423 insertions(+)
+
+commit 26d0d900429012f4cae555bafefb6d6f413c0d02
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jan 19 18:57:58 2003 +0000
+
+    importing bbkeys-ng into bbkeys module
+
+ AUTHORS                |   34 +
+ BUGS                   |    2 +
+ ChangeLog              |  559 ++++
+ INSTALL                |    6 +
+ LICENSE                |   19 +
+ Makefile.am            |   18 +
+ Makefile.in            |  563 ++++
+ NEWS                   |  134 +
+ README                 |  118 +
+ TODO                   |    6 +
+ aclocal.m4             |  850 +++++
+ config.h.in            |  152 +
+ configure              | 7397 ++++++++++++++++++++++++++++++++++++++++++++
+ configure.ac           |  186 ++
+ data/Makefile.am       |    7 +
+ data/Makefile.in       |  290 ++
+ data/bbkeysrc          |   74 +
+ debian/changelog       |   15 +
+ debian/control         |   16 +
+ debian/copyright       |   13 +
+ debian/docs            |    7 +
+ debian/menu            |    2 +
+ debian/rules           |   79 +
+ debian/watch           |    5 +
+ doc/Makefile.am        |    6 +
+ doc/Makefile.in        |  370 +++
+ doc/bbkeys.1.in        |  105 +
+ doc/bbkeysrc.5         |  135 +
+ install-sh             |  251 ++
+ missing                |  336 ++
+ mkinstalldirs          |   40 +
+ src/Config.cpp         |  115 +
+ src/Config.h           |   52 +
+ src/ConfigOptions.h    |   46 +
+ src/FileTokenizer.cpp  |  152 +
+ src/FileTokenizer.h    |   69 +
+ src/KeyClient.cpp      |  391 +++
+ src/KeyClient.h        |  100 +
+ src/KeyGrabber.cpp     |   98 +
+ src/KeyGrabber.h       |   50 +
+ src/LocalUtil.h        |   86 +
+ src/Makefile.am        |   36 +
+ src/Makefile.in        |  474 +++
+ src/Netclient.cpp      |  276 ++
+ src/Netclient.h        |  115 +
+ src/ScreenHandler.cpp  |  820 +++++
+ src/ScreenHandler.h    |  137 +
+ src/WindowlistMenu.cpp |   34 +
+ src/WindowlistMenu.h   |   37 +
+ src/actions.cc         |  124 +
+ src/actions.hh         |  132 +
+ src/keytree.cc         |  249 ++
+ src/keytree.hh         |   81 +
+ src/main.cpp           |  110 +
+ src/main.h             |   34 +
+ src/window.cc          |  458 +++
+ src/window.hh          |  152 +
+ stamp-h.in             |    0
+ version.h.in           |    2 +
+ 59 files changed, 16225 insertions(+)
+
+commit efddbe251b7e8329bb7449d5551e2cf1a56cfaf2
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jan 19 18:15:08 2003 +0000
+
+    trying this import again
+
+ LICENSE                |  19 --
+ configure.ac           | 186 ----------
+ data/bbkeysrc          |  74 ----
+ src/Config.cpp         | 115 -------
+ src/Config.h           |  52 ---
+ src/ConfigOptions.h    |  46 ---
+ src/FileTokenizer.cpp  | 152 ---------
+ src/FileTokenizer.h    |  69 ----
+ src/KeyClient.cpp      | 391 ---------------------
+ src/KeyClient.h        | 100 ------
+ src/KeyGrabber.cpp     |  98 ------
+ src/KeyGrabber.h       |  50 ---
+ src/LocalUtil.h        |  86 -----
+ src/Netclient.cpp      | 276 ---------------
+ src/Netclient.h        | 115 -------
+ src/ScreenHandler.cpp  | 820 ---------------------------------------------
+ src/ScreenHandler.h    | 137 --------
+ src/WindowlistMenu.cpp |  34 --
+ src/WindowlistMenu.h   |  37 --
+ src/actions.cc         | 124 -------
+ src/actions.hh         | 132 --------
+ src/keytree.cc         | 249 --------------
+ src/keytree.hh         |  81 -----
+ src/main.cpp           | 110 ------
+ src/main.h             |  34 --
+ src/window.cc          | 458 -------------------------
+ src/window.hh          | 152 ---------
+ 27 files changed, 4197 deletions(-)
+
+commit a28bead76baf1358685c6e85ff8656e30b11db2a
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jan 19 18:03:31 2003 +0000
+
+    Initial revision
+
+ LICENSE                |  19 ++
+ configure.ac           | 186 ++++++++++
+ data/bbkeysrc          |  74 ++++
+ src/Config.cpp         | 115 +++++++
+ src/Config.h           |  52 +++
+ src/ConfigOptions.h    |  46 +++
+ src/FileTokenizer.cpp  | 152 +++++++++
+ src/FileTokenizer.h    |  69 ++++
+ src/KeyClient.cpp      | 391 +++++++++++++++++++++
+ src/KeyClient.h        | 100 ++++++
+ src/KeyGrabber.cpp     |  98 ++++++
+ src/KeyGrabber.h       |  50 +++
+ src/LocalUtil.h        |  86 +++++
+ src/Netclient.cpp      | 276 +++++++++++++++
+ src/Netclient.h        | 115 +++++++
+ src/ScreenHandler.cpp  | 820 +++++++++++++++++++++++++++++++++++++++++++++
+ src/ScreenHandler.h    | 137 ++++++++
+ src/WindowlistMenu.cpp |  34 ++
+ src/WindowlistMenu.h   |  37 ++
+ src/actions.cc         | 124 +++++++
+ src/actions.hh         | 132 ++++++++
+ src/keytree.cc         | 249 ++++++++++++++
+ src/keytree.hh         |  81 +++++
+ src/main.cpp           | 110 ++++++
+ src/main.h             |  34 ++
+ src/window.cc          | 458 +++++++++++++++++++++++++
+ src/window.hh          | 152 +++++++++
+ 27 files changed, 4197 insertions(+)
+
+commit 896efa7be158ea747740679e903bc41ab49218a5
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jan 19 17:55:30 2003 +0000
+
+    removing all files to bring bbkeys-ng inline
+
+ AUTHORS               |   17 -
+ BUGS                  |    2 -
+ COPYING               |  340 ----
+ ChangeLog             |  556 -----
+ INSTALL               |   37 -
+ Makefile.am           |   22 -
+ Makefile.in           |  405 ----
+ NEWS                  |   64 -
+ README                |   99 -
+ README.bbtools        |   23 -
+ TODO                  |    5 -
+ aclocal.m4            |  190 --
+ bootstrap             |   14 -
+ c/Makefile            |   21 -
+ c/bbkeys.c            |  151 --
+ config.guess          | 1321 ------------
+ config.h.in           |  131 --
+ config.sub            | 1443 -------------
+ configure             | 3416 -------------------------------
+ configure.in          |  160 --
+ data/Makefile.am      |    8 -
+ data/Makefile.in      |  207 --
+ data/bbkeys.bb        |   57 -
+ data/bbkeys.nobb      |   54 -
+ debian/changelog      |   15 -
+ debian/control        |   17 -
+ debian/copyright      |   15 -
+ debian/docs           |    4 -
+ debian/menu           |    2 -
+ debian/rules          |   79 -
+ debian/watch          |    5 -
+ doc/Makefile.am       |    6 -
+ doc/Makefile.in       |  263 ---
+ doc/bbkeys.1.in       |  105 -
+ doc/bbkeys.bb.5       |   51 -
+ doc/bbkeysrc.5        |  135 --
+ install-sh            |  250 ---
+ ltmain.sh             | 4982 ---------------------------------------------
+ missing               |  188 --
+ mkinstalldirs         |   40 -
+ redhat/Makefile.am    |   13 -
+ redhat/Makefile.in    |  190 --
+ redhat/bbkeys.spec.in |   76 -
+ src/BaseDisplay.cc    |  536 -----
+ src/BaseDisplay.hh    |  345 ----
+ src/Basemenu.cc       |  985 ---------
+ src/Basemenu.hh       |  197 --
+ src/Baseresource.cc   |  433 ----
+ src/Baseresource.hh   |  105 -
+ src/Basewindow.cc     |  115 --
+ src/Basewindow.hh     |  123 --
+ src/Image.cc          | 2473 ----------------------
+ src/Image.hh          |  247 ---
+ src/LinkedList.cc     |  356 ----
+ src/LinkedList.hh     |  133 --
+ src/Makefile.am       |   23 -
+ src/Makefile.in       |  324 ---
+ src/NETInterface.cc   |   80 -
+ src/NETInterface.hh   |   61 -
+ src/Timer.cc          |   84 -
+ src/Timer.hh          |   85 -
+ src/bbkeys.cc         | 2377 ---------------------
+ src/bbkeys.hh         |  227 ---
+ src/bbkeysconf.pl.in  |  328 ---
+ src/blackboxstyle.hh  |   76 -
+ src/grab_defs.hh      |   82 -
+ src/main.cc           |  154 --
+ src/main.hh           |   41 -
+ src/resource.cc       |  593 ------
+ src/resource.hh       |  160 --
+ src/stackmenu.cc      |  236 ---
+ src/stackmenu.hh      |   54 -
+ src/wminterface.cc    |  327 ---
+ src/wminterface.hh    |   61 -
+ stamp-h.in            |    1 -
+ version.h.in          |    2 -
+ 76 files changed, 26603 deletions(-)
+
+commit 0b98c104c3e1aa2eb40329d3033d45c95f1dcab7
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jan 19 17:49:33 2003 +0000
+
+    last bit of fiddling before removing everything for bbkeys-ng
+
+ src/bbkeys.cc      | 3676 ++++++++++++++++++++++++------------------------
+ src/stackmenu.cc   |  298 ++--
+ src/wminterface.cc |  446 +++---
+ 3 files changed, 2210 insertions(+), 2210 deletions(-)
+
+commit 8336f99292e647bca9342ecca0f684e50ce61114
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Oct 15 19:23:16 2002 +0000
+
+    fixing parse error in execcommand
+
+ ChangeLog     | 4 ++++
+ src/bbkeys.cc | 4 ++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+commit 09743ae712ec47d1b6766e537a8c8b53d37c3faf
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Oct 8 19:38:26 2002 +0000
+
+    fixing mac os/x compile issue
+
+ ChangeLog    | 3 +++
+ configure    | 4 ++--
+ configure.in | 2 +-
+ 3 files changed, 6 insertions(+), 3 deletions(-)
+
+commit d797bdc3452321db1addc29e996d4c12e43311b1
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Oct 8 02:06:40 2002 +0000
+
+    adding fix for solaris compilation
+
+ ChangeLog           |   4 +
+ aclocal.m4          |  52 ++++++++--
+ bootstrap           |  14 +++
+ configure           | 263 ++++++++++++++++++++++++------------------------
+ configure.in        |   2 +-
+ data/Makefile.in    |   2 +-
+ doc/Makefile.in     |   2 +-
+ redhat/Makefile.in  |   2 +-
+ src/BaseDisplay.cc  |   4 +-
+ src/BaseDisplay.hh  |   4 +-
+ src/Basemenu.hh     |   4 +-
+ src/Baseresource.hh |   4 +-
+ src/Basewindow.hh   |   4 +-
+ src/Image.hh        |   4 +-
+ src/Makefile.in     |   2 +-
+ src/NETInterface.hh |   4 +-
+ src/bbkeys.cc       |   4 +-
+ src/bbkeys.hh       |   4 +-
+ src/stackmenu.cc    |   4 +-
+ 19 files changed, 226 insertions(+), 157 deletions(-)
+
+commit e28e42cbf05aa34a7f47c543adba6f87e4703b54
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Aug 29 17:07:44 2002 +0000
+
+    fixing bug redhat build bug
+
+ ChangeLog          |  9 ++++++---
+ Makefile.am        |  6 +++++-
+ Makefile.in        | 17 +++++++++++------
+ config.h.in        |  7 +++++++
+ data/Makefile.in   |  4 ++--
+ doc/Makefile.in    |  4 ++--
+ redhat/Makefile.in |  4 ++--
+ src/Makefile.in    |  6 +++---
+ stamp-h.in         |  1 +
+ 9 files changed, 39 insertions(+), 19 deletions(-)
+
+commit 5b877763c10d4f0f98bcb9082464d2b08351ca0f
+Author: eckzor <eckzor>
+Date:   Sat Jul 20 08:25:40 2002 +0000
+
+    remove some debugging printfs
+
+ src/bbkeys.cc | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
+
+commit e66f70fd974771d5101d0f7c9985e756238cdb25
+Author: eckzor <eckzor>
+Date:   Fri Jul 19 06:45:25 2002 +0000
+
+    proper window nudging at last.
+
+ src/bbkeys.cc | 120 ++++++++++++++++++++++++++++++++++++++++++++++++++----
+ src/bbkeys.hh |   3 +-
+ 2 files changed, 114 insertions(+), 9 deletions(-)
+
+commit 4769b51e53a59bd11d1499119404118c0208ae19
+Author: eckzor <eckzor>
+Date:   Wed Jul 10 14:04:29 2002 +0000
+
+    possible fix for the mouse-over-the-menu focus problem
+
+ src/stackmenu.cc | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+commit c8c9272d15563cee87d7323a1a1f84f1f2da0c8d
+Author: eckzor <eckzor>
+Date:   Wed Jul 10 13:57:34 2002 +0000
+
+    back out changes to window nudging. they are no longer required.
+
+ ChangeLog     |   4 ---
+ src/bbkeys.cc | 105 +++++-------------------------------------------------
+ 2 files changed, 8 insertions(+), 101 deletions(-)
+
+commit 8546916e88b0c5a28ed48554b3ce3130971be8e6
+Author: eckzor <eckzor>
+Date:   Thu Jun 27 21:07:16 2002 +0000
+
+    properly acquire window margins and positions, so that nudging works
+    properly
+
+ src/bbkeys.cc | 172 +++++++++++++++++++++++++++---------------------------
+ 1 file changed, 87 insertions(+), 85 deletions(-)
+
+commit e60b4cd9a31362eb93c62623f6e9cc16f0767c52
+Author: eckzor <eckzor>
+Date:   Thu Jun 27 20:45:50 2002 +0000
+
+    to get the window's decorations sizes, we have to compare to the window's
+    parent's parent
+
+ src/bbkeys.cc | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+commit d3080f84cc3aea9a7a48c109a9a08c7d3a2edad4
+Author: eckzor <eckzor>
+Date:   Thu Jun 27 20:35:09 2002 +0000
+
+    add some debug printfs
+
+ src/bbkeys.cc | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+commit fe9532f4cc03e57c67c95289e4ae7bc78fbbb8f4
+Author: eckzor <eckzor>
+Date:   Thu Jun 27 20:26:13 2002 +0000
+
+    change how the window's position is retreived for window nudging. The
+    old code relied ona  bug in blackbox, which has been fixed. So now we
+    have to do this right.
+
+ ChangeLog     |  4 +++
+ src/bbkeys.cc | 92 ++++++++++++++++++++++++++++++++++++++++++++++++++-----
+ 2 files changed, 89 insertions(+), 7 deletions(-)
+
+commit df6dbc937d094a39593c032c77f51668e2e6abee
+Author: eckzor <eckzor>
+Date:   Wed Jun 26 00:14:32 2002 +0000
+
+    fix a memory leak
+
+ ChangeLog     | 3 +++
+ src/bbkeys.cc | 8 ++++++--
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+
+commit e2683ee28776679fbf5c72eaff0727dab7002db2
+Author: eckzor <eckzor>
+Date:   Fri Jun 7 19:07:34 2002 +0000
+
+    remove the X server grabs. They actually can cause the server to lock
+    indefinately, and they are not needed.
+
+ ChangeLog          |  6 ++++++
+ src/BaseDisplay.cc | 20 +-------------------
+ src/BaseDisplay.hh |  6 ++----
+ src/Image.cc       | 13 +------------
+ 4 files changed, 10 insertions(+), 35 deletions(-)
+
+commit 89f67b39d3ace2983aa0c5945c5aa32a22cba050
+Author: eckzor <eckzor>
+Date:   Fri Jun 7 14:32:22 2002 +0000
+
+    add entry for change where window list is cleared when a blackbox startup
+    message is received.
+
+ ChangeLog | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+commit 6d30aa61ec40dd68dfd489d51a53f2214fb0ffb4
+Author: eckzor <eckzor>
+Date:   Fri Jun 7 06:12:26 2002 +0000
+
+    when we are notified that blackbox is starting, clear out our windows
+    list, in case we have any rogues from the last shutdown.
+
+ src/bbkeys.cc      | 15 +++++++++++----
+ src/bbkeys.hh      |  3 ++-
+ src/wminterface.cc | 10 +++++++++-
+ 3 files changed, 22 insertions(+), 6 deletions(-)
+
+commit febcaeaa211ab7cfa70a77d0318711398e7812f5
+Author: eckzor <eckzor>
+Date:   Fri Jun 7 05:59:48 2002 +0000
+
+    better linked list removal
+
+ src/bbkeys.cc | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+commit f5437f469fd1fa13a3c98e097f5f7bb5e8a8de70
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jun 2 14:20:03 2002 +0000
+
+    changing to 0.8.5 so our rpm friends can compile
+
+ configure          | 2 +-
+ configure.in       | 2 +-
+ data/Makefile.in   | 2 +-
+ doc/Makefile.in    | 2 +-
+ redhat/Makefile.in | 2 +-
+ src/Makefile.in    | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+commit a2bfc14b592b1d96d13f821e78c0a68a6087155b
+Author: eckzor <eckzor>
+Date:   Sun Jun 2 07:24:38 2002 +0000
+
+    update with changes ive made for the last few days
+
+ ChangeLog | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+commit 28b53211511980a2304641da1c872d43a67ccbc9
+Author: eckzor <eckzor>
+Date:   Fri May 31 19:54:24 2002 +0000
+
+    get rid of a syntax error
+
+ configure    | 10 +++++-----
+ configure.in |  6 +++---
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+commit 6bd94b1d0f9cb12bb9a8f9162c0eb71f53fcac24
+Author: eckzor <eckzor>
+Date:   Fri May 31 19:51:07 2002 +0000
+
+    even better solaris support? no more -g all teh time when compiling, etc
+
+ configure    | 365 ++++++++++++++++++++++++++++++-------------------------
+ configure.in |  67 ++++++----
+ 2 files changed, 239 insertions(+), 193 deletions(-)
+
+commit 955343af9e2174f895f3ff810919e958625469aa
+Author: eckzor <eckzor>
+Date:   Fri May 31 18:38:32 2002 +0000
+
+    even more correctly get the host!
+
+ configure    | 130 +++++++++++++++++++++++++++----------------------------
+ configure.in |   2 +-
+ 2 files changed, 66 insertions(+), 66 deletions(-)
+
+commit 0157e0de203cd586c793959f2ce1738c4095dbda
+Author: eckzor <eckzor>
+Date:   Fri May 31 18:31:09 2002 +0000
+
+    properly grab the host os
+
+ configure    | 248 +++++++++++++++++++++++++++----------------------------
+ configure.in |   4 +-
+ 2 files changed, 125 insertions(+), 127 deletions(-)
+
+commit c307afe4ca49f0b333520e2df95d4ced6f84eefb
+Author: eckzor <eckzor>
+Date:   Fri May 31 18:04:05 2002 +0000
+
+    reorder
+
+ configure.in | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
+
+commit 28754d428be9b15e2c1f5cc32aa5c6d9bfa396e7
+Author: eckzor <eckzor>
+Date:   Fri May 31 18:03:00 2002 +0000
+
+    readding files
+
+ config.guess | 1321 +++++++++++++++++++++++++++++++++++++++++++++++++
+ config.sub   | 1443 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 2764 insertions(+)
+
+commit 2a740989cdfa1107d711d50dee86eb2863d026aa
+Author: eckzor <eckzor>
+Date:   Fri May 31 18:01:55 2002 +0000
+
+    properly get the host system type
+
+ Makefile.in        |   7 +-
+ configure          | 295 +++++++++++++++++++++++++------------------------
+ configure.in       |  23 ++--
+ data/Makefile.in   |   2 +
+ doc/Makefile.in    |   2 +
+ redhat/Makefile.in |   2 +
+ src/Makefile.in    |   2 +
+ 7 files changed, 177 insertions(+), 156 deletions(-)
+
+commit 9b81ee3fcbd44a4f2793fe6fd71cd0949ad547ea
+Author: eckzor <eckzor>
+Date:   Fri May 31 17:41:55 2002 +0000
+
+    readding files
+
+ config.guess | 1321 -------------------------------------------------
+ config.sub   | 1443 ------------------------------------------------------
+ configure    |  110 ++---
+ 3 files changed, 55 insertions(+), 2819 deletions(-)
+
+commit c0e34663b5f8e5aaad25c4a021f179c205f6f4f9
+Author: eckzor <eckzor>
+Date:   Fri May 31 17:37:02 2002 +0000
+
+    these files are needed to get the system host type
+
+ config.guess | 250 ++++++++++++++++++++++++++++---------------------------
+ config.sub   | 150 ++++++++++++++++++++-------------
+ configure.in |   6 +-
+ 3 files changed, 221 insertions(+), 185 deletions(-)
+
+commit 5e1f27a8a220793ae32f45b1a9277c32587c4774
+Author: eckzor <eckzor>
+Date:   Fri May 31 17:29:59 2002 +0000
+
+    set up linker flags specifically for the solaris platform so that
+    we compile.
+
+ configure    | 210 +++++++++++++++++++++++++++++++------------------------
+ configure.in |  24 +++++--
+ 2 files changed, 138 insertions(+), 96 deletions(-)
+
+commit 0fe16abecfcf2974cc4e629366059d2599f3c254
+Author: eckzor <eckzor>
+Date:   Fri May 31 17:07:04 2002 +0000
+
+    more solaris fixes
+
+ src/BaseDisplay.cc  |  6 +++---
+ src/Baseresource.cc | 18 ++++++++++--------
+ src/Baseresource.hh |  4 ++--
+ src/bbkeys.cc       | 20 ++++++++++----------
+ 4 files changed, 25 insertions(+), 23 deletions(-)
+
+commit 2c3e60c4dbf041ff171dff2b6db4edfdd9694d5b
+Author: eckzor <eckzor>
+Date:   Thu May 30 20:47:45 2002 +0000
+
+    header dependancy cleanups
+
+ src/BaseDisplay.cc  | 49 ++++++++++++++++++++++++-------------------------
+ src/BaseDisplay.hh  |  8 ++++----
+ src/Basemenu.cc     |  4 ++--
+ src/Basemenu.hh     |  8 +++-----
+ src/Baseresource.cc | 15 +++++++++------
+ src/Baseresource.hh | 23 ++++++++++++++++++++---
+ src/Basewindow.cc   | 13 ++++++-------
+ src/Basewindow.hh   | 41 ++++++++++++++++++++++++++---------------
+ src/Image.cc        |  4 ++--
+ src/LinkedList.cc   |  7 +++----
+ src/NETInterface.cc |  3 ++-
+ src/NETInterface.hh |  3 +--
+ src/Timer.cc        |  4 ++--
+ src/Timer.hh        |  7 +++----
+ src/bbkeys.hh       |  9 +++++----
+ src/main.cc         | 10 +++++-----
+ src/resource.cc     |  6 +++---
+ src/resource.hh     |  6 ++----
+ src/stackmenu.cc    | 10 +++++-----
+ src/wminterface.cc  | 11 +++++------
+ 20 files changed, 132 insertions(+), 109 deletions(-)
+
+commit e3f57e84b88e2a947cb5f9118ae1150d54ab257e
+Author: eckzor <eckzor>
+Date:   Thu May 30 20:20:45 2002 +0000
+
+    some header dependancy cleanups
+
+ src/Basemenu.cc  |  8 ++++----
+ src/bbkeys.cc    |  5 ++++-
+ src/bbkeys.hh    | 10 ++++++----
+ src/stackmenu.cc |  4 +++-
+ src/stackmenu.hh |  5 +++--
+ 5 files changed, 20 insertions(+), 12 deletions(-)
+
+commit 8f956fe9d6d88bb9b2c877790511b1035017094d
+Author: eckzor <eckzor>
+Date:   Thu May 30 20:10:35 2002 +0000
+
+    regenerated files
+
+ Makefile.in        |   1 +
+ configure          | 180 ++++++++++++++++++++++++-------------------------
+ data/Makefile.in   |   1 +
+ doc/Makefile.in    |   1 +
+ redhat/Makefile.in |   1 +
+ src/Makefile.in    |   1 +
+ 6 files changed, 95 insertions(+), 90 deletions(-)
+
+commit 060ed184f9271c90ad6933caf71617b0e2e28b2b
+Author: eckzor <eckzor>
+Date:   Thu May 30 20:10:14 2002 +0000
+
+    oops, removed something
+
+ configure.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit f5500b2b932febf03cdde3f5cde64be14bb7fe9f
+Author: eckzor <eckzor>
+Date:   Thu May 30 20:08:40 2002 +0000
+
+    update auto* system to work on solaris now too?
+
+ Makefile.in        |   6 +-
+ config.h.in        |   7 -
+ configure          | 841 ++++++++++++++++++++++++-------------------------
+ configure.in       |  30 +-
+ data/Makefile.in   |   3 +-
+ doc/Makefile.in    |   3 +-
+ redhat/Makefile.in |   3 +-
+ src/Makefile.in    |   3 +-
+ stamp-h.in         |   1 -
+ 9 files changed, 440 insertions(+), 457 deletions(-)
+
+commit eaf64bd78a0b8f532966df0db0bca76e4b94df50
+Author: eckzor <eckzor>
+Date:   Thu May 30 19:23:29 2002 +0000
+
+    use putenv instead of setenv, solaris doesnt seem to have setenv.
+
+ configure.in | 4 ++--
+ src/main.cc  | 8 ++++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+commit ff24d0eb9611eed3995a0082b6f8f2520962ff18
+Author: eckzor <eckzor>
+Date:   Thu May 30 18:46:08 2002 +0000
+
+    include stdlib for the setenv call
+
+ src/main.cc | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+commit bf115da630dec8420860e04a4ceffa7bc57c676d
+Author: eckzor <eckzor>
+Date:   Thu May 30 18:26:25 2002 +0000
+
+    fix (hopefully) all the solaris compiling issues.
+
+ src/Basemenu.hh     |  6 +++---
+ src/Baseresource.cc | 21 ++++++++++++---------
+ src/Baseresource.hh | 13 +++++++------
+ src/Basewindow.cc   |  4 ++--
+ src/Image.cc        |  6 +++---
+ src/Image.hh        |  6 +++---
+ src/bbkeys.cc       | 27 ++++++++++++++-------------
+ src/bbkeys.hh       | 18 +++++++++---------
+ src/stackmenu.cc    | 11 +++++++++--
+ src/stackmenu.hh    |  3 ++-
+ src/wminterface.cc  |  4 ++--
+ 11 files changed, 66 insertions(+), 53 deletions(-)
+
+commit 7ee7ffdba823800000f3acc631771157648663b4
+Author: eckzor <eckzor>
+Date:   Thu May 30 07:38:58 2002 +0000
+
+    last focus_window cleanups, and some braces cleanups =)
+
+ src/bbkeys.cc | 50 ++++++++++++++++++++++----------------------------
+ 1 file changed, 22 insertions(+), 28 deletions(-)
+
+commit 2aa276aaaf489f96fddc25ce7de2bdec0ca07628
+Author: eckzor <eckzor>
+Date:   Thu May 30 07:33:13 2002 +0000
+
+    "Need to take out this next bit when nyz has 0.60.0 ready"
+
+    ... :P
+    i dont think more comment is required. This was letting people "Nudge"
+    the toolbar.
+
+ src/bbkeys.cc | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
+
+commit 8840172ff18bf1fce1a00450c29b61871ad6d385
+Author: eckzor <eckzor>
+Date:   Thu May 30 07:30:03 2002 +0000
+
+    make bbkeys stop trying to perform action
+
+ src/wminterface.cc | 12 ++----------
+ src/wminterface.hh | 24 +-----------------------
+ 2 files changed, 3 insertions(+), 33 deletions(-)
+
+commit e7210fc0b31a87d14d8c996b370e0e6a2f06b835
+Author: eckzor <eckzor>
+Date:   Mon May 27 20:01:18 2002 +0000
+
+    use vr's fix for setenv =)
+
+ src/bbkeys.cc | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+commit 7e65d16eb0f6233953d6a83bbf50bbc54ab748c5
+Author: eckzor <eckzor>
+Date:   Mon May 27 19:56:17 2002 +0000
+
+    using string instead of ostrstream. more portable.
+    set the DISPLAY env var when execing a command so they run on the right
+    display.
+
+ src/bbkeys.cc | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
+
+commit 7ed402efcae6754292b133d9a92cf81a7d8d66f4
+Author: eckzor <eckzor>
+Date:   Mon May 27 19:30:31 2002 +0000
+
+    set the DISPLAY environment variable for exec's commands when tehy are
+    run so they run on the correct head.
+
+ src/bbkeys.cc | 45 ++++++++++++++++++++++++++-------------------
+ src/bbkeys.hh |  6 +++---
+ 2 files changed, 29 insertions(+), 22 deletions(-)
+
+commit 5c2d06474ab70621a767f43d97c5fc6e4e4b356a
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon May 27 19:14:50 2002 +0000
+
+    fix for multi-head DISPLAY problem
+
+ ChangeLog   | 5 +++++
+ src/main.cc | 6 +++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+commit 6b29d6144d0d361c01ab79ca0c167e917337da29
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Apr 21 20:41:44 2002 +0000
+
+    adding original c code to project for posterity's sake
+
+ c/Makefile |  21 ++++++++
+ c/bbkeys.c | 151 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 172 insertions(+)
+
+commit d15a238569e31776da8c349635ba7604cbddcd7d
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Mar 12 19:33:03 2002 +0000
+
+    fix for configurator launch
+
+ ChangeLog     |  5 ++++
+ src/bbkeys.cc | 78 ++++++++++++++++++++++++-------------------------------
+ 2 files changed, 39 insertions(+), 44 deletions(-)
+
+commit 74b7ac06b2d2b94d7846762bb58def6a8f0639fe
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Mar 11 16:20:25 2002 +0000
+
+    fix for XUngrabKey for multi-head
+
+ ChangeLog     | 4 ++++
+ src/bbkeys.cc | 4 ++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+commit 87c5dc4ab2be12348167859ca7c12fdf74e97963
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Feb 21 02:05:29 2002 +0000
+
+    - changing MaxInstructions to 100 for cthulhain (crazy nut) =:)
+
+ ChangeLog     | 3 +++
+ src/bbkeys.hh | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+commit 4576d144bc8e4b3f4b40754680ad09dd954ea840
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Feb 5 13:19:57 2002 +0000
+
+    fixing bitwise rather than logical or bug
+
+ ChangeLog    | 5 +++++
+ configure    | 2 +-
+ configure.in | 2 +-
+ src/main.cc  | 4 ++--
+ 4 files changed, 9 insertions(+), 4 deletions(-)
+
+commit 4ea051767498a7aa7c88c1ea55020109b700de13
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Jan 19 05:52:55 2002 +0000
+
+    cleaning up ChangeLog
+
+ ChangeLog | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+commit 863127849f5becb7f98b71a9915532b1fec1b8fe
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Jan 18 13:50:46 2002 +0000
+
+    cross-compilation patch from Bo Thorsen
+
+ ChangeLog    | 2 ++
+ configure    | 4 ++--
+ configure.in | 4 ++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+
+commit 50563c6d90d73dabff707caf76ba8702ec34e0bd
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Jan 16 21:32:39 2002 +0000
+
+    whoops. re-running automake with -i
+
+ Makefile.in        |  9 ++---
+ data/Makefile.in   |  9 ++---
+ doc/Makefile.in    |  9 ++---
+ redhat/Makefile.in |  9 ++---
+ src/Makefile.in    | 90 +++++++++-----------------------------------------
+ 5 files changed, 23 insertions(+), 103 deletions(-)
+
+commit 3f9ef1de6a0c34321cc629a26a570a88a206142b
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jan 13 18:59:39 2002 +0000
+
+    adding CVS version id's to all files
+
+ ChangeLog            |  3 ++-
+ doc/bbkeys.1.in      | 21 ++++++++++++---------
+ doc/bbkeys.bb.5      |  3 +++
+ doc/bbkeysrc.5       |  3 +++
+ src/BaseDisplay.cc   |  2 ++
+ src/BaseDisplay.hh   |  2 ++
+ src/Basemenu.cc      |  2 ++
+ src/Basemenu.hh      |  2 ++
+ src/Baseresource.cc  |  1 +
+ src/Baseresource.hh  |  1 +
+ src/Basewindow.cc    |  2 ++
+ src/Basewindow.hh    |  2 ++
+ src/Image.cc         |  2 ++
+ src/Image.hh         |  2 ++
+ src/LinkedList.cc    |  2 ++
+ src/LinkedList.hh    |  2 ++
+ src/NETInterface.cc  |  1 +
+ src/NETInterface.hh  |  1 +
+ src/Timer.cc         |  2 ++
+ src/Timer.hh         |  2 ++
+ src/bbkeys.cc        |  1 +
+ src/bbkeys.hh        |  2 ++
+ src/bbkeysconf.pl.in |  1 +
+ src/blackboxstyle.hh |  1 +
+ src/grab_defs.hh     |  2 ++
+ src/main.cc          |  1 +
+ src/main.hh          |  2 ++
+ src/resource.cc      |  1 +
+ src/resource.hh      |  1 +
+ src/stackmenu.cc     |  2 ++
+ src/stackmenu.hh     |  2 ++
+ src/wminterface.cc   |  1 +
+ src/wminterface.hh   |  2 ++
+ 33 files changed, 67 insertions(+), 10 deletions(-)
+
+commit 5e9343686bf240f28f909c555b39589c23725843
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Jan 12 15:42:19 2002 +0000
+
+    documentation update changes
+    build fix for RPM process due to above
+
+ ChangeLog             |  4 +--
+ Makefile.am           |  2 +-
+ Makefile.in           | 11 ++++--
+ data/Makefile.am      |  3 +-
+ data/Makefile.in      | 11 ++++--
+ data/README.bbkeys    | 65 ----------------------------------
+ doc/Makefile.in       |  9 +++--
+ doc/bbkeys.1.in       | 24 +++++++------
+ doc/bbkeys.bb.5       |  8 ++---
+ doc/bbkeysrc.5        | 23 ++++++++----
+ redhat/Makefile.in    |  9 +++--
+ redhat/bbkeys.spec.in |  5 ++-
+ src/Makefile.in       | 90 +++++++++++++++++++++++++++++++++++++++--------
+ 13 files changed, 147 insertions(+), 117 deletions(-)
+
+commit ff9d0cd6eb796c2954b0fe3bb12acde14c591b37
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Jan 12 15:21:05 2002 +0000
+
+    documentation updates
+
+ ChangeLog |   3 ++
+ INSTALL   |   7 +--
+ NEWS      |  64 +++++++++++++++++++++++++++
+ README    | 140 +++++-----------------------------------------------------
+ 4 files changed, 79 insertions(+), 135 deletions(-)
+
+commit 3a544352677d0f869499ebf7ea878958223dd416
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Jan 12 15:07:19 2002 +0000
+
+    adding Darryll to the ChangeLog for bug report on RPM build process
+
+ ChangeLog | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 346f9e3754dd4e617419c2a03531f1063e835621
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Jan 8 14:57:55 2002 +0000
+
+    adding ownership to ChangeLog  =:)
+
+ ChangeLog | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+commit 0fc1abeed17ef54684fe0900db5c149b51ea8c13
+Author: eckzor <eckzor>
+Date:   Tue Jan 8 06:14:29 2002 +0000
+
+    added a description of my last patch. the sanity check in removeWindow()
+
+ ChangeLog | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+commit 0120886cdbfa00b33924fdc5ea20b21fb2551595
+Author: eckzor <eckzor>
+Date:   Mon Jan 7 23:20:16 2002 +0000
+
+    fix iconify last window on workspace -- maximixe bug that makes blackbox
+    seggie.
+    When a window is removed, if it was the focus window, the focus window
+    is changed to 0 (None).
+
+ src/bbkeys.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit 5377f87e809902a81b33ddcd33d199b63044e72f
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jan 6 07:49:06 2002 +0000
+
+    forgot to delete the new char*'s
+
+ src/bbkeys.cc | 3 +++
+ 1 file changed, 3 insertions(+)
+
+commit e7f550408d2aa4846294dacd9b25f20d34a106f1
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jan 6 07:47:09 2002 +0000
+
+    adding logic to launch configurators with arguments to load correct
+    rc-files
+
+ ChangeLog     |  4 ++++
+ src/bbkeys.cc | 14 +++++++++++---
+ src/bbkeys.hh |  1 +
+ 3 files changed, 16 insertions(+), 3 deletions(-)
+
+commit b25655691ce0db702eb9b3f70e6f2b456872b0e7
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Jan 6 06:48:04 2002 +0000
+
+    taking out old configurators from loop as well as removing wait for
+    configurator to exit
+
+ ChangeLog            |  7 +++++++
+ src/bbkeys.cc        | 22 +++++++++-------------
+ src/bbkeysconf.pl.in | 43 ++++++++++++++++++++++---------------------
+ 3 files changed, 38 insertions(+), 34 deletions(-)
+
+commit 26f14f1f8b9e8e0e5d0e48629aebd7415e29be2c
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Jan 5 21:39:34 2002 +0000
+
+    fix for RPM-building gzipped man file problem
+
+ ChangeLog             |  3 +++
+ redhat/bbkeys.spec.in | 12 +++++++++---
+ 2 files changed, 12 insertions(+), 3 deletions(-)
+
+commit ac9d763fa1c89221ec66ea71ecd667b5f9171386
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Jan 4 18:56:51 2002 +0000
+
+    finishing touches on bbkeysconf.pl--adding ToggleDecor and taking out
+    extra print; exit;
+
+ src/bbkeysconf.pl.in | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+commit 6f173daf77db9b8b39b73cd33481cb98dff5e5ff
+Author: eckzor <eckzor>
+Date:   Sat Dec 22 10:31:41 2001 +0000
+
+    Added a -h[elp] option.
+
+ src/bbkeysconf.pl.in | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+commit c471afb94d0fd5cee433f6107d2003034b575fd7
+Author: eckzor <eckzor>
+Date:   Sat Dec 22 10:01:12 2001 +0000
+
+    added a -rc[file] command line parameter to the perl script, and so it
+    can now
+    have it's rcfile specified at the command line.
+
+ src/bbkeysconf.pl.in | 30 +++++++++++++++++++++---------
+ 1 file changed, 21 insertions(+), 9 deletions(-)
+
+commit 493ca3478b87fe292c02096fc562486d39831a4b
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Dec 20 19:04:13 2001 +0000
+
+    fixing windows hyper modifier annoyance
+
+ ChangeLog     | 10 ++++++++--
+ configure     |  2 +-
+ configure.in  |  2 +-
+ src/bbkeys.cc | 25 ++++++++++++++++++++-----
+ 4 files changed, 30 insertions(+), 9 deletions(-)
+
+commit ab14abdf9f1536af6bfac8f6609842de1cd058f2
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Dec 12 15:18:09 2001 +0000
+
+    putting ToggleDecor back in properly for blackbox 0.61.2 release
+
+ Makefile.in        |  9 ++---
+ configure          |  2 +-
+ configure.in       |  2 +-
+ data/Makefile.in   |  9 ++---
+ doc/Makefile.in    |  9 ++---
+ redhat/Makefile.in |  9 ++---
+ src/BaseDisplay.hh |  4 +--
+ src/Makefile.in    | 90 +++++++++-----------------------------------------
+ src/wminterface.cc | 12 +++----
+ 9 files changed, 33 insertions(+), 113 deletions(-)
+
+commit f44b94e09ad5f5478b60bff19be03d098fb97875
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Nov 14 01:02:40 2001 +0000
+
+    patch to allow alternate keybindings config file
+
+ ChangeLog     |   5 ++
+ src/bbkeys.cc |  20 ++++--
+ src/main.cc   | 210 ++++++++++++++++++++++++++----------------------------
+ src/main.hh   |   1 +
+ 4 files changed, 124 insertions(+), 112 deletions(-)
+
+commit 898a807fa9346bef663cbab1274fc8a9bdfa68e5
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Nov 13 04:51:00 2001 +0000
+
+    - bug fix for unnamed windows not showing up in bbkeys window list
+
+ ChangeLog        | 12 ++++++++++-
+ src/bbkeys.cc    |  5 +----
+ src/stackmenu.cc | 59 +++++++++++++++++++++++++++++++++++++---------------
+ 3 files changed, 54 insertions(+), 22 deletions(-)
+
+commit 92e66c468614271ce316c2c17209a204303b38cd
+Author: eckzor <eckzor>
+Date:   Mon Nov 12 07:15:42 2001 +0000
+
+    changed my email addres everywhere (except in the Changelog)
+
+ AUTHORS            | 2 +-
+ debian/copyright   | 2 +-
+ src/Basemenu.cc    | 2 +-
+ src/Basemenu.hh    | 2 +-
+ src/bbkeys.cc      | 2 +-
+ src/bbkeys.hh      | 2 +-
+ src/grab_defs.hh   | 2 +-
+ src/stackmenu.cc   | 2 +-
+ src/stackmenu.hh   | 2 +-
+ src/wminterface.cc | 2 +-
+ src/wminterface.hh | 2 +-
+ 11 files changed, 11 insertions(+), 11 deletions(-)
+
+commit 4fa49a342f3be9ef8a28d0cbe5d52bce71b42919
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Nov 12 05:58:05 2001 +0000
+
+    making nextWindowAllWorkspaces a separate keybinding
+
+ ChangeLog        |  7 +++++++
+ data/bbkeys.bb   |  6 ------
+ data/bbkeys.nobb |  6 ------
+ src/bbkeys.cc    | 27 ++++++++++++++++++++-------
+ src/bbkeys.hh    |  3 +++
+ src/grab_defs.hh |  1 +
+ src/resource.cc  |  9 ---------
+ src/resource.hh  |  2 --
+ src/stackmenu.cc | 11 ++++++-----
+ 9 files changed, 37 insertions(+), 35 deletions(-)
+
+commit 977bfae0e111d767d42798e454f2d24f557c827f
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Nov 8 04:03:21 2001 +0000
+
+    improvements in CLI configurator
+
+ src/bbkeysconf.pl.in | 49 +++++++++++++++++++++++++++++-------------------
+ 1 file changed, 30 insertions(+), 19 deletions(-)
+
+commit a692539e843588310c7e56d4c1fbe9b09c6becc7
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Nov 8 02:59:02 2001 +0000
+
+    formatting fixes
+
+ src/bbkeys.cc | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+commit f50b998c50bd5b812b1523c5c44ae222d01ad210
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Nov 5 20:30:35 2001 +0000
+
+    bbkeysconf.pl now firmly in place rather than bbkeysConfigC
+
+ ChangeLog            | 6 ++++++
+ src/bbkeys.cc        | 4 ++--
+ src/bbkeysconf.pl.in | 1 +
+ 3 files changed, 9 insertions(+), 2 deletions(-)
+
+commit 7ea268a536ed4fc5b20cc0e2fa2b3cb925559225
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Nov 5 19:54:46 2001 +0000
+
+    - updating debian and redhat build files for version 0.8.4
+    - minor code tweakage in bbkeysconf.pl.in so we skip blank lines and
+      comments
+
+ debian/changelog      |  6 ++++++
+ redhat/bbkeys.spec.in |  4 +++-
+ src/bbkeysconf.pl.in  | 26 ++++++++++++++++++++++----
+ 3 files changed, 31 insertions(+), 5 deletions(-)
+
+commit 5e03ed97544a3e07b02c7d3022bd9662738a1ed6
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Nov 5 18:39:45 2001 +0000
+
+    rebuilding perl bbkeys configurator script at configure time
+
+ Makefile.in        |   9 +++-
+ data/Makefile.in   |   9 +++-
+ doc/Makefile.in    |   9 +++-
+ redhat/Makefile.in |   9 +++-
+ src/Makefile.am    |   6 ++-
+ src/Makefile.in    | 121 +++++++++++++++++++++++++++++++++++++++++--------
+ 6 files changed, 136 insertions(+), 27 deletions(-)
+
+commit 7e707caed9347a638b94671d46f1431ac3b5641b
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Mon Nov 5 13:36:19 2001 +0000
+
+    moving from C configurator which sucked to perl configurator which is
+    MUCH better
+
+ ChangeLog             |   4 +-
+ Makefile.in           |   1 +
+ configure             | 224 ++++++++++++++++++++++++-------------
+ configure.in          |  29 +++++
+ data/Makefile.in      |   1 +
+ doc/Makefile.in       |   1 +
+ redhat/Makefile.in    |   1 +
+ redhat/bbkeys.spec.in |   2 +-
+ src/Makefile.am       |   3 +-
+ src/Makefile.in       |  22 ++--
+ src/bbkeysConfigC.c   | 103 -----------------
+ src/bbkeysconf.pl.in  | 274 ++++++++++++++++++++++++++++++++++++++++++++++
+ 12 files changed, 467 insertions(+), 198 deletions(-)
+
+commit 8cd94d1b2f6185141d4d6df835fa9cb96ed2a78e
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Oct 24 03:15:19 2001 +0000
+
+    updating to 0.8.4 and trying to get multi-head working
+
+ ChangeLog          |   5 +
+ Makefile.in        |  18 ++--
+ aclocal.m4         |  33 ++++++
+ configure          | 265 +++++++++++++++++++++++++++----------------------
+ configure.in       |   3 +-
+ data/Makefile.in   |  12 +--
+ doc/Makefile.in    |  12 +--
+ redhat/Makefile.in |  12 +--
+ src/Makefile.in    |  94 ++++--------------
+ src/bbkeys.cc      |   8 +-
+ 10 files changed, 228 insertions(+), 234 deletions(-)
+
+commit 165ca3c78d8310953a73374c4f982033d3460903
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Sep 19 16:02:10 2001 +0000
+
+    - I'm drinking the aclocal; autoheader; autoscan ; autoconf; automake
+      potion, baybee.  We now have a cleaner build where we don't have to pass
+      300 -DDEFINE's in our compile statement.  All modified source files were
+      to add an include for ../config.h to take advantage of this.  Added files
+      were so we can do this deep magic.
+
+ ChangeLog           |    5 +
+ Makefile.in         |   81 +-
+ aclocal.m4          |   23 +
+ config.guess        | 1317 +++++++++++++
+ config.h.in         |  131 ++
+ config.sub          | 1411 ++++++++++++++
+ configure           | 1238 ++++++------
+ configure.in        |   45 +-
+ data/Makefile.in    |   14 +-
+ doc/Makefile.in     |   14 +-
+ ltmain.sh           | 4982 +++++++++++++++++++++++++++++++++++++++++++++++
+ redhat/Makefile.in  |   14 +-
+ src/Baseresource.cc |    4 +
+ src/Basewindow.cc   |    4 +
+ src/Makefile.am     |   24 +-
+ src/Makefile.in     |  100 +-
+ src/NETInterface.cc |    4 +
+ src/resource.cc     |    2 +-
+ src/stackmenu.cc    |    4 +
+ src/wminterface.cc  |    4 +
+ stamp-h.in          |    1 +
+ 21 files changed, 8777 insertions(+), 645 deletions(-)
+
+commit dbc852c03c5746d04c2e294cb7f798a69e54ee00
+Author: eckzor <eckzor>
+Date:   Wed Sep 19 05:37:37 2001 +0000
+
+    fixed the description in debian/control
+
+ debian/control | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+commit 0ccaa11a0801f8fe328c35ed88b66c9a529e40ee
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Sep 19 02:43:48 2001 +0000
+
+    fix for debian control file \(apparently it doesn't like blank lines at
+    the end\)
+
+ debian/control | 2 --
+ 1 file changed, 2 deletions(-)
+
+commit 96b7fdd567753d4cbee6c0d988cded08980c0be0
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Sep 19 02:36:30 2001 +0000
+
+    fixing man page Makefile.am
+
+ Makefile.in        |  11 +++-
+ configure          |   4 ++
+ doc/Makefile.am    |   2 +-
+ doc/Makefile.in    |   2 +-
+ redhat/Makefile.in | 160 +++----------------------------------------------
+ 5 files changed, 24 insertions(+), 155 deletions(-)
+
+commit 9d0ecfc02463bac2517b4620addedf13cab97801
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Sep 19 02:29:25 2001 +0000
+
+    - adding debian and redhat build directories, ala bbconf
+
+ Makefile.am                          |  13 +-
+ configure.in                         |   2 +
+ debian/changelog                     |   9 +
+ debian/control                       |  18 ++
+ debian/copyright                     |  15 ++
+ debian/docs                          |   4 +
+ debian/menu                          |   2 +
+ debian/rules                         |  79 ++++++++
+ debian/watch                         |   5 +
+ redhat/Makefile.am                   |  13 ++
+ redhat/Makefile.in                   | 323 +++++++++++++++++++++++++++++++
+ bbkeys.spec => redhat/bbkeys.spec.in |  41 ++--
+ 12 files changed, 506 insertions(+), 18 deletions(-)
+
+commit 365ab2a3ba9d4444ca1e411fd661cf3a84d10862
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Sep 19 02:08:33 2001 +0000
+
+    changing 'version.h' to '../version.h' due to changed directory structure
+
+ src/Basewindow.hh | 2 +-
+ src/main.hh       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 83b87ea356f09b3b1c359e64c8c5d2040a4ac26d
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Sep 19 02:03:35 2001 +0000
+
+    whoops, forgot 2
+
+ doc/bbkeys.1.in     |  98 +++++++++++++++++++++++++++++++++++++++++++++
+ src/bbkeysConfigC.c | 103 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 201 insertions(+)
+
+commit 10ba356560af21ebef68e3918ea1ee31dfdd10f6
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Wed Sep 19 02:03:03 2001 +0000
+
+    - umm. major cleanup. moving all source files into src.
+    - also, making our bbkeys manpage be generated for us so we don't have to
+      keep up with the version changes, etc.
+
+ Makefile.am                              |  24 +--
+ Makefile.in                              | 129 +++-------------
+ bbkeysConfigC.c                          | 103 -------------
+ configure                                |  20 ++-
+ configure.in                             |  11 +-
+ doc/Makefile.am                          |   2 +
+ doc/Makefile.in                          |   8 +-
+ doc/bbkeys.1                             |  98 ------------
+ BaseDisplay.cc => src/BaseDisplay.cc     |   0
+ BaseDisplay.hh => src/BaseDisplay.hh     |   0
+ Basemenu.cc => src/Basemenu.cc           |   0
+ Basemenu.hh => src/Basemenu.hh           |   0
+ Baseresource.cc => src/Baseresource.cc   |   0
+ Baseresource.hh => src/Baseresource.hh   |   0
+ Basewindow.cc => src/Basewindow.cc       |   0
+ Basewindow.hh => src/Basewindow.hh       |   0
+ Image.cc => src/Image.cc                 |   0
+ Image.hh => src/Image.hh                 |   0
+ LinkedList.cc => src/LinkedList.cc       |   0
+ LinkedList.hh => src/LinkedList.hh       |   0
+ Makefile.am => src/Makefile.am           |   5 -
+ Makefile.in => src/Makefile.in           | 219 +++++----------------------
+ NETInterface.cc => src/NETInterface.cc   |   0
+ NETInterface.hh => src/NETInterface.hh   |   0
+ Timer.cc => src/Timer.cc                 |   0
+ Timer.hh => src/Timer.hh                 |   0
+ bbkeys.cc => src/bbkeys.cc               |   0
+ bbkeys.hh => src/bbkeys.hh               |   0
+ blackboxstyle.hh => src/blackboxstyle.hh |   0
+ grab_defs.hh => src/grab_defs.hh         |   0
+ main.cc => src/main.cc                   |   0
+ main.hh => src/main.hh                   |   0
+ resource.cc => src/resource.cc           |   0
+ resource.hh => src/resource.hh           |   0
+ stackmenu.cc => src/stackmenu.cc         |   0
+ stackmenu.hh => src/stackmenu.hh         |   0
+ wminterface.cc => src/wminterface.cc     |   0
+ wminterface.hh => src/wminterface.hh     |   0
+ 38 files changed, 90 insertions(+), 529 deletions(-)
+
+commit eabc6d74268e4ef075965258e0cb72ffc6d69632
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Sep 14 20:40:11 2001 +0000
+
+    - by default we launch bbconf first now to configure keybindings
+
+ ChangeLog |  2 ++
+ bbkeys.cc | 22 ++++++++++++----------
+ 2 files changed, 14 insertions(+), 10 deletions(-)
+
+commit 9ede5373989024e4775d18979e4b050c2a548afc
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Aug 21 14:51:46 2001 +0000
+
+    going to version 0.8.3...
+
+ configure    | 2 +-
+ configure.in | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 347f00eacdbd48fbe6701aaa0cc1b0820680485b
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Aug 21 14:02:02 2001 +0000
+
+    adding documentation in ChangeLog for bug-fix in stackmenu.cc
+
+ ChangeLog | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+commit 2d0dffb5bb59af42d7e56caca7cba06c10e5a585
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Aug 19 02:51:09 2001 +0000
+
+    hrm. this should have been there a long time ago
+
+ data/bbkeys.bb   | 8 ++++++++
+ data/bbkeys.nobb | 9 +++++++++
+ 2 files changed, 17 insertions(+)
+
+commit 09dadef3b468b0291f18ebdcb1da94a58e06763c
+Author: eckzor <eckzor>
+Date:   Sun Aug 19 00:43:05 2001 +0000
+
+    got rid of a useless variables. added the XK_Super_[LR] keys to be
+    associated with the Mod3Mask.
+
+ bbkeys.cc | 15 +++++++++------
+ bbkeys.hh |  4 ++--
+ 2 files changed, 11 insertions(+), 8 deletions(-)
+
+commit 25036d96c0cba128b794a2839be258766e82e687
+Author: eckzor <eckzor>
+Date:   Mon Aug 13 16:37:12 2001 +0000
+
+    this change supposedly fixes a siggie. deals with a bug in X.
+
+ stackmenu.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit c3c6e61a72e602b4a2d49a612b60aa7dab172799
+Author: eckzor <eckzor>
+Date:   Fri Aug 10 18:51:47 2001 +0000
+
+    changed the convert function so that Meta_[LR] look for the Mod4Mask,
+    as this
+    is how it would be on a 104 key keyboard, i believe. In xev, i get state of
+    0x40, which is 1<<6, which is Mod4Mask for the Meta_L key.
+
+ bbkeys.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 31099f084641075cc6e104f794886843ced3a2ff
+Author: eckzor <eckzor>
+Date:   Thu Aug 9 02:14:08 2001 +0000
+
+    added a couple things to the TODO
+
+ TODO | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+commit aa79ff58f43d84057c833f7a61b655ff9537ce60
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Aug 7 22:48:13 2001 +0000
+
+    updating version in bbkeys.spec and man page to new version...
+    *note to self* redo this with automake -i automatically.....
+
+ bbkeys.spec  | 2 +-
+ doc/bbkeys.1 | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 3aa3e4cb279e67d5d669412c0cb023e288bce0f2
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Aug 7 22:41:53 2001 +0000
+
+    Updating documentation, adding new features, etc.
+
+ ChangeLog   | 22 ++++++++++++++++++++++
+ README      |  4 ++++
+ resource.cc |  1 +
+ 3 files changed, 27 insertions(+)
+
+commit ec3077c1b3c41b793ec0bdf521913ea3e84b13da
+Author: eckzor <eckzor>
+Date:   Tue Aug 7 20:16:58 2001 +0000
+
+    this keeps the menu on top of all other windows.
+    if another app ends up doing the same thing as this..there will be
+    problems,
+    as we accomplish this by catching XEvents that tell us we're hiden, and
+    raising ourselves back to the top. We only do this becuase blackbox does
+    not provide us a way to keep the menu always on top as best as we can find.
+    When a better solution is available, this will be switched over to it.
+
+ bbkeys.cc    | 8 ++++++++
+ stackmenu.cc | 6 +-----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
+
+commit 0a9affae76f961770dd516984855c1c5cb7c1cd1
+Author: eckzor <eckzor>
+Date:   Tue Aug 7 19:20:30 2001 +0000
+
+    patched in the code to have a matrix like workspace setup, and have bbkeys
+    switch between them.
+
+ bbkeys.cc        | 107 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ bbkeysConfigC.c  |   1 +
+ data/bbkeys.bb   |   3 ++
+ data/bbkeys.nobb |   3 ++
+ grab_defs.hh     |   7 ++++
+ resource.cc      |   2 +-
+ stackmenu.cc     |   5 +++
+ 7 files changed, 127 insertions(+), 1 deletion(-)
+
+commit c2490e9ca238e2e40a2100a1c88ff5afb41e2f20
+Author: eckzor <eckzor>
+Date:   Tue Aug 7 17:20:07 2001 +0000
+
+    when "showAllWorkspaces" is on, the window list for stacked cycling
+    appends "(workspace 1)" to each window in the list (with the correct
+    number).
+    Also squashed a bug where the first time the menu was brought up after
+    starting bbkeys, it would not center properly.
+
+ stackmenu.cc | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
+
+commit 93a7f57ef8d734db093e91a0cad4a6f00c139588
+Author: eckzor <eckzor>
+Date:   Tue Aug 7 16:17:36 2001 +0000
+
+    fixed compilation with the past commit. *oops*
+
+ bbkeys.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 92b56abc9f448900d71bd6d42c9c9f702d407f92
+Author: eckzor <eckzor>
+Date:   Tue Aug 7 16:15:52 2001 +0000
+
+    fixed the bug with windows being turned sticky from desktops other than
+    where they were originally on.
+
+ bbkeys.cc    | 3 +--
+ stackmenu.cc | 7 ++++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+commit f25ad3cb56cacdaad881441010ca8890ef8808d5
+Author: eckzor <eckzor>
+Date:   Tue Aug 7 15:20:54 2001 +0000
+
+    changed addSticky().
+    maybe this will get rid of the bug.
+
+ bbkeys.cc    | 22 ++++++++++------------
+ stackmenu.cc |  1 -
+ 2 files changed, 10 insertions(+), 13 deletions(-)
+
+commit 256397c247bac96227bdfb20ace42041453f1a9a
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Tue Aug 7 01:51:13 2001 +0000
+
+    - incrementing version count to 0.8.2 for next release....
+    - fixing flawed logic test for prev/next window in keyrelease--valid index
+      might be 0, so we can't do (if (prev/next))....
+
+ ChangeLog        |  7 +++++++
+ bbkeys.cc        | 17 +++++++++++++----
+ configure        |  2 +-
+ configure.in     |  2 +-
+ data/Makefile.in |  9 ++-------
+ doc/Makefile.in  |  9 ++-------
+ 6 files changed, 26 insertions(+), 20 deletions(-)
+
+commit 6834e7a7793387fff25b69b111ab5ec7e173d988
+Author: eckzor <eckzor>
+Date:   Mon Aug 6 08:25:39 2001 +0000
+
+    some fixes for focusing windows with stickyness around. fixed showAll
+    to work right with sticky windows as well as normal stacked again.
+
+ bbkeys.cc    | 5 +++--
+ stackmenu.cc | 9 +++++----
+ 2 files changed, 8 insertions(+), 6 deletions(-)
+
+commit d31bbd495e4067c887a023a2dbdc65aaf0776634
+Author: eckzor <eckzor>
+Date:   Mon Aug 6 08:01:38 2001 +0000
+
+    added the "showAllWorkspaces" option. I've tested it a little, hope it
+    works right!
+
+ Makefile.in      | 92 +++++++++-------------------------------------------
+ bbkeys.cc        |  4 +--
+ bbkeys.hh        |  1 +
+ data/bbkeys.bb   |  6 ++++
+ data/bbkeys.nobb |  6 ++++
+ resource.cc      |  8 +++++
+ resource.hh      |  2 ++
+ stackmenu.cc     | 19 +++++++++--
+ wminterface.cc   | 12 +++++--
+ wminterface.hh   |  4 +--
+ 10 files changed, 69 insertions(+), 85 deletions(-)
+
+commit 70cf7aa2dd3078182e29369df15417255e5bbf3a
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Aug 5 06:28:17 2001 +0000
+
+    fixing small buglet around stacked cycling in a workspace with no windows
+    to cycle
+
+ bbkeys.cc    | 1 -
+ stackmenu.cc | 2 ++
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+commit 93c76495a2d0ec518e2944a48610fa57f0eb6245
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Aug 5 06:13:46 2001 +0000
+
+    forgot ChangeLog in rpm build file
+
+ bbkeys.spec | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 31e6e17f56af6f6c55d9a7400bf2468e458d798b
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Aug 5 06:03:16 2001 +0000
+
+    adding man pages to bbkeys, updating other files appropriately
+
+ ChangeLog       |   6 ++
+ Makefile.in     |   2 +-
+ bbkeys.spec     |   6 +-
+ configure       |   4 +-
+ configure.in    |   2 +-
+ doc/Makefile.am |   4 +
+ doc/Makefile.in | 255 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ doc/bbkeys.1    |  98 ++++++++++++++++++++
+ doc/bbkeys.bb.5 |  48 ++++++++++
+ doc/bbkeysrc.5  | 123 +++++++++++++++++++++++++
+ 10 files changed, 542 insertions(+), 6 deletions(-)
+
+commit eb717a897bb8d2441531b7e2fdbd37e8435ff7b7
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Aug 5 05:50:26 2001 +0000
+
+    Adding README, AUTHORS, and ChangeLog into installed files list, re-doing
+    bbkeys.spec for RPM build with changes from Hollis Blanchard, updating
+    ChangeLog accordingly
+
+ Makefile.am      |   7 ++-
+ Makefile.in      | 129 ++++++++++++++++++++++++++++++++++++++++++---------
+ bbkeys.spec      |  36 +++++++++-----
+ data/Makefile.in |   9 +++-
+ 4 files changed, 143 insertions(+), 38 deletions(-)
+
+commit c719918781cfd56b2293d98b0d78536c78eefc9d
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Aug 5 04:33:59 2001 +0000
+
+    updating rpm-build file for new version
+
+ bbkeys.spec | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit 9e985be3afbc420634cb2150906b2440b48547b3
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Aug 5 04:32:31 2001 +0000
+
+    - added a new resource to allow not showing popup window menu with stacked
+      cycling
+    - implemented new method of using stacked cycling code but not showing
+      popup window menu
+    - documented said goodies
+
+ ChangeLog        | 18 +++++++++++++-----
+ bbkeys.cc        | 11 +++++++----
+ bbkeys.hh        |  3 +++
+ data/bbkeys.bb   |  3 +++
+ data/bbkeys.nobb |  3 +++
+ resource.cc      | 12 +++++++++++-
+ resource.hh      |  2 ++
+ stackmenu.cc     | 10 ++++++----
+ stackmenu.hh     |  2 +-
+ 9 files changed, 49 insertions(+), 15 deletions(-)
+
+commit ef670a8b0b25eb205ed7c9f90b40b37b932c1a32
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Aug 5 03:53:32 2001 +0000
+
+    - changed "friend blah" to "friend class blah" for gcc 3, etc.
+    - implemented a set-focus on cycle but don't raise until we're done method.
+      focus is returned to beginning window if cycle is cancelled.
+
+ Basemenu.hh   |  2 +-
+ ChangeLog     | 18 ++++++++++++++++--
+ LinkedList.hh |  4 ++--
+ Timer.hh      |  2 +-
+ bbkeys.cc     | 28 ++++++++++++++++++++--------
+ bbkeys.hh     |  2 +-
+ stackmenu.cc  | 33 ++++++++++++++++++++++-----------
+ stackmenu.hh  |  2 +-
+ 8 files changed, 64 insertions(+), 27 deletions(-)
+
+commit 8e1c7066f5a9b8b20d8e41a598c56102c884b195
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sun Aug 5 02:37:25 2001 +0000
+
+    removing auto_raise from resource.hh, XRaiseWindow() from bbkeys.cc to
+    fix un-iconify problem; raising version for next release to 0.8.1
+
+ ChangeLog    | 5 +++++
+ bbkeys.cc    | 3 ---
+ configure    | 2 +-
+ configure.in | 2 +-
+ resource.hh  | 7 +------
+ 5 files changed, 8 insertions(+), 11 deletions(-)
+
+commit f9c75c8f5ef319102909524dd32905691dc6f443
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Sat Aug 4 02:29:36 2001 +0000
+
+    fix in documentation for turning off new stackCycling
+
+ README | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+commit 97cebf8eb7581b1760fec51e1292f34e79f0abd6
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Aug 3 23:43:22 2001 +0000
+
+    updating rpm-building spec file
+
+ bbkeys.spec | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit 4912812336daaf0c84afb7a1d580d6e61090900c
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Aug 3 23:30:21 2001 +0000
+
+    documentation changes, setting configure to version 0.8.0
+
+ ChangeLog | 66 +++++++++++++++++++++++++++++++++++++++++++----------------
+ README    | 56 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ configure |  2 +-
+ 3 files changed, 105 insertions(+), 19 deletions(-)
+
+commit 918cc038470afade1355bfeb51fbbda5e9a6e04e
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 21:19:14 2001 +0000
+
+    fixed login in keyRelease:
+
+ bbkeys.cc | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+commit cf21685e389041e23eff97ca8260795c5a8e4e7c
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 21:16:45 2001 +0000
+
+    added a few checks in releaseKey, and reset the actionList variable
+    when keygrabs are loaded.
+
+ bbkeys.cc | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+commit daef6b57b8acfde43ab0989c06725759f2ce7d59
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 21:02:41 2001 +0000
+
+    this has a new method for keyRelease, and adds teh actionList memver
+    variable to ToolWindow, which is a reference from a given action, to
+    the entry for that action in grabSet.
+
+ bbkeys.cc    | 14 ++++----------
+ bbkeys.hh    |  1 +
+ stackmenu.cc |  6 ------
+ stackmenu.hh |  1 -
+ 4 files changed, 5 insertions(+), 17 deletions(-)
+
+commit 8d30200b69047d8eb026274888d2890e5d620ef1
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 20:34:26 2001 +0000
+
+    cleaned up keypress in bbkeys.cc process_events
+
+ bbkeys.cc | 388 +++++++++++++++++++++++++++++-----------------------------
+ 1 file changed, 193 insertions(+), 195 deletions(-)
+
+commit a97a03a9d5ef820c5c7d87fd3c3f9195692d2a8a
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 20:13:19 2001 +0000
+
+    fully working keyRelease for the menu now. a faster method should be
+    implemented though.
+
+ bbkeys.cc | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+commit 12fc64723d842f247c5423f3c35dedcc356d88b4
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 19:06:24 2001 +0000
+
+    redone the catching key releases for closing the menu.
+
+ bbkeys.cc | 43 +++++++++++++++++++++++++++++++++++--------
+ bbkeys.hh |  1 +
+ 2 files changed, 36 insertions(+), 8 deletions(-)
+
+commit 4130766a5bc7d49388e1e97d58137865d39c20ff
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 18:01:56 2001 +0000
+
+    new menu keyreleasing code! hoe this works
+
+ bbkeys.cc | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+commit f125aa666529bb73f283102faeb9321db479acef
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 17:33:31 2001 +0000
+
+    add where state will be staved for keypressing/releasing in the menu
+
+ bbkeys.cc | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
+
+commit 0b114fb532002a5cdc1a75262020d23704c9a254
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 16:31:01 2001 +0000
+
+    other keybndings dont close the menu now
+
+ stackmenu.cc | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit b2b624ce61250890916e44bf95f4c5a7b4e48571
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 16:18:39 2001 +0000
+
+    hardcode "Return" key to select the current menu item and use it.
+    break out the selecting the currently focused menu item and acting on
+    it into
+     seperate function, selectFocused()
+
+ bbkeys.cc    |  9 ++++++---
+ stackmenu.cc | 26 +++++++++++++++-----------
+ stackmenu.hh |  1 +
+ 3 files changed, 22 insertions(+), 14 deletions(-)
+
+commit 861d610b634b021839ea58e7bb0f9063e423a2bb
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 15:48:58 2001 +0000
+
+    fixed Basemenu hopefully to play nice when using setHighlight and the
+    mouse in tandom to select menu items.
+    This is done by calling setHighlight, with what i think is the selected
+    item,
+    in motionNotify in Basemenu.cc
+
+ Basemenu.cc | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+commit c48caf3e839eb2794763d7230f73ed200f69f1a9
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 15:37:15 2001 +0000
+
+    got rid of thew Update in stackmenu, as it was a completely useless
+    waste of cpu power
+
+ bbkeys.cc    | 4 +---
+ stackmenu.cc | 5 -----
+ stackmenu.hh | 3 ---
+ 3 files changed, 1 insertion(+), 11 deletions(-)
+
+commit f38617a3bed2ed9acbf2cedbeee7c18c90995b2a
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 15:27:04 2001 +0000
+
+    fix the checks on the Xlib calls in setMenuItems to watch for success, not
+    failure. oops.
+
+ stackmenu.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit 9199eeec47890f45181bad4d667e01ef14087d81
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 15:23:07 2001 +0000
+
+    moved a couple things into show() from bbkeys::cycle_stack()
+    removed a couple commented out lines
+
+ bbkeys.cc    | 2 --
+ stackmenu.cc | 3 +--
+ 2 files changed, 1 insertion(+), 4 deletions(-)
+
+commit f1999ae69607e757807cf8aee66a8263ba1d9c78
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 15:19:08 2001 +0000
+
+    fix nonappearing menu?
+
+ stackmenu.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 97a16fced2123ea199e37f2ee85c5adf2de35b09
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 15:13:41 2001 +0000
+
+    readded old checks to setMenuItems as well for extra caution
+
+ stackmenu.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit f80ac18147cb3febd196487278bb1a8b8d72dbed
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 15:10:04 2001 +0000
+
+    fix alt relaese change the checks in setMenuItems for the Xlib calls
+
+ stackmenu.cc | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+commit f25b92c3992e6dd621c95a4accd7aae0991e4eac
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 15:02:08 2001 +0000
+
+    chaged the menu's reconfigureing and how items are added.
+
+ bbkeys.cc    | 7 ++-----
+ stackmenu.cc | 1 -
+ stackmenu.hh | 2 +-
+ 3 files changed, 3 insertions(+), 7 deletions(-)
+
+commit f23642c679501894db8d7a4d8323a96952cf3dff
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 14:30:57 2001 +0000
+
+    got rid of the compiler warning the the debugging function p().
+    i think i've made it possible to do a "show windows on all workspaces"
+    option. I don't want to try code that from work tho.. so I will look into
+    that later. if the cycling order stops being correct this can be removed
+    again, it consists of removing the check in focus_stack, to not focus
+    a window on a desktop other than the current one.
+
+ bbkeys.cc    | 6 +++---
+ stackmenu.cc | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 6fb08dd227298885b44883e13b97d447b60220e8
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 05:03:09 2001 +0000
+
+    hopefully fix a core dump in setMenuItems()
+
+ ChangeLog    | 28 ++++++++++++++--------------
+ stackmenu.cc |  6 ++++--
+ 2 files changed, 18 insertions(+), 16 deletions(-)
+
+commit b7f6957600bb99609ca12b3399f20b68e6e7f325
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Aug 3 04:48:07 2001 +0000
+
+    changing version number to 0.8.0, changing copyright date to 2001
+
+ README       | 2 +-
+ bbkeys.cc    | 2 +-
+ configure.in | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+commit b71486d51a666bb05d1cd0619f494f79ba06dead
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 04:44:16 2001 +0000
+
+    added my name to the top of the files i made large changes on
+    and didnt have my name in.
+
+ Basemenu.cc    | 1 +
+ Basemenu.hh    | 1 +
+ wminterface.cc | 1 +
+ wminterface.hh | 1 +
+ 4 files changed, 4 insertions(+)
+
+commit 5eff273e986b256426da1c44f59727244e0cb022
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 04:09:19 2001 +0000
+
+    moved the resource loading to a more appropriate place
+
+ resource.cc | 18 +++++++++---------
+ resource.hh |  2 +-
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+
+commit 5316090b0e46a883c23575df87708a2476fea8ac
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 04:05:08 2001 +0000
+
+    added the new resource to the config files for window cycling styles
+
+ data/bbkeys.bb   | 3 +++
+ data/bbkeys.nobb | 3 +++
+ 2 files changed, 6 insertions(+)
+
+commit 65a67488aa65b07d12985085dfb0076b076a4848
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 04:01:47 2001 +0000
+
+    added a resource for switching between linear and stacked window cycling.
+
+ bbkeys.cc   | 15 ++++++++++-----
+ resource.cc |  8 ++++++++
+ resource.hh |  2 ++
+ 3 files changed, 20 insertions(+), 5 deletions(-)
+
+commit af778a9913b4e00d086cb62fefaf081a5b6abb30
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Aug 3 03:48:59 2001 +0000
+
+    okay, last fix for foreground texture on theme change
+
+ bbkeys.cc | 3 +++
+ 1 file changed, 3 insertions(+)
+
+commit 3a44b2f828b291dc1afbfde8b188162ef64092e4
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Aug 3 03:42:32 2001 +0000
+
+    WOOTmake  Fixed font resource reloading
+
+ bbkeys.cc | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
+
+commit 04380532ef4417b08a3ad59e6095ce1d4ed63106
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 03:39:25 2001 +0000
+
+    everything is working..
+    removed debugging messages. ill put em back in if i get a seggie somewheres
+    along the way.
+
+ bbkeys.cc | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit 56cc673fd7dd93a9d09170b10b2f2ef2b0cb516f
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Aug 3 03:21:04 2001 +0000
+
+    more fixes for resource-getting order
+
+ Basemenu.cc |  2 +-
+ resource.cc | 65 ++++++++++++++++++++++++++++-----------------------------
+ 2 files changed, 33 insertions(+), 34 deletions(-)
+
+commit 61d57803ecd49a06abd13e4904f757f72a8b9fb7
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 02:16:38 2001 +0000
+
+    fixed timer, cuz i broke it before in debugging.
+    fixed Stackmenu::show() so that if 1 window is present, it sents the
+    focus to it and leaves, instead of ignoring it.
+
+ bbkeys.cc    |  5 ++---
+ stackmenu.cc | 11 +++++++++--
+ 2 files changed, 11 insertions(+), 5 deletions(-)
+
+commit b7297b8414e191e55af065025ee76ba69e6c1019
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Aug 3 02:08:55 2001 +0000
+
+    fixed hilighted menu texture
+
+ Basemenu.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 2c3d38437af112bc6ab2ba22a29908a71c38541a
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 02:05:59 2001 +0000
+
+    squashed a bug in removeSticky()
+
+ bbkeys.cc | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+commit 570703a5a960dbc1052b69b5761f660922078277
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Aug 3 01:58:16 2001 +0000
+
+    getting regular font working in windowlist menu
+
+ Basemenu.cc | 6 +++---
+ bbkeys.cc   | 2 +-
+ resource.cc | 2 +-
+ resource.hh | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
+
+commit 31d8a0c0b6ff088c270c03b4d81020b2c33db6a5
+Author: eckzor <eckzor>
+Date:   Fri Aug 3 01:45:37 2001 +0000
+
+    sticky works!
+    segfaults fixed! (hopefully all of them)
+    iconfied windows work!
+    TODO: make bbkeys not uniconfy when alt-tab is pressed
+    TODO: add resources for changing how to cycle windows
+
+ bbkeys.cc      | 110 +++++++++++++++++++++++++++++++++++++++++++++++------
+ bbkeys.hh      |   3 ++
+ wminterface.cc |   3 +-
+ 3 files changed, 103 insertions(+), 13 deletions(-)
+
+commit eb872153dba049c07843c00ee53dcd35cd48484d
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Aug 3 00:52:52 2001 +0000
+
+    basemenu now uses menu.hiTexture... updated other files to provide it.
+
+ Basemenu.cc      |  2 +-
+ blackboxstyle.hh |  7 +++++--
+ resource.cc      | 13 +++++++++----
+ resource.hh      |  1 +
+ 4 files changed, 16 insertions(+), 7 deletions(-)
+
+commit 568373f576a9c6e7c8c005ce86848540fdfc96e6
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Fri Aug 3 00:24:54 2001 +0000
+
+    complete overhaul of resource.cc/blackboxstyle.hh to match 0.6x.x styles
+
+ blackboxstyle.hh | 49 ++++++++++++++++++++++++++++++-------------------
+ resource.cc      | 38 +++++++++++++++++++-------------------
+ 2 files changed, 49 insertions(+), 38 deletions(-)
+
+commit 408b2d89a4b6c5a6628d1e9fcc2a82b5815d6165
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 23:53:03 2001 +0000
+
+    moved little but bewtween basemenu and stackmenu
+
+ Basemenu.cc  | 8 --------
+ Basemenu.hh  | 2 +-
+ stackmenu.cc | 4 ++--
+ 3 files changed, 3 insertions(+), 11 deletions(-)
+
+commit b729bd98b2996bac7066cc66a74e7e7d9a007b38
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 23:42:35 2001 +0000
+
+    preliminary real highlighting
+
+ Basemenu.cc  | 11 +++++++++--
+ Basemenu.hh  |  3 +++
+ stackmenu.cc | 15 +++++++++++----
+ stackmenu.hh |  2 +-
+ 4 files changed, 24 insertions(+), 7 deletions(-)
+
+commit 9abf5d131672c1ed0508770f6ef7a50b66bd432b
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 22:57:38 2001 +0000
+
+    getting dots now.. sorta. and it compiles
+
+ Basemenu.cc  |  7 +++++++
+ bbkeys.cc    |  2 +-
+ stackmenu.cc | 14 ++++----------
+ stackmenu.hh |  1 -
+ 4 files changed, 12 insertions(+), 12 deletions(-)
+
+commit e701f7196660765f064d4468a0e28dfb33fdf477
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 22:37:29 2001 +0000
+
+    new Basemenu.*. woop! let the debugging begin..
+
+ Basemenu.cc  | 1039 ++++++++++++++++++++++++++++--------------------------
+ Basemenu.hh  |  185 ++++++----
+ stackmenu.cc |   19 +-
+ stackmenu.hh |    1 +
+ 4 files changed, 652 insertions(+), 592 deletions(-)
+
+commit 2988f973c796f923e18edb3d2e26d8bd84dd91e6
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Aug 2 21:05:45 2001 +0000
+
+    adding setHighlight(sel) back into setSelected.
+
+ stackmenu.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit dfbe36aa312ead12d3fd9b9b4482a5690be104d9
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 19:58:28 2001 +0000
+
+    stupid bug. stupid
+
+ bbkeys.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit a2fa674f8c63315c9615311e3624ec807aeb5931
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 19:54:39 2001 +0000
+
+    bunch of changes to the menu code.
+    no highlighting is going on at all atm.. soon to be fixed.
+    and Escape will exit the menu now.
+
+ bbkeys.cc    |  7 +++++--
+ stackmenu.cc | 27 ++++++++++++++++++---------
+ stackmenu.hh |  4 +++-
+ 3 files changed, 26 insertions(+), 12 deletions(-)
+
+commit 2f61a0426a4b9581de27421eeb238f7edb3ba981
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 19:14:35 2001 +0000
+
+    changed the menu to not pop up with there are none or only 1 window that
+    are going to be in the menu.
+
+ stackmenu.cc | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+commit d01b773f98c346aa64d9958ec96883554f6a733c
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 19:11:35 2001 +0000
+
+    stack cycling works! this fixed the KeyPress handling to make it go
+    correctly
+
+ bbkeys.cc | 395 ++++++++++++++++++++++++++++------------------------------
+ 1 file changed, 192 insertions(+), 203 deletions(-)
+
+commit 1a73edb40d32ea7b5c1a571f48c6828fa7c4812f
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 18:58:47 2001 +0000
+
+    test for ignoring shift
+
+ bbkeys.cc | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+commit 1ed3f5ed7f2dec4d6d27659c2055146fb73ec0ea
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 18:46:10 2001 +0000
+
+    fixed the button press routine to correctly grab the right event from
+    the key stroke.
+    almost all functional!
+
+ bbkeys.cc    | 9 ++++-----
+ stackmenu.cc | 2 --
+ 2 files changed, 4 insertions(+), 7 deletions(-)
+
+commit 4baa11cee5c8c2bc822bbe9bb02ab4c00923a813
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 18:42:31 2001 +0000
+
+    small fix
+
+ bbkeys.cc | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+commit b7cd50e6c7b6b11ac0c0f1538e80c6ce95e34195
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 18:30:23 2001 +0000
+
+    nothing changed really. but this compiles now :)
+
+ stackmenu.cc | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+commit 53461c593ce8547b9435435448104120f3e6faf4
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 18:17:37 2001 +0000
+
+    reapplied the changes that were lost, and fixed the GrabKeyboard call
+
+ stackmenu.cc | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+commit 4a5db3b5354eaaae3a97606ac9737abb81bf9a7d
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Aug 2 18:06:47 2001 +0000
+
+    baby steps.
+
+ bbkeys.cc    | 15 ++++++++++-----
+ stackmenu.cc | 22 ++++++++++++++++------
+ stackmenu.hh |  2 +-
+ 3 files changed, 27 insertions(+), 12 deletions(-)
+
+commit 10f39a1c696beae9ec283646d9d949ddeb0ab6db
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 16:05:39 2001 +0000
+
+    took out the use of getHighlight() as it is not needed.
+
+ stackmenu.cc | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+commit f15a1a4544dc3d4783bc1847f8cddc84d64aa211
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 15:51:53 2001 +0000
+
+    changed up stack cycling to grab the entire keyboard, and moved the key
+    handling for during stack cycling into stackmenu.cc
+
+ bbkeys.cc    | 51 ++++++++++++--------------------------------------
+ bbkeys.hh    |  1 -
+ stackmenu.cc | 57 ++++++++++++++++++++++++++++++++++++++++++++++----------
+ stackmenu.hh |  6 ++++--
+ 4 files changed, 63 insertions(+), 52 deletions(-)
+
+commit ade74f0659d485911d09a304b033691af7eb5ba4
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 15:03:27 2001 +0000
+
+    reverting to before my last update. it was broken, and the changes are
+    going to be irrelvant with newer additions to come
+
+ bbkeys.cc    | 68 +++++++++++++++++---------------------------------------
+ stackmenu.cc |  6 ++---
+ 2 files changed, 24 insertions(+), 50 deletions(-)
+
+commit cd2410f95b6bc2c1a63bceda3510aa850c9fc686
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 05:55:54 2001 +0000
+
+    cleaned up some code.
+    made the menus close when anotehr event occurs, like switching desktops.
+    menus no longer draw right, and i haven't a clue why.. :\ this is my
+    job for otmorrow i suppose.
+
+ bbkeys.cc    | 68 +++++++++++++++++++++++++++++++++++++++-----------------
+ stackmenu.cc |  6 ++---
+ 2 files changed, 50 insertions(+), 24 deletions(-)
+
+commit 30dd0b2b23ab303cf6a9901c2e1e5a7826f5dd36
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Aug 2 04:51:50 2001 +0000
+
+    adding xOr to authors...
+    updating ChangeLog with myriad of enhancement, etc.
+    configure.in updated to 0.8.0-pre to signify major jump forward in version
+
+ AUTHORS      |  2 ++
+ ChangeLog    | 30 +++++++++++++++++++++++++++++-
+ Makefile.in  |  8 ++++----
+ configure    |  2 +-
+ configure.in |  2 +-
+ 5 files changed, 37 insertions(+), 7 deletions(-)
+
+commit b3429fe7524ec4f492a08f26e33f8f4ad003a68c
+Author: eckzor <eckzor>
+Date:   Thu Aug 2 04:26:18 2001 +0000
+
+    Addes the new windows style cycling. not quite perfect yet, but almost
+    working right!
+
+ Basemenu.cc      | 937 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ Basemenu.hh      | 160 +++++++++
+ Makefile.am      |   2 +
+ bbkeys.cc        | 199 +++++++++--
+ bbkeys.hh        |  30 +-
+ blackboxstyle.hh |  16 +
+ resource.cc      | 156 ++++++++-
+ resource.hh      |  28 ++
+ stackmenu.cc     | 104 ++++++
+ stackmenu.hh     |  49 +++
+ 10 files changed, 1642 insertions(+), 39 deletions(-)
+
+commit 2d88a2edffb60cfea683eb5cbd812fcee0525217
+Author: Jason Kasper <vR@movingparts.net>
+Date:   Thu Aug 2 03:48:27 2001 +0000
+
+    Initial revision
+
+ AUTHORS            |   15 +
+ BUGS               |    2 +
+ BaseDisplay.cc     |  551 +++++++++
+ BaseDisplay.hh     |  343 ++++++
+ Baseresource.cc    |  420 +++++++
+ Baseresource.hh    |   84 ++
+ Basewindow.cc      |  110 ++
+ Basewindow.hh      |  108 ++
+ COPYING            |  340 ++++++
+ ChangeLog          |  291 +++++
+ INSTALL            |   42 +
+ Image.cc           | 2482 ++++++++++++++++++++++++++++++++++++++
+ Image.hh           |  243 ++++
+ LinkedList.cc      |  355 ++++++
+ LinkedList.hh      |  131 ++
+ Makefile.am        |   20 +
+ Makefile.in        |  421 +++++++
+ NETInterface.cc    |   74 ++
+ NETInterface.hh    |   59 +
+ NEWS               |    0
+ README             |  156 +++
+ README.bbtools     |   23 +
+ TODO               |    2 +
+ Timer.cc           |   82 ++
+ Timer.hh           |   84 ++
+ aclocal.m4         |  104 ++
+ bbkeys.cc          | 1874 +++++++++++++++++++++++++++++
+ bbkeys.hh          |  182 +++
+ bbkeys.spec        |   41 +
+ bbkeysConfigC.c    |  102 ++
+ blackboxstyle.hh   |   45 +
+ configure          | 3129 ++++++++++++++++++++++++++++++++++++++++++++++++
+ configure.in       |   93 ++
+ data/Makefile.am   |    9 +
+ data/Makefile.in   |  198 +++
+ data/README.bbkeys |   65 +
+ data/bbkeys.bb     |   40 +
+ data/bbkeys.nobb   |   36 +
+ grab_defs.hh       |   72 ++
+ install-sh         |  250 ++++
+ main.cc            |  141 +++
+ main.hh            |   38 +
+ missing            |  188 +++
+ mkinstalldirs      |   40 +
+ resource.cc        |  416 +++++++
+ resource.hh        |  133 ++
+ version.h.in       |    2 +
+ wminterface.cc     |  313 +++++
+ wminterface.hh     |   80 ++
+ 49 files changed, 14029 insertions(+)

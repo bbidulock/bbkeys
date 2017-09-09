@@ -7,7 +7,7 @@ PACKAGE=$(grep AC_INIT configure.ac|head -1|sed -r 's,AC_INIT[(][[],,;s,[]].*,,'
 GTVERSION=$(gettext --version|head -1|awk '{print$NF}'|sed -r 's,(^[^\.]*\.[^\.]*\.[^\.]*)\..*$,\1,')
 
 if [ -x "`which git 2>/dev/null`" -a -d .git ]; then
-	VERSION=$(git describe --tags|sed 's,^rel-,,;s,^([0-9])([0-9])([0-9]),\1.\2.\3,;s,[-_],.,g;s,\.g.*$,,')
+	VERSION=$(git describe --tags|sed -r 's,^rel-,,;s,^([0-9])([0-9])([0-9]),\1.\2.\3,;s,[-_],.,g;s,\.g.*$,,')
 	DATE=$(git show -s --format=%ci HEAD^{commit}|awk '{print$1}')
 	BRANCH=$(git tag --sort=-creatordate|head -1)
 	if [ "$VERSION" != "$BRANCH" ]; then
@@ -23,7 +23,6 @@ if [ -x "`which git 2>/dev/null`" -a -d .git ]; then
 	       s:%%VERSION%%:$VERSION:g
 	       s:%%DATE%%:$DATE:g"
 	sed -r -e "$subst" rpm/bbkeys.spec.in >rpm/bbkeys.spec
-	echo -e "PACKAGE=$PACKAGE\nVERSION=$VERSION" >VERSION
 else
 	sed -i.bak configure.ac -r \
 		-e "s:^AM_GNU_GETTEXT_VERSION.*:AM_GNU_GETTEXT_VERSION([$GTVERSION]):"

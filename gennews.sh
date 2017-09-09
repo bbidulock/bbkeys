@@ -24,7 +24,7 @@ for o in $(git tag --sort=-creatordate) ""; do
 	else
 		version="$t"
 	fi
-	version=$(echo "$version"|sed 's,^[^0-9]*,,;s,[-_],.,g;s,\.g.*$,,')
+	version=$(echo "$version"|sed -r 's,rel-([0-9])([0-9])([0-9]),\1.\2.\3,;s,^[^0-9]*,,;s,[-_],.,g;s,\.g.*$,,')
 	date=$(git show -s --format=%ci "$t^{commit}"|awk '{print$1}')
 	title="Release ${PACKAGE}${PACKAGE:+-}$version released $date"
 	under=$(echo "$title"|sed 's,.,-,g')
