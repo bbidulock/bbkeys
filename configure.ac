@@ -170,16 +170,15 @@ CXXFLAGS="$CXXFLAGS $LIBBT_CFLAGS $XFT_CFLAGS"
 LIBS="$LIBS $LIBBT_LIBS $XFT_LIBS"
 
 dnl Output files
-AC_OUTPUT( \
-version.h \
-Makefile \
-src/Makefile \
-doc/Makefile \
-data/Makefile \
-doc/bbkeys.1 \
-rpm/Makefile \
-rpm/bbkeys.spec \
-)
+AC_OUTPUT([
+	version.h
+	Makefile
+	src/Makefile
+	doc/Makefile
+	data/Makefile
+	rpm/Makefile
+	rpm/bbkeys.spec
+])
 
 dnl Print results
 AC_MSG_RESULT([])

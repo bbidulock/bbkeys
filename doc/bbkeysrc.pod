@@ -1,0 +1,487 @@
+=pod
+
+=head1 NAME
+
+ bbkeysrc - bbkeys configuration file
+
+=head1 SYNOPSIS
+
+F<$HOME/.bbkeysrc>
+
+=head1 DESCRIPTION
+
+L<bbkeys(1)> picks up its configuration settings from the
+F<$HOME/.bbkeysrc> file unless overridden by command line options.
+There are several avenues open to the user to set any key-grabs that the
+user wishes:
+
+=over
+
+=item B<Using> L<bbconf(1)>:
+
+This is a Qt-based application available at L<http://bbconf.sourceforge.net/>.
+
+=item B<Manually editing> F<$HOME/.bbkeysrc>:
+
+The format is very easy, and it follows the same format as blackbox's
+menu files.  It must begin with a C<[begin]> tag.  It may contain a
+C<[config]> tag, containing a configuration section, ending with an
+C<[end]> tag.  In fact, all opening section tags must end with an
+C<[end]> tag.  It should also contain a C<[keybindings]> section.  For
+more information, see blackbox's menu (L<blackbox(1)>/MENU).
+
+=back
+
+=head1 FORMAT
+
+The F<bbkeysrc> file is formatted into two sections: a configuration
+section (see L</CONFIGURATION>) and a keybindings section (see
+L</KEYBINDINGS>).
+
+=head2 CONFIGURATION
+
+=over
+
+=item I<stylefile>: (string)
+
+The file name of the blackbox style to use.
+
+=item I<honorModifiers>: (C<true> or C<false>)
+
+Whether or not to break if C<NumLock> or C<ScrollLock> is pressed.  (For
+L<bbkeys(1)> to ignore your keybindings if C<NumLock> or C<ScrollLock>
+are pressed, set this to C<true>.)
+
+=item I<raiseWhileCycling>: (C<true> or C<false>)
+
+Should L<bbkeys(1)> raise the windows through which you are cycling
+while cycling through them?
+
+=item I<followWindowOnSend>: (C<true> or C<false>)
+
+Should L<bbkeys(1)> follow the window that you send to another
+work space?  This will apply to all send-to operations such that if this
+is set to C<true>, L<bbkeys(1)> will change work spaces to the work
+space to which you sent the window.
+
+=item I<includeIconifiedWindowsInCycle>: (C<true> or C<false>)
+
+Should L<bbkeys(1)> include iconified windows in its window-cycling
+list?
+
+=item I<showCycleMenu>: (C<true> or C<false>)
+
+Show the window-cycling menu or cycle without it?
+
+=item I<cycleMenuTitle>: (string)
+
+Show the given string as the title of the window-cycling menu.  If an
+empty string is passed as the parameter to this configuration option
+(C<{}>), then the title will not be drawn.
+
+=item I<menuTextJustify>: (C<left>, C<center>, C<right>)
+
+How should the window cycling menu be justified?
+
+=item I<menuTitleJustify>: (C<left>, C<center>, C<right>)
+
+How should the window-cycling title be justified?
+
+=item I<autoConfig>: (C<true> or C<false>)
+
+Should L<bbkeys(1)> watch for changes to its configuration file?  Note:
+if you decide to not do this (though it should be B<very> light on
+system resources), you can always force L<bbkeys(1)> to reconfigure
+itself by sending it a C<SIGHUP> (C<killall -HUP bbkeys>).
+
+=item I<autoConfigCheckTimeout>: (numeric number of seconds)
+
+How often should L<bbkeys(1)> check for changes made to its
+configuration file?
+
+=item I<workspaceColumns>: (numeric)
+
+Number of columns that you have your work spaces laid out in your pager.
+
+=item I<workspaceRows>: (numeric)
+
+Number of rows in which you have your work spaces or desktops laid out.
+As way of an example, if you have your pager laid out in a 4x2 grid (4
+wide, 2 high), then you would set B<workspaceColumns> to 4 and
+B<workspaceRows> to 2.
+
+=item I<cycleMenuX>: (numeric)
+
+Horizontal position at which you want the window cycling menu to appear.
+
+=item I<cycleMenuY>: (numeric)
+
+Vertical position at which you want the window cycling menu to appear.
+
+NOTE: The B<cycleMenuX> and B<cycleMenuY> configuration options allow
+you to place your window-cycling window exactly where you want to put it
+on the screen.  We at the I<Bbkeys Foundation For Better Software (TM)>
+call this a feature, though some crazy nuts might call it a bug caused
+by the fact that blackbox's Menu class does not have anything in it to
+center it on-screen, etc.  It also does not have any methods available
+to figure out how big the menu will be on-screen.  This can be worked
+around by bbkeys, but I have not the time to do it now.  Patch anyone?
+Or, you can just consider it a really neat feature that you can place
+the pop-up window-cycling window anywhere that you want.  =:D
+
+=back
+
+=head2 KEYBINDINGS
+
+The format of this section is similar to the configuration section, and
+L<blackbox(1)>'s menu structure.  Each line will look like this:
+
+    [command] (keys) {parameters}
+
+=head3 Parameters:
+
+Not all directives need to have parameters provided, and within the
+C<[keybindings]> section, the only sub-group allowed (a group that will
+have an C<[end]> tag) is the C<[chain]> tag.  The chain tag is special
+and allows the user to give emacs-style keybindings, where a certain
+keystroke is given, released, and then another keystroke is given to
+complete the action.  A good example would be the following:
+
+    [chain] (Control-Mod1-W)
+      [sendToWorkspace] (1) {1}
+      [sendToWorkspace] (2) {2}
+      [sendToWorkspace] (3) {3}
+      [sendToWorkspace] (4) {4}
+    [end]
+
+Note that both the beginning C<[chain]> and the ending C<[end]> tags
+must be provided.  In this example, the chain is begun by the user
+pressing (and holding) the C<Control> modifier, the C<Mod1> (C<Alt>)
+modifier, and the C<W> key on their keyboard.  The user then releases
+these keys and L<bbkeys(1)> enters the chain.  L<bbkeys(1)> will then
+wait for the user to press one of the keybindings from within that chain
+to execute the next action.  In this case, if L<bbkeys(1)> sees either
+the C<1>, C<2>, C<3> or C<4> key pressed on the keyboard, it will
+execute the given action for that key.  Again, in this case, bbkeys will
+send the currently-focused window to the work space specified in the
+{}-enclosed parameter (work space 1, 2, 3 or 4 as the case may be).
+
+So, the parameters provided in a keybinding directive can be seen as
+additional information to provide to the "command".  In some cases, it
+will be a number (what work space to send a window to, how many pixels
+to move the window, how many pixels to resize a window, etc.).  In other
+cases, it will be a string (C<xterm -fn nexus>, for example, as an
+argument to the I<Execute> command.  And for many directives, it is not
+needed at all.
+
+=head3 Keys:
+
+The format for the keybindings are using zero or more modifiers,
+separated by the C<-> character, finally followed by the key name as
+known to X.  The C<left> key, for example, is know to X as C<Left>.  The
+C<j> key is known as C<J>.  You get the idea.  The modifiers are
+typically, C<Shift>, C<Control> and C<Mod1>.  An example would be
+C<Mod1-Control-K>.  This would be listed as the second element in a
+keybinding directive.
+
+=head3 Commands:
+
+The following commands are understood by L<bbkeys(1)>.  L<bbkeys(1)> is
+not case-sensitive with regard to its commands, so the case may be mixed
+accidentally or on purpose.  =:)
+
+=over
+
+=item I<execute> {string}
+
+Executes a command.  A string parameter is expected for this directive
+that lists the command to be executed.
+
+=item I<iconify>
+
+Iconify the currently active window.
+
+=item I<raise>
+
+Raise the currently active window.
+
+=item I<lower>
+
+Lower the currently active window.
+
+=item I<close>
+
+Close the currently active window.
+
+=item I<toggleShade>
+
+Toggle shading of the currently active window.
+
+=item I<toggleOmniPresent>
+
+Toggle omnipresence (sticky on all work spaces) of the currently active
+window.
+
+=item I<toggleDecorations>
+
+Either strips a window of all decorations or causes it to be decorated
+regularly.
+
+=item I<moveWindowUp>
+
+A numeric parameter may be provided that tells L<bbkeys(1)> how many
+pixels in the given direction to move the currently selected window.
+
+=item I<moveWindowDown>
+
+A numeric parameter may be provided that tells L<bbkeys(1)> how many
+pixels in the given direction to move the currently selected window.
+
+=item I<moveWindowLeft>
+
+A numeric parameter may be provided that tells L<bbkeys(1)> how many
+pixels in the given direction to move the currently selected window.
+
+=item I<moveWindowRight>
+
+A numeric parameter may be provided that tells L<bbkeys(1)> how many
+pixels in the given direction to move the currently selected window.
+
+=item I<resizeWindowWidth>
+
+A numeric parameter may be provided that tells L<bbkeys(1)> how many
+pixels in the given direction to resize the currently selected window.
+This may be a positive or negative number, allowing L<bbkeys(1)> to grow
+or shrink the window.
+
+=item I<resizeWindowHeight>
+
+A numeric parameter may be provided that tells L<bbkeys(1)> how many
+pixels in the given direction to resize the currently selected window.
+This may be a positive or negative number, allowing L<bbkeys(1)> to grow
+or shrink the window.
+
+=item I<toggleMaximizeFull>
+
+Toggle maximization of the currently selected window.
+
+=item I<toggleMaximizeVertical>
+
+Toggle maximization in the vertical direction of the currently selected
+window.
+
+=item I<toggleMaximizeHorizontal>
+
+Toggle maximization in the horizontal direction of the currently
+selected window.
+
+=item I<sendToWorkspace>
+
+A numeric parameter must be provided that tells L<bbkeys(1)> to which
+work space (starting at C<1>) to send the window.
+
+=item I<sendToNextWorkspace>
+
+Send the currently selected window to the next work space.
+
+=item I<sendToPrevWorkspace>
+
+Send the currently selected window to the previous work space.
+
+=item I<nextWindow>
+
+Select the next window in the window list,
+considering windows only on the current work space.
+
+=item I<prevWindow>
+
+Select the previous window in the window list,
+considering windows only on the current work space.
+
+=item I<nextWindowOnAllWorkspaces>
+
+Select the next window in the window list considering windows on all
+work spaces of the current screen.
+
+=item I<prevWindowOnAllWorkspaces>
+
+Select the previous window in the window list considering windows on all
+work spaces of the current screen.
+
+=item I<nextWindowOnAllScreens>
+
+Select the next window in the window list considering windows on all
+screens.
+
+=item I<prevWindowOnAllScreens>
+
+Select the previous window in the window list considering windows on all
+screens.
+
+=item I<nextWindowOfClass>
+
+Select the next window in the window list of the same resource class as
+the currently selected window, considering windows only on the current
+work space.
+
+=item I<prevWindowOfClass>
+
+Select the previous window in the window list of the same resource class as
+the currently selected window, considering windows only on the current
+work space.
+
+=item I<nextWindowOfClassOnAllWorkspaces>
+
+Select the next window in the window list of the same resource class as
+the currently selected window, considering windows on all work spaces.
+
+=item I<prevWindowOfClassOnAllWorkspaces>
+
+Select the previous window in the window list of the same resource class as
+the currently selected window, considering windows on all workspaces.
+
+=item I<changeWorkspace>
+
+A numeric parameter must be given to tell L<bbkeys(1)> to which work
+space to switch.
+
+=item I<nextWorkspace>
+
+Move to the next work space.
+
+=item I<prevWorkspace>
+
+Move to the previous work space.
+
+=item I<upWorkspace>
+
+Move one work space upward in the desktop layout.
+
+=item I<downWorkspace>
+
+Move one work space down in the desktop layout.
+
+=item I<leftWorkspace>
+
+Move one work space left in the desktop layout.
+
+=item I<rightWorkspace>
+
+Move one work space right in the desktop layout.
+
+=item I<nextScreen>
+
+Move to the next screen.
+
+=item I<prevScreen>
+
+Move to the previous screen.
+
+=item I<chain>
+
+No parameter is needed for this directive.
+
+=back
+
+=head1 EXAMPLE
+
+An example configuration file appears below:
+
+ [begin] (bbkeys configuration file)
+   [config]
+     [option] (stylefile) {/usr/share/blackbox/styles/Cthulhain}
+     [option] (honorModifiers) {false}
+     [option] (raiseWhileCycling) {false}
+     [option] (showCycleMenu) {true}
+     [option] (menuTextJustify) {right}
+     [option] (autoCOnfig) {true}
+     [option] (autoConfigCheckTimeout) {2}
+     [option] (workspaceColumns) {4}
+     [option] (workspaceRows) {2}
+     [option] (cycleMenuX) {20}
+     [option] (cycleMenuY) {20}
+   [end]
+
+   [keybindings] (begin keybindings)
+     [chain] (Control-Mod1-W)
+       [sendToWorkspace] (1) {1}
+       [sendToWorkspace] (2) {2}
+       [sendToWorkspace] (3) {3}
+       [sendToWorkspace] (4) {4}
+       [sendToWorkspace] (5) {5}
+       [sendToWorkspace] (6) {6}
+       [sendToWorkspace] (7) {7}
+       [sendToWorkspace] (8) {8}
+     [end]
+     [chain] (Mod1-Y)
+       [execute] (1) {xmms}
+       [execute] (2) {aumix -v +5}
+       [execute] (3) {aumix -v -5}
+     [end]
+     [Lower] (Mod1-Down)
+     [Raise] (Mod1-Up)
+     [toggleShade] (Mod1-F9)
+     [Close] (Mod1-F4)
+     [Iconify] (Mod1-m)
+     [toggleMaximizeFull] (Mod1-F12)
+     [toggleMaximizeHorizontal] (Mod1-F11)
+     [toggleMaximizeVertical] (Mod1-F10)
+     [toggleOmnipresent] (Mod1-Control-Up)
+     [resizeWindowWidth] (Mod1-Control-Shift-Left) {-5}
+     [resizeWindowWidth] (Mod1-Control-Shift-Right) {5}
+     [resizeWindowHeight] (Mod1-Control-Shift-Up) {-5}
+     [resizeWindowHeight] (Mod1-Control-Shift-Down) {5}
+     [moveWindowUp] (Mod1-Control-Up) {1}
+     [moveWindowDown] (Mod1-Control-Down) {1}
+     [moveWindowLeft] (Mod1-Control-Left) {1}
+     [moveWindowRight] (Mod1-Control-Right) {1}
+     [NextWindow] (Mod1-Tab)
+     [NextWindowOnAllWorkspaces] (Mod1-Control-Tab)
+     [PrevWindow] (Mod1-Shift-Tab)
+     [changeWorkspace] (Mod1-1) {1}
+     [changeWorkspace] (Mod1-2) {2}
+     [changeWorkspace] (Mod1-3) {3}
+     [changeWorkspace] (Mod1-4) {4}
+     [changeWorkspace] (Mod1-5) {5}
+     [changeWorkspace] (Mod1-6) {6}
+     [changeWorkspace] (Mod1-7) {7}
+     [changeWorkspace] (Mod1-8) {8}
+
+     [upWorkspace] (Mod1-Control-K)
+     [downWorkspace] (Mod1-Control-J)
+     [leftWorkspace] (Mod1-Control-H)
+     [rightWorkspace] (Mod1-Control-L)
+
+     [showRootMenu] (Mod1-Control-Escape)
+
+     [Execute] (Mod1-F5) {xrefresh}
+     [Execute] (Mod1-F1) {gnome-terminal}
+     #[Execute] (Mod4-E) {kfmclient openProfile filemanagement}
+     #[Execute] (F20) {kfmclient openProfile filemanagement}
+     [Execute] (Mod4-E) {nautilus /home/gideon}
+     [Execute] (F20) {nautilus /home/gideon}
+  [end] (end keybindings)
+  [end] (end bbkeys configuration)
+
+=head1 SEE ALSO
+
+L<bbkeys(1)>,
+L<blackbox(1)>,
+L<bbconf(1)>,
+L<bbkeysconf(1)>.
+
+=head1 AUTHOR
+
+Brian Bidulock L<mailto:bidulock@openss7.org>.
+
+See B<--copying> for full copyright notice and copying permissions.
+
+=head1 LICENSE
+
+B<bbkeys> is licensed under the MIT License.
+See the F<COPYING> file in the distribution or use the B<--copying> flag
+to display copying permissions.
+
+=cut
+
+# vim: set sw=4 tw=72 nocin spell spelllang=en_ca:

@@ -1,0 +1,92 @@
+=pod
+
+=head1 NAME
+
+ bbkeys - a general XWindow keygrabber
+
+=head1 SYNOPSIS
+
+B<bbkeys> [I<OPTIONS>]
+
+=head1 DESCRIPTION
+
+B<bbkeys> is the key-grabber for the blackbox window manager.  B<bbkeys>
+handles all keybindings and keyboard shortcuts for blackbox.  It uses
+blackbox's Image classes for rendering its look and feel so that
+B<bbkeys> will render itself to match whatever blackbox style is used.
+It is highly configurable either via the L<bbconf(1)> GUI utility or the
+(now deprecated) L<bbkeysconf(1)> GUI utility or by hand-editing
+B<bbkey>'s configuration file.
+
+=head1 USAGE
+
+On startup, B<bbkeys> reads F<$HOME/.bbkeysrc>, which you can edit by
+hand or through L<bbconf(1)> or L<bbkeysconf(1)>.  This is now
+configurable through a command-line switch as shown in L</OPTIONS>.
+
+=head1 OPTIONS
+
+A summary of the options supported by B<bbkeys> is included below:
+
+=over
+
+=item B<-d>, B<--display> I<DISPLAY>
+
+The X server to which to connect.
+
+=item B<-D>, B<--debug>
+
+Print debugging information to standard error during operation.
+
+=item B<-c>, B<--config> I<FILENAME>
+
+Use an alternate configuration file.  (The default is F<~/.bbkeysrc>.)h
+
+=item B<-v>, B<--version>
+
+Display the version number and exit.
+
+=item B<-h>, B<--help>
+
+Display help message and exit.
+
+=back
+
+=head1 FILES
+
+=over
+
+=item F<$HOME/.bbkeysrc>
+
+Maintains key bindings.  See L<bbkeysrc(5)>.
+
+=back
+
+=head1 SEE ALSO
+
+L<blackbox(1)>,
+L<bbconf(1)>,
+L<bbkeysconf(1)>,
+L<bbkeysrc(5)>.
+
+=head1 BUGS
+
+B<bbkeys> had no known bugs at the time of release.  Please report bugs
+for current versions to the source code repository at
+L<https://github.com/bbidulock/bbkeys/issues>.
+
+=head1 AUTHOR
+
+Brian Bidulock L<mailto:bidulock@openss7.org>.
+
+See B<--copying> for full copyright notice and copying permissions.
+
+=head1 LICENSE
+
+B<bbkeys> is licensed under the MIT License.
+See the F<COPYING> file in the distribution or use the B<--copying> flag
+to display copying permissions.
+
+=cut
+
+# vim: set sw=4 tw=72 nocin spell spelllang=en_ca:
