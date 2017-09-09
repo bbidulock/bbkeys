@@ -2,7 +2,6 @@
 COPYING
 Makefile
 Makefile.in
-README.md.in
 aclocal.m4
 autom4te.cache/
 config.h

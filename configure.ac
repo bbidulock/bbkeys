@@ -93,6 +93,13 @@ AC_ARG_VAR([LD], [Linker loader command])
 AC_ARG_VAR([MARKDOWN],[markdown command. @<:@default=markdown@:>@])
 AC_CHECK_PROGS([MARKDOWN],[markdown],[${am_missing_run}markdown],[$PATH])
 
+AC_ARG_VAR([LINKS],[links command. @<:@default=lynx@:>@])
+AC_CHECK_PROGS([LINKS],[lynx links],[${am_missing_run}lynx],[$PATH])
+
+if test "$LINKS" = "links"; then
+	LINKS="links -codepage utf-8"
+fi
+
 dnl minimum version we can live with
 PERL_VERSION=5.004
 dnl check for perl for our command-line configurator

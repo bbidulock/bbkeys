@@ -1,22 +1,22 @@
-[bbkeys -- read me first file.  @DATE]: #
+[@PACKAGE@ -- read me first file.  @DATE]: #
 
-bbkeys
+@PACKAGE@
 ===============
 
-Package `bbkeys-0.9.1` was released under MIT license 2017-09-08.
+Package `@PACKAGE@-@VERSION@` was released under MIT license @DATE@.
 
-This package provides the classic bbkeysd utility for setting key
+This package provides the classic @PACKAGE@d utility for setting key
 bindings for GNOME/WMH and NetWM/EWMH compliant window managers that
 do not provide a key binding mechanism of their own.
 
 Release
 -------
 
-This is the `bbkeys-0.9.1` package, released 2017-09-08.  This
+This is the `@PACKAGE@-@VERSION@` package, released @DATE@.  This
 release, and the latest version, can be obtained from the [GitHub
 repository][1], using a command such as:
 
-    $> git clone https://github.com/bbidulock/bbkeys.git
+    $> git clone https://github.com/bbidulock/@PACKAGE@.git
 
 Please see the [NEWS][2] file for release notes and history of user
 visible changes for the current version, and the [ChangeLog][3]
@@ -36,17 +36,17 @@ the file [COPYING][6].
 Quick Start
 -----------
 
-The quickest and easiest way to get `bbkeys` up and running
+The quickest and easiest way to get `@PACKAGE@` up and running
 is to run the following commands:
 
-    $> git clone https://github.com/bbidulock/bbkeys.git
-    $> cd bbkeys
+    $> git clone https://github.com/bbidulock/@PACKAGE@.git
+    $> cd @PACKAGE@
     $> ./autogen.sh
     $> ./configure --prefix=/usr --sysconfdir=/etc
     $> make V=0
     $> make DESTDIR="$pkgdir" install
 
-This will configure, compile and install `bbkeys` the quickest.
+This will configure, compile and install `@PACKAGE@` the quickest.
 For those who would like to spend the extra 15 seconds reading
 the output of `./configure --help`, some compile options can be
 turned on and off before the build.
@@ -62,12 +62,12 @@ Report problems at GitHub [here][7].
 
 
 
-[1]: https://github.com/bbidulock/bbkeys
-[2]: https://github.com/bbidulock/bbkeys/blob/master/NEWS
-[3]: https://github.com/bbidulock/bbkeys/blob/master/ChangeLog
-[4]: https://github.com/bbidulock/bbkeys/blob/master/TODO
-[5]: https://github.com/bbidulock/bbkeys/blob/master/INSTALL
-[6]: https://github.com/bbidulock/bbkeys/blob/master/COPYING
-[7]: https://github.com/bbidulock/bbkeys/issues
+[1]: https://github.com/bbidulock/@PACKAGE@
+[2]: https://github.com/bbidulock/bbkeys/blob/@BRANCH@/NEWS
+[3]: https://github.com/bbidulock/bbkeys/blob/@BRANCH@/ChangeLog
+[4]: https://github.com/bbidulock/bbkeys/blob/@BRANCH@/TODO
+[5]: https://github.com/bbidulock/bbkeys/blob/@BRANCH@/INSTALL
+[6]: https://github.com/bbidulock/bbkeys/blob/@BRANCH@/COPYING
+[7]: https://github.com/bbidulock/@PACKAGE@/issues
 
 [ vim: set ft=markdown sw=4 tw=72 nocin nosi fo+=tcqlorn spell: ]: #
