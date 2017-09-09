@@ -20,6 +20,7 @@ AC_SUBST([BRANCH])
 # Initialize Automake
 AM_INIT_AUTOMAKE([1.13.4 dist-xz no-dist-gzip std-options -Wall color-tests silent-rules tar-pax])
 AM_MAINTAINER_MODE
+AM_SILENT_RULES([yes])
 AC_PREFIX_DEFAULT([/usr])
 
 AC_CHECK_PROGS([regex_cmd],[sed])
@@ -85,6 +86,12 @@ AC_PROG_AWK
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
+AM_PROG_AR
+AC_PROG_MKDIR_P
+AC_ARG_VAR([LD], [Linker loader command])
+
+AC_ARG_VAR([MARKDOWN],[markdown command. @<:@default=markdown@:>@])
+AC_CHECK_PROGS([MARKDOWN],[markdown],[${am_missing_run}markdown],[$PATH])
 
 dnl minimum version we can live with
 PERL_VERSION=5.004

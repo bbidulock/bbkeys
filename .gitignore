@@ -38,4 +38,6 @@ stamp-h1
 version.h
 bbkeys-*.tar.xz
 configure.ac.bak
-
+config.h.in
+README.txt
+README.html
