@@ -1,5 +1,85 @@
 # created with git log --stat=76 -M -C -300|fmt -sct -w80
 
+commit 2ca43f19236ca7a4546cf023563a30f330b9ecbd
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Sat Sep 9 00:06:13 2017 -0600
+
+    podify manual pages
+
+ configure.ac     |  19 +-
+ doc/Makefile.am  |  40 +++-
+ doc/bbkeys.1.in  |  71 -------
+ doc/bbkeys.man   | 201 +++++++++++++++++++
+ doc/bbkeys.pod   |  92 +++++++++
+ doc/bbkeysrc.5   | 349 --------------------------------
+ doc/bbkeysrc.man | 558 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ doc/bbkeysrc.pod | 487 ++++++++++++++++++++++++++++++++++++++++++++
+ 8 files changed, 1385 insertions(+), 432 deletions(-)
+
+commit 08c01da525075f3036588ce7c381d7f60a26f1d1
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Fri Sep 8 21:21:56 2017 -0600
+
+    proper copying file
+
+ .gitignore |  1 -
+ COPYING    | 19 +++++++++++++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
+
+commit 8eb903e8dcc3029e1d9ceceb4e3efd2ff04e8457
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Fri Sep 8 21:20:04 2017 -0600
+
+    better README.md generation for github
+
+ .gitignore                |  1 -
+ Makefile.am               |  2 +-
+ README.md                 | 14 +++++++-------
+ README.md => README.md.in | 36 ++++++++++++++++++------------------
+ configure.ac              |  7 +++++++
+ 5 files changed, 33 insertions(+), 27 deletions(-)
+
+commit b7a7213442bda646bc51fae81540940445e513b3
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Fri Sep 8 20:52:48 2017 -0600
+
+    some corrections to README.md creation
+
+ .gitignore   |  4 +++-
+ README.md    | 73 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ configure.ac |  7 ++++++
+ 3 files changed, 83 insertions(+), 1 deletion(-)
+
+commit 21fd10f2df10c075868b09952e00cbd31974f41d
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Fri Sep 8 20:33:03 2017 -0600
+
+    correct build system for gnits
+
+ .gitignore                 |   41 +
+ AUTHORS                    |   37 +-
+ ChangeLog                  | 3870 ++++++++++++++++++++++++++++++++++------
+ ChangeLog => ChangeLog.old |    0
+ INSTALL                    |  372 +++-
+ Makefile.am                |   71 +-
+ NEWS                       |  965 ++++++++--
+ NEWS => NEWS.old           |    0
+ stamp-h.in => README.md    |    0
+ README => README.old       |    0
+ AUTHORS => THANKS          |    4 +
+ autogen.sh                 |    3 +-
+ config.h.in                |  154 --
+ configure.ac               |   38 +-
+ data/Makefile.am           |    1 -
+ depcomp                    |  423 -----
+ gennews.sh                 |    2 +-
+ install-sh                 |  251 ---
+ missing                    |  336 ----
+ mkinstalldirs              |   40 -
+ rpm/Makefile.am            |    8 +-
+ src/Makefile.am            |   11 +-
+ 22 files changed, 4637 insertions(+), 1990 deletions(-)
+
 commit 6d23eeb9c6d2ab8eebb3e0801cb0ee7f33af3aa1
 Author: Brian Bidulock <bidulock@openss7.org>
 Date:   Fri Sep 8 07:22:12 2017 -0600
