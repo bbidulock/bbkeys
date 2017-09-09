@@ -99,7 +99,7 @@ void keytree::grabChildren(keynode *node, ScreenHandler *scr)
       bool ret = scr->grabKey(act->keycode(), act->modifierMask());
       if (!ret) {
         string key;
-        KeySym _sym = XKeycodeToKeysym(_display, act->keycode(), 0);
+        KeySym _sym = XkbKeycodeToKeysym(_display, act->keycode(), 0, 0);
     
         if (_sym == NoSymbol) key="key not found";
         else key = XKeysymToString(_sym);

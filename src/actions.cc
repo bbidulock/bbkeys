@@ -31,7 +31,7 @@
 
 Action::Action(enum ActionType type, Display * display, KeyCode keycode,
                unsigned int modifierMask, const std::string &str)
-  : _type(type), _display(display), _keycode(keycode), _modifierMask(modifierMask)
+  : _type(type), _keycode(keycode), _modifierMask(modifierMask), _display(display)
 {
   // These are the action types that take string arguments. This
   // should probably be moved to a static member
@@ -131,7 +131,7 @@ const char * Action::getActionName() {
 
 const std::string Action::toString() {
     std::string key;
-    KeySym _sym = XKeycodeToKeysym(_display, keycode(), 0);
+    KeySym _sym = XkbKeycodeToKeysym(_display, keycode(), 0, 0);
 
     if (_sym == NoSymbol) key="key not found";
     else key = XKeysymToString(_sym);

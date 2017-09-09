@@ -465,6 +465,9 @@ void XWindow::move(int x, int y) const {
     }
   }
 
+  (void) xright; /* XXX: why not used? */
+  (void) ybelow; /* XXX: why not used? */
+
   int destx = rx +x, desty = ry +y;
 
   XMoveWindow(_display, _window, destx, desty);

@@ -65,8 +65,8 @@ extern "C" {
 //--------------------------------------------------------
 KeyClient::KeyClient (int argc, char **argv,
                       Config & config, std::string display):
-  bt::Application(BBTOOL, display.c_str(), true), _config(config),
-  _keybindings(0), config_check_timer(0)
+  bt::Application(BBTOOL, display.c_str(), true),
+  _keybindings(0), _config(config), config_check_timer(0)
 {
 
   // save off what we're constructed with for reconfiguring later...
@@ -198,7 +198,7 @@ void KeyClient::handleConfigFile() {
 
   _keybindings->reset();
 
-  bool _doingConfig = false, _doingKeybindings = false;
+  bool _doingConfig = false;
 
   TokenBlock *block = 0;
   while ((block = tokenizer.next())) {
@@ -221,7 +221,6 @@ void KeyClient::handleConfigFile() {
       _config.setOption(block->name, block->data);
       break;
     case ConfigOpts::keybindings:
-      _doingKeybindings = true;
       setKeybindings(tokenizer);
 
       if (_debug)
@@ -412,7 +411,7 @@ void KeyClient::process_event(XEvent *e) {
 void KeyClient::cycleScreen(int current, bool forward) const {
   unsigned int i;
   for (i = 0; i < screenList.size(); ++i)
-    if (screenList[i]->getScreenNumber() == current) {
+    if (screenList[i]->getScreenNumber() == (unsigned) current) {
       current = i;
       break;
     }

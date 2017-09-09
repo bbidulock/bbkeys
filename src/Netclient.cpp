@@ -40,7 +40,7 @@ Netclient::~Netclient ()
 }
 
 void Netclient::init_icccm(void) {
-  char* atoms[9] = {
+  const char* atoms[9] = {
     "WM_COLORMAP_WINDOWS",
     "WM_PROTOCOLS",
     "WM_NAME",
@@ -52,7 +52,7 @@ void Netclient::init_icccm(void) {
     "_MOTIF_WM_HINTS"
   };
   Atom atoms_return[9];
-  XInternAtoms(_display.XDisplay(), atoms, 9, False, atoms_return);
+  XInternAtoms(_display.XDisplay(), (char **) atoms, 9, False, atoms_return);
   xa_wm_colormap_windows = atoms_return[0];
   xa_wm_protocols = atoms_return[1];
   xa_wm_name = atoms_return[2];
@@ -66,14 +66,14 @@ void Netclient::init_icccm(void) {
 }
 
 void Netclient::init_extras(void) {
-  char* atoms[4] = {
+  const char* atoms[4] = {
     "_OPENBOX_SHOW_ROOT_MENU",
     "_OPENBOX_SHOW_WORKSPACE_MENU",
     "ENLIGHTENMENT_DESKTOP",
     "_NET_VIRTUAL_ROOTS"
   };
   Atom atoms_return[4];
-  XInternAtoms(_display.XDisplay(), atoms, 2, False, atoms_return);
+  XInternAtoms(_display.XDisplay(), (char **) atoms, 2, False, atoms_return);
   openbox_show_root_menu = atoms_return[0];
   openbox_show_workspace_menu = atoms_return[1];
   enlightenment_desktop = atoms_return[2];
@@ -82,13 +82,13 @@ void Netclient::init_extras(void) {
 }
 
 void Netclient::init_blackbox(void) {
-  char* atoms[3] = {
+  const char* atoms[3] = {
     "_BLACKBOX_HINTS",
     "_BLACKBOX_ATTRIBUTES",
     "_BLACKBOX_CHANGE_ATTRIBUTES"
   };
   Atom atoms_return[3];
-  XInternAtoms(_display.XDisplay(), atoms, 3, False, atoms_return);
+  XInternAtoms(_display.XDisplay(), (char **) atoms, 3, False, atoms_return);
   blackbox_hints = atoms_return[0];
   blackbox_attributes = atoms_return[1];
   blackbox_change_attributes = atoms_return[2];

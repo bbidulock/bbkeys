@@ -42,7 +42,7 @@ KeyGrabber::~KeyGrabber ()
 bool KeyGrabber::grab (const KeyCode & keyCode,
                        const unsigned int & modifierMask,  Window window)
 {
-  int ret = 
+  // int ret = 
   XGrabKey(_display, keyCode, modifierMask,
            window, True, GrabModeAsync, GrabModeAsync);
   XGrabKey(_display, keyCode, 
