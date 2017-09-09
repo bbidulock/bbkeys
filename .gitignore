@@ -1,5 +1,4 @@
 .*.sw[nop]
-COPYING
 Makefile
 Makefile.in
 aclocal.m4
