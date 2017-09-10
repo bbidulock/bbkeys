@@ -28,55 +28,14 @@ if test x$regex_cmd = "x"; then
  AC_MSG_ERROR([error. sed is required to build the default bbtoolsrc file.])
 fi
 
-dnl get the debug values right
-AC_DEFUN([AC_SET_DEBUG],
-[
-  _CFLAGS="-g -Wall -DDEBUG"
-  _CXXFLAGS="-g -Wall -DDEBUG"
-  _LDFLAGS=""
-  case $host_os in
-  [*solaris*)]
-    dnl On solaris, we get a ton of multiply-defined errors if we don't include
-    dnl this parameter
-    _LDFLAGS="$_LDFLAGS -z muldefs"
-    ;;
-  esac
-  test "$CFLAGS" = "" && CFLAGS=$_CFLAGS
-  test "$CXXFLAGS" = "" && CXXFLAGS=$_CXXFLAGS
-  test "$LDFLAGS" = "" && LDFLAGS=$_LDFLAGS
-])
-
-AC_DEFUN([AC_SET_NODEBUG],
-[
-  _CFLAGS="-DNDEBUG"
-  _CXXFLAGS="-DNDEBUG"
-  _LDFLAGS=""
-  case $host_os in
-  [*solaris*)]
-     _CFLAGS="$_CFLAGS -O"
-     _CXXFLAGS="$_CXXFLAGS -O"
-     dnl On solaris, we get a ton of multiply-defined errors if we don't include
-     dnl this parameter
-     _LDFLAGS="$_LDFLAGS -z muldefs"
-     ;;
-  [*)]
-     _CFLAGS="$_CFLAGS -O2"
-     _CXXFLAGS="$_CXXFLAGS -O2"
-     ;;
-  esac
-  test "$CFLAGS" = "" && CFLAGS=$_CFLAGS
-  test "$CXXFLAGS" = "" && CXXFLAGS=$_CXXFLAGS
-  test "$LDFLAGS" = "" && LDFLAGS=$_LDFLAGS
-])
-
-AC_ARG_ENABLE(debug,[  --enable-debug	create debugging code [default=no]],
-[
-if test $enableval = "no";
- then AC_SET_NODEBUG
- else AC_SET_DEBUG
+AC_ARG_ENABLE([debug],
+	AC_HELP_STRING([--enable-debug],
+		[Enable debuggin support @<:@default=disabled@:>@]))
+if test "x$enable_debug" = xyes ; then
+	AC_DEFINE_UNQUOTED([DEBUG],[],[Define to enable debugging])
 fi
-],
-AC_SET_NODEBUG)
+AC_MSG_CHECKING([for debug support])
+AC_MSG_RESULT([${enable_debug:-no}])
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -147,27 +106,13 @@ AC_TYPE_SIGNAL
 dnl AC_FUNC_STAT
 AC_CHECK_FUNCS(setlocale sigaction strftime gettimeofday memset strcasecmp strchr strcspn strdup strncasecmp select strstr)
 
-dnl these have to be here for X tests...
-CFLAGS="$CFLAGS $X_CFLAGS"
-CXXFLAGS="$CXXFLAGS $X_CFLAGS"
-LDFLAGS="$LDFLAGS $X_LIBS $X_PRE_LIBS"
-
-
-dnl Checks for X libraries.
-AC_CHECK_LIB(X11, XOpenDisplay, LIBS="-lX11",
-             AC_MSG_ERROR(XOpenDisplay not found in -lX11))
-
-dnl Checks for Xextension
-AC_CHECK_LIB(Xext, XMissingExtension, LIBS="$LIBS -lXext",
-             AC_MSG_ERROR(XMissingExtension not found in -lXext))
-
 PKG_PROG_PKG_CONFIG
 
 dnl pkgconfig checks for blackbox library
-PKG_CHECK_MODULES(LIBBT, libbt)
-PKG_CHECK_MODULES(XFT, xft)
-CXXFLAGS="$CXXFLAGS $LIBBT_CFLAGS $XFT_CFLAGS"
-LIBS="$LIBS $LIBBT_LIBS $XFT_LIBS"
+PKG_CHECK_MODULES([X11], [x11])
+PKG_CHECK_MODULES([XEXT], [xext])
+PKG_CHECK_MODULES([XFT], [xft])
+PKG_CHECK_MODULES([LIBBT], [libbt])
 
 dnl Output files
 AC_OUTPUT([
