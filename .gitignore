@@ -39,3 +39,5 @@ configure.ac.bak
 config.h.in
 README.txt
 README.html
+cscope.files
+cscope.out
