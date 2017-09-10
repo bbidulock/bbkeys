@@ -1,9 +1,9 @@
 DEFAULT_RC=$(pkgdatadir)/bbkeysrc
 DEFAULT_STYLE=$(pkgdatadir)/defaultStyle
 
-AM_CPPFLAGS =	$(CPPFLAGS) \
-	-DDEFAULTRC=\"$(DEFAULT_RC)\" \
-	-DDEFAULTSTYLE=\"$(DEFAULT_STYLE)\"
+AM_CXXFLAGS = $(X11_CFLAGS) $(XEXT_CFLAGS) $(XFT_CFLAGS) $(LIBBT_CFLAGS)
+AM_LDFLAGS = $(LIBBT_LIBS) $(XFT_LIBS) $(XEXT_LIBS) $(X11_LIBS)
+AM_CPPFLAGS = -DDEFAULTRC=\"$(DEFAULT_RC)\" -DDEFAULTSTYLE=\"$(DEFAULT_STYLE)\"
 
 bin_PROGRAMS = bbkeys
 
@@ -31,7 +31,6 @@ bbkeys_SOURCES = actions.cc \
 	window.hh \
 	WindowlistMenu.cpp \
 	WindowlistMenu.h 
-
-bbkeys_LDADD = $(LIBS)
+bbkeys_LDADD = /usr/lib/libbt.a
 
 AM_INSTALLCHECK_STD_OPTIONS_EXEMPT = bbkeys
