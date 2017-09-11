@@ -4,6 +4,7 @@
 AC_PREREQ([2.69])
 AC_INIT([bbkeys],[0.9.1],[https://github.com/bbidulock/bbkeys/issues])
 AC_REVISION([0.9.1])
+
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
@@ -18,7 +19,7 @@ BRANCH='master'
 AC_SUBST([BRANCH])
 
 # Initialize Automake
-AM_INIT_AUTOMAKE([1.13.4 dist-xz no-dist-gzip std-options -Wall color-tests silent-rules tar-pax])
+AM_INIT_AUTOMAKE([gnits 1.14 dist-xz no-dist-gzip std-options -Wall color-tests silent-rules tar-pax])
 AM_MAINTAINER_MODE
 AM_SILENT_RULES([yes])
 AC_PREFIX_DEFAULT([/usr])
@@ -37,11 +38,12 @@ fi
 AC_MSG_CHECKING([for debug support])
 AC_MSG_RESULT([${enable_debug:-no}])
 
-dnl Checks for programs.
+# Checks for programs.
+AC_PROG_SED
+AC_PROG_AWK
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_CPP
-AC_PROG_AWK
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
@@ -52,13 +54,37 @@ AC_ARG_VAR([LD], [Linker loader command])
 AC_ARG_VAR([MARKDOWN],[markdown command. @<:@default=markdown@:>@])
 AC_CHECK_PROGS([MARKDOWN],[markdown],[${am_missing_run}markdown],[$PATH])
 
+AC_ARG_VAR([ASCIIDOC],[asciidoc command. @<:@default=asciidoctor@:>@])
+AC_CHECK_PROGS([ASCIIDOC],[asciidoctor asciidoc],[${am_missing_run}asciidoctor],[$PATH])
+
+AC_ARG_VAR([ASCIIDOC_BACKEND],[asciidoc backend @<:@default=NONE@:>@])
+if test -z "$ASCIIDOC_BACKEND"; then
+	case "$ASCIIDOC" in
+		asciidoc) ASCIIDOC_BACKEND="--backend=html4" ;;
+		asciidoctor) ASCIIDOC_BACKEND="--backend=html5" ;;
+		*) AC_MSG_WARN([ASCIIDOC $ASCIIDOC is not supported.]) ;;
+	esac
+fi
+
+AC_ARG_VAR([ASCIIMAN],[asciidoc to manpage converter. @<:@default=asciidoctor@:>@])
+AC_CHECK_PROGS([ASCIIMAN],[asciidoctor a2x],[${am_missing_run}asciidoctor],[$PATH])
+
+AC_ARG_VAR([ASCIIMAN_FORMAT],[asciidoc manpage option @<:@default=NONE@:>@])
+if test -z "$ASCIIMAN_FORMAT"; then
+	case "$ASCIIMAN" in
+		a2x) ASCIIMAN_FORMAT="--format=manpage" ;;
+		asciidoctor) ASCIIMAN_FORMAT="--backend=manpage" ;;
+		*) AC_MSG_WARN([ASCIIMAN $ASCIIMAN is not supported.]) ;;
+	esac
+fi
+
 AC_ARG_VAR([LINKS],[links command. @<:@default=lynx@:>@])
 AC_CHECK_PROGS([LINKS],[lynx links],[${am_missing_run}lynx],[$PATH])
-
 if test "$LINKS" = "links"; then
 	LINKS="links -codepage utf-8"
 fi
 
+AC_DISABLE_STATIC
 dnl minimum version we can live with
 PERL_VERSION=5.004
 dnl check for perl for our command-line configurator
@@ -86,10 +112,12 @@ else
     AC_MSG_RESULT([yes])
 fi
 
+# Checks for libraries.
 
 # Checks for header files.
-AC_PATH_XTRA
 AC_HEADER_STDC
+AC_PATH_X
+AC_PATH_XTRA
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(ctype.h strings.h fcntl.h libgen.h locale.h process.h signal.h stdio.h time.h errno.h unistd.h sys/signal.h sys/param.h sys/select.h sys/stat.h sys/time.h sys/types.h sys/wait.h stdlib.h string.h malloc.h)
 
