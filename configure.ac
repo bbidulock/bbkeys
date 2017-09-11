@@ -19,7 +19,7 @@ BRANCH='master'
 AC_SUBST([BRANCH])
 
 # Initialize Automake
-AM_INIT_AUTOMAKE([gnits 1.14 dist-xz no-dist-gzip std-options -Wall color-tests silent-rules tar-pax])
+AM_INIT_AUTOMAKE([1.14 dist-xz no-dist-gzip std-options -Wall color-tests silent-rules tar-pax])
 AM_MAINTAINER_MODE
 AM_SILENT_RULES([yes])
 AC_PREFIX_DEFAULT([/usr])
@@ -84,7 +84,6 @@ if test "$LINKS" = "links"; then
 	LINKS="links -codepage utf-8"
 fi
 
-AC_DISABLE_STATIC
 dnl minimum version we can live with
 PERL_VERSION=5.004
 dnl check for perl for our command-line configurator
