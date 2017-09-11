@@ -21,7 +21,8 @@ if [ -x "`which git 2>/dev/null`" -a -d .git ]; then
 		    s:^AM_GNU_GETTEXT_VERSION.*:AM_GNU_GETTEXT_VERSION([$GTVERSION]):"
 	subst="s:%%PACKAGE%%:$PACKAGE:g
 	       s:%%VERSION%%:$VERSION:g
-	       s:%%DATE%%:$DATE:g"
+	       s:%%DATE%%:$DATE:g
+	       s:%%BRANCH%%:$BRANCH:g"
 	sed -r -e "$subst" rpm/bbkeys.spec.in >rpm/bbkeys.spec
 else
 	sed -i.bak configure.ac -r \
