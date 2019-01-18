@@ -1,6 +1,8 @@
-- perl configurator script needs to be rewritten for the new file syntax 
+* [ ] perl configurator script needs to be rewritten for the new file syntax 
   (must handle config options as well as keybindings)
 
-- popup window-cycling menu/list needs to be implemented still
+* [ ] popup window-cycling menu/list needs to be implemented still
 
-- other stuff I'm sure
+* [ ] other stuff I'm sure
+
+// vim: set ft=asciidoc tw=72 nocin nosi fo+=tcqlorn spell:
