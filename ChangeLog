@@ -1,4 +1,223 @@
-# created with git log --stat=76 -M -C -300|fmt -sct -w80
+# created with git log --stat=76 -M -C -500|fmt -sct -w80
+
+commit 70ac0d380dc66b265c80508574b8ce49382a5103
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Mon Sep 9 00:56:17 2019 -0600
+
+    build release notes with dist
+
+ dist.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit a9b0b36e9abbf11a4b314d2dd6293ea81ddbcaa6
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Mon Sep 9 00:56:02 2019 -0600
+
+    have better defaults now
+
+ configure.sh | 3 ---
+ 1 file changed, 3 deletions(-)
+
+commit 310c9357954fdccf5e84ac4845965201f989ebe8
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Mon Sep 9 00:55:45 2019 -0600
+
+    better defaults and lzip compression
+
+ configure.ac | 27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
+
+commit 10df976bf8002617f6bc0d281377b978fec82b59
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Mon Sep 9 00:55:23 2019 -0600
+
+    corrections to autogen.sh
+
+ autogen.sh | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+commit af4182d0c0ab76a2d5695d78e11779502b35c52d
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Mon Sep 9 00:54:34 2019 -0600
+
+    build release notes
+
+ Makefile.am | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+commit 1132108309ed05a664040ed5d9aa6aa2ffaa18e8
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Mon Sep 9 00:54:09 2019 -0600
+
+    add release notes
+
+ .gitignore | 40 +++++++++++++++++++++++-----------------
+ RELEASE.md | 20 ++++++++++++++++++++
+ 2 files changed, 43 insertions(+), 17 deletions(-)
+
+commit 0cebdeaf2d0e3a14437f187948168372d3270d60
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Sat Aug 31 01:09:25 2019 -0600
+
+    handle annotated tags when generating NEWS
+
+ gennews.sh | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
+
+commit abf2311b906b53b844f9e94814253a86aa02a82e
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Fri Jan 18 09:16:06 2019 -0700
+
+    reformat TODO
+
+ TODO | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+commit 67323e00c31844c8bd06cee643b3c8824a99efa5
+Merge: 94f6c7e a024020
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Mon Oct 23 09:49:43 2017 -0600
+
+    Merge branch 'master' of github.com:bbidulock/bbkeys
+
+commit 94f6c7e24e8e71ee013ed3fa07564f3716eefd78
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Mon Oct 23 09:49:26 2017 -0600
+
+    update build system
+
+ Makefile.am  | 13 +++++++------
+ configure.sh |  4 ++--
+ dist.sh      |  2 +-
+ rebuild.sh   |  4 +++-
+ 4 files changed, 13 insertions(+), 10 deletions(-)
+
+commit a024020af1078dc6c0afd147422d743ccd9ced9d
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Mon Sep 11 03:22:31 2017 +0000
+
+    corrections
+
+ configure.ac | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+commit c7fde8757eb673130c4fedfa09e5787479f4361d
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Mon Sep 11 03:22:20 2017 +0000
+
+    update release files
+
+ README    | 74 +++++++++++++++++++++++++++++++++--------------------------
+ README.md | 72 +++++++++++++++++++++++++++++++--------------------------
+ 2 files changed, 81 insertions(+), 65 deletions(-)
+
+commit b62bc2bb0e1e3347fdc4658bdc6b59e6b1420ea9
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Mon Sep 11 03:18:27 2017 +0000
+
+    tweaks
+
+ README.md.in | 72 +++++++++++++++++++++++++++++++-------------------------
+ 1 file changed, 40 insertions(+), 32 deletions(-)
+
+commit c562f49b262a626d9d9ecd1e7cb27760de0b7652
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Sun Sep 10 19:08:39 2017 -0600
+
+    silent now default
+
+ rebuild.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit ed8e162327f0d746cf21a3b633dcfac3ded62217
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Sun Sep 10 19:08:13 2017 -0600
+
+    update make flags
+
+ configure.sh | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+commit 203864828ea1d41c772478e29f91ca9509a8d08e
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Sun Sep 10 19:07:47 2017 -0600
+
+    more checks
+
+ configure.ac | 38 +++++++++++++++++++++++++++++++++-----
+ 1 file changed, 33 insertions(+), 5 deletions(-)
+
+commit 96656e714b632c3bfe88983082124ce5718c18ab
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Sun Sep 10 19:07:20 2017 -0600
+
+    add branch to substitution
+
+ autogen.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+commit 0a78bbfb0f50116d698fb57c417f57828ae862f1
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Sun Sep 10 19:06:52 2017 -0600
+
+    do not use explicit package name
+
+ README.md.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+commit 32c6a6105a0e0a82d3fb9ebd67db9336c51632a6
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Sun Sep 10 01:01:57 2017 -0600
+
+    ignore cscope files
+
+ .gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit c38ad42b2b50df546abbada8137bfd77ef533f67
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Sun Sep 10 01:00:58 2017 -0600
+
+    use new flags properly
+
+ src/Makefile.am | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+commit e6566624aa8ee662b94ca351a7b69116c3fa8bb5
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Sun Sep 10 01:00:24 2017 -0600
+
+    simplify tests
+
+ configure.ac | 77 ++++++++------------------------------------------------
+ 1 file changed, 11 insertions(+), 66 deletions(-)
+
+commit 6a42bbed44685324898071f68539aef5fc7c041c
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Sat Sep 9 01:34:58 2017 -0600
+
+    removed compiler warnings
+
+ src/KeyClient.cpp  |  9 ++++-----
+ src/KeyGrabber.cpp |  2 +-
+ src/Netclient.cpp  | 12 ++++++------
+ src/actions.cc     |  4 ++--
+ src/actions.hh     |  1 +
+ src/keytree.cc     |  2 +-
+ src/keytree.hh     |  1 +
+ src/window.cc      |  3 +++
+ 8 files changed, 19 insertions(+), 15 deletions(-)
+
+commit 9ff8a144e6cb658a0b93aaa8e09445004ba5a23d
+Author: Brian Bidulock <bidulock@openss7.org>
+Date:   Sat Sep 9 00:18:16 2017 -0600
+
+    update release files
+
+ ChangeLog | 80 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ NEWS      | 11 +++++---
+ README    | 73 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 161 insertions(+), 3 deletions(-)
 
 commit 2ca43f19236ca7a4546cf023563a30f330b9ecbd
 Author: Brian Bidulock <bidulock@openss7.org>

@@ -1,9 +1,9 @@
-[bbkeys -- read me first file.  2017-09-08]: #
+[bbkeys -- read me first file.  2019-09-09]: #
 
 bbkeys
 ===============
 
-Package `bbkeys-0.9.1` was released under MIT license 2017-09-08.
+Package `bbkeys-0.9.2` was released under MIT license 2019-09-09.
 
 This package provides the classic bbkeys utility for setting key
 bindings for GNOME/WMH and NetWM/EWMH compliant window managers that
@@ -12,7 +12,7 @@ do not provide a key binding mechanism of their own.
 Release
 -------
 
-This is the `bbkeys-0.9.1` package, released 2017-09-08.  This release, and
+This is the `bbkeys-0.9.2` package, released 2019-09-09.  This release, and
 the latest version, can be obtained from [GitHub][1], using a command such as:
 
     $> git clone https://github.com/bbidulock/bbkeys.git

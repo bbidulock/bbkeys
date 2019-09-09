@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([bbkeys],[0.9.1],[https://github.com/bbidulock/bbkeys/issues])
-AC_REVISION([0.9.1])
+AC_INIT([bbkeys],[0.9.2],[https://github.com/bbidulock/bbkeys/issues])
+AC_REVISION([0.9.2])
 
 # set better defaults
 AC_PREFIX_DEFAULT([/usr])
@@ -20,10 +20,10 @@ AC_CONFIG_AUX_DIR([scripts])
 AC_USE_SYSTEM_EXTENSIONS
 AC_CANONICAL_TARGET
 
-DATE='2017-09-08'
+DATE='2019-09-09'
 AC_SUBST([DATE])
 
-MDOCDATE='September 8, 2017'
+MDOCDATE='September 9, 2019'
 AC_SUBST([MDOCDATE])
 
 BRANCH='master'

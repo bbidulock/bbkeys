@@ -1,6 +1,7 @@
 aclocal.m4
 autom4te.cache/
 bbkeys-*.tar.xz
+bbkeys-*.tar.lz
 config.h
 config.h.in
 config.h.in~
