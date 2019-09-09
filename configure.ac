@@ -5,6 +5,14 @@ AC_PREREQ([2.69])
 AC_INIT([bbkeys],[0.9.1],[https://github.com/bbidulock/bbkeys/issues])
 AC_REVISION([0.9.1])
 
+# set better defaults
+AC_PREFIX_DEFAULT([/usr])
+if test "$prefix" = /usr -o "$prefix" = NONE; then
+	test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
+	test "$sharedstatedir" = '${prefix}/com' && sharedstatedir=/var
+	test "$localstatedir" = '${prefix}/var' && localstatedir=/var
+fi
+
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
@@ -15,14 +23,16 @@ AC_CANONICAL_TARGET
 DATE='2017-09-08'
 AC_SUBST([DATE])
 
+MDOCDATE='September 8, 2017'
+AC_SUBST([MDOCDATE])
+
 BRANCH='master'
 AC_SUBST([BRANCH])
 
 # Initialize Automake
-AM_INIT_AUTOMAKE([1.14 dist-xz no-dist-gzip std-options -Wall color-tests silent-rules tar-pax])
+AM_INIT_AUTOMAKE([1.16 dist-lzip no-dist-gzip std-options -Wall color-tests silent-rules tar-pax])
 AM_MAINTAINER_MODE
 AM_SILENT_RULES([yes])
-AC_PREFIX_DEFAULT([/usr])
 
 AC_CHECK_PROGS([regex_cmd],[sed])
 if test x$regex_cmd = "x"; then
@@ -55,7 +65,7 @@ AC_ARG_VAR([MARKDOWN],[markdown command. @<:@default=markdown@:>@])
 AC_CHECK_PROGS([MARKDOWN],[markdown],[${am_missing_run}markdown],[$PATH])
 
 AC_ARG_VAR([ASCIIDOC],[asciidoc command. @<:@default=asciidoctor@:>@])
-AC_CHECK_PROGS([ASCIIDOC],[asciidoctor asciidoc],[${am_missing_run}asciidoctor],[$PATH])
+AC_CHECK_PROGS([ASCIIDOC],[asciidoc asciidoctor],[${am_missing_run}asciidoc],[$PATH])
 
 AC_ARG_VAR([ASCIIDOC_BACKEND],[asciidoc backend @<:@default=NONE@:>@])
 if test -z "$ASCIIDOC_BACKEND"; then
@@ -66,8 +76,8 @@ if test -z "$ASCIIDOC_BACKEND"; then
 	esac
 fi
 
-AC_ARG_VAR([ASCIIMAN],[asciidoc to manpage converter. @<:@default=asciidoctor@:>@])
-AC_CHECK_PROGS([ASCIIMAN],[asciidoctor a2x],[${am_missing_run}asciidoctor],[$PATH])
+AC_ARG_VAR([ASCIIMAN],[asciidoc to manpage converter. @<:@default=a2x@:>@])
+AC_CHECK_PROGS([ASCIIMAN],[a2x asciidoctor],[${am_missing_run}a2x],[$PATH])
 
 AC_ARG_VAR([ASCIIMAN_FORMAT],[asciidoc manpage option @<:@default=NONE@:>@])
 if test -z "$ASCIIMAN_FORMAT"; then
@@ -114,6 +124,7 @@ fi
 # Checks for libraries.
 
 # Checks for header files.
+AS_BOX([Header Files])
 AC_HEADER_STDC
 AC_PATH_X
 AC_PATH_XTRA
@@ -121,12 +132,14 @@ AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(ctype.h strings.h fcntl.h libgen.h locale.h process.h signal.h stdio.h time.h errno.h unistd.h sys/signal.h sys/param.h sys/select.h sys/stat.h sys/time.h sys/types.h sys/wait.h stdlib.h string.h malloc.h)
 
 # Checks for typedefs, structures, and compiler characteristics.
+AS_BOX([Typedefs, Structures, Compiler])
 AC_C_CONST
 AC_C_INLINE
 AC_HEADER_TIME
 AC_STRUCT_TM
 
 # Checks for library functions.
+AS_BOX([Library Functions])
 dnl AC_FUNC_FORK
 dnl AC_FUNC_MALLOC
 AC_TYPE_SIGNAL
@@ -135,10 +148,12 @@ AC_CHECK_FUNCS(setlocale sigaction strftime gettimeofday memset strcasecmp strch
 
 PKG_PROG_PKG_CONFIG
 
-dnl pkgconfig checks for blackbox library
+AS_BOX([X11 Extension Libraries])
+
 PKG_CHECK_MODULES([X11], [x11])
 PKG_CHECK_MODULES([XEXT], [xext])
 PKG_CHECK_MODULES([XFT], [xft])
+dnl pkgconfig checks for blackbox library
 PKG_CHECK_MODULES([LIBBT], [libbt])
 
 dnl Output files
