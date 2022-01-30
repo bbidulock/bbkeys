@@ -28,7 +28,7 @@ Brian Bidulock <bidulock@openss7.org> (29):
       some corrections to README.md creation
       better README.md generation for github
       proper copying file
-      podify manual pages
+      modify manual pages
       update release files
       removed compiler warnings
       simplify tests
