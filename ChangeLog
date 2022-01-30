@@ -223,7 +223,7 @@ commit 2ca43f19236ca7a4546cf023563a30f330b9ecbd
 Author: Brian Bidulock <bidulock@openss7.org>
 Date:   Sat Sep 9 00:06:13 2017 -0600
 
-    podify manual pages
+    modify manual pages
 
  configure.ac     |  19 +-
  doc/Makefile.am  |  40 +++-
